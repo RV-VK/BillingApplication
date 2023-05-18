@@ -14,7 +14,7 @@ public class AdminMain {
   public static void AdminView()
       throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException {
     scanner = new Scanner(System.in);
-      System.out.println(" TO THE BILLING SOFTWARE_____________________");
+    System.out.println(" TO THE BILLING SOFTWARE_____________________");
     System.out.println(">> Try \"help\" to know better!\n");
     do {
       System.out.print("> ");
@@ -36,9 +36,8 @@ public class AdminMain {
         commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
       }
       String commandString = commandlist.get(0);
-      String operationString="";
-      if(commandlist.size()>1)
-         operationString = commandlist.get(1);
+      String operationString = "";
+      if (commandlist.size() > 1) operationString = commandlist.get(1);
       switch (commandString) {
         case "product":
           ProductCLI productCLI = new ProductCLI();
@@ -53,7 +52,7 @@ public class AdminMain {
               productCLI.list(commandlist);
               break;
             case "edit":
-              productCLI.edit(commandlist,command);
+              productCLI.edit(commandlist, command);
               break;
             case "delete":
               productCLI.delete(commandlist);
@@ -76,7 +75,7 @@ public class AdminMain {
               userCLI.userListCLI(commandlist);
               break;
             case "edit":
-              userCLI.userEditCLI(commandlist,command);
+              userCLI.userEditCLI(commandlist, command);
               break;
             case "delete":
               userCLI.userDeleteCLI(commandlist);
@@ -93,7 +92,7 @@ public class AdminMain {
               storeCLI.storeCreateCLI(commandlist);
               break;
             case "edit":
-              storeCLI.storeEditCLI(commandlist,command);
+              storeCLI.storeEditCLI(commandlist, command);
               break;
             case "delete":
               storeCLI.storeDeleteCLI(commandlist);
@@ -113,7 +112,7 @@ public class AdminMain {
               unitCLI.unitListCLI(commandlist);
               break;
             case "edit":
-              unitCLI.unitEditCLI(commandlist,command);
+              unitCLI.unitEditCLI(commandlist, command);
               break;
             case "delete":
               unitCLI.unitDeleteCLI(commandlist);
@@ -189,9 +188,8 @@ public class AdminMain {
           }
           break;
         case "price":
-          StockPriceCLI stockPriceCLI=new StockPriceCLI();
-          switch(operationString)
-          {
+          StockPriceCLI stockPriceCLI = new StockPriceCLI();
+          switch (operationString) {
             case "update":
               stockPriceCLI.updatePrice(commandlist);
               break;
@@ -200,9 +198,8 @@ public class AdminMain {
           }
           break;
         case "stock":
-          StockPriceCLI stockPriceCLI1=new StockPriceCLI();
-          switch(operationString)
-          {
+          StockPriceCLI stockPriceCLI1 = new StockPriceCLI();
+          switch (operationString) {
             case "update":
               stockPriceCLI1.updateStock(commandlist);
               break;
