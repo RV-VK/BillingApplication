@@ -15,19 +15,19 @@ public class UnitServiceImplementation implements UnitService {
   private final String CODE_REGEX = "^[a-zA-Z]{1,4}$";
 
   @Override
-  public Unit createUnitService(Unit unit)
+  public Unit create(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     if (validate(unit)) return unitDAO.create(unit);
     else return null;
   }
 
   @Override
-  public List<Unit> listUnitService() throws ApplicationErrorException {
+  public List<Unit> list() throws ApplicationErrorException {
     return unitDAO.list();
   }
 
   @Override
-  public int editUnitService(Unit unit)
+  public int edit(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     if (!validate(unit)) {
       return 0;
@@ -36,7 +36,7 @@ public class UnitServiceImplementation implements UnitService {
   }
 
   @Override
-  public int deleteUnitService(String code) throws ApplicationErrorException {
+  public int delete(String code) throws ApplicationErrorException {
     UnitDAO unitDeleteDAO = new UnitDAOImplementation();
     return unitDeleteDAO.delete(code);
   }

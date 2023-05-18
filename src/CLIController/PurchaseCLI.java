@@ -28,7 +28,7 @@ public class PurchaseCLI {
   private Scanner scanner = new Scanner(System.in);
   private HashMap<String, String> listAttributesMap = new HashMap<>();
 
-  public void purchaseCreateCLI(String command) {
+  public void Create(String command) {
     String productCodeRegex = "^[a-zA-Z0-9]{2,6}$";
     String[] commandEntities = command.split(",\\s*(?=\\[)");
     if (commandEntities.length < 1) {
@@ -75,7 +75,7 @@ public class PurchaseCLI {
       }
       Purchase purchase = new Purchase(purchaseDate, invoice, purchaseItemList, grandTotal);
       try {
-        createdPurchase = purchaseService.createPurchaseService(purchase);
+        createdPurchase = purchaseService.create(purchase);
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
@@ -117,7 +117,7 @@ public class PurchaseCLI {
     }
   }
 
-  public void purchaseCountCLI(List<String> arguments) throws ApplicationErrorException {
+  public void Count(List<String> arguments) throws ApplicationErrorException {
     int purchaseCount;
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
@@ -142,14 +142,14 @@ public class PurchaseCLI {
       }
     }
     if (arguments.size() == 2) {
-      purchaseCount = purchaseService.countPurchaseService(null);
+      purchaseCount = purchaseService.count(null);
       System.out.println(">> PurchaseCount " + purchaseCount);
       return;
     }
     if (arguments.size() == 4) {
       if (arguments.get(2).equals("-d")) {
         String parameter = arguments.get(3);
-        purchaseCount = purchaseService.countPurchaseService(parameter);
+        purchaseCount = purchaseService.count(parameter);
         if (purchaseCount > 0) System.out.println(">> PurchaseCount " + purchaseCount);
         else {
           System.out.println(">> Given Date or Category not found!!!");
@@ -165,7 +165,7 @@ public class PurchaseCLI {
     }
   }
 
-  public void purchaseListCLI(List<String> arguments)
+  public void List(List<String> arguments)
       throws PageCountOutOfBoundsException, ApplicationErrorException {
     listAttributesMap.put("Pagelength", null);
     listAttributesMap.put("Pagenumber", null);
@@ -236,7 +236,7 @@ public class PurchaseCLI {
           listAttributesMap.put("Searchtext", searchText);
           listAttributesMap.put("Pagelength", "20");
           listAttributesMap.put("Pagenumber", String.valueOf(1));
-          purchaseList = purchaseService.listPurchaseService(listAttributesMap);
+          purchaseList = purchaseService.list(listAttributesMap);
           listHelper(listAttributesMap);
         } else {
           System.out.println("Given attribute is not a searchable attribute!!");
@@ -318,7 +318,7 @@ public class PurchaseCLI {
 
   private void listHelper(HashMap<String, String> listAttributesMap)  {
     try{
-    purchaseList = purchaseService.listPurchaseService(listAttributesMap);
+    purchaseList = purchaseService.list(listAttributesMap);
     if (purchaseList == null) {
       if(!listAttributesMap.get("Searchtext").equals("id")){
         System.out.println(">>Given SearchText does not exist!!!");
@@ -358,7 +358,7 @@ public class PurchaseCLI {
   }
 
 
-  public void purchaseDeleteCLI(List<String> arguments) throws ApplicationErrorException {
+  public void Delete(List<String> arguments) throws ApplicationErrorException {
     PurchaseService purchaseDeleteService = new PurchaseServiceImplementation();
     String numberRegex = "^[0-9]{1,10}$";
     if (arguments.size() == 3) {
@@ -374,7 +374,7 @@ public class PurchaseCLI {
         System.out.println(">> Are you sure want to delete the Purchase Entry y/n ? : ");
         String prompt = scanner.nextLine();
         if (prompt.equals("y")) {
-          int resultCode = purchaseDeleteService.deletePurchaseService(arguments.get(2));
+          int resultCode = purchaseDeleteService.delete(arguments.get(2));
           if (resultCode == 1) {
             System.out.println(">> Purchase Deleted Successfully!!");
           } else if (resultCode == -1) {

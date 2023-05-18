@@ -14,19 +14,19 @@ public class UserServiceImplementation implements UserService {
   private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
 
   @Override
-  public User createUserService(User user)
+  public User create(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     if (validate(user)) return userDAO.create(user);
     else return null;
   }
 
   @Override
-  public int countUserService() throws ApplicationErrorException {
+  public int count() throws ApplicationErrorException {
     return userDAO.count();
   }
 
   @Override
-  public List listUserService(HashMap<String, String> listattributes)
+  public List list(HashMap<String, String> listattributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
     List<User> userList;
     if (Collections.frequency(listattributes.values(), null) == 0
@@ -50,7 +50,7 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public int editUserService(User user)
+  public int edit(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     if (!validate(user)) return 0;
     boolean status = userDAO.edit(user);
@@ -62,7 +62,7 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public int deleteUserService(String username) throws ApplicationErrorException {
+  public int delete(String username) throws ApplicationErrorException {
     return userDAO.delete(username);
   }
 

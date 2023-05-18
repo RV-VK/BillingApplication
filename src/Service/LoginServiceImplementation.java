@@ -18,7 +18,7 @@ public class LoginServiceImplementation implements  LoginService{
     @Override
     public User createUser(User user) throws UniqueConstraintException, SQLException, ApplicationErrorException {
         UserService userService=new UserServiceImplementation();
-        return userService.createUserService(user);
+        return userService.create(user);
     }
 
   @Override

@@ -41,13 +41,13 @@ public class PurchaseMain {
                     PurchaseCLI purchaseCLI = new PurchaseCLI();
                     switch (operationString) {
                         case "count":
-                            purchaseCLI.purchaseCountCLI(commandlist);
+                            purchaseCLI.Count(commandlist);
                             break;
                         case "list":
-                            purchaseCLI.purchaseListCLI(commandlist);
+                            purchaseCLI.List(commandlist);
                             break;
                         case "delete":
-                            purchaseCLI.purchaseDeleteCLI(commandlist);
+                            purchaseCLI.Delete(commandlist);
                             break;
                         case "help":
                             System.out.println(
@@ -63,7 +63,7 @@ public class PurchaseMain {
                                             + "\t\tcostprice - numbers, mandatory");
                         default:
                             if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                                purchaseCLI.purchaseCreateCLI(command);
+                                purchaseCLI.Create(command);
                             } else {
                                 System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
                                 System.out.println(

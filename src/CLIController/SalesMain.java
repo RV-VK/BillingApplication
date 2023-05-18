@@ -40,13 +40,13 @@ public class SalesMain {
                     SalesCLI salesCLI = new SalesCLI();
                     switch (operationString) {
                         case "count":
-                            salesCLI.salesCountCLI(commandlist);
+                            salesCLI.count(commandlist);
                             break;
                         case "list":
-                            salesCLI.salesListCLI(commandlist);
+                            salesCLI.list(commandlist);
                             break;
                         case "delete":
-                            salesCLI.salesDeleteCLI(commandlist);
+                            salesCLI.delete(commandlist);
                             break;
                         case "help":
                             System.out.println(
@@ -59,7 +59,7 @@ public class SalesMain {
                             break;
                         default:
                             if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                                salesCLI.salesCreateCLI(command);
+                                salesCLI.Create(command);
                             } else {
                                 System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
                                 System.out.println(

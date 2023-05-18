@@ -13,7 +13,7 @@ public class SalesServiceImplementation implements SalesService {
   private SalesDAO salesDAO = new SalesDAOImplementation();
 
   @Override
-  public Sales createSalesService(Sales sales)
+  public Sales create(Sales sales)
       throws ApplicationErrorException, SQLException, UnDividableEntityException {
     boolean isDividable;
     ProductDAO getProductByCode = new ProductDAOImplementation();
@@ -37,7 +37,7 @@ public class SalesServiceImplementation implements SalesService {
   }
 
   @Override
-  public int countSalesService(String parameter) throws ApplicationErrorException {
+  public int count(String parameter) throws ApplicationErrorException {
     SalesDAO salesCountDAO = new SalesDAOImplementation();
     String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
     if (parameter != null) {
@@ -49,7 +49,7 @@ public class SalesServiceImplementation implements SalesService {
   }
 
   @Override
-  public List<Sales> listSalesService(HashMap<String, String> listAttributes)
+  public List<Sales> list(HashMap<String, String> listAttributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
     List<Sales> salesList;
     SalesDAO listSalesDAO = new SalesDAOImplementation();
@@ -74,7 +74,7 @@ public class SalesServiceImplementation implements SalesService {
   }
 
   @Override
-  public int deleteSalesService(String id) throws ApplicationErrorException {
+  public int delete(String id) throws ApplicationErrorException {
     SalesDAO salesDeleteDAO = new SalesDAOImplementation();
     return salesDeleteDAO.delete(Integer.parseInt(id));
   }

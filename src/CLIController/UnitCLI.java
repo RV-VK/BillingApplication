@@ -5,8 +5,6 @@ import Entity.Unit;
 import Service.UnitService;
 import Service.UnitServiceImplementation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +17,7 @@ public class UnitCLI {
   private UnitService unitService = new UnitServiceImplementation();
   private final Scanner scanner = new Scanner(System.in);
 
-  public void unitCreateCLI(List<String> arguments) {
+  public void create(List<String> arguments) {
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
           ">> Create unit using the following template,\n"
@@ -66,7 +64,7 @@ public class UnitCLI {
     Unit unit = new Unit(name, unitcode, description, isDividable);
     Unit createdUnit;
     try {
-      createdUnit = unitService.createUnitService(unit);
+      createdUnit = unitService.create(unit);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
@@ -79,14 +77,14 @@ public class UnitCLI {
     }
   }
 
-  public void unitListCLI(List<String> arguments) throws ApplicationErrorException {
+  public void list(List<String> arguments) throws ApplicationErrorException {
     List<Unit> unitList;
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
           ">> List unit with the following options\n" + ">> unit list - will list all the units");
 
     } else if (arguments.size() == 2) {
-      unitList = unitService.listUnitService();
+      unitList = unitService.list();
       for (Unit unit : unitList) {
         System.out.println(
             ">> id: "
@@ -106,7 +104,7 @@ public class UnitCLI {
     }
   }
 
-  public void unitEditCLI(List<String> arguments,String command) {
+  public void edit(List<String> arguments, String command) {
     final String editCommandRegex="^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
@@ -190,7 +188,7 @@ public class UnitCLI {
     }
     int statusCode;
     try {
-      statusCode = unitService.editUnitService(unit);
+      statusCode = unitService.edit(unit);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
@@ -206,7 +204,7 @@ public class UnitCLI {
     }
   }
 
-  public void unitDeleteCLI(List<String> arguments) throws ApplicationErrorException {
+  public void delete(List<String> arguments) throws ApplicationErrorException {
     String codeRegex = "^[a-zA-Z]{1,4}$";
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
@@ -219,9 +217,9 @@ public class UnitCLI {
         System.out.print(">> Are you Sure you want to delete the Unit y/n :");
         String prompt = scanner.nextLine();
         if (prompt.equals("y")) {
-          if (unitService.deleteUnitService(arguments.get(2)) == 1) {
+          if (unitService.delete(arguments.get(2)) == 1) {
             System.out.println(">> Unit deleted Successfully!!!");
-          } else if (unitService.deleteUnitService(arguments.get(2)) == -1) {
+          } else if (unitService.delete(arguments.get(2)) == -1) {
             System.out.println(">> Unit deletion failed!!!");
             System.out.println(">> Please check the unitcode you have entered!!!");
             System.out.println("Try \"unit delete help\" for proper syntax");

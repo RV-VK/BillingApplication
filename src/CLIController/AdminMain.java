@@ -66,19 +66,19 @@ public class AdminMain {
           UserCLI userCLI = new UserCLI();
           switch (operationString) {
             case "create":
-              userCLI.userCreateCLI(commandlist);
+              userCLI.create(commandlist);
               break;
             case "count":
-              userCLI.userCountCLI(commandlist);
+              userCLI.count(commandlist);
               break;
             case "list":
-              userCLI.userListCLI(commandlist);
+              userCLI.list(commandlist);
               break;
             case "edit":
-              userCLI.userEditCLI(commandlist, command);
+              userCLI.edit(commandlist, command);
               break;
             case "delete":
-              userCLI.userDeleteCLI(commandlist);
+              userCLI.delete(commandlist);
               break;
             default:
               System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
@@ -89,13 +89,13 @@ public class AdminMain {
           StoreCLI storeCLI = new StoreCLI();
           switch (operationString) {
             case "create":
-              storeCLI.storeCreateCLI(commandlist);
+              storeCLI.create(commandlist);
               break;
             case "edit":
-              storeCLI.storeEditCLI(commandlist, command);
+              storeCLI.edit(commandlist, command);
               break;
             case "delete":
-              storeCLI.storeDeleteCLI(commandlist);
+              storeCLI.delete(commandlist);
               break;
             default:
               System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
@@ -106,16 +106,16 @@ public class AdminMain {
           UnitCLI unitCLI = new UnitCLI();
           switch (operationString) {
             case "create":
-              unitCLI.unitCreateCLI(commandlist);
+              unitCLI.create(commandlist);
               break;
             case "list":
-              unitCLI.unitListCLI(commandlist);
+              unitCLI.list(commandlist);
               break;
             case "edit":
-              unitCLI.unitEditCLI(commandlist, command);
+              unitCLI.edit(commandlist, command);
               break;
             case "delete":
-              unitCLI.unitDeleteCLI(commandlist);
+              unitCLI.delete(commandlist);
               break;
             default:
               System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
@@ -126,13 +126,13 @@ public class AdminMain {
           PurchaseCLI purchaseCLI = new PurchaseCLI();
           switch (operationString) {
             case "count":
-              purchaseCLI.purchaseCountCLI(commandlist);
+              purchaseCLI.Count(commandlist);
               break;
             case "list":
-              purchaseCLI.purchaseListCLI(commandlist);
+              purchaseCLI.List(commandlist);
               break;
             case "delete":
-              purchaseCLI.purchaseDeleteCLI(commandlist);
+              purchaseCLI.Delete(commandlist);
               break;
             case "help":
               System.out.println(
@@ -148,7 +148,7 @@ public class AdminMain {
                       + "\t\tcostprice - numbers, mandatory");
             default:
               if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                purchaseCLI.purchaseCreateCLI(command);
+                purchaseCLI.Create(command);
               } else {
                 System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
                 System.out.println(
@@ -160,13 +160,13 @@ public class AdminMain {
           SalesCLI salesCLI = new SalesCLI();
           switch (operationString) {
             case "count":
-              salesCLI.salesCountCLI(commandlist);
+              salesCLI.count(commandlist);
               break;
             case "list":
-              salesCLI.salesListCLI(commandlist);
+              salesCLI.list(commandlist);
               break;
             case "delete":
-              salesCLI.salesDeleteCLI(commandlist);
+              salesCLI.delete(commandlist);
               break;
             case "help":
               System.out.println(
@@ -179,7 +179,7 @@ public class AdminMain {
               break;
             default:
               if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                salesCLI.salesCreateCLI(command);
+                salesCLI.Create(command);
               } else {
                 System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
                 System.out.println(

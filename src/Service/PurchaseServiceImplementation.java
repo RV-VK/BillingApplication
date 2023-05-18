@@ -13,7 +13,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
   private final PurchaseDAO purchaseDAO = new PurchaseDAOImplementation();
 
   @Override
-  public Purchase createPurchaseService(Purchase purchase)
+  public Purchase create(Purchase purchase)
       throws ApplicationErrorException, SQLException {
     ProductDAO productDAO = new ProductDAOImplementation();
     UnitDAO getUnitByCode = new UnitDAOImplementation();
@@ -36,7 +36,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
   }
 
   @Override
-  public int countPurchaseService(String parameter) throws ApplicationErrorException {
+  public int count(String parameter) throws ApplicationErrorException {
     String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
     if (parameter != null) {
       if (!parameter.matches(dateRegex)) return -1;
@@ -45,7 +45,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
   }
 
   @Override
-  public List<Purchase> listPurchaseService(HashMap<String, String> listattributes)
+  public List<Purchase> list(HashMap<String, String> listattributes)
       throws ApplicationErrorException {
     List<Purchase> purchaseList;
     if (Collections.frequency(listattributes.values(), null) == 0
@@ -69,7 +69,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
   }
 
   @Override
-  public int deletePurchaseService(String invoice) throws ApplicationErrorException {
+  public int delete(String invoice) throws ApplicationErrorException {
     return purchaseDAO.delete(Integer.parseInt(invoice));
   }
 }
