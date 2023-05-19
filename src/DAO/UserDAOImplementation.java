@@ -27,23 +27,10 @@ public class UserDAOImplementation implements UserDAO {
       PreparedStatement userCreateStatement =
           userConnection.prepareStatement(
               "INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (?,?,?,?,?,?) RETURNING *");
-      userCreateStatement.setString(1, user.getUserName());
-      userCreateStatement.setString(2, user.getUserType());
-      userCreateStatement.setString(3, user.getPassWord());
-      userCreateStatement.setString(4, user.getFirstName());
-      userCreateStatement.setString(5, user.getLastName());
-      userCreateStatement.setLong(6, user.getPhoneNumber());
+      setParameters(userCreateStatement,user);
       ResultSet userCreateResultSet = userCreateStatement.executeQuery();
       userCreateResultSet.next();
-      User createdUser =
-          new User(
-              userCreateResultSet.getInt(1),
-              userCreateResultSet.getString(3),
-              userCreateResultSet.getString(2),
-              userCreateResultSet.getString(4),
-              userCreateResultSet.getString(5),
-              userCreateResultSet.getString(6),
-              userCreateResultSet.getLong(7));
+      User createdUser=getUserFromResultSet(userCreateResultSet);
       userConnection.commit();
       userConnection.setAutoCommit(true);
       return createdUser;
@@ -56,6 +43,26 @@ public class UserDAOImplementation implements UserDAO {
       throw new ApplicationErrorException(
           "Application has went into an Error!!!\n Please Try again");
     }
+  }
+  private PreparedStatement setParameters(PreparedStatement statement,User user) throws SQLException {
+    statement.setString(1, user.getUserName());
+    statement.setString(2, user.getUserType());
+    statement.setString(3, user.getPassWord());
+    statement.setString(4, user.getFirstName());
+    statement.setString(5, user.getLastName());
+    statement.setLong(6, user.getPhoneNumber());
+    return statement;
+  }
+
+  private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+    return new User(
+            resultSet.getInt(1),
+            resultSet.getString(3),
+            resultSet.getString(2),
+            resultSet.getString(4),
+            resultSet.getString(5),
+            resultSet.getString(6),
+            resultSet.getLong(7));
   }
 
   /**
@@ -191,16 +198,7 @@ public class UserDAOImplementation implements UserDAO {
    */
   private List<User> listHelper(ResultSet resultSet) throws SQLException {
     while (resultSet.next()) {
-      User listedUser =
-          new User(
-              resultSet.getInt(1),
-              resultSet.getString(3),
-              resultSet.getString(2),
-              resultSet.getString(4),
-              resultSet.getString(5),
-              resultSet.getString(6),
-              resultSet.getLong(7));
-      userList.add(listedUser);
+      userList.add(getUserFromResultSet(resultSet));
     }
     return userList;
   }
@@ -223,11 +221,7 @@ public class UserDAOImplementation implements UserDAO {
       String editQuery =
           "UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=?";
       PreparedStatement editStatement = editConnection.prepareStatement(editQuery);
-      editStatement.setString(1, user.getUserName());
-      editStatement.setString(2, user.getUserType());
-      editStatement.setString(3, user.getPassWord());
-      editStatement.setString(4, user.getFirstName());
-      editStatement.setString(5, user.getLastName());
+      setParameters(editStatement,user);
       if (user.getPhoneNumber() == 0) {
         editStatement.setNull(6, Types.BIGINT);
       } else {
@@ -295,12 +289,11 @@ public class UserDAOImplementation implements UserDAO {
    * @param userName Unique entry username of the user
    * @param passWord Password string of the user
    * @return String - Usertype or null
-   * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
   @Override
   public String login(String userName, String passWord)
-      throws SQLException, ApplicationErrorException {
+      throws ApplicationErrorException {
     try{
     ResultSet resultSet = userConnection
             .createStatement()

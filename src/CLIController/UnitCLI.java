@@ -83,7 +83,7 @@ public class UnitCLI {
       System.out.println(">> Template Mismatch!!");
     } else if (createdUnit != null) {
       System.out.println("Unit creation Succesful!!");
-      System.out.println(unit);
+      System.out.println(createdUnit);
     }
   }
 

@@ -28,24 +28,10 @@ public class UnitDAOImplementation implements UnitDAO {
       PreparedStatement unitCreateStatement =
           unitConnection.prepareStatement(
               "INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (?,?,?,?) RETURNING *");
-      unitCreateStatement.setString(1, unit.getName());
-      unitCreateStatement.setString(2, unit.getCode());
-      unitCreateStatement.setString(3, unit.getDescription());
-      unitCreateStatement.setBoolean(4, unit.getIsDividable());
+      setParameters(unitCreateStatement,unit);
       ResultSet unitCreateResultSet = unitCreateStatement.executeQuery();
       unitCreateResultSet.next();
-      boolean isDividable;
-      if (unitCreateResultSet.getString(4).equals("t")) {
-        isDividable = true;
-      } else {
-        isDividable = false;
-      }
-      Unit createdUnit =
-          new Unit(
-              unitCreateResultSet.getString(1),
-              unitCreateResultSet.getString(2),
-              unitCreateResultSet.getString(3),
-              isDividable);
+      Unit createdUnit =getUnitFromResultSet(unitCreateResultSet);
       unitConnection.commit();
       unitConnection.setAutoCommit(true);
       return createdUnit;
@@ -57,6 +43,29 @@ public class UnitDAOImplementation implements UnitDAO {
       throw new ApplicationErrorException(
           "Application has went into an Error!!!\n Please Try again");
     }
+  }
+
+  private PreparedStatement setParameters(PreparedStatement statement, Unit unit) throws SQLException {
+    statement.setString(1, unit.getName());
+    statement.setString(2, unit.getCode());
+    statement.setString(3, unit.getDescription());
+    statement.setBoolean(4, unit.getIsDividable());
+    return statement;
+  }
+  
+  private Unit getUnitFromResultSet(ResultSet resultSet) throws SQLException {
+    boolean isDividable;
+    if (resultSet.getString(5).equals("t")) {
+      isDividable = true;
+    } else {
+      isDividable = false;
+    }
+    return new Unit(
+            resultSet.getInt(1),
+            resultSet.getString(2),
+            resultSet.getString(3),
+            resultSet.getString(4),
+            isDividable);
   }
 
   /**
@@ -72,18 +81,7 @@ public class UnitDAOImplementation implements UnitDAO {
       Statement listStatement = unitConnection.createStatement();
       ResultSet listResultSet = listStatement.executeQuery("SELECT * FROM UNIT ORDER BY CODE");
       while (listResultSet.next()) {
-        int id = listResultSet.getInt(1);
-        String name = listResultSet.getString(2);
-        String code = listResultSet.getString(3);
-        String description = listResultSet.getString(4);
-        boolean isdividable;
-        if (listResultSet.getString(5).equals("t")) {
-          isdividable = true;
-        } else {
-          isdividable = false;
-        }
-        Unit listedUnit = new Unit(id, name, code, description, isdividable);
-        unitList.add(listedUnit);
+        unitList.add(getUnitFromResultSet(listResultSet));
       }
       return unitList;
     } catch (Exception e) {
@@ -110,9 +108,7 @@ public class UnitDAOImplementation implements UnitDAO {
       String editQuery =
           "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=?";
       PreparedStatement editStatement = unitConnection.prepareStatement(editQuery);
-      editStatement.setString(1, unit.getName());
-      editStatement.setString(2, unit.getCode());
-      editStatement.setString(3, unit.getDescription());
+      setParameters(editStatement,unit);
       try {
         editStatement.setBoolean(4, unit.getIsDividable());
       } catch (Exception e) {
@@ -174,13 +170,7 @@ public class UnitDAOImplementation implements UnitDAO {
           getUnitStatement.executeQuery("SELECT * FROM UNIT WHERE CODE='" + code + "'");
       Unit unit = null;
       while (getUnitResultSet.next()) {
-        unit =
-            new Unit(
-                getUnitResultSet.getInt(1),
-                getUnitResultSet.getString(2),
-                getUnitResultSet.getString(3),
-                getUnitResultSet.getString(4),
-                getUnitResultSet.getBoolean(5));
+        unit =getUnitFromResultSet(getUnitResultSet);
       }
       return unit;
     } catch (Exception e) {

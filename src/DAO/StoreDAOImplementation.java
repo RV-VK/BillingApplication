@@ -22,18 +22,10 @@ public class StoreDAOImplementation implements StoreDAO {
       PreparedStatement unitCreateStatement =
           storeConnection.prepareStatement(
               "INSERT INTO STORE(NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (?,?,?,?) RETURNING *");
-      unitCreateStatement.setString(1, store.getName());
-      unitCreateStatement.setLong(2, store.getPhoneNumber());
-      unitCreateStatement.setString(3, store.getAddress());
-      unitCreateStatement.setString(4, store.getGstCode());
+      setParameters(unitCreateStatement,store);
       ResultSet storeCreateResultSet = unitCreateStatement.executeQuery();
       storeCreateResultSet.next();
-      Store createdStore =
-          new Store(
-              storeCreateResultSet.getString(2),
-              storeCreateResultSet.getLong(3),
-              storeCreateResultSet.getString(4),
-              storeCreateResultSet.getString(5));
+      Store createdStore =getStoreFromResultSet(storeCreateResultSet);
       storeConnection.commit();
       storeConnection.setAutoCommit(true);
       return createdStore;
@@ -45,6 +37,21 @@ public class StoreDAOImplementation implements StoreDAO {
         throw new ApplicationErrorException(
           e.getMessage());
     }
+  }
+
+  private PreparedStatement setParameters(PreparedStatement statement,Store store) throws SQLException {
+    statement.setString(1, store.getName());
+    statement.setLong(2, store.getPhoneNumber());
+    statement.setString(3, store.getAddress());
+    statement.setString(4, store.getGstCode());
+    return statement;
+  }
+  private Store getStoreFromResultSet(ResultSet resultSet) throws SQLException {
+    return  new Store(
+            resultSet.getString(2),
+            resultSet.getLong(3),
+            resultSet.getString(4),
+            resultSet.getString(5));
   }
 
   /**
@@ -61,14 +68,12 @@ public class StoreDAOImplementation implements StoreDAO {
       String editQuery =
           "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER)";
       PreparedStatement editStatement = storeConnection.prepareStatement(editQuery);
-      editStatement.setString(1, store.getName());
+      setParameters(editStatement,store);
       if (store.getPhoneNumber() == 0) {
         editStatement.setNull(2, Types.BIGINT);
       } else {
         editStatement.setLong(2, store.getPhoneNumber());
       }
-      editStatement.setString(3, store.getAddress());
-      editStatement.setString(4,store.getGstCode());
       if (editStatement.executeUpdate() > 0) {
         storeConnection.commit();
         storeConnection.setAutoCommit(true);

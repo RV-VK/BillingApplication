@@ -13,11 +13,12 @@ public class ProductDAOImplementation implements ProductDAO {
   /**
    * This Method Creates an Entry in the Product Table
    *
-   * @param product - Input product
-   * @return product - Entered product
+   * @param product Input product entity.
+   * @return product - Entered product entity.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    * @throws SQLException Exception thrown based on SQL syntax.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table
    */
   @Override
   public Product create(Product product)
@@ -30,12 +31,7 @@ public class ProductDAOImplementation implements ProductDAO {
       PreparedStatement productCreateStatement =
           productConnection.prepareStatement(
               "INSERT INTO PRODUCT(CODE,NAME,unitcode,TYPE,PRICE,STOCK) VALUES (?,?,?,?,?,?) RETURNING *");
-      productCreateStatement.setString(1, product.getCode());
-      productCreateStatement.setString(2, product.getName());
-      productCreateStatement.setString(3, product.getunitcode());
-      productCreateStatement.setString(4, product.getType());
-      productCreateStatement.setDouble(5, product.getPrice());
-      productCreateStatement.setFloat(6, product.getAvailableQuantity());
+      setParameters(productCreateStatement,product);
       ResultSet productCreateResultSet = productCreateStatement.executeQuery();
       productCreateResultSet.next();
       productConnection.commit();
@@ -60,6 +56,15 @@ public class ProductDAOImplementation implements ProductDAO {
 
   }
 
+  private PreparedStatement setParameters(PreparedStatement statement,Product product) throws SQLException {
+    statement.setString(1, product.getCode());
+    statement.setString(2, product.getName());
+    statement.setString(3, product.getunitcode());
+    statement.setString(4, product.getType());
+    statement.setDouble(5, product.getPrice());
+    statement.setFloat(6, product.getAvailableQuantity());
+    return statement;
+  }
   /**
    * Private Method to assist Product Construction from ResultSet.
    * @param resultSet - Product ResultSet.
@@ -232,10 +237,7 @@ public class ProductDAOImplementation implements ProductDAO {
       String editQuery =
           "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE) WHERE ID=? ";
       PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
-      editStatement.setString(1, product.getCode());
-      editStatement.setString(2, product.getName());
-      editStatement.setString(3, product.getunitcode());
-      editStatement.setString(4, product.getType());
+      setParameters(editStatement,product);
       if (product.getPrice() == 0) {
         editStatement.setNull(5, Types.NUMERIC);
       } else {
@@ -340,7 +342,7 @@ public class ProductDAOImplementation implements ProductDAO {
    */
   public int updateStock(String code,float stock) throws ApplicationErrorException {
     try{
-    return productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK="+stock+" WHERE CODE='"+code+"'");
+    return productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+"+stock+" WHERE CODE='"+code+"'");
     }catch(Exception e)
     {
       throw new ApplicationErrorException(e.getMessage());
