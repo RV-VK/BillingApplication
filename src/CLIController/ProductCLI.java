@@ -118,8 +118,8 @@ public class ProductCLI {
    * This method handles the Presentation layer of the List function.
    *
    * @param arguments - List of Command Arguments.
-   * @throws PageCountOutOfBoundsException
-   * @throws ApplicationErrorException
+   * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in Product table.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
   public void list(List<String> arguments)
       throws PageCountOutOfBoundsException, ApplicationErrorException {
@@ -307,7 +307,7 @@ public class ProductCLI {
   /**
    * This method handles the Presentation Layer of the Count function.
    *
-   * @throws ApplicationErrorException - Exception thrown due to Persistence problem.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problem.
    */
   public void count(List<String> arguments) throws ApplicationErrorException {
     if (arguments.size() > 2) {
@@ -380,7 +380,7 @@ public class ProductCLI {
   /**
    * This method serves the Edit function
    *
-   * @param editAttributes
+   * @param editAttributes Attributes of product to be edited.
    */
   private void editHelper(List<String> editAttributes) {
     Product product = new Product();
@@ -450,7 +450,7 @@ public class ProductCLI {
    * This method handles the Presentation Layer of the Delete function.
    *
    * @param arguments - List of Command arguments.
-   * @throws ApplicationErrorException
+   * @throws ApplicationErrorException Exception thrown due to Persistence problem.
    */
   public void delete(List<String> arguments) throws ApplicationErrorException {
     String numberRegex = "^[0-9]*$";
@@ -488,8 +488,8 @@ public class ProductCLI {
   /**
    * This method serves the Delete function
    *
-   * @param parameter
-   * @throws ApplicationErrorException
+   * @param parameter Input parameter to perform delete.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problem.
    */
   private void deleteHelper(String parameter) throws ApplicationErrorException {
     System.out.println(">> Are you sure want to delete the product y/n ? : ");

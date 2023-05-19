@@ -271,7 +271,7 @@ public class ProductDAOImplementation implements ProductDAO {
   /**
    * This method deletes an entry in the Product table based on the given parameter.
    *
-   * @param parameter - Input Parameter to delete.
+   * @param parameter - Input parameter based on which the row is selected to delete.
    * @return resultCode - Integer
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
