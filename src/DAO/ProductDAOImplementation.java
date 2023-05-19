@@ -56,18 +56,24 @@ public class ProductDAOImplementation implements ProductDAO {
 
   }
 
-  private PreparedStatement setParameters(PreparedStatement statement,Product product) throws SQLException {
+  /**
+   * Private method to Set parameters on PreparedStatement for Product.
+   *
+   * @param statement Statement to be set.
+   * @param product Product entity.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
+  private void setParameters(PreparedStatement statement, Product product) throws SQLException {
     statement.setString(1, product.getCode());
     statement.setString(2, product.getName());
     statement.setString(3, product.getunitcode());
     statement.setString(4, product.getType());
     statement.setDouble(5, product.getPrice());
     statement.setFloat(6, product.getAvailableQuantity());
-    return statement;
   }
   /**
    * Private Method to assist Product Construction from ResultSet.
-   * @param resultSet - Product ResultSet.
+   * @param resultSet Product ResultSet.
    * @return Product
    * @throws SQLException Exception thrown based on SQL syntax.
    */
@@ -273,7 +279,7 @@ public class ProductDAOImplementation implements ProductDAO {
   /**
    * This method deletes an entry in the Product table based on the given parameter.
    *
-   * @param parameter - Input parameter based on which the row is selected to delete.
+   * @param parameter Input parameter based on which the row is selected to delete.
    * @return resultCode - Integer
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */

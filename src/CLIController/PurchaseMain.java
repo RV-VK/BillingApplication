@@ -68,6 +68,7 @@ public class PurchaseMain {
                                             + "\t\tcode - text, min 2 - 6 char, mandatory\n"
                                             + "\t\tquantity - numbers, mandatory\n"
                                             + "\t\tcostprice - numbers, mandatory");
+                            break;
                         default:
                             if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
                                 purchaseCLI.Create(command);
@@ -89,6 +90,7 @@ public class PurchaseMain {
                             System.out.println("Invalid operation for command \""+commandString+"\"");
                             System.out.println("Try \"Help\" for proper syntax");
                     }
+                    break;
                 case "help":
                     System.out.println("product\n"
                             + "\t    list\n");
