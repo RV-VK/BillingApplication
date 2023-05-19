@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface SalesService {
-  Sales createSalesService(Sales sales)
+  Sales create(Sales sales)
       throws ApplicationErrorException, SQLException, UnDividableEntityException;
 
-  int countSalesService(String parameter) throws ApplicationErrorException;
+  int count(String parameter) throws ApplicationErrorException;
 
-  List<Sales> listSalesService(HashMap<String, String> listAttributes)
+  List<Sales> list(HashMap<String, String> listAttributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException;
 
-  int deleteSalesService(String id) throws ApplicationErrorException;
+  int delete(String id) throws ApplicationErrorException;
 }

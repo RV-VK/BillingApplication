@@ -15,9 +15,9 @@ public class UserDAOImplementation implements UserDAO {
    * This method Creates a User Entry in the User table
    * @param user Input Object
    * @return User Object - created
-   * @throws SQLException
-   * @throws ApplicationErrorException
-   * @throws UniqueConstraintException
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
    */
   @Override
   public User create(User user)
@@ -27,23 +27,10 @@ public class UserDAOImplementation implements UserDAO {
       PreparedStatement userCreateStatement =
           userConnection.prepareStatement(
               "INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (?,?,?,?,?,?) RETURNING *");
-      userCreateStatement.setString(1, user.getUserName());
-      userCreateStatement.setString(2, user.getUserType());
-      userCreateStatement.setString(3, user.getPassWord());
-      userCreateStatement.setString(4, user.getFirstName());
-      userCreateStatement.setString(5, user.getLastName());
-      userCreateStatement.setLong(6, user.getPhoneNumber());
+      setParameters(userCreateStatement,user);
       ResultSet userCreateResultSet = userCreateStatement.executeQuery();
       userCreateResultSet.next();
-      User createdUser =
-          new User(
-              userCreateResultSet.getInt(1),
-              userCreateResultSet.getString(3),
-              userCreateResultSet.getString(2),
-              userCreateResultSet.getString(4),
-              userCreateResultSet.getString(5),
-              userCreateResultSet.getString(6),
-              userCreateResultSet.getLong(7));
+      User createdUser=getUserFromResultSet(userCreateResultSet);
       userConnection.commit();
       userConnection.setAutoCommit(true);
       return createdUser;
@@ -57,7 +44,33 @@ public class UserDAOImplementation implements UserDAO {
           "Application has went into an Error!!!\n Please Try again");
     }
   }
+  private PreparedStatement setParameters(PreparedStatement statement,User user) throws SQLException {
+    statement.setString(1, user.getUserName());
+    statement.setString(2, user.getUserType());
+    statement.setString(3, user.getPassWord());
+    statement.setString(4, user.getFirstName());
+    statement.setString(5, user.getLastName());
+    statement.setLong(6, user.getPhoneNumber());
+    return statement;
+  }
 
+  private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+    return new User(
+            resultSet.getInt(1),
+            resultSet.getString(3),
+            resultSet.getString(2),
+            resultSet.getString(4),
+            resultSet.getString(5),
+            resultSet.getString(6),
+            resultSet.getLong(7));
+  }
+
+  /**
+   * This method counts the number od entries in the user table.
+   *
+   * @return count - Integer
+   * @throws ApplicationErrorException Exception thrown due to persistence problems
+   */
   @Override
   public int count() throws ApplicationErrorException {
     try {
@@ -74,6 +87,13 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
+  /**
+   * This method Lists the records in the user table based on a given Search-text.
+   *
+   * @param searchText - The search-text that must be found.
+   * @return List - Users
+   * @throws ApplicationErrorException Exception thrown due to persistence problems
+   */
   @Override
   public List<User> list(String searchText) throws ApplicationErrorException {
     try {
@@ -103,6 +123,17 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
+  /**
+   * This method lists the users in the user table based on the given searchable attribute
+   * and its corresponding search-text formatted in a pageable manner.
+   *
+   * @param attribute  The attribute to be looked upon
+   * @param searchText The search-text to be found.
+   * @param pageLength The number of entries that must be listed.
+   * @param offset The Page number that has to be listed.
+   * @return List - Users
+   * @throws ApplicationErrorException Exception thrown due to persistence problems
+   */
   @Override
   public List list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException {
@@ -159,22 +190,28 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
+  /**
+   * This method serves the ListDAO function.
+   * @param resultSet ListQuery results.
+   * @return List - Users
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   private List<User> listHelper(ResultSet resultSet) throws SQLException {
     while (resultSet.next()) {
-      User listedUser =
-          new User(
-              resultSet.getInt(1),
-              resultSet.getString(3),
-              resultSet.getString(2),
-              resultSet.getString(4),
-              resultSet.getString(5),
-              resultSet.getString(6),
-              resultSet.getLong(7));
-      userList.add(listedUser);
+      userList.add(getUserFromResultSet(resultSet));
     }
     return userList;
   }
 
+  /**
+   * This method updates the attributes of the User entry in the user table.
+   *
+   * @param user  The updated User Entry.
+   * @return status - Boolean
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+   */
   @Override
   public boolean edit(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
@@ -184,11 +221,7 @@ public class UserDAOImplementation implements UserDAO {
       String editQuery =
           "UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=?";
       PreparedStatement editStatement = editConnection.prepareStatement(editQuery);
-      editStatement.setString(1, user.getUserName());
-      editStatement.setString(2, user.getUserType());
-      editStatement.setString(3, user.getPassWord());
-      editStatement.setString(4, user.getFirstName());
-      editStatement.setString(5, user.getLastName());
+      setParameters(editStatement,user);
       if (user.getPhoneNumber() == 0) {
         editStatement.setNull(6, Types.BIGINT);
       } else {
@@ -212,6 +245,13 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
+  /**
+   * This method deleted an entry in the User table based on the given parameter.
+   *
+   * @param username Input parameter based on which the row is selected to delete.
+   * @return resultCode - Integer
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public int delete(String username) throws ApplicationErrorException {
     try {
@@ -229,6 +269,13 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
+  /**
+   * This method acts as a helper method to check whether any entry is made on User table so that the control
+   * of the program is directed as Initial setup or Login.
+   *
+   * @return status - Boolean
+   * @throws SQLException Exception thrown due to Persistence problems.
+   */
   public boolean checkIfInitialSetup() throws SQLException {
     ResultSet resultSet =
         userConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM USERS WHERE USERTYPE='Admin'");
@@ -236,9 +283,17 @@ public class UserDAOImplementation implements UserDAO {
     return resultSet.getInt(1) == 0;
   }
 
+  /**
+   * This method verifies whether the input username and password matches in the user table to enable login for the users.
+   *
+   * @param userName Unique entry username of the user
+   * @param passWord Password string of the user
+   * @return String - Usertype or null
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public String login(String userName, String passWord)
-      throws SQLException, ApplicationErrorException {
+      throws ApplicationErrorException {
     try{
     ResultSet resultSet = userConnection
             .createStatement()

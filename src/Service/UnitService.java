@@ -4,17 +4,16 @@ import DAO.ApplicationErrorException;
 import DAO.UniqueConstraintException;
 import Entity.Unit;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 public interface UnitService {
-  Unit createUnitService(Unit unit)
+  Unit create(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException;
 
-  List<Unit> listUnitService() throws ApplicationErrorException;
+  List<Unit> list() throws ApplicationErrorException;
 
-  int editUnitService(Unit unit)
+  int edit(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException;
 
-  int deleteUnitService(String code) throws ApplicationErrorException;
+  int delete(String code) throws ApplicationErrorException;
 }

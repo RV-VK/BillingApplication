@@ -4,8 +4,7 @@ import DAO.ApplicationErrorException;
 import Entity.Store;
 import Service.StoreService;
 import Service.StoreServiceImplementation;
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +16,13 @@ public class StoreCLI {
   private StoreService storeService = new StoreServiceImplementation();
   private final Scanner scanner = new Scanner(System.in);
 
-  public void storeCreateCLI(List<String> arguments) {
+
+  /**
+   * This method handles the presentation layer of the Create function
+   *
+   * @param arguments Command arguments.
+   */
+  public void create(List<String> arguments) {
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
           ">> Create store using the following template,\n"
@@ -38,6 +43,11 @@ public class StoreCLI {
     createHelper(arguments.subList(2, arguments.size()));
   }
 
+  /**
+   * This method serves the create function.
+   *
+   * @param storeAttributes Attributes of Store entity.
+   */
   private void createHelper(List<String> storeAttributes) {
     if (storeAttributes.size() < 4) {
       System.out.println(">> Insufficient arguments for command \"store create\"");
@@ -64,7 +74,7 @@ public class StoreCLI {
     Store store = new Store(name, phoneNumber, address, GSTNumber);
     Store createdStore;
     try {
-      createdStore = storeService.createStoreService(store);
+      createdStore = storeService.create(store);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
@@ -77,7 +87,14 @@ public class StoreCLI {
       System.out.println(">> Template Mismatch!!");
     }
   }
-  public void storeEditCLI(List<String> arguments,String command) {
+
+  /**
+   * This method handles the presentation layer of the Edit function
+   *
+   * @param arguments Command arguments.
+   * @param command Command String.
+   */
+  public void edit(List<String> arguments, String command) {
     final String editCommandRegex = "^name:\\s*([A-Za-z\\s]+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
@@ -116,6 +133,12 @@ public class StoreCLI {
     }
   }
 
+
+  /**
+   * This method serves the Edit function.
+   *
+   * @param editAttributes Store attributes to be edited.
+   */
   private void editHelper(List<String> editAttributes) {
     Store store = new Store();
     for (int index = 0; index < editAttributes.size(); index = index + 2) {
@@ -143,7 +166,7 @@ public class StoreCLI {
     }
     int statusCode;
     try {
-      statusCode = storeService.editStoreService(store);
+      statusCode = storeService.edit(store);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
@@ -159,7 +182,13 @@ public class StoreCLI {
     }
   }
 
-  public void storeDeleteCLI(List<String> arguments) throws ApplicationErrorException {
+  /**
+   * This method handles the presentation layer of the Delete function.
+   *
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
+  public void delete(List<String> arguments) throws ApplicationErrorException {
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(">> delete store using the following template\n" + "\tstore delete \n");
     } else if (arguments.size() == 2) {
@@ -169,7 +198,7 @@ public class StoreCLI {
       if (prompt.equals("y")) {
         System.out.print(">> Enter admin password to delete the store: ");
         String password = scanner.nextLine();
-        int resultCode = storeService.deleteStoreService(password);
+        int resultCode = storeService.delete(password);
         if (resultCode == 1) {
           System.out.println(">> Store deleted Successfully !!! GOOD BYE !");
         } else if (resultCode == -1) {

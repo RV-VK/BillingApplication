@@ -11,6 +11,15 @@ import java.util.List;
 public class UnitDAOImplementation implements UnitDAO {
   private Connection unitConnection = DBHelper.getConnection();
 
+  /**
+   * This method creates an Entry in the Unit table.
+   *
+   * @param unit Input Unit
+   * @return Unit - Created Unit.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL table
+   */
   @Override
   public Unit create(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
@@ -19,24 +28,10 @@ public class UnitDAOImplementation implements UnitDAO {
       PreparedStatement unitCreateStatement =
           unitConnection.prepareStatement(
               "INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (?,?,?,?) RETURNING *");
-      unitCreateStatement.setString(1, unit.getName());
-      unitCreateStatement.setString(2, unit.getCode());
-      unitCreateStatement.setString(3, unit.getDescription());
-      unitCreateStatement.setBoolean(4, unit.getIsDividable());
+      setParameters(unitCreateStatement,unit);
       ResultSet unitCreateResultSet = unitCreateStatement.executeQuery();
       unitCreateResultSet.next();
-      boolean isDividable;
-      if (unitCreateResultSet.getString(4).equals("t")) {
-        isDividable = true;
-      } else {
-        isDividable = false;
-      }
-      Unit createdUnit =
-          new Unit(
-              unitCreateResultSet.getString(1),
-              unitCreateResultSet.getString(2),
-              unitCreateResultSet.getString(3),
-              isDividable);
+      Unit createdUnit =getUnitFromResultSet(unitCreateResultSet);
       unitConnection.commit();
       unitConnection.setAutoCommit(true);
       return createdUnit;
@@ -50,6 +45,35 @@ public class UnitDAOImplementation implements UnitDAO {
     }
   }
 
+  private PreparedStatement setParameters(PreparedStatement statement, Unit unit) throws SQLException {
+    statement.setString(1, unit.getName());
+    statement.setString(2, unit.getCode());
+    statement.setString(3, unit.getDescription());
+    statement.setBoolean(4, unit.getIsDividable());
+    return statement;
+  }
+  
+  private Unit getUnitFromResultSet(ResultSet resultSet) throws SQLException {
+    boolean isDividable;
+    if (resultSet.getString(5).equals("t")) {
+      isDividable = true;
+    } else {
+      isDividable = false;
+    }
+    return new Unit(
+            resultSet.getInt(1),
+            resultSet.getString(2),
+            resultSet.getString(3),
+            resultSet.getString(4),
+            isDividable);
+  }
+
+  /**
+   * This method Lists all the entries of the Unit table.
+   *
+   * @return List - Units.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public List<Unit> list() throws ApplicationErrorException {
     List<Unit> unitList = new ArrayList<>();
@@ -57,18 +81,7 @@ public class UnitDAOImplementation implements UnitDAO {
       Statement listStatement = unitConnection.createStatement();
       ResultSet listResultSet = listStatement.executeQuery("SELECT * FROM UNIT ORDER BY CODE");
       while (listResultSet.next()) {
-        int id = listResultSet.getInt(1);
-        String name = listResultSet.getString(2);
-        String code = listResultSet.getString(3);
-        String description = listResultSet.getString(4);
-        boolean isdividable;
-        if (listResultSet.getString(5).equals("t")) {
-          isdividable = true;
-        } else {
-          isdividable = false;
-        }
-        Unit listedUnit = new Unit(id, name, code, description, isdividable);
-        unitList.add(listedUnit);
+        unitList.add(getUnitFromResultSet(listResultSet));
       }
       return unitList;
     } catch (Exception e) {
@@ -78,6 +91,15 @@ public class UnitDAOImplementation implements UnitDAO {
     }
   }
 
+  /**
+   * This method updates the attributes of the Unit entry in the Unit table.
+   *
+   * @param unit Updated Unit.
+   * @return resultCode - Integer.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+   */
   @Override
   public int edit(Unit unit)
       throws ApplicationErrorException, SQLException, UniqueConstraintException {
@@ -86,9 +108,7 @@ public class UnitDAOImplementation implements UnitDAO {
       String editQuery =
           "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=?";
       PreparedStatement editStatement = unitConnection.prepareStatement(editQuery);
-      editStatement.setString(1, unit.getName());
-      editStatement.setString(2, unit.getCode());
-      editStatement.setString(3, unit.getDescription());
+      setParameters(editStatement,unit);
       try {
         editStatement.setBoolean(4, unit.getIsDividable());
       } catch (Exception e) {
@@ -113,6 +133,13 @@ public class UnitDAOImplementation implements UnitDAO {
     }
   }
 
+  /**
+   * This method deletes an entry in the Unit table.
+   *
+   * @param code Input attribute to perform delete.
+   * @return resultCode - Integer
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public int delete(String code) throws ApplicationErrorException {
     try {
@@ -128,6 +155,13 @@ public class UnitDAOImplementation implements UnitDAO {
     }
   }
 
+  /**
+   * This method returns a Unit entry based on its attribute code.
+   *
+   * @param code Input code
+   * @return Unit
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public Unit findByCode(String code) throws ApplicationErrorException {
     try {
@@ -136,13 +170,7 @@ public class UnitDAOImplementation implements UnitDAO {
           getUnitStatement.executeQuery("SELECT * FROM UNIT WHERE CODE='" + code + "'");
       Unit unit = null;
       while (getUnitResultSet.next()) {
-        unit =
-            new Unit(
-                getUnitResultSet.getInt(1),
-                getUnitResultSet.getString(2),
-                getUnitResultSet.getString(3),
-                getUnitResultSet.getString(4),
-                getUnitResultSet.getBoolean(5));
+        unit =getUnitFromResultSet(getUnitResultSet);
       }
       return unit;
     } catch (Exception e) {

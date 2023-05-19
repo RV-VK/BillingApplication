@@ -7,6 +7,14 @@ import java.sql.*;
 public class StoreDAOImplementation implements StoreDAO {
   private Connection storeConnection = DBHelper.getConnection();
 
+
+  /**
+   * This method creates an Entry in the Store table.
+   * @param store Input Store entity.
+   * @return Store - Created store.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   @Override
   public Store create(Store store) throws ApplicationErrorException, SQLException {
     try {
@@ -14,18 +22,10 @@ public class StoreDAOImplementation implements StoreDAO {
       PreparedStatement unitCreateStatement =
           storeConnection.prepareStatement(
               "INSERT INTO STORE(NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (?,?,?,?) RETURNING *");
-      unitCreateStatement.setString(1, store.getName());
-      unitCreateStatement.setLong(2, store.getPhoneNumber());
-      unitCreateStatement.setString(3, store.getAddress());
-      unitCreateStatement.setString(4, store.getGstCode());
+      setParameters(unitCreateStatement,store);
       ResultSet storeCreateResultSet = unitCreateStatement.executeQuery();
       storeCreateResultSet.next();
-      Store createdStore =
-          new Store(
-              storeCreateResultSet.getString(2),
-              storeCreateResultSet.getLong(3),
-              storeCreateResultSet.getString(4),
-              storeCreateResultSet.getString(5));
+      Store createdStore =getStoreFromResultSet(storeCreateResultSet);
       storeConnection.commit();
       storeConnection.setAutoCommit(true);
       return createdStore;
@@ -39,6 +39,28 @@ public class StoreDAOImplementation implements StoreDAO {
     }
   }
 
+  private PreparedStatement setParameters(PreparedStatement statement,Store store) throws SQLException {
+    statement.setString(1, store.getName());
+    statement.setLong(2, store.getPhoneNumber());
+    statement.setString(3, store.getAddress());
+    statement.setString(4, store.getGstCode());
+    return statement;
+  }
+  private Store getStoreFromResultSet(ResultSet resultSet) throws SQLException {
+    return  new Store(
+            resultSet.getString(2),
+            resultSet.getLong(3),
+            resultSet.getString(4),
+            resultSet.getString(5));
+  }
+
+  /**
+   * This method updates the attributes of the Store entry in the Store table.
+   * @param store Updated Store entity.
+   * @return statusCode - Integer.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
+   */
   @Override
   public int edit(Store store) throws SQLException, ApplicationErrorException {
     storeConnection.setAutoCommit(false);
@@ -46,14 +68,12 @@ public class StoreDAOImplementation implements StoreDAO {
       String editQuery =
           "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER)";
       PreparedStatement editStatement = storeConnection.prepareStatement(editQuery);
-      editStatement.setString(1, store.getName());
+      setParameters(editStatement,store);
       if (store.getPhoneNumber() == 0) {
         editStatement.setNull(2, Types.BIGINT);
       } else {
         editStatement.setLong(2, store.getPhoneNumber());
       }
-      editStatement.setString(3, store.getAddress());
-      editStatement.setString(4,store.getGstCode());
       if (editStatement.executeUpdate() > 0) {
         storeConnection.commit();
         storeConnection.setAutoCommit(true);
@@ -69,6 +89,13 @@ public class StoreDAOImplementation implements StoreDAO {
     }
   }
 
+  /**
+   * This method deleted the store Entry in the Store table.
+   *
+   * @param adminPassword Password String to allow to delete store.
+   * @return statusCode - Integer.
+   * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
+   */
   @Override
   public int delete(String adminPassword) throws ApplicationErrorException {
     try {

@@ -9,16 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface UserService {
-  User createUserService(User user)
+  User create(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException;
 
-  int countUserService() throws ApplicationErrorException;
+  int count() throws ApplicationErrorException;
 
-  List<User> listUserService(HashMap<String, String> listattributes)
+  List<User> list(HashMap<String, String> listattributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException;
 
-  int editUserService(User user)
+  int edit(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException;
 
-  int deleteUserService(String username) throws ApplicationErrorException;
+  int delete(String username) throws ApplicationErrorException;
 }

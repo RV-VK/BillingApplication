@@ -13,6 +13,14 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   private List<Purchase> purchaseList = new ArrayList<>();
 
 
+  /**
+   * This method is a composite function that creates an entry in both Purchase and PurchaseItems table.
+   *
+   * @param purchase Purchase to be entered.
+   * @return Purchase - Created Purchase Entry.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   @Override
   public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException {
     try {
@@ -20,26 +28,18 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
       PreparedStatement stockUpdateStatement = purchaseConnection.prepareStatement("UPDATE PRODUCT SET STOCK=STOCK+? WHERE CODE=?");
       PreparedStatement purchaseEntryStatement = purchaseConnection.prepareStatement("INSERT INTO PURCHASE(DATE,INVOICE,GRANDTOTAL) VALUES(?,?,?) RETURNING *");
       PreparedStatement productNameStatement = purchaseConnection.prepareStatement("SELECT NAME FROM PRODUCT WHERE CODE=?");
-      purchaseEntryStatement.setDate(1, Date.valueOf(purchase.getDate()));
-      purchaseEntryStatement.setInt(2, purchase.getInvoice());
-      purchaseEntryStatement.setDouble(3, purchase.getGrandTotal());
+      setPurchase(purchaseEntryStatement,purchase);
       ResultSet purchaseEntryResultSet = purchaseEntryStatement.executeQuery();
       Purchase purchaseEntry = new Purchase();
       while (purchaseEntryResultSet.next()) {
-        purchaseEntry.setId(purchaseEntryResultSet.getInt(1));
-        purchaseEntry.setDate(String.valueOf(purchaseEntryResultSet.getDate(2)));
-        purchaseEntry.setInvoice(purchaseEntryResultSet.getInt(3));
-        purchaseEntry.setGrandTotal(purchaseEntryResultSet.getDouble(4));
+            purchaseEntry=getPurchaseFromResultSet(purchaseEntryResultSet,purchaseEntry);
       }
       List<PurchaseItem> purchaseItemList = new ArrayList<>();
       PreparedStatement purchaseItemInsertStatement =
           purchaseConnection.prepareStatement("INSERT INTO PURCHASEITEMS(INVOICE,PRODUCTCODE,QUANTITY,COSTPRICE) VALUES(?,?,?,?) RETURNING *");
       ResultSet purchaseItemInsertResultSet;
       for (PurchaseItem purchaseItem : purchase.getPurchaseItemList()) {
-        purchaseItemInsertStatement.setInt(1, purchase.getInvoice());
-        purchaseItemInsertStatement.setString(2, purchaseItem.getProduct().getCode());
-        purchaseItemInsertStatement.setFloat(3, purchaseItem.getQuantity());
-        purchaseItemInsertStatement.setDouble(4, purchaseItem.getUnitPurchasePrice());
+        setPurchaseItems(purchaseItemInsertStatement,purchaseItem,purchase);
         purchaseItemInsertResultSet = purchaseItemInsertStatement.executeQuery();
         stockUpdateStatement.setFloat(1, purchaseItem.getQuantity());
         stockUpdateStatement.setString(2, purchaseItem.getProduct().getCode());
@@ -50,12 +50,8 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
           productNameStatement.setString(1, purchaseItemInsertResultSet.getString(2));
           ResultSet productNameResultSet = productNameStatement.executeQuery();
           productNameResultSet.next();
-          purchaseItemList.add(
-              new PurchaseItem(
-                  new Product(
-                      purchaseItemInsertResultSet.getString(2), productNameResultSet.getString(1)),
-                  purchaseItemInsertResultSet.getFloat(3),
-                  purchaseItemInsertResultSet.getDouble(4)));
+          purchaseItemList.add(getPurchaseItemFromResultSet(purchaseItemInsertResultSet,productNameResultSet.getString(1)));
+
         }
       }
       purchaseEntry.setPurchaseItemList(purchaseItemList);
@@ -70,6 +66,41 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
     }
   }
 
+  private PreparedStatement setPurchase(PreparedStatement statement,Purchase purchase) throws SQLException {
+    statement.setDate(1, Date.valueOf(purchase.getDate()));
+    statement.setInt(2, purchase.getInvoice());
+    statement.setDouble(3, purchase.getGrandTotal());
+    return statement;
+  }
+  private PreparedStatement setPurchaseItems(PreparedStatement statement,PurchaseItem purchaseItem,Purchase purchase) throws SQLException {
+    statement.setInt(1, purchase.getInvoice());
+    statement.setString(2, purchaseItem.getProduct().getCode());
+    statement.setFloat(3, purchaseItem.getQuantity());
+    statement.setDouble(4, purchaseItem.getUnitPurchasePrice());
+    return statement;
+
+  }
+  private Purchase getPurchaseFromResultSet(ResultSet resultSet,Purchase purchase) throws SQLException {
+    purchase.setId(resultSet.getInt(1));
+    purchase.setDate(String.valueOf(resultSet.getDate(2)));
+    purchase.setInvoice(resultSet.getInt(3));
+    purchase.setGrandTotal(resultSet.getDouble(4));
+    return purchase;
+  }
+  private PurchaseItem getPurchaseItemFromResultSet(ResultSet resultSet,String name) throws SQLException {
+    return new PurchaseItem(
+            new Product(
+                    resultSet.getString(2), name),
+            resultSet.getFloat(3),
+            resultSet.getDouble(4));
+  }
+
+  /**
+   * This method counts the number of entries in the Purchase table based on date parameter.
+   * @param parameter Date of Purchase
+   * @return Count - Integer.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public int count(String parameter) throws ApplicationErrorException {
     int count;
@@ -91,6 +122,18 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
       throw new ApplicationErrorException(e.getMessage());
     }
   }
+
+  /**
+   * This method Lists the Purchase and PurchaseItem entries based on the given searchable attribute
+   * and its corresponding search-text formatted in a pageable manner.
+   *
+   * @param attribute The attribute to be looked upon.
+   * @param searchText The searchtext to be found.
+   * @param pageLength The number of entries that must be listed.
+   * @param offset The Page number to be listed.
+   * @return List - Purchase.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
 
   @Override
   public List list(String attribute, String searchText, int pageLength, int offset)
@@ -150,6 +193,12 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   }
 
 
+  /**
+   * This method lists the entries in the Purchase and PurchaseItems table based on the given search-text.
+   * @param searchText The search-text to be found.
+   * @return List - Purchase
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public List list(String searchText) throws ApplicationErrorException {
     try {
@@ -168,13 +217,17 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
     }
   }
 
+  /**
+   * This method serves the listDAO function.
+   *
+   * @param resultSet ListQuery results.
+   * @return List - Purchase.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   private List<Purchase> listHelper(ResultSet resultSet) throws SQLException {
     while (resultSet.next()) {
       Purchase listedPurchase = new Purchase();
-      listedPurchase.setId(resultSet.getInt(1));
-      listedPurchase.setDate(String.valueOf(resultSet.getDate(2)));
-      listedPurchase.setInvoice(resultSet.getInt(3));
-      listedPurchase.setGrandTotal(resultSet.getInt(4));
+      getPurchaseFromResultSet(resultSet,listedPurchase);
       purchaseList.add(listedPurchase);
     }
     PreparedStatement listPurchaseItemsStatement =
@@ -185,17 +238,19 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
       listPurchaseItemsStatement.setInt(1, purchase.getInvoice());
       ResultSet listPurchaseResultSet = listPurchaseItemsStatement.executeQuery();
       while (listPurchaseResultSet.next()) {
-        purchaseItemList.add(
-                new PurchaseItem(
-                        new Product(
-                                listPurchaseResultSet.getString(2), listPurchaseResultSet.getString(1)),
-                        listPurchaseResultSet.getFloat(3),
-                        listPurchaseResultSet.getDouble(4)));
+        purchaseItemList.add(getPurchaseItemFromResultSet(listPurchaseResultSet,listPurchaseResultSet.getString(1)));
       }
       purchase.setPurchaseItemList(purchaseItemList);
     }
     return purchaseList;
   }
+
+  /**
+   * This method deletes an entry in the Purchase table and the corresponding entries in the purchase-items table
+   * @param invoice Input invoice to perform delete.
+   * @return resultCode - Integer.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   @Override
   public int delete(int invoice) throws ApplicationErrorException {
     try {

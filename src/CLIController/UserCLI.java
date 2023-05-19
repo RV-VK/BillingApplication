@@ -2,12 +2,10 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
-import Entity.Product;
 import Entity.User;
 import Service.UserService;
 import Service.UserServiceImplementation;
 
-import javax.swing.*;
 import java.util.*;
 
 public class UserCLI {
@@ -30,7 +28,13 @@ public class UserCLI {
   private List<String> userAttributes =
       Arrays.asList(
           "id", "usertype", "username", "password", "firstname", "lastname", "phonenumber");
-  public void userCreateCLI(List<String> arguments) {
+
+  /**
+   * This method handles the presentation layer of the Create function.
+   *
+   * @param arguments - List of command arguments.
+   */
+  public void create(List<String> arguments) {
     Scanner scanner = new Scanner(System.in);
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
@@ -53,6 +57,11 @@ public class UserCLI {
     createHelper(arguments.subList(2, arguments.size()));
   }
 
+  /**
+   *This method serves the create function.
+   *
+   * @param userAttributes
+   */
   private void createHelper(List<String> userAttributes) {
     if (userAttributes.size() < 6) {
       System.out.println("Insufficient arguments for command \"user create\"");
@@ -79,7 +88,7 @@ public class UserCLI {
     User user = new User(userType, userName, passWord, firstName, lastName, phoneNumber);
     User createdUser;
     try {
-      createdUser = userService.createUserService(user);
+      createdUser = userService.create(user);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
@@ -93,16 +102,30 @@ public class UserCLI {
     }
   }
 
-  public void userCountCLI(List<String> arguments) throws ApplicationErrorException {
+  /**
+   * This method handles the Presentation layer of the Count function.
+   *
+   * @param arguments List of command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
+  public void count(List<String> arguments) throws ApplicationErrorException {
     if (arguments.size() > 2) {
       System.out.println(">> Invalid Command!! Try \"help\"");
       return;
     }
-    int userCount = userService.countUserService();
+    int userCount = userService.count();
     System.out.println(">> User Count " + userCount);
   }
 
-  public void userListCLI(List<String> arguments)
+
+  /**
+   * This method handles the Presentation layer of the List function.
+   *
+   * @param arguments List of Command arguments.
+   * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in User table.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
+  public void list(List<String> arguments)
       throws PageCountOutOfBoundsException, ApplicationErrorException {
     listAttributesMap.put("Pagelength", null);
     listAttributesMap.put("Pagenumber", null);
@@ -248,9 +271,14 @@ public class UserCLI {
     }
   }
 
+  /**
+   * This method serves the List function.
+   *
+   * @param listAttributesMap - Attribute list of the List function
+   */
   private void listHelper(HashMap<String, String> listAttributesMap) {
     try{
-    userList = userService.listUserService(listAttributesMap);
+    userList = userService.list(listAttributesMap);
     if (userList == null) {
       System.out.println(">>Given SearchText does not exist!!!");
       return;
@@ -279,7 +307,15 @@ public class UserCLI {
     }
   }
 
-  public void userEditCLI(List<String> arguments,String command) {
+
+  /**
+   * This method handles the Presentation Layer of the Edit function.
+   *
+   * @param arguments List of Command arguments
+   * @param command Command String.
+   *
+   */
+  public void edit(List<String> arguments, String command) {
     final String editCommandRegex="^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
@@ -328,6 +364,11 @@ public class UserCLI {
     }
   }
 
+  /**
+   * This method serves the Edit function
+   *
+   * @param editAttributes Attributes of user to be edited.
+   */
   private void editHelper(List<String> editAttributes) {
     User user = new User();
     try {
@@ -365,7 +406,7 @@ public class UserCLI {
     }
     int statusCode;
     try {
-      statusCode = userService.editUserService(user);
+      statusCode = userService.edit(user);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
@@ -381,7 +422,13 @@ public class UserCLI {
     }
   }
 
-  public void userDeleteCLI(List<String> arguments) throws ApplicationErrorException {
+  /**
+   * This method handles the presentation layer of the Delete function.
+   *
+   * @param arguments List of Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problem.
+   */
+  public void delete(List<String> arguments) throws ApplicationErrorException {
     String nameregex = "^[a-zA-Z0-9]{3,30}$";
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
@@ -395,9 +442,9 @@ public class UserCLI {
         System.out.println(">> Are you sure want to delete the User y/n ? : ");
         String prompt = scanner.nextLine();
         if (prompt.equals("y")) {
-          if (userService.deleteUserService(arguments.get(2)) == 1) {
+          if (userService.delete(arguments.get(2)) == 1) {
             System.out.println("User Deleted Successfull!!!");
-          } else if (userService.deleteUserService(arguments.get(2)) == -1) {
+          } else if (userService.delete(arguments.get(2)) == -1) {
             System.out.println(">> User Deletion Failed!!!");
             System.out.println(">> Please check the username you have entered!!!");
             System.out.println("Try \"user delete help\" for proper syntax");

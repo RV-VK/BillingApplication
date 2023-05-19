@@ -9,6 +9,13 @@ import java.util.Scanner;
 
 public class SalesMain {
     static Scanner scanner;
+
+    /**
+     * Sales user View Control.
+     *
+     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+     * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+     */
     public static void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException {
         scanner=new Scanner(System.in);
         System.out.println(" TO THE BILLING SOFTWARE_____________________");
@@ -33,20 +40,21 @@ public class SalesMain {
                 commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
             }
             String commandString = commandlist.get(0);
-            String operationString = commandlist.get(1);
+            String operationString ="";
+            if (commandlist.size() > 1) operationString = commandlist.get(1);
             switch(commandString)
             {
                 case "sales":
                     SalesCLI salesCLI = new SalesCLI();
                     switch (operationString) {
                         case "count":
-                            salesCLI.salesCountCLI(commandlist);
+                            salesCLI.count(commandlist);
                             break;
                         case "list":
-                            salesCLI.salesListCLI(commandlist);
+                            salesCLI.list(commandlist);
                             break;
                         case "delete":
-                            salesCLI.salesDeleteCLI(commandlist);
+                            salesCLI.delete(commandlist);
                             break;
                         case "help":
                             System.out.println(
@@ -59,7 +67,7 @@ public class SalesMain {
                             break;
                         default:
                             if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                                salesCLI.salesCreateCLI(command);
+                                salesCLI.Create(command);
                             } else {
                                 System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
                                 System.out.println(

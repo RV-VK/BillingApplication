@@ -1,7 +1,6 @@
 package CLIController;
 
 import DAO.ApplicationErrorException;
-import DAO.PageCountOutOfBoundsException;
 import Entity.*;
 import Service.SalesService;
 import Service.SalesServiceImplementation;
@@ -23,7 +22,13 @@ public class SalesCLI {
   private Scanner scanner = new Scanner(System.in);
   private List<Sales> salesList;
 
-  public void salesCreateCLI(String command) {
+
+  /**
+   * This method handles the Presentation layer of the Create function.
+   *
+   * @param command Command String.
+   */
+  public void Create(String command) {
     String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
     String[] commandEntities = command.split(",\\s*(?=\\[)");
     if (commandEntities.length < 1) {
@@ -62,7 +67,7 @@ public class SalesCLI {
       Sales sales = new Sales(salesDate, salesItemList, grandTotal);
       Sales createdSale;
       try {
-        createdSale = salesService.createSalesService(sales);
+        createdSale = salesService.create(sales);
       } catch (Exception e) {
         System.out.println(e.getMessage());
         return;
@@ -102,12 +107,12 @@ public class SalesCLI {
   }
 
   /**
-   * To count the number of Sales Entry Recorded in the Sales Table.
+   * This method handles the presentation layer of the count function.
    *
-   * @param arguments The arguments provided for the command.
-   * @throws ApplicationErrorException Exception thrown when there is an error with DB Persistence
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
-  public void salesCountCLI(List<String> arguments) throws ApplicationErrorException {
+  public void count(List<String> arguments) throws ApplicationErrorException {
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
         System.out.println(
@@ -129,14 +134,14 @@ public class SalesCLI {
       return;
     }
     if (arguments.size() == 2) {
-      int salesCount = salesService.countSalesService(null);
+      int salesCount = salesService.count(null);
       System.out.println(">> SalesCount :" + salesCount);
       return;
     }
     if (arguments.size() == 4) {
       if (arguments.get(2).equals("-d")) {
         String parameter = arguments.get(3);
-        int salesCount = salesService.countSalesService(parameter);
+        int salesCount = salesService.count(parameter);
         if (salesCount > 0) System.out.println(">> SalesCount " + salesCount);
         else {
           System.out.println(">> Given Date or Category not found!!!");
@@ -152,7 +157,13 @@ public class SalesCLI {
     }
   }
 
-  public void salesListCLI(List<String> arguments) {
+
+  /**
+   * This method handles the presentation layer of the List function.
+   *
+   * @param arguments Command arguments.
+   */
+  public void list(List<String> arguments) {
     listAttributesMap.put("Pagelength", null);
     listAttributesMap.put("Pagenumber", null);
     listAttributesMap.put("Attribute", null);
@@ -301,9 +312,15 @@ public class SalesCLI {
     }
   }
 
+
+  /**
+   * This method serves the List function.
+   *
+   * @param listAttributesMap
+   */
   private void listHelper(HashMap<String, String> listAttributesMap) {
     try{
-    salesList = salesService.listSalesService(listAttributesMap);
+    salesList = salesService.list(listAttributesMap);
     if (salesList == null) {
         if (!listAttributesMap.get("Searchtext").equals("id")) {
           System.out.println(">> Given SearchText does not exist!!!");
@@ -337,7 +354,14 @@ public class SalesCLI {
     }
   }
 
-  public void salesDeleteCLI(List<String> arguments) throws ApplicationErrorException {
+
+  /**
+   * This method handles the presentation layer of the Delete function.
+   *
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
+  public void delete(List<String> arguments) throws ApplicationErrorException {
     String numberRegex = "^[0-9]{1,10}$";
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
@@ -350,7 +374,7 @@ public class SalesCLI {
         System.out.println(">> Are you sure you want to delete the Sales Entry y/n : ");
         String prompt = scanner.nextLine();
         if (prompt.equals("y")) {
-          int resultCode = salesService.deleteSalesService(arguments.get(2));
+          int resultCode = salesService.delete(arguments.get(2));
           if (resultCode == 1) {
             System.out.println(">> Sales Entry Deleted Successfully!!!");
           } else if (resultCode == -1) {

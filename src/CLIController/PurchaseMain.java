@@ -10,6 +10,12 @@ import java.util.Scanner;
 
 public class PurchaseMain {
     static Scanner scanner;
+
+    /**
+     * Purchase user View Control.
+     * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+     */
     public static void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException {
         scanner=new Scanner(System.in);
         System.out.println(" TO THE BILLING SOFTWARE_____________________");
@@ -34,20 +40,21 @@ public class PurchaseMain {
                 commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
             }
             String commandString = commandlist.get(0);
-            String operationString = commandlist.get(1);
+            String operationString ="";
+            if (commandlist.size() > 1) operationString = commandlist.get(1);
             switch(commandString)
             {
                 case "purchase":
                     PurchaseCLI purchaseCLI = new PurchaseCLI();
                     switch (operationString) {
                         case "count":
-                            purchaseCLI.purchaseCountCLI(commandlist);
+                            purchaseCLI.Count(commandlist);
                             break;
                         case "list":
-                            purchaseCLI.purchaseListCLI(commandlist);
+                            purchaseCLI.List(commandlist);
                             break;
                         case "delete":
-                            purchaseCLI.purchaseDeleteCLI(commandlist);
+                            purchaseCLI.Delete(commandlist);
                             break;
                         case "help":
                             System.out.println(
@@ -63,7 +70,7 @@ public class PurchaseMain {
                                             + "\t\tcostprice - numbers, mandatory");
                         default:
                             if (operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-                                purchaseCLI.purchaseCreateCLI(command);
+                                purchaseCLI.Create(command);
                             } else {
                                 System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
                                 System.out.println(

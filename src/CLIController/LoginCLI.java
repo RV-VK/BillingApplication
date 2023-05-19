@@ -18,6 +18,7 @@ public class LoginCLI {
   private static String lastName;
   private static Long phoneNumber;
 
+  /** Login View Main**/
   public static void main(String args[])
       throws SQLException,
           UniqueConstraintException,
@@ -83,6 +84,13 @@ public class LoginCLI {
     }
   }
 
+  /**
+   * The Presentation Layer of the Login function.
+   *
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   private static void Login()
       throws SQLException, PageCountOutOfBoundsException, ApplicationErrorException {
     System.out.println("Please Login To continue to the Billing Software!!\n");

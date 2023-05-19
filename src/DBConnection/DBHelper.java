@@ -4,6 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBHelper {
+
+  /**
+   * This method establishes a connection with DB Layer
+   *
+   * @return connection Object.
+   */
   public static Connection getConnection() {
     Connection connection = null;
     try {
