@@ -369,6 +369,7 @@ public class PurchaseCLI {
                 + purchaseItem.getUnitPurchasePrice()
                 + "], ");
       }
+      System.out.print(purchase.getGrandTotal()+" ");
       System.out.print("]");
       System.out.println();
     }
