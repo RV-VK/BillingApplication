@@ -22,6 +22,12 @@ public class SalesCLI {
   private Scanner scanner = new Scanner(System.in);
   private List<Sales> salesList;
 
+
+  /**
+   * This method handles the Presentation layer of the Create function.
+   *
+   * @param command Command String.
+   */
   public void Create(String command) {
     String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
     String[] commandEntities = command.split(",\\s*(?=\\[)");
@@ -101,10 +107,10 @@ public class SalesCLI {
   }
 
   /**
-   * To count the number of Sales Entry Recorded in the Sales Table.
+   * This method handles the presentation layer of the count function.
    *
-   * @param arguments The arguments provided for the command.
-   * @throws ApplicationErrorException Exception thrown when there is an error with DB Persistence
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
   public void count(List<String> arguments) throws ApplicationErrorException {
     if (arguments.size() == 3) {
@@ -151,6 +157,12 @@ public class SalesCLI {
     }
   }
 
+
+  /**
+   * This method handles the presentation layer of the List function.
+   *
+   * @param arguments Command arguments.
+   */
   public void list(List<String> arguments) {
     listAttributesMap.put("Pagelength", null);
     listAttributesMap.put("Pagenumber", null);
@@ -300,6 +312,12 @@ public class SalesCLI {
     }
   }
 
+
+  /**
+   * This method serves the List function.
+   *
+   * @param listAttributesMap
+   */
   private void listHelper(HashMap<String, String> listAttributesMap) {
     try{
     salesList = salesService.list(listAttributesMap);
@@ -336,6 +354,13 @@ public class SalesCLI {
     }
   }
 
+
+  /**
+   * This method handles the presentation layer of the Delete function.
+   *
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   public void delete(List<String> arguments) throws ApplicationErrorException {
     String numberRegex = "^[0-9]{1,10}$";
     if (arguments.size() == 3) {

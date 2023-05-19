@@ -9,6 +9,13 @@ import java.util.Scanner;
 
 public class SalesMain {
     static Scanner scanner;
+
+    /**
+     * Sales user View Control.
+     *
+     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+     * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+     */
     public static void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException {
         scanner=new Scanner(System.in);
         System.out.println(" TO THE BILLING SOFTWARE_____________________");
@@ -33,7 +40,8 @@ public class SalesMain {
                 commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
             }
             String commandString = commandlist.get(0);
-            String operationString = commandlist.get(1);
+            String operationString ="";
+            if (commandlist.size() > 1) operationString = commandlist.get(1);
             switch(commandString)
             {
                 case "sales":

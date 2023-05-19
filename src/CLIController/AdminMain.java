@@ -11,6 +11,13 @@ import java.util.Scanner;
 public class AdminMain {
   static Scanner scanner;
 
+  /**
+   * The Admin View Control.
+   *
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws PageCountOutOfBoundsException  Custom Exception thrown when a non-existing page is given as input in Pageable List.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   public static void AdminView()
       throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException {
     scanner = new Scanner(System.in);

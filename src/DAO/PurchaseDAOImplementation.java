@@ -79,7 +79,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   }
 
   /**
-   * This method counts the number of entries in the Purchase table based on a parameter.
+   * This method counts the number of entries in the Purchase table based on date parameter.
    * @param parameter Date of Purchase
    * @return Count - Integer.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
@@ -200,6 +200,13 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
     }
   }
 
+  /**
+   * This method serves the listDAO function.
+   *
+   * @param resultSet ListQuery results.
+   * @return List - Purchase.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   private List<Purchase> listHelper(ResultSet resultSet) throws SQLException {
     while (resultSet.next()) {
       Purchase listedPurchase = new Purchase();

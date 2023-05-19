@@ -10,6 +10,12 @@ import java.util.Scanner;
 
 public class PurchaseMain {
     static Scanner scanner;
+
+    /**
+     * Purchase user View Control.
+     * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+     */
     public static void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException {
         scanner=new Scanner(System.in);
         System.out.println(" TO THE BILLING SOFTWARE_____________________");
@@ -34,7 +40,8 @@ public class PurchaseMain {
                 commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
             }
             String commandString = commandlist.get(0);
-            String operationString = commandlist.get(1);
+            String operationString ="";
+            if (commandlist.size() > 1) operationString = commandlist.get(1);
             switch(commandString)
             {
                 case "purchase":

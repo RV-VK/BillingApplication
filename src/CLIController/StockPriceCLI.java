@@ -7,6 +7,12 @@ import java.util.List;
 
 public class StockPriceCLI {
     private ProductService productService=new ProductServiceImplementation();
+
+    /**
+     * This method handles the presentation layer of the stock update function.
+     *
+     * @param arguments Command arguments.
+     */
   public void updateStock(List<String> arguments) {
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
@@ -47,6 +53,12 @@ public class StockPriceCLI {
       System.out.println("Invalid command format!");
     }
   }
+
+    /**
+     * This method handles the price update function.
+     *
+     * @param arguments Command arguments.
+     */
   public void updatePrice(List<String> arguments) {
     if (arguments.size() == 3) {
       if (arguments.get(2).equals("help")) {
