@@ -28,6 +28,12 @@ public class PurchaseCLI {
   private Scanner scanner = new Scanner(System.in);
   private HashMap<String, String> listAttributesMap = new HashMap<>();
 
+
+  /**
+   * This method handles the presentation Layer of the Create function.
+   *
+   * @param command Command String.
+   */
   public void Create(String command) {
     String productCodeRegex = "^[a-zA-Z0-9]{2,6}$";
     String[] commandEntities = command.split(",\\s*(?=\\[)");
@@ -117,6 +123,11 @@ public class PurchaseCLI {
     }
   }
 
+  /**
+   * This method handles the presentation layer of the Count function.
+   * @param arguments Command arguments
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   public void Count(List<String> arguments) throws ApplicationErrorException {
     int purchaseCount;
     if (arguments.size() == 3) {
@@ -165,6 +176,12 @@ public class PurchaseCLI {
     }
   }
 
+  /**
+   * This method handles the presentation layer of the List function.
+   * @param arguments Command arguments
+   * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in Purchase table.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   public void List(List<String> arguments)
       throws PageCountOutOfBoundsException, ApplicationErrorException {
     listAttributesMap.put("Pagelength", null);
@@ -316,6 +333,11 @@ public class PurchaseCLI {
     }
   }
 
+  /**
+   * This method serves the List function.
+   *
+   * @param listAttributesMap Attribute List of the list function.
+   */
   private void listHelper(HashMap<String, String> listAttributesMap)  {
     try{
     purchaseList = purchaseService.list(listAttributesMap);
@@ -357,7 +379,12 @@ public class PurchaseCLI {
     }
   }
 
-
+  /**
+   * This method handles the presentation layer of the Delete function.
+   *
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   public void Delete(List<String> arguments) throws ApplicationErrorException {
     PurchaseService purchaseDeleteService = new PurchaseServiceImplementation();
     String numberRegex = "^[0-9]{1,10}$";

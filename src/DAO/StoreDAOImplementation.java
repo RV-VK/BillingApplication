@@ -7,6 +7,14 @@ import java.sql.*;
 public class StoreDAOImplementation implements StoreDAO {
   private Connection storeConnection = DBHelper.getConnection();
 
+
+  /**
+   * This method creates an Entry in the Store table.
+   * @param store Input Store entity.
+   * @return Store - Created store.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   @Override
   public Store create(Store store) throws ApplicationErrorException, SQLException {
     try {
@@ -39,6 +47,13 @@ public class StoreDAOImplementation implements StoreDAO {
     }
   }
 
+  /**
+   * This method updates the attributes of the Store entry in the Store table.
+   * @param store Updated Store entity.
+   * @return statusCode - Integer.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
+   */
   @Override
   public int edit(Store store) throws SQLException, ApplicationErrorException {
     storeConnection.setAutoCommit(false);
@@ -69,6 +84,13 @@ public class StoreDAOImplementation implements StoreDAO {
     }
   }
 
+  /**
+   * This method deleted the store Entry in the Store table.
+   *
+   * @param adminPassword Password String to allow to delete store.
+   * @return statusCode - Integer.
+   * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
+   */
   @Override
   public int delete(String adminPassword) throws ApplicationErrorException {
     try {

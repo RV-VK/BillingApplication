@@ -311,7 +311,9 @@ public class UserCLI {
   /**
    * This method handles the Presentation Layer of the Edit function.
    *
-   * @param arguments - List of Command arguments
+   * @param arguments List of Command arguments
+   * @param command Command String.
+   *
    */
   public void edit(List<String> arguments, String command) {
     final String editCommandRegex="^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";

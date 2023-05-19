@@ -272,7 +272,7 @@ public class ProductCLI {
   /**
    * This method serves the List function.
    *
-   * @param listAttributesMap - Attribute list of the List function
+   * @param listAttributesMap Attribute list of the List function
    */
   private void listHelper(HashMap<String, String> listAttributesMap) {
     try{
@@ -322,7 +322,8 @@ public class ProductCLI {
   /**
    * This method handles the Presentation Layer of the Edit function.
    *
-   * @param arguments - List of Command arguments
+   * @param arguments List of Command arguments
+   * @param command Command String.
    */
   public void edit(List<String> arguments,String command) {
     final String editCommandRegex="^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";

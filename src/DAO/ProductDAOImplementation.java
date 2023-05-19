@@ -103,7 +103,7 @@ public class ProductDAOImplementation implements ProductDAO {
    *
    * @param searchText The search-text that must be found.
    * @return List - Products
-   * @throws ApplicationErrorException - Exception thrown due to Persistence problems.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
   public List<Product> list(String searchText) throws ApplicationErrorException {
     try {

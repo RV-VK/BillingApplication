@@ -16,6 +16,12 @@ public class StoreCLI {
   private StoreService storeService = new StoreServiceImplementation();
   private final Scanner scanner = new Scanner(System.in);
 
+
+  /**
+   * This method handles the presentation layer of the Create function
+   *
+   * @param arguments Command arguments.
+   */
   public void create(List<String> arguments) {
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
@@ -37,6 +43,11 @@ public class StoreCLI {
     createHelper(arguments.subList(2, arguments.size()));
   }
 
+  /**
+   * This method serves the create function.
+   *
+   * @param storeAttributes Attributes of Store entity.
+   */
   private void createHelper(List<String> storeAttributes) {
     if (storeAttributes.size() < 4) {
       System.out.println(">> Insufficient arguments for command \"store create\"");
@@ -76,6 +87,13 @@ public class StoreCLI {
       System.out.println(">> Template Mismatch!!");
     }
   }
+
+  /**
+   * This method handles the presentation layer of the Edit function
+   *
+   * @param arguments Command arguments.
+   * @param command Command String.
+   */
   public void edit(List<String> arguments, String command) {
     final String editCommandRegex = "^name:\\s*([A-Za-z\\s]+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
@@ -115,6 +133,12 @@ public class StoreCLI {
     }
   }
 
+
+  /**
+   * This method serves the Edit function.
+   *
+   * @param editAttributes Store attributes to be edited.
+   */
   private void editHelper(List<String> editAttributes) {
     Store store = new Store();
     for (int index = 0; index < editAttributes.size(); index = index + 2) {
@@ -158,6 +182,12 @@ public class StoreCLI {
     }
   }
 
+  /**
+   * This method handles the presentation layer of the Delete function.
+   *
+   * @param arguments Command arguments.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
   public void delete(List<String> arguments) throws ApplicationErrorException {
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(">> delete store using the following template\n" + "\tstore delete \n");
