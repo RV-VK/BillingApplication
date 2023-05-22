@@ -18,15 +18,12 @@ public class ProductDAOImplementation implements ProductDAO {
           UniqueConstraintException,
           UnitCodeViolationException {
     try {
-      productConnection.setAutoCommit(false);
       PreparedStatement productCreateStatement =
           productConnection.prepareStatement(
               "INSERT INTO PRODUCT(CODE,NAME,unitcode,TYPE,PRICE,STOCK) VALUES (?,?,?,?,?,?) RETURNING *");
       setParameters(productCreateStatement,product);
       ResultSet productCreateResultSet = productCreateStatement.executeQuery();
       productCreateResultSet.next();
-      productConnection.commit();
-      productConnection.setAutoCommit(true);
       return getProductFromResultSet(productCreateResultSet);
     } catch (SQLException e) {
       handleException(e);
@@ -140,26 +137,10 @@ public class ProductDAOImplementation implements ProductDAO {
       throws ApplicationErrorException, PageCountOutOfBoundsException {
     int count = Integer.MAX_VALUE;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + "AND ISDELETED=FALSE ORDER BY ID";
-      String listQuery =
-          "SELECT * FROM PRODUCT WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + "AND ISDELETED=FALSE ORDER BY ID LIMIT "
-              + pageLength
-              + "  OFFSET "
-              + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE(?," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
+      String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE(?," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement=productConnection.prepareStatement(EntryCount);
-      PreparedStatement listStatement =
-          productConnection.prepareStatement(
-              listQuery, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+      PreparedStatement listStatement = productConnection.prepareStatement(listQuery);
       if (attribute.equals("id") && searchText == null) {
         listStatement.setNull(1, Types.INTEGER);
         countStatement.setNull(1,Types.INTEGER);
@@ -203,15 +184,9 @@ public class ProductDAOImplementation implements ProductDAO {
     return productList;
   }
 
-
   @Override
-  public boolean edit(Product product)
-      throws SQLException,
-          ApplicationErrorException,
-          UniqueConstraintException,
-          UnitCodeViolationException {
+  public boolean edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
     try {
-      productConnection.setAutoCommit(false);
       String editQuery =
           "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE) WHERE ID=? ";
       PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
@@ -222,11 +197,8 @@ public class ProductDAOImplementation implements ProductDAO {
         editStatement.setDouble(5, product.getPrice());
       }
       editStatement.setInt(6, product.getId());
-      if (editStatement.executeUpdate() > 0) {
-        productConnection.commit();
-        productConnection.setAutoCommit(true);
+      if (editStatement.executeUpdate() > 0)
         return true;
-      }
       else return false;
     } catch (SQLException e) {
       productConnection.rollback();
@@ -241,30 +213,13 @@ public class ProductDAOImplementation implements ProductDAO {
     try {
       Statement deleteStatement = productConnection.createStatement();
       ResultSet stockResultSet;
-      if (Character.isAlphabetic(parameter.charAt(0)))
-        stockResultSet =
-            deleteStatement.executeQuery(
-                "SELECT STOCK FROM PRODUCT WHERE CODE='" + parameter + "'");
-      else
-        stockResultSet =
-            deleteStatement.executeQuery("SELECT STOCK FROM PRODUCT WHERE ID='" + parameter + "'");
+      stockResultSet = deleteStatement.executeQuery("SELECT STOCK FROM PRODUCT WHERE CODE='" + parameter + "'"+" OR CAST(ID AS TEXT) ILIKE '%"+parameter+"%'");
       if (!stockResultSet.next()) return -1;
-      float stock = stockResultSet.getFloat(1);
-      if (stock > 0) return 0;
-      else {
-        if (Character.isAlphabetic(parameter.charAt(0)))
-          if (deleteStatement.executeUpdate(
-              "UPDATE PRODUCT SET ISDELETED='TRUE' WHERE CODE ='" + parameter + "'")>0)
-            return 1;
-          else
-            return -1;
-        else
-          if (deleteStatement.executeUpdate(
-              "UPDATE PRODUCT SET ISDELETED='TRUE' WHERE ID ='" + parameter + "'")>0)
-            return 1;
-          else
-            return -1;
-      }
+      if (stockResultSet.getFloat(1) > 0) return 0;
+      if (deleteStatement.executeUpdate("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE CAST(ID AS TEXT) ILIKE '%" + parameter + "%'"+"OR CODE='"+parameter+"'")>0)
+        return 1;
+      else
+        return -1;
     } catch (Exception e) {
       e.printStackTrace();
       throw new ApplicationErrorException(
