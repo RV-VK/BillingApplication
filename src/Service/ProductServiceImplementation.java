@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProductServiceImplementation implements ProductService {
 
-  private ProductDAO productDAO = new ProductDAOImplementation();
+  private final ProductDAO productDAO = new ProductDAOImplementation();
   private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
   private final String CODE_REGEX = "^[a-zA-Z0-9]{2,6}$";
   private final String NUMBER_REGEX="^[0-9]*$";
@@ -138,9 +138,8 @@ public class ProductServiceImplementation implements ProductService {
    * @return status - Boolean.
    */
   private boolean validate(Product product) {
-    if ((product.getName()!=null&&!product.getName().matches(NAME_REGEX))
-        || (product.getType()!=null && !product.getType().matches(NAME_REGEX))
-        || (product.getCode()!=null&&!product.getCode().matches(CODE_REGEX))) return false;
-    else return true;
+    return (product.getName() == null || product.getName().matches(NAME_REGEX))
+            && (product.getType() == null || product.getType().matches(NAME_REGEX))
+            && (product.getCode() == null || product.getCode().matches(CODE_REGEX));
   }
 }
