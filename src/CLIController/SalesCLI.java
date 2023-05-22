@@ -204,7 +204,7 @@ public class SalesCLI {
         listAttributesMap.put("Attribute", "id");
         listHelper(listAttributesMap);
       } else if (arguments.get(2).equals("-s")) {
-        String searchText = arguments.get(3).trim();
+         searchText = arguments.get(3).trim();
         listAttributesMap.put("Searchtext", searchText);
         listHelper(listAttributesMap);
       } else {
@@ -231,7 +231,7 @@ public class SalesCLI {
         searchText = arguments.get(4);
         if (saleAttributes.contains(attribute)) {
           listAttributesMap.put("Attribute", attribute);
-          listAttributesMap.put("Searchtext", searchText);
+          listAttributesMap.put("Searchtext", "'"+searchText+"'");
           listAttributesMap.put("Pagelength", "20");
           listAttributesMap.put("Pagenumber", String.valueOf(1));
           listHelper(listAttributesMap);
@@ -249,7 +249,7 @@ public class SalesCLI {
         attribute = attribute.replace(":", "");
         searchText = arguments.get(4);
         listAttributesMap.put("Attribute", attribute);
-        listAttributesMap.put("Searchtext", searchText);
+        listAttributesMap.put("Searchtext", "'"+searchText+"'");
         if (saleAttributes.contains(attribute)) {
           if (arguments.get(5).equals("-p")) {
             try {
@@ -280,7 +280,7 @@ public class SalesCLI {
         attribute = attribute.replace(":", "");
         searchText = arguments.get(4);
         listAttributesMap.put("Attribute", attribute);
-        listAttributesMap.put("Searchtext", searchText);
+        listAttributesMap.put("Searchtext", "'"+searchText+"'");
         if (saleAttributes.contains(attribute)) {
           if (arguments.get(5).equals("-p")) {
             try {

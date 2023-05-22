@@ -250,7 +250,7 @@ public class PurchaseCLI {
         searchText = arguments.get(4);
         if (purchaseAttributes.contains(attribute)) {
           listAttributesMap.put("Attribute", attribute);
-          listAttributesMap.put("Searchtext", searchText);
+          listAttributesMap.put("Searchtext", "'"+searchText+"'");
           listAttributesMap.put("Pagelength", "20");
           listAttributesMap.put("Pagenumber", String.valueOf(1));
           purchaseList = purchaseService.list(listAttributesMap);
@@ -269,7 +269,7 @@ public class PurchaseCLI {
         attribute = attribute.replace(":", "");
         searchText = arguments.get(4);
         listAttributesMap.put("Attribute", attribute);
-        listAttributesMap.put("Searchtext", searchText);
+        listAttributesMap.put("Searchtext", "'"+searchText+"'");
         if (purchaseAttributes.contains(attribute)) {
           if (arguments.get(5).equals("-p")) {
             try {
@@ -300,7 +300,7 @@ public class PurchaseCLI {
         attribute = attribute.replace(":", "");
         searchText = arguments.get(4);
         listAttributesMap.put("Attribute", attribute);
-        listAttributesMap.put("Searchtext", searchText);
+        listAttributesMap.put("Searchtext", "'"+searchText+"'");
         if (purchaseAttributes.contains(attribute)) {
           if (arguments.get(5).equals("-p")) {
             try {

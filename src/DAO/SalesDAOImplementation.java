@@ -121,8 +121,8 @@ public class SalesDAOImplementation implements SalesDAO {
       throws ApplicationErrorException {
     int count;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM SALES WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID";
-      String listQuery = "SELECT * FROM SALES WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM SALES WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID";
+      String listQuery = "SELECT * FROM SALES WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement listStatement = salesConnection.prepareStatement(listQuery);
       PreparedStatement countStatement=salesConnection.prepareStatement(EntryCount);
       ResultSet countResultSet=countStatement.executeQuery();

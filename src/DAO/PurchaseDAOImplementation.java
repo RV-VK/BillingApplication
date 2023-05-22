@@ -114,8 +114,8 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
       throws ApplicationErrorException {
     int count;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM PURCHASE WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID";
-      String listQuery ="SELECT * FROM PURCHASE WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM PURCHASE WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID";
+      String listQuery ="SELECT * FROM PURCHASE WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement=purchaseConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = purchaseConnection.prepareStatement(listQuery);
       ResultSet countResultSet=countStatement.executeQuery();

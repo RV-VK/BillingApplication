@@ -182,7 +182,7 @@ public class ProductCLI {
         searchText = arguments.get(4);
         if (productAttributes.contains(attribute)) {
           listAttributesMap.put("Attribute", attribute);
-          listAttributesMap.put("Searchtext", searchText);
+          listAttributesMap.put("Searchtext", "'"+searchText+"'");
           listAttributesMap.put("Pagelength", "20");
           listAttributesMap.put("Pagenumber", String.valueOf(1));
           listHelper(listAttributesMap);
@@ -201,7 +201,7 @@ public class ProductCLI {
         attribute = attribute.replace(":", "");
         searchText = arguments.get(4);
         listAttributesMap.put("Attribute", attribute);
-        listAttributesMap.put("Searchtext", searchText);
+        listAttributesMap.put("Searchtext", "'"+searchText+"'");
         if (productAttributes.contains(attribute)) {
           if (arguments.get(5).equals("-p")) {
             try {
@@ -233,7 +233,7 @@ public class ProductCLI {
         attribute = attribute.replace(":", "");
         searchText = arguments.get(4);
         listAttributesMap.put("Attribute", attribute);
-        listAttributesMap.put("Searchtext", searchText);
+        listAttributesMap.put("Searchtext", "'"+searchText+"'");
         if (productAttributes.contains(attribute)) {
           if (arguments.get(5).equals("-p")) {
             try {

@@ -112,8 +112,8 @@ public class UserDAOImplementation implements UserDAO {
       throws ApplicationErrorException {
     int count;
     try {
-      String EntryCount = "SELECT COUNT(*) OVER() FROM USERS WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID";
-      String listQuery = "SELECT * FROM USERS WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
+      String EntryCount = "SELECT COUNT(*) OVER() FROM USERS WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID";
+      String listQuery = "SELECT * FROM USERS WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement = userConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = userConnection.prepareStatement(listQuery);
       ResultSet countResultSet = countStatement.executeQuery();

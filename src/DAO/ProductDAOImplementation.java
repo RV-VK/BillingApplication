@@ -136,8 +136,8 @@ public class ProductDAOImplementation implements ProductDAO {
       throws ApplicationErrorException, PageCountOutOfBoundsException {
     int count;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
-      String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
+      String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement=productConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = productConnection.prepareStatement(listQuery);
       ResultSet countResultSet=countStatement.executeQuery();
