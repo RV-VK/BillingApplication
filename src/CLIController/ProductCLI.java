@@ -432,7 +432,6 @@ public class ProductCLI {
     try {
       statusCode = productService.edit(product);
     } catch (Exception e) {
-      e.printStackTrace();
       System.out.println(e.getMessage());
       return;
     }

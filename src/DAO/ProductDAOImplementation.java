@@ -31,7 +31,7 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  /**
+ /**
    * Private method to handle SQL Exception and convert it to user readable messages.
    *
    * @param e Exception Object

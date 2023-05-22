@@ -32,7 +32,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
           purchaseConnection.prepareStatement("INSERT INTO PURCHASEITEMS(INVOICE,PRODUCTCODE,QUANTITY,COSTPRICE) VALUES(?,?,?,?) RETURNING *");
       ResultSet purchaseItemInsertResultSet;
       for (PurchaseItem purchaseItem : purchase.getPurchaseItemList()) {
-        setPurchaseItems(purchaseItemInsertStatement,purchaseItem,purchase);
+        setPurchaseItems(purchaseItemInsertStatement,purchaseItem,purchaseEntry);
         purchaseItemInsertResultSet = purchaseItemInsertStatement.executeQuery();
         stockUpdateStatement.setFloat(1, purchaseItem.getQuantity());
         stockUpdateStatement.setString(2, purchaseItem.getProduct().getCode());
@@ -44,7 +44,6 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
           ResultSet productNameResultSet = productNameStatement.executeQuery();
           productNameResultSet.next();
           purchaseItemList.add(getPurchaseItemFromResultSet(purchaseItemInsertResultSet,productNameResultSet.getString(1)));
-
         }
       }
       purchaseEntry.setPurchaseItemList(purchaseItemList);
@@ -93,19 +92,16 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   public int count(String parameter) throws ApplicationErrorException {
     int count;
     try {
+      ResultSet countResultSet;
       if (parameter == null) {
-        ResultSet countResultSet =purchaseConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM PURCHASE");
-        countResultSet.next();
-        count = countResultSet.getInt(1);
-        return count;
+        countResultSet = purchaseConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM PURCHASE");
       } else {
-        ResultSet countResultSet =
-                purchaseConnection.createStatement().executeQuery(
+        countResultSet = purchaseConnection.createStatement().executeQuery(
                 "SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'");
-        countResultSet.next();
-        count = countResultSet.getInt(1);
-        return count;
       }
+      countResultSet.next();
+      count = countResultSet.getInt(1);
+      return count;
     } catch (Exception e) {
       throw new ApplicationErrorException(e.getMessage());
     }
@@ -118,36 +114,10 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
       throws ApplicationErrorException {
     int count;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM PURCHASE WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + " ORDER BY ID";
-      String listQuery =
-          "SELECT * FROM PURCHASE WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + " ORDER BY ID LIMIT "
-              + pageLength
-              + "  OFFSET "
-              + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM PURCHASE WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID";
+      String listQuery ="SELECT * FROM PURCHASE WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement=purchaseConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = purchaseConnection.prepareStatement(listQuery);
-      if (attribute.equals("id") && searchText == null) {
-        listStatement.setNull(1, Types.INTEGER);
-        countStatement.setNull(1,Types.INTEGER);
-      } else if (attribute.equals("id")
-          || attribute.equals("grandtotal")
-          || attribute.equals("invoice")) {
-        listStatement.setDouble(1, Double.parseDouble(searchText));
-        countStatement.setDouble(1,Double.parseDouble(searchText));
-      } else {
-        listStatement.setDate(1, Date.valueOf(searchText));
-        countStatement.setDate(1,Date.valueOf(searchText));
-      }
       ResultSet countResultSet=countStatement.executeQuery();
       if (countResultSet.next()) {
         count = countResultSet.getInt(1);

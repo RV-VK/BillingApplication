@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SalesDAOImplementation implements SalesDAO {
   private Connection salesConnection = DBHelper.getConnection();
-  private     List<Sales> salesList = new ArrayList<>();
+  private List<Sales> salesList = new ArrayList<>();
 
 
   @Override
@@ -20,14 +20,11 @@ public class SalesDAOImplementation implements SalesDAO {
       PreparedStatement salesPriceStatement = salesConnection.prepareStatement("SELECT PRICE,STOCK,NAME FROM PRODUCT WHERE CODE=?");
       PreparedStatement stockUpdateStatement = salesConnection.prepareStatement("UPDATE PRODUCT SET STOCK=STOCK-? WHERE CODE=?");
       PreparedStatement grandTotalUpdateStatement = salesConnection.prepareStatement("UPDATE SALES SET GRANDTOTAL=? WHERE ID=?");
-      salesEntryStatement.setDate(1, Date.valueOf(sales.getDate()));
-      salesEntryStatement.setDouble(2, sales.getGrandTotal());
+      setSales(salesEntryStatement,sales);
       ResultSet salesEntryResultSet = salesEntryStatement.executeQuery();
       Sales salesEntry = new Sales();
       while (salesEntryResultSet.next()) {
-        salesEntry.setId(salesEntryResultSet.getInt(1));
-        salesEntry.setDate(String.valueOf(salesEntryResultSet.getDate(2)));
-        salesEntry.setGrandTotal(salesEntryResultSet.getDouble(3));
+          salesEntry=getSalesFromResultSet(salesEntryResultSet,salesEntry);
       }
       List<SalesItem> salesItemList = new ArrayList<>();
       ResultSet salesItemInsertResultSet;
@@ -47,20 +44,13 @@ public class SalesDAOImplementation implements SalesDAO {
           salesConnection.rollback();
           return null;
         }
-        salesItemInsertStatement.setInt(1, salesEntry.getId());
-        salesItemInsertStatement.setString(2, salesItem.getProduct().getCode());
-        salesItemInsertStatement.setFloat(3, salesItem.getQuantity());
-        salesItemInsertStatement.setDouble(4, price);
+        setSalesItems(salesItemInsertStatement,salesItem,salesEntry,price);
         salesItemInsertResultSet = salesItemInsertStatement.executeQuery();
         stockUpdateStatement.setFloat(1, salesItem.getQuantity());
         stockUpdateStatement.setString(2, salesItem.getProduct().getCode());
         stockUpdateStatement.executeUpdate();
         while (salesItemInsertResultSet.next()) {
-          salesItemList.add(
-              new SalesItem(
-                  new Product(salesItemInsertResultSet.getString(2), productName),
-                  salesItemInsertResultSet.getFloat(3),
-                  salesItemInsertResultSet.getDouble(4)));
+          salesItemList.add(getSalesItemFromResultSet(salesItemInsertResultSet,productName));
         }
       }
       grandTotalUpdateStatement.setDouble(1, grandTotal);
@@ -78,25 +68,48 @@ public class SalesDAOImplementation implements SalesDAO {
     }
   }
 
+  private PreparedStatement setSales(PreparedStatement statement, Sales sales) throws SQLException {
+    statement.setDate(1, Date.valueOf(sales.getDate()));
+    statement.setDouble(2, sales.getGrandTotal());
+    return statement;
+  }
+
+  private PreparedStatement setSalesItems(PreparedStatement statement,SalesItem salesItem, Sales sales,double price) throws SQLException {
+    statement.setInt(1, sales.getId());
+    statement.setString(2, salesItem.getProduct().getCode());
+    statement.setFloat(3, salesItem.getQuantity());
+    statement.setDouble(4, price);
+    return statement;
+  }
+
+  private Sales getSalesFromResultSet(ResultSet resultSet,Sales sales) throws SQLException {
+    sales.setId(resultSet.getInt(1));
+    sales.setDate(String.valueOf(resultSet.getDate(2)));
+    sales.setGrandTotal(resultSet.getDouble(3));
+    return sales;
+  }
+
+  private SalesItem getSalesItemFromResultSet(ResultSet resultSet,String name) throws SQLException {
+    return new SalesItem(
+            new Product(resultSet.getString(2), name),
+            resultSet.getFloat(3),
+            resultSet.getDouble(4));
+  }
 
   @Override
   public int count(String parameter) throws ApplicationErrorException {
     int count;
     try {
-
+      ResultSet countResultSet;
       if (parameter == null) {
-        ResultSet countResultSet = salesConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM SALES");
-        countResultSet.next();
-        count = countResultSet.getInt(1);
-        return count;
+        countResultSet = salesConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM SALES");
       } else {
-        ResultSet countResultSet =
-                salesConnection.createStatement().executeQuery(
+        countResultSet = salesConnection.createStatement().executeQuery(
                 "SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'");
-        countResultSet.next();
-        count = countResultSet.getInt(1);
-        return count;
       }
+      countResultSet.next();
+      count = countResultSet.getInt(1);
+      return count;
     } catch (Exception e) {
       throw new ApplicationErrorException(e.getMessage());
     }
@@ -108,34 +121,10 @@ public class SalesDAOImplementation implements SalesDAO {
       throws ApplicationErrorException {
     int count;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM SALES WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + " ORDER BY ID";
-      String listQuery =
-          "SELECT * FROM SALES WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + " ORDER BY ID LIMIT "
-              + pageLength
-              + "  OFFSET "
-              + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM SALES WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID";
+      String listQuery = "SELECT * FROM SALES WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement listStatement = salesConnection.prepareStatement(listQuery);
       PreparedStatement countStatement=salesConnection.prepareStatement(EntryCount);
-      if (attribute.equals("id") && searchText == null) {
-        listStatement.setNull(1, Types.INTEGER);
-        countStatement.setNull(1,Types.INTEGER);
-      } else if (attribute.equals("id") || attribute.equals("grandtotal")) {
-        listStatement.setDouble(1, Double.parseDouble(searchText));
-        countStatement.setDouble(1,Double.parseDouble(searchText));
-      } else {
-        listStatement.setDate(1, Date.valueOf(searchText));
-        countStatement.setDate(1,Date.valueOf(searchText));
-      }
       ResultSet countResultSet=countStatement.executeQuery();
       if(countResultSet.next())
         count=countResultSet.getInt(1);
@@ -186,25 +175,16 @@ public class SalesDAOImplementation implements SalesDAO {
   private List<Sales> listHelper(ResultSet resultSet) throws SQLException {
     while (resultSet.next()) {
       Sales listedSale = new Sales();
-      listedSale.setId(resultSet.getInt(1));
-      listedSale.setDate(String.valueOf(resultSet.getDate(2)));
-      listedSale.setGrandTotal(resultSet.getDouble(3));
+      getSalesFromResultSet(resultSet,listedSale);
       salesList.add(listedSale);
     }
-    PreparedStatement listSalesItemStatement =
-            salesConnection.prepareStatement(
-                    "SELECT P.NAME, S.PRODUCTCODE,S.QUANTITY,S.SALESPRICE FROM SALESITEMS S INNER JOIN PRODUCT P ON P.CODE=S.PRODUCTCODE WHERE S.ID=?");
+    PreparedStatement listSalesItemStatement = salesConnection.prepareStatement("SELECT P.NAME, S.PRODUCTCODE,S.QUANTITY,S.SALESPRICE FROM SALESITEMS S INNER JOIN PRODUCT P ON P.CODE=S.PRODUCTCODE WHERE S.ID=?");
     for (Sales sales : salesList) {
       List<SalesItem> salesItemList = new ArrayList<>();
       listSalesItemStatement.setInt(1, sales.getId());
       ResultSet listSalesResultSet = listSalesItemStatement.executeQuery();
-      while (listSalesResultSet.next()) {
-        salesItemList.add(
-                new SalesItem(
-                        new Product(listSalesResultSet.getString(2), listSalesResultSet.getString(1)),
-                        listSalesResultSet.getFloat(3),
-                        listSalesResultSet.getDouble(4)));
-      }
+      while (listSalesResultSet.next())
+        salesItemList.add(getSalesItemFromResultSet(listSalesResultSet,listSalesResultSet.getString(1)));
       sales.setSalesItemList(salesItemList);
     }
     return salesList;
