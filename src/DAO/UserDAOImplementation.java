@@ -11,14 +11,7 @@ public class UserDAOImplementation implements UserDAO {
   private List<User> userList = new ArrayList<>();
 
 
-  /**
-   * This method Creates a User Entry in the User table
-   * @param user Input Object
-   * @return User Object - created
-   * @throws SQLException Exception thrown based on SQL syntax.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
-   */
+
   @Override
   public User create(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
@@ -65,12 +58,7 @@ public class UserDAOImplementation implements UserDAO {
             resultSet.getLong(7));
   }
 
-  /**
-   * This method counts the number od entries in the user table.
-   *
-   * @return count - Integer
-   * @throws ApplicationErrorException Exception thrown due to persistence problems
-   */
+
   @Override
   public int count() throws ApplicationErrorException {
     try {
@@ -87,14 +75,7 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
-  /**
-   * This method Lists the records in the user table based on a given Search-text.
-   *
-   * @param searchText - The search-text that must be found.
-   * @return List - Users
-   * @throws ApplicationErrorException Exception thrown due to persistence problems
-   */
-  @Override
+
   public List<User> list(String searchText) throws ApplicationErrorException {
     try {
       Statement listStatement = userConnection.createStatement();
@@ -123,17 +104,7 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
-  /**
-   * This method lists the users in the user table based on the given searchable attribute
-   * and its corresponding search-text formatted in a pageable manner.
-   *
-   * @param attribute  The attribute to be looked upon
-   * @param searchText The search-text to be found.
-   * @param pageLength The number of entries that must be listed.
-   * @param offset The Page number that has to be listed.
-   * @return List - Users
-   * @throws ApplicationErrorException Exception thrown due to persistence problems
-   */
+
   @Override
   public List list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException {
@@ -203,15 +174,7 @@ public class UserDAOImplementation implements UserDAO {
     return userList;
   }
 
-  /**
-   * This method updates the attributes of the User entry in the user table.
-   *
-   * @param user  The updated User Entry.
-   * @return status - Boolean
-   * @throws SQLException Exception thrown based on SQL syntax.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
-   */
+
   @Override
   public boolean edit(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
@@ -245,13 +208,7 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
-  /**
-   * This method deleted an entry in the User table based on the given parameter.
-   *
-   * @param username Input parameter based on which the row is selected to delete.
-   * @return resultCode - Integer
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public int delete(String username) throws ApplicationErrorException {
     try {
@@ -269,13 +226,7 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
-  /**
-   * This method acts as a helper method to check whether any entry is made on User table so that the control
-   * of the program is directed as Initial setup or Login.
-   *
-   * @return status - Boolean
-   * @throws SQLException Exception thrown due to Persistence problems.
-   */
+
   public boolean checkIfInitialSetup() throws SQLException {
     ResultSet resultSet =
         userConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM USERS WHERE USERTYPE='Admin'");

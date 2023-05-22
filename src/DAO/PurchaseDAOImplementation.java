@@ -13,14 +13,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   private List<Purchase> purchaseList = new ArrayList<>();
 
 
-  /**
-   * This method is a composite function that creates an entry in both Purchase and PurchaseItems table.
-   *
-   * @param purchase Purchase to be entered.
-   * @return Purchase - Created Purchase Entry.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws SQLException Exception thrown based on SQL syntax.
-   */
+
   @Override
   public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException {
     try {
@@ -95,12 +88,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
             resultSet.getDouble(4));
   }
 
-  /**
-   * This method counts the number of entries in the Purchase table based on date parameter.
-   * @param parameter Date of Purchase
-   * @return Count - Integer.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public int count(String parameter) throws ApplicationErrorException {
     int count;
@@ -123,17 +111,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
     }
   }
 
-  /**
-   * This method Lists the Purchase and PurchaseItem entries based on the given searchable attribute
-   * and its corresponding search-text formatted in a pageable manner.
-   *
-   * @param attribute The attribute to be looked upon.
-   * @param searchText The searchtext to be found.
-   * @param pageLength The number of entries that must be listed.
-   * @param offset The Page number to be listed.
-   * @return List - Purchase.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
 
   @Override
   public List list(String attribute, String searchText, int pageLength, int offset)
@@ -193,12 +171,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   }
 
 
-  /**
-   * This method lists the entries in the Purchase and PurchaseItems table based on the given search-text.
-   * @param searchText The search-text to be found.
-   * @return List - Purchase
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public List list(String searchText) throws ApplicationErrorException {
     try {
@@ -245,12 +218,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
     return purchaseList;
   }
 
-  /**
-   * This method deletes an entry in the Purchase table and the corresponding entries in the purchase-items table
-   * @param invoice Input invoice to perform delete.
-   * @return resultCode - Integer.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public int delete(int invoice) throws ApplicationErrorException {
     try {

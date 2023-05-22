@@ -10,16 +10,7 @@ public class ProductDAOImplementation implements ProductDAO {
   private final Connection productConnection = DBHelper.getConnection();
   private List<Product> productList = new ArrayList<>();
 
-  /**
-   * This Method Creates an Entry in the Product Table
-   *
-   * @param product Input product entity.
-   * @return product - Entered product entity.
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws SQLException Exception thrown based on SQL syntax.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
-   *     table
-   */
+
   @Override
   public Product create(Product product)
       throws ApplicationErrorException,
@@ -38,24 +29,36 @@ public class ProductDAOImplementation implements ProductDAO {
       productConnection.setAutoCommit(true);
       return getProductFromResultSet(productCreateResultSet);
     } catch (SQLException e) {
-      productConnection.rollback();
-      if (e.getSQLState().equals("23503")) {
-        throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
-      } else if (e.getSQLState().equals("23505")) {
-        if (e.getMessage().contains("product_name"))
-          throw new UniqueConstraintException(
-              ">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
-        else
-          throw new UniqueConstraintException(
-              ">> Code must be unique!!!\n>> The code you have entered already exists!!!");
-      } else {
-        throw new ApplicationErrorException(
-            ">> Application has went into an Error!!!\n>>Please Try again");
-      }
+      handleException(e);
+      return null;
     }
-
   }
 
+  /**
+   * Private method to handle SQL Exception and convert it to user readable messages.
+   *
+   * @param e Exception Object
+   * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product table.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+   * @throws SQLException Exception thrown based on SQL syntax.
+   * @throws ApplicationErrorException xception thrown due to Persistence problems.
+   */
+  private void handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, SQLException, ApplicationErrorException {
+    productConnection.rollback();
+    if (e.getSQLState().equals("23503")) {
+      throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
+    } else if (e.getSQLState().equals("23505")) {
+      if (e.getMessage().contains("product_name"))
+        throw new UniqueConstraintException(
+                ">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
+      else
+        throw new UniqueConstraintException(
+                ">> Code must be unique!!!\n>> The code you have entered already exists!!!");
+    } else {
+      throw new ApplicationErrorException(
+              ">> Application has went into an Error!!!\n>>Please Try again");
+    }
+  }
   /**
    * Private method to Set parameters on PreparedStatement for Product.
    *
@@ -88,12 +91,6 @@ public class ProductDAOImplementation implements ProductDAO {
   }
 
 
-  /**
-   * This Method returns the number of entries in the Product table.
-   *
-   * @return count
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
   @Override
   public int count() throws ApplicationErrorException {
     try {
@@ -109,13 +106,7 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  /**
-   * This method Lists the products in the product table based on the given search-text.
-   *
-   * @param searchText The search-text that must be found.
-   * @return List - Products
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   public List<Product> list(String searchText) throws ApplicationErrorException {
     try {
       String listQuery =
@@ -143,17 +134,7 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  /**
-   * This method lists the products in the products table based on the given searchable attribute
-   * and its corresponding search-text formatted in a pageable manner.
-   *
-   * @param attribute The attribute to be looked upon.
-   * @param searchText The searchtext to be found.
-   * @param pageLength The number of entries that must be listed.
-   * @param offset The Page number that has to be listed
-   * @return List - Products
-   * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
-   */
+
   @Override
   public List<Product> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
@@ -222,16 +203,7 @@ public class ProductDAOImplementation implements ProductDAO {
     return productList;
   }
 
-  /**
-   * This method updates the attributes of the product entry in the Product table
-   *
-   * @param product The Updated Product entry
-   * @return status - Boolean
-   * @throws SQLException  Exception thrown based on SQL syntax.
-   * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL table
-   * @throws UnitCodeViolationException  Custom Exception to convey Foreign Key Violation in Product table.
-   */
+
   @Override
   public boolean edit(Product product)
       throws SQLException,
@@ -243,7 +215,7 @@ public class ProductDAOImplementation implements ProductDAO {
       String editQuery =
           "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE) WHERE ID=? ";
       PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
-      setParameters(editStatement,product);
+      setParameters(editStatement, product);
       if (product.getPrice() == 0) {
         editStatement.setNull(5, Types.NUMERIC);
       } else {
@@ -255,34 +227,15 @@ public class ProductDAOImplementation implements ProductDAO {
         productConnection.setAutoCommit(true);
         return true;
       }
+      else return false;
     } catch (SQLException e) {
       productConnection.rollback();
-      if (e.getSQLState().equals("23505")) {
-        if (e.getMessage().contains("product_code")) {
-          throw new UniqueConstraintException(
-              ">>Code must be unique!!!\n>>The code you have entered already exists!!!");
-        } else if (e.getMessage().contains("product_name")) {
-          throw new UniqueConstraintException(
-              "Name must be unique!!!\n>>The Name you have entered already exists!!!");
-        }
-      } else if (e.getSQLState().equals("23503")) {
-        throw new UnitCodeViolationException(">>The unitcode you have entered doesn't exist!!!");
-      } else {
-        e.printStackTrace();
-        throw new ApplicationErrorException(
-            "Application has went into an Error!!!\n Please Try again");
-      }
+      handleException(e);
+      return false;
     }
-    return false;
   }
 
-  /**
-   * This method deletes an entry in the Product table based on the given parameter.
-   *
-   * @param parameter Input parameter based on which the row is selected to delete.
-   * @return resultCode - Integer
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public int delete(String parameter) throws ApplicationErrorException {
     try {
@@ -319,13 +272,7 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  /**
-   * This method finds the Product by its product code attribute.
-   *
-   * @param code Input product code.
-   * @return Product
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public Product findByCode(String code) throws ApplicationErrorException {
     try {
@@ -339,13 +286,7 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  /**This method updates the Stock column of Product based on given product code.
-   *
-   * @param code Product code
-   * @param stock Stock to be updated
-   * @return updated Stock - Float
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   public int updateStock(String code,float stock) throws ApplicationErrorException {
     try{
     return productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+"+stock+" WHERE CODE='"+code+"'");
@@ -355,13 +296,6 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  /**This method updates the Price column of Product based on given product code.
-   *
-   * @param code Product code
-   * @param price Price to be updated
-   * @return updated Price - Double
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
   public int updatePrice(String code,double price) throws ApplicationErrorException {
     try{
       return productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET PRICE="+price+" WHERE CODE='"+code+"'");
