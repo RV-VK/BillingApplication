@@ -12,7 +12,6 @@ public class StoreDAOImplementation implements StoreDAO {
   @Override
   public Store create(Store store) throws ApplicationErrorException, SQLException {
     try {
-      storeConnection.setAutoCommit(false);
       PreparedStatement unitCreateStatement =
           storeConnection.prepareStatement(
               "INSERT INTO STORE(NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (?,?,?,?) RETURNING *");
@@ -20,8 +19,6 @@ public class StoreDAOImplementation implements StoreDAO {
       ResultSet storeCreateResultSet = unitCreateStatement.executeQuery();
       storeCreateResultSet.next();
       Store createdStore =getStoreFromResultSet(storeCreateResultSet);
-      storeConnection.commit();
-      storeConnection.setAutoCommit(true);
       return createdStore;
     } catch (SQLException e) {
       storeConnection.rollback();
@@ -51,7 +48,6 @@ public class StoreDAOImplementation implements StoreDAO {
 
   @Override
   public int edit(Store store) throws SQLException, ApplicationErrorException {
-    storeConnection.setAutoCommit(false);
     try {
       String editQuery =
           "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER)";
@@ -63,8 +59,6 @@ public class StoreDAOImplementation implements StoreDAO {
         editStatement.setLong(2, store.getPhoneNumber());
       }
       if (editStatement.executeUpdate() > 0) {
-        storeConnection.commit();
-        storeConnection.setAutoCommit(true);
         return 1;
       } else {
         return -1;
@@ -85,9 +79,7 @@ public class StoreDAOImplementation implements StoreDAO {
       ResultSet storeResultSet = storeExistenceCheckStatement.executeQuery("SELECT * FROM STORE");
       if (storeResultSet.next()) {
         Statement passwordCheckStatement = storeConnection.createStatement();
-        ResultSet adminPasswordResultSet =
-            passwordCheckStatement.executeQuery(
-                "SELECT PASSWORD FROM USERS WHERE USERTYPE='Admin'");
+        ResultSet adminPasswordResultSet = passwordCheckStatement.executeQuery("SELECT PASSWORD FROM USERS WHERE USERTYPE='Admin'");
         if (adminPasswordResultSet.next()) {
           String originalPassword = adminPasswordResultSet.getString(1);
           if (originalPassword.equals(adminPassword)) {

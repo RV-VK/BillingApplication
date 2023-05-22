@@ -41,7 +41,6 @@ public class ProductDAOImplementation implements ProductDAO {
    * @throws ApplicationErrorException xception thrown due to Persistence problems.
    */
   private void handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, SQLException, ApplicationErrorException {
-    productConnection.rollback();
     if (e.getSQLState().equals("23503")) {
       throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
     } else if (e.getSQLState().equals("23505")) {
@@ -135,26 +134,16 @@ public class ProductDAOImplementation implements ProductDAO {
   @Override
   public List<Product> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
-    int count = Integer.MAX_VALUE;
+    int count;
     try {
-      String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE(?," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
-      String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE(?," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
+      String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
+      String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement=productConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = productConnection.prepareStatement(listQuery);
-      if (attribute.equals("id") && searchText == null) {
-        listStatement.setNull(1, Types.INTEGER);
-        countStatement.setNull(1,Types.INTEGER);
-      } else if (attribute.equals("id") || attribute.equals("stock") || attribute.equals("price")) {
-        listStatement.setDouble(1, Double.parseDouble(searchText));
-        countStatement.setDouble(1,Double.parseDouble(searchText));
-      } else {
-        listStatement.setString(1, searchText);
-        countStatement.setString(1,searchText);
-      }
       ResultSet countResultSet=countStatement.executeQuery();
-      if(countResultSet.next())
+      if(countResultSet.next() && countResultSet.getInt(1)<=offset)
+      {
         count=countResultSet.getInt(1);
-      if (count <= offset) {
         int pageCount;
         if (count % pageLength == 0)
           pageCount=count/pageLength;

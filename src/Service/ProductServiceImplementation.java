@@ -13,8 +13,6 @@ public class ProductServiceImplementation implements ProductService {
   private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
   private final String CODE_REGEX = "^[a-zA-Z0-9]{2,6}$";
   private final String NUMBER_REGEX="^[0-9]*$";
-
-
   public Product create(Product product)
       throws SQLException,
           ApplicationErrorException,
@@ -24,11 +22,9 @@ public class ProductServiceImplementation implements ProductService {
     else return null;
   }
 
-
   public int count() throws ApplicationErrorException {
     return productDAO.count();
   }
-
 
   public List<Product> list(HashMap<String, String> listattributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
@@ -52,7 +48,6 @@ public class ProductServiceImplementation implements ProductService {
     }
     return null;
   }
-
 
   public int edit(Product product)
       throws SQLException,

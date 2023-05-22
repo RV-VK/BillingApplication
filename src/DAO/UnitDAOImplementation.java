@@ -16,7 +16,6 @@ public class UnitDAOImplementation implements UnitDAO {
   public Unit create(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     try {
-      unitConnection.setAutoCommit(false);
       PreparedStatement unitCreateStatement =
           unitConnection.prepareStatement(
               "INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (?,?,?,?) RETURNING *");
@@ -24,16 +23,10 @@ public class UnitDAOImplementation implements UnitDAO {
       ResultSet unitCreateResultSet = unitCreateStatement.executeQuery();
       unitCreateResultSet.next();
       Unit createdUnit =getUnitFromResultSet(unitCreateResultSet);
-      unitConnection.commit();
-      unitConnection.setAutoCommit(true);
       return createdUnit;
     } catch (SQLException e) {
-      unitConnection.rollback();
-      if (e.getSQLState().equals("23505"))
-        throw new UniqueConstraintException(
-            ">> Unit Code must be unique!!! the Unit code you have entered Already exists");
-      throw new ApplicationErrorException(
-          "Application has went into an Error!!!\n Please Try again");
+      handleException(e);
+      return null;
     }
   }
 
@@ -52,14 +45,18 @@ public class UnitDAOImplementation implements UnitDAO {
     } else {
       isDividable = false;
     }
-    return new Unit(
-            resultSet.getInt(1),
-            resultSet.getString(2),
-            resultSet.getString(3),
-            resultSet.getString(4),
+    return new Unit(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
             isDividable);
   }
 
+  private void handleException(SQLException e)
+      throws UniqueConstraintException, ApplicationErrorException {
+    if (e.getSQLState().equals("23505"))
+      throw new UniqueConstraintException(
+              ">> Unit Code must be unique!!! the Unit code you have entered Already exists");
+    throw new ApplicationErrorException(
+            "Application has went into an Error!!!\n Please Try again");
+  }
 
   @Override
   public List<Unit> list() throws ApplicationErrorException {
@@ -100,15 +97,8 @@ public class UnitDAOImplementation implements UnitDAO {
         return 1;
       } else return -1;
     } catch (SQLException e) {
-      unitConnection.rollback();
-      if (e.getSQLState().equals("23505")) {
-        throw new UniqueConstraintException(
-            ">>Unit Code must be unique!!!\n The unit code you have entered already exists!!!");
-      } else {
-        e.printStackTrace();
-        throw new ApplicationErrorException(
-            "Application has went into an Error!!!\n Please Try again");
-      }
+      handleException(e);
+      return -1;
     }
   }
 

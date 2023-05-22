@@ -16,7 +16,6 @@ public class UserDAOImplementation implements UserDAO {
   public User create(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     try {
-      userConnection.setAutoCommit(false);
       PreparedStatement userCreateStatement =
           userConnection.prepareStatement(
               "INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (?,?,?,?,?,?) RETURNING *");
@@ -24,17 +23,10 @@ public class UserDAOImplementation implements UserDAO {
       ResultSet userCreateResultSet = userCreateStatement.executeQuery();
       userCreateResultSet.next();
       User createdUser=getUserFromResultSet(userCreateResultSet);
-      userConnection.commit();
-      userConnection.setAutoCommit(true);
       return createdUser;
     } catch (SQLException e) {
-      userConnection.rollback();
-      if (e.getSQLState().equals("23505")) {
-        throw new UniqueConstraintException(
-            ">> UserName must be unique!! The username you have entered already exists!!");
-      }
-      throw new ApplicationErrorException(
-          "Application has went into an Error!!!\n Please Try again");
+      handleException(e);
+      return null;
     }
   }
   private PreparedStatement setParameters(PreparedStatement statement,User user) throws SQLException {
@@ -56,6 +48,16 @@ public class UserDAOImplementation implements UserDAO {
             resultSet.getString(5),
             resultSet.getString(6),
             resultSet.getLong(7));
+  }
+
+  private void handleException(SQLException e)
+      throws UniqueConstraintException, ApplicationErrorException {
+    if (e.getSQLState().equals("23505")) {
+      throw new UniqueConstraintException(
+              ">> UserName must be unique!! The username you have entered already exists!!");
+    }
+    throw new ApplicationErrorException(
+            "Application has went into an Error!!!\n Please Try again");
   }
 
 
@@ -110,41 +112,13 @@ public class UserDAOImplementation implements UserDAO {
       throws ApplicationErrorException {
     int count;
     try {
-      String EntryCount =
-          "SELECT COUNT(*) OVER() FROM USERS WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + " ORDER BY ID";
-      String listQuery =
-          "SELECT * FROM USERS WHERE "
-              + attribute
-              + "= COALESCE(?,"
-              + attribute
-              + ")"
-              + " ORDER BY ID LIMIT "
-              + pageLength
-              + "  OFFSET "
-              + offset;
+      String EntryCount = "SELECT COUNT(*) OVER() FROM USERS WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID";
+      String listQuery = "SELECT * FROM USERS WHERE " + attribute + "= COALESCE('"+searchText+"'," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
       PreparedStatement countStatement = userConnection.prepareStatement(EntryCount);
-      PreparedStatement listStatement =
-          userConnection.prepareStatement(
-              listQuery, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-      if (attribute.equals("id") && searchText == null) {
-        listStatement.setNull(1, Types.INTEGER);
-        countStatement.setNull(1, Types.INTEGER);
-      } else if (attribute.equals("id") || attribute.equals("phonenumber")) {
-        listStatement.setLong(1, Long.parseLong(searchText));
-        countStatement.setLong(1, Long.parseLong(searchText));
-      } else {
-        listStatement.setString(1, searchText);
-        countStatement.setString(1, searchText);
-      }
+      PreparedStatement listStatement = userConnection.prepareStatement(listQuery);
       ResultSet countResultSet = countStatement.executeQuery();
-      countResultSet.next();
-      count = countResultSet.getInt(1);
-      if (count <= offset) {
+      if (countResultSet.next() &&countResultSet.getInt(1) <= offset) {
+        count = countResultSet.getInt(1);
         int pageCount;
         if (count % pageLength == 0)
           pageCount=count/pageLength;
@@ -198,14 +172,9 @@ public class UserDAOImplementation implements UserDAO {
       }
       return false;
     } catch (SQLException e) {
-      if (e.getSQLState().equals("23505")) {
-        throw new UniqueConstraintException(
-            ">> Username must be unique!!!\n>>The username you have entered already exists!!!");
+      handleException(e);
+      return false;
       }
-      editConnection.rollback();
-      throw new ApplicationErrorException(
-          "Application has went into an Error!!!\n Please Try again");
-    }
   }
 
 
