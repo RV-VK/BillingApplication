@@ -13,14 +13,7 @@ public class StoreServiceImplementation implements StoreService {
   private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
   private final String GST_NUMBER_REGEX = "^[a-zA-Z0-9]{15}$";
 
-    /**
-     * This method invokes the DAO of the Store entity and serves the Create function.
-     *
-     * @param store Input Store.
-     * @return Store - Created store.
-     * @throws SQLException Exception thrown based on SQL syntax.
-     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-     */
+
   @Override
   public Store create(Store store) throws SQLException, ApplicationErrorException {
     if (validate(store)) return storeDAO.create(store);
@@ -28,14 +21,7 @@ public class StoreServiceImplementation implements StoreService {
   }
 
 
-    /**
-     * This method invokes the DAO of the Store entity and serves the Edit function.
-     *
-     * @param store Edited store.
-     * @return resultCode - Integer.
-     * @throws SQLException  Exception thrown based on SQL syntax.
-     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-     */
+
   @Override
   public int edit(Store store) throws SQLException, ApplicationErrorException {
     if (!validate(store)) {
@@ -45,13 +31,7 @@ public class StoreServiceImplementation implements StoreService {
   }
 
 
-    /**
-     * This method invokes the DAO of the Store entity and serves the delete function.
-     *
-     * @param adminPassword Password string to allow deletion.
-     * @return resultCode - Integer.
-     * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-     */
+
   @Override
   public int delete(String adminPassword) throws ApplicationErrorException {
     return storeDAO.delete(adminPassword);
