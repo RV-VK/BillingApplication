@@ -15,13 +15,15 @@ public interface ProductService {
    * @return Product
    * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table.
    */
   Product create(Product product)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
-          UnitCodeViolationException;
+          UnitCodeViolationException,
+          InvalidTemplateException;
 
   /**
    * This method invokes the ProductDAO object and serves the Count function.
@@ -43,18 +45,22 @@ public interface ProductService {
 
   /**
    * This method invokes the Product DAO object and serves the edit function.
+   *
    * @param product Edited Product
    * @return resultCode - Integer
    * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
-   * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product table.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table.
+   * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
+   *     table.
    */
   int edit(Product product)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
-          UnitCodeViolationException;
+          UnitCodeViolationException,
+          InvalidTemplateException;
 
   /**
    *This method invokes the ProductDAO object and serves the delete function

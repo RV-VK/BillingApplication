@@ -17,11 +17,14 @@ public interface UserService {
    * @return User - Entered user
    * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table
    */
   User create(User user)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException;
-
+      throws SQLException,
+          ApplicationErrorException,
+          UniqueConstraintException,
+          InvalidTemplateException;
 
   /**
    * This method invokes the DAO of the User entity and serves the count function.
@@ -42,19 +45,21 @@ public interface UserService {
   List<User> list(HashMap<String, String> listattributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException;
 
-
   /**
    * This method invokes the DAO of the User entity and serves the Edit function.
+   *
    * @param user Edited user.
    * @return resultCode - Integer.
    * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table.
    */
   int edit(User user)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException;
-
-
+      throws SQLException,
+          ApplicationErrorException,
+          UniqueConstraintException,
+          InvalidTemplateException;
 
   /**
    * This method invokes the DAO of the User entity and serves the Delete function.

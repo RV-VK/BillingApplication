@@ -17,7 +17,7 @@ public class UnitServiceImplementation implements UnitService {
 
   @Override
   public Unit create(Unit unit)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException {
+      throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
     if (validate(unit)) return unitDAO.create(unit);
     else return null;
   }
@@ -31,7 +31,7 @@ public class UnitServiceImplementation implements UnitService {
 
   @Override
   public int edit(Unit unit)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException {
+      throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
     if (!validate(unit)) {
       return 0;
     }
@@ -51,8 +51,11 @@ public class UnitServiceImplementation implements UnitService {
    * @param unit Unit to be validated
    * @return status - Boolean.
    */
-  private boolean validate(Unit unit) {
-    if ((unit.getName()!=null&&!unit.getName().matches(NAME_REGEX)) || (unit.getCode()!=null&&!unit.getCode().matches(CODE_REGEX))) return false;
-    else return true;
+  private boolean validate(Unit unit) throws InvalidTemplateException {
+    if (unit.getName()!=null&&!unit.getName().matches(NAME_REGEX))
+      throw new InvalidTemplateException(">> Invalid Unit Name!!");
+    if (unit.getCode()!=null&&!unit.getCode().matches(CODE_REGEX))
+      throw new InvalidTemplateException(">> Invalid UnitCode!!");
+    return true;
   }
 }

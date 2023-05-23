@@ -138,28 +138,29 @@ public class ProductDAOImplementation implements ProductDAO {
     try {
       String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
       String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
-      PreparedStatement countStatement=productConnection.prepareStatement(EntryCount);
+      PreparedStatement countStatement = productConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = productConnection.prepareStatement(listQuery);
       ResultSet countResultSet=countStatement.executeQuery();
       if(countResultSet.next() && countResultSet.getInt(1)<=offset)
-      {
-        count=countResultSet.getInt(1);
-        int pageCount;
-        if (count % pageLength == 0)
-          pageCount=count/pageLength;
-        else
-          pageCount=(count/pageLength)+1;
-        throw new PageCountOutOfBoundsException(
-              ">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
-                  + pageCount);
-      }
+        checkPagination(countResultSet.getInt(1),offset,pageLength);
       ResultSet resultSet = listStatement.executeQuery();
       return listHelper(resultSet);
     } catch (SQLException e) {
       throw new ApplicationErrorException(e.getMessage());
     }
   }
-
+    private void checkPagination(int count,int offset,int pageLength) throws PageCountOutOfBoundsException {
+        if (count <= offset) {
+            int pageCount;
+            if (count % pageLength == 0)
+                pageCount=count/pageLength;
+            else
+                pageCount=(count/pageLength)+1;
+            throw new PageCountOutOfBoundsException(
+                    ">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
+                            + pageCount);
+        }
+    }
   /**
    * This method serves the ListDAO function.
    * @param resultSet ListQuery results.

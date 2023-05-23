@@ -13,11 +13,13 @@ public class ProductServiceImplementation implements ProductService {
   private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
   private final String CODE_REGEX = "^[a-zA-Z0-9]{2,6}$";
   private final String NUMBER_REGEX="^[0-9]*$";
+
   public Product create(Product product)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
-          UnitCodeViolationException {
+          UnitCodeViolationException,
+          InvalidTemplateException {
     if (validate(product)) return productDAO.create(product);
     else return null;
   }
@@ -53,7 +55,8 @@ public class ProductServiceImplementation implements ProductService {
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
-          UnitCodeViolationException {
+          UnitCodeViolationException,
+          InvalidTemplateException {
     if (!validate(product)) return 0;
     boolean status = productDAO.edit(product);
     if (status) {
@@ -87,9 +90,13 @@ public class ProductServiceImplementation implements ProductService {
    * @param product Product to be Validated
    * @return status - Boolean.
    */
-  private boolean validate(Product product) {
-    return (product.getName() == null || product.getName().matches(NAME_REGEX))
-            && (product.getType() == null || product.getType().matches(NAME_REGEX))
-            && (product.getCode() == null || product.getCode().matches(CODE_REGEX));
+  private boolean validate(Product product) throws InvalidTemplateException {
+     if(product.getName() != null && !product.getName().matches(NAME_REGEX))
+       throw new InvalidTemplateException(">> Invalid Product Name!");
+     if(product.getType() == null || product.getType().matches(NAME_REGEX))
+       throw new InvalidTemplateException(">> Invalid Product Type!!") ;
+     if(product.getCode() == null || product.getCode().matches(CODE_REGEX))
+       throw new InvalidTemplateException(">> Invalid Product Code!!");
+     return true;
   }
 }

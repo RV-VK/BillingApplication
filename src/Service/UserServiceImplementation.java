@@ -13,20 +13,20 @@ public class UserServiceImplementation implements UserService {
   private final List<String> userTypeList = Arrays.asList("Sales", "Purchase", "Admin");
   private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
 
-
   @Override
   public User create(User user)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException {
+      throws SQLException,
+          ApplicationErrorException,
+          UniqueConstraintException,
+          InvalidTemplateException {
     if (validate(user)) return userDAO.create(user);
     else return null;
   }
-
 
   @Override
   public int count() throws ApplicationErrorException {
     return userDAO.count();
   }
-
 
   @Override
   public List list(HashMap<String, String> listattributes)
@@ -52,10 +52,12 @@ public class UserServiceImplementation implements UserService {
     return null;
   }
 
-
   @Override
   public int edit(User user)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException {
+      throws SQLException,
+          ApplicationErrorException,
+          UniqueConstraintException,
+          InvalidTemplateException {
     if (!validate(user)) return 0;
     boolean status = userDAO.edit(user);
     if (status) {
@@ -76,13 +78,20 @@ public class UserServiceImplementation implements UserService {
    * @param user user to be validated.
    * @return status - Boolean.
    */
-  private boolean validate(User user) {
-    if ((user.getUserName()!=null&&!user.getUserName().matches(NAME_REGEX))
-        || (user.getFirstName()!=null&&!user.getFirstName().matches(NAME_REGEX))
-        || (user.getLastName()!=null&&!user.getLastName().matches(NAME_REGEX))
-        || (user.getPassWord()!=null&&!user.getPassWord().matches(PASSWORD_REGEX))
-        || (user.getPhoneNumber()!=0&&!String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
-        || (user.getUserType()!=null&&!userTypeList.contains(user.getUserType()))) return false;
-    else return true;
+  private boolean validate(User user) throws InvalidTemplateException {
+    if (user.getUserName() != null && !user.getUserName().matches(NAME_REGEX))
+      throw new InvalidTemplateException(">> Invalid UserName!!");
+    if (user.getFirstName() != null && !user.getFirstName().matches(NAME_REGEX))
+      throw new InvalidTemplateException(">> Invalid FirstName!!");
+    if (user.getLastName() != null && !user.getLastName().matches(NAME_REGEX))
+      throw new InvalidTemplateException(">> Invalid LastName!!");
+    if (user.getPassWord() != null && !user.getPassWord().matches(PASSWORD_REGEX))
+      throw new InvalidTemplateException(">> Invalid Password!!");
+    if (user.getPhoneNumber() != 0
+        && !String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
+      throw new InvalidTemplateException(">> Invalid Phonenumber!!");
+    if (user.getUserType() != null && !userTypeList.contains(user.getUserType()))
+      throw new InvalidTemplateException(">> Invalid Usertype!!");
+    return true;
   }
 }

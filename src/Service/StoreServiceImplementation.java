@@ -13,17 +13,16 @@ public class StoreServiceImplementation implements StoreService {
   private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
   private final String GST_NUMBER_REGEX = "^[a-zA-Z0-9]{15}$";
 
-
   @Override
-  public Store create(Store store) throws SQLException, ApplicationErrorException {
+  public Store create(Store store)
+      throws SQLException, ApplicationErrorException, InvalidTemplateException {
     if (validate(store)) return storeDAO.create(store);
     else return new Store();
   }
 
-
-
   @Override
-  public int edit(Store store) throws SQLException, ApplicationErrorException {
+  public int edit(Store store)
+      throws SQLException, ApplicationErrorException, InvalidTemplateException {
     if (!validate(store)) {
       return 0;
     }
@@ -43,10 +42,13 @@ public class StoreServiceImplementation implements StoreService {
      * @param store Store to be validated
      * @return status - Boolean
      */
-  private boolean validate(Store store) {
-    if ((store.getName()!=null&&!store.getName().matches(NAME_REGEX))
-        || (store.getPhoneNumber()!=0&&!String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
-        || (store.getGstCode()!=null&&!String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))) return false;
+  private boolean validate(Store store) throws InvalidTemplateException {
+    if (store.getName()!=null&&!store.getName().matches(NAME_REGEX))
+        throw new InvalidTemplateException(">> Invalid Store Name!!");
+    if (store.getPhoneNumber()!=0&&!String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
+        throw new InvalidTemplateException(">> Invalid Phone-number!!");
+    if (store.getGstCode()!=null&&!String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))
+        throw new InvalidTemplateException(">> Invalid GstCode!!");
     else return true;
   }
 }

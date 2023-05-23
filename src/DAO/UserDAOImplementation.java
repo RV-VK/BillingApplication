@@ -29,6 +29,15 @@ public class UserDAOImplementation implements UserDAO {
       return null;
     }
   }
+
+  /**
+   * Private method to set User parameters for Prepared Statement.
+   *
+   * @param statement Statement to be Set.
+   * @param user User Entity
+   * @return Prepared Statement
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   private PreparedStatement setParameters(PreparedStatement statement,User user) throws SQLException {
     statement.setString(1, user.getUserName());
     statement.setString(2, user.getUserType());
@@ -39,6 +48,12 @@ public class UserDAOImplementation implements UserDAO {
     return statement;
   }
 
+  /**
+   * Private method to assists user construction from resultset.
+   * @param resultSet User resultset.
+   * @return User entity.
+   * @throws SQLException Exception thrown based on SQL syntax.
+   */
   private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
     return new User(
             resultSet.getInt(1),
@@ -50,9 +65,16 @@ public class UserDAOImplementation implements UserDAO {
             resultSet.getLong(7));
   }
 
-  private void handleException(SQLException e)
+  /**
+   * Private method to convert SQL Exception to user readable messages.
+   *
+   * @param exception Exception Object.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+   */
+  private void handleException(SQLException exception)
       throws UniqueConstraintException, ApplicationErrorException {
-    if (e.getSQLState().equals("23505")) {
+    if (exception.getSQLState().equals("23505")) {
       throw new UniqueConstraintException(
               ">> UserName must be unique!! The username you have entered already exists!!");
     }
@@ -117,17 +139,8 @@ public class UserDAOImplementation implements UserDAO {
       PreparedStatement countStatement = userConnection.prepareStatement(EntryCount);
       PreparedStatement listStatement = userConnection.prepareStatement(listQuery);
       ResultSet countResultSet = countStatement.executeQuery();
-      if (countResultSet.next() &&countResultSet.getInt(1) <= offset) {
-        count = countResultSet.getInt(1);
-        int pageCount;
-        if (count % pageLength == 0)
-          pageCount=count/pageLength;
-        else
-          pageCount=(count/pageLength)+1;
-        throw new PageCountOutOfBoundsException(
-            ">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
-                + pageCount);
-        }
+      if (countResultSet.next() &&countResultSet.getInt(1) <= offset)
+        checkPagination(countResultSet.getInt(1),offset,pageLength);
       ResultSet listResultSet = listStatement.executeQuery();
       return listHelper(listResultSet);
     } catch (Exception e) {
@@ -135,6 +148,18 @@ public class UserDAOImplementation implements UserDAO {
     }
   }
 
+  private void checkPagination(int count,int offset,int pageLength) throws PageCountOutOfBoundsException {
+    if (count <= offset) {
+      int pageCount;
+      if (count % pageLength == 0)
+        pageCount=count/pageLength;
+      else
+        pageCount=(count/pageLength)+1;
+      throw new PageCountOutOfBoundsException(
+              ">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
+                      + pageCount);
+    }
+  }
   /**
    * This method serves the ListDAO function.
    * @param resultSet ListQuery results.
@@ -203,14 +228,7 @@ public class UserDAOImplementation implements UserDAO {
     return resultSet.getInt(1) == 0;
   }
 
-  /**
-   * This method verifies whether the input username and password matches in the user table to enable login for the users.
-   *
-   * @param userName Unique entry username of the user
-   * @param passWord Password string of the user
-   * @return String - Usertype or null
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
+
   @Override
   public String login(String userName, String passWord)
       throws ApplicationErrorException {

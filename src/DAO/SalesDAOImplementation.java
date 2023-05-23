@@ -98,18 +98,16 @@ public class SalesDAOImplementation implements SalesDAO {
 
   @Override
   public int count(String parameter) throws ApplicationErrorException {
-    int count;
     try {
+      String countQuery="SELECT COUNT(ID) FROM SALES";
+      String countQueryByDate="SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'";
       ResultSet countResultSet;
-      if (parameter == null) {
-        countResultSet = salesConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM SALES");
-      } else {
-        countResultSet = salesConnection.createStatement().executeQuery(
-                "SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'");
-      }
+      if (parameter == null)
+        countResultSet = salesConnection.createStatement().executeQuery(countQuery);
+      else
+        countResultSet = salesConnection.createStatement().executeQuery(countQueryByDate);
       countResultSet.next();
-      count = countResultSet.getInt(1);
-      return count;
+      return countResultSet.getInt(1);
     } catch (Exception e) {
       throw new ApplicationErrorException(e.getMessage());
     }
@@ -129,14 +127,7 @@ public class SalesDAOImplementation implements SalesDAO {
       if(countResultSet.next())
         count=countResultSet.getInt(1);
       else return null;
-      if(count<=offset){
-        int pageCount;
-        if (count % pageLength == 0)
-          pageCount=count/pageLength;
-        else
-          pageCount=(count/pageLength)+1;
-        throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "+pageCount);
-    }
+      checkPagination(count,offset,pageLength);
       ResultSet listResultSet = listStatement.executeQuery();
       return listHelper(listResultSet);
     } catch (Exception e) {
@@ -144,6 +135,18 @@ public class SalesDAOImplementation implements SalesDAO {
     }
   }
 
+  private void checkPagination(int count,int offset,int pageLength) throws PageCountOutOfBoundsException {
+    if (count <= offset) {
+      int pageCount;
+      if (count % pageLength == 0)
+        pageCount=count/pageLength;
+      else
+        pageCount=(count/pageLength)+1;
+      throw new PageCountOutOfBoundsException(
+              ">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
+                      + pageCount);
+    }
+  }
 
 
   @Override
@@ -189,7 +192,6 @@ public class SalesDAOImplementation implements SalesDAO {
     }
     return salesList;
   }
-
 
   @Override
   public int delete(int id) throws ApplicationErrorException {

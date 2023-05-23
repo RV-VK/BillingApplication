@@ -9,14 +9,19 @@ import java.util.List;
 public interface UnitService {
   /**
    * This method invokes the DAO of the Unit entity and serves the Create function.
+   *
    * @param unit Input Unit.
    * @return Unit - Created unit.
    * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table.
    */
   Unit create(Unit unit)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException;
+      throws SQLException,
+          ApplicationErrorException,
+          UniqueConstraintException,
+          InvalidTemplateException;
 
   /**
    * This method invokes the DAO of the Unit entity and serves the List function.
@@ -27,16 +32,20 @@ public interface UnitService {
   List<Unit> list() throws ApplicationErrorException;
 
   /**
-   *This method invokes the DAO of the Unit entity and serves the Edit function.
+   * This method invokes the DAO of the Unit entity and serves the Edit function.
    *
    * @param unit Edited Unit.
    * @return resultCode - Integer.
    * @throws SQLException Exception thrown based on SQL syntax.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
+   * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
+   *     table.
    */
   int edit(Unit unit)
-      throws SQLException, ApplicationErrorException, UniqueConstraintException;
+      throws SQLException,
+          ApplicationErrorException,
+          UniqueConstraintException,
+          InvalidTemplateException;
 
   /**
    * This method invokes the DAO of the Unit entity and serves the Delete function.

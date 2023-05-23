@@ -42,14 +42,13 @@ public class SalesServiceImplementation implements SalesService {
 
   @Override
   public int count(String parameter) throws ApplicationErrorException {
-    SalesDAO salesCountDAO = new SalesDAOImplementation();
     String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
     if (parameter != null) {
       if (!parameter.matches(dateRegex)) {
         return -1;
       }
     }
-    return salesCountDAO.count(parameter);
+    return salesDAO.count(parameter);
   }
 
 
@@ -58,14 +57,13 @@ public class SalesServiceImplementation implements SalesService {
   public List<Sales> list(HashMap<String, String> listAttributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
     List<Sales> salesList;
-    SalesDAO listSalesDAO = new SalesDAOImplementation();
     if (Collections.frequency(listAttributes.values(), null) == 0
         || Collections.frequency(listAttributes.values(), null) == 1) {
       int pageLength = Integer.parseInt(listAttributes.get("Pagelength"));
       int pageNumber = Integer.parseInt(listAttributes.get("Pagenumber"));
       int offset = (pageLength * pageNumber) - pageLength;
       salesList =
-          listSalesDAO.list(
+          salesDAO.list(
               listAttributes.get("Attribute"),
               listAttributes.get("Searchtext"),
               pageLength,
@@ -73,7 +71,7 @@ public class SalesServiceImplementation implements SalesService {
       return salesList;
     } else if (Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1
         && listAttributes.get("Searchtext") != null) {
-      salesList = listSalesDAO.list(listAttributes.get("Searchtext"));
+      salesList = salesDAO.list(listAttributes.get("Searchtext"));
       return salesList;
     }
     return null;
@@ -83,7 +81,6 @@ public class SalesServiceImplementation implements SalesService {
 
   @Override
   public int delete(String id) throws ApplicationErrorException {
-    SalesDAO salesDeleteDAO = new SalesDAOImplementation();
-    return salesDeleteDAO.delete(Integer.parseInt(id));
+    return salesDAO.delete(Integer.parseInt(id));
   }
 }
