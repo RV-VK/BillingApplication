@@ -80,7 +80,7 @@ public class UnitCLI {
       return;
     }
     if (createdUnit == null) {
-      System.out.println(">> Template Mismatch!!");
+      System.out.println(">> Try \"unit create help\" for proper syntax");
     } else if (createdUnit != null) {
       System.out.println("Unit creation Succesful!!");
       System.out.println(createdUnit);
@@ -226,7 +226,6 @@ public class UnitCLI {
       System.out.println(">> Unit Edit failed!!!");
       System.out.println(">> Please check the Id you have entered!!!");
     } else if (statusCode == 0) {
-      System.out.println(">> Invalid format of attributes for edit command!!!");
       System.out.println(">> Try \"unit edit help:\" for proper syntax!!!");
     }
   }

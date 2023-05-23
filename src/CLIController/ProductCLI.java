@@ -106,7 +106,6 @@ public class ProductCLI {
       return;
     }
     if (createdProduct == null) {
-      System.out.println(">> Template Mismatch!!");
       System.out.println(">> Try \"product create help\" for proper syntax");
     } else if (createdProduct != null) {
       System.out.println(">> Product Creation Successfull!!");
@@ -441,7 +440,6 @@ public class ProductCLI {
       System.out.println(">> Product edit failed!!!");
       System.out.println(">>Please check the Id you have entered!!!");
     } else if (statusCode == 0) {
-      System.out.println(">>Invalid format of attributes given for edit Command!!!");
       System.out.println(">>Try \"product edit help\" for proper syntax");
     }
   }

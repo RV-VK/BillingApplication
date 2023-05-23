@@ -84,7 +84,7 @@ public class StoreCLI {
     else if (createdStore.getName() != null) {
       System.out.println(">> Store Created Successfully!!!");
     } else if (createdStore.getName() == null) {
-      System.out.println(">> Template Mismatch!!");
+      System.out.println(">> Try \"store create help\" for proper syntax!!");
     }
   }
 
@@ -177,7 +177,6 @@ public class StoreCLI {
       System.out.println(">> Store Edit failed!!!");
       System.out.println(">> Please check the name you have entered!!!");
     } else if (statusCode == 0) {
-      System.out.println(">> Invalid format of attributes for edit command!!!");
       System.out.println(">> Try \"store edit help:\" for proper syntax!!!");
     }
   }

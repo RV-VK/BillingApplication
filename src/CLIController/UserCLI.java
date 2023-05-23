@@ -94,7 +94,6 @@ public class UserCLI {
       return;
     }
     if (createdUser== null) {
-      System.out.println("Template Mismatch!!");
       System.out.println("Try \"user create help\" for proper syntax");
     } else if (createdUser != null) {
       System.out.println(">> User Creation Successfull!!");
@@ -417,7 +416,6 @@ public class UserCLI {
       System.out.println(">> User edit failed!!!");
       System.out.println(">>Please check the Id you have entered!!!");
     } else if (statusCode == 0) {
-      System.out.println(">>Invalid format of attributes given for edit Command!!!");
       System.out.println(">>Try \"user edit help\" for proper syntax");
     }
   }
