@@ -17,9 +17,12 @@ public class LoginServiceImplementation implements  LoginService{
         return userDAO.checkIfInitialSetup();
     }
 
-
-    @Override
-    public User createUser(User user) throws UniqueConstraintException, SQLException, ApplicationErrorException {
+  @Override
+  public User createUser(User user)
+      throws UniqueConstraintException,
+          SQLException,
+          ApplicationErrorException,
+          InvalidTemplateException {
         UserService userService=new UserServiceImplementation();
         return userService.create(user);
     }

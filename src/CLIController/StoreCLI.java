@@ -95,7 +95,7 @@ public class StoreCLI {
    * @param command Command String.
    */
   public void edit(List<String> arguments, String command) {
-    final String editCommandRegex = "^name:\\s*([A-Za-z\\s]+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
+    final String editCommandRegex = "^name:\\s*([A-Za-z0-9\\s]+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
     if (arguments.size() == 3 && arguments.get(2).equals("help")) {
       System.out.println(
           ">> Edit store uing the following template\t\n"
@@ -126,7 +126,7 @@ public class StoreCLI {
       if(!command.substring(11).matches(editCommandRegex))
       {
         System.out.println(
-                ">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
+                ">> Invalid command Format!\n>> Try \"store edit help for proper syntax!");
         return;
       }
       editHelper(arguments.subList(2, arguments.size()));

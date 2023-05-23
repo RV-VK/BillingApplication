@@ -63,12 +63,9 @@ public class UnitCLI {
     name = unitAttributes.get(0).trim();
     unitcode = unitAttributes.get(1).trim();
     description = unitAttributes.get(2).trim();
-    isDividable = true;
-    try {
+    if (unitAttributes.get(3).trim().equals("true") || unitAttributes.get(3).trim().equals("false"))
       isDividable = Boolean.parseBoolean(unitAttributes.get(3).trim());
-    } catch (Exception e) {
-      System.out.println(">> Invalid format for 4th argument \"Isdividable\"");
-      System.out.println(">> Try \"unit create help\" for proper syntax");
+    else { System.out.println(">> Invalid Entry for Isdividable!! Must be either true or false!!");
       return;
     }
     Unit unit = new Unit(name, unitcode, description, isDividable);
@@ -197,13 +194,10 @@ public class UnitCLI {
         unit.setCode(editAttributes.get(index + 1).trim());
       } else if (editAttributes.get(index).trim().equals("description")) {
         unit.setDescription(editAttributes.get(index + 1).trim());
-      } else if (editAttributes.get(index).trim().equals("isdividable")) {
-        boolean isDividable;
-        try {
-          isDividable = Boolean.parseBoolean(editAttributes.get(index + 1).trim());
-        } catch (Exception e) {
-          System.out.println(">> Isdividable must be either true or false!!");
-          System.out.println(">> Try \"unit edit help\" for proper syntax");
+      } else if (editAttributes.get(index).trim().equals("isdividable")){
+        if(editAttributes.get(index+1).trim().equals("true")||editAttributes.get(index+1).trim().equals("false")) {
+           isDividable=Boolean.parseBoolean(editAttributes.get(index + 1).trim());
+        }else {System.out.println(">>Invalid Entry for Unitcode!! Must be either true or false ");
           return;
         }
         unit.setIsDividable(isDividable);

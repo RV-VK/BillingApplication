@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class StoreServiceImplementation implements StoreService {
  private final StoreDAO storeDAO = new StoreDAOImplementation();
-  private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
+  private final String NAME_REGEX = "^[a-zA-Z0-9\\s]{4,30}$";
   private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
   private final String GST_NUMBER_REGEX = "^[a-zA-Z0-9]{15}$";
 

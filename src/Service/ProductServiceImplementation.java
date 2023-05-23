@@ -12,7 +12,9 @@ public class ProductServiceImplementation implements ProductService {
   private final ProductDAO productDAO = new ProductDAOImplementation();
   private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
   private final String CODE_REGEX = "^[a-zA-Z0-9]{2,6}$";
-  private final String NUMBER_REGEX="^[0-9]*$";
+  private final String UNIT_CODE_REGEX = "^[a-zA-Z]{1,4}$";
+
+    private final String NUMBER_REGEX="^[0-9]*$";
 
   public Product create(Product product)
       throws SQLException,
@@ -91,12 +93,14 @@ public class ProductServiceImplementation implements ProductService {
    * @return status - Boolean.
    */
   private boolean validate(Product product) throws InvalidTemplateException {
-     if(product.getName() != null && !product.getName().matches(NAME_REGEX))
+      if(product.getCode() != null && ! product.getCode().matches(CODE_REGEX))
+          throw new InvalidTemplateException(">> Invalid Product Code!!");
+      if(product.getName() != null && ! product.getName().matches(NAME_REGEX))
        throw new InvalidTemplateException(">> Invalid Product Name!");
-     if(product.getType() == null || product.getType().matches(NAME_REGEX))
+      if(product.getunitcode() != null && ! product.getunitcode().matches(UNIT_CODE_REGEX))
+          throw new InvalidTemplateException(">> Invalid Unit Code!!");
+      if(product.getType() != null && ! product.getType().matches(NAME_REGEX))
        throw new InvalidTemplateException(">> Invalid Product Type!!") ;
-     if(product.getCode() == null || product.getCode().matches(CODE_REGEX))
-       throw new InvalidTemplateException(">> Invalid Product Code!!");
      return true;
   }
 }

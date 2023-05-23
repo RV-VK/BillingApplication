@@ -4,6 +4,7 @@ import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import DAO.UniqueConstraintException;
 import Entity.User;
+import Service.InvalidTemplateException;
 import Service.LoginService;
 import Service.LoginServiceImplementation;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class LoginCLI {
       throws SQLException,
           UniqueConstraintException,
           ApplicationErrorException,
-          PageCountOutOfBoundsException {
+          PageCountOutOfBoundsException, InvalidTemplateException {
     if (loginService.checkIfInitialSetup()) {
 
         System.out.println(
