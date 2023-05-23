@@ -497,12 +497,8 @@ public class ProductCLI {
         System.out.println("Product Deletion Successfull!!!");
       } else if (productService.delete(parameter) == -1) {
         System.out.println(">> Product Deletion Failed!!!");
-        System.out.println(">> Please check the Id (or) Code you have entered!!!");
+        System.out.println(">> Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
         System.out.println(">> Try \"product delete help\" for proper syntax");
-      } else if (productService.delete(parameter) == 0) {
-        System.out.println(">> Product cannot be deleted!!!");
-        System.out.println(">>Selected Product has stock left and should not be deleted!!!");
-        System.out.println(">>Please check the selected product to be deleted!!!");
       }
     } else if (prompt.equals("n")) {
       System.out.println(">> Delete operation cancelled");

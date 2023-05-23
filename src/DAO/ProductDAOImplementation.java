@@ -199,11 +199,7 @@ public class ProductDAOImplementation implements ProductDAO {
   public int delete(String parameter) throws ApplicationErrorException {
     try {
       Statement deleteStatement = productConnection.createStatement();
-      ResultSet stockResultSet;
-      stockResultSet = deleteStatement.executeQuery("SELECT STOCK FROM PRODUCT WHERE CODE='" + parameter + "'"+" OR CAST(ID AS TEXT) ILIKE '%"+parameter+"%'");
-      if (!stockResultSet.next()) return -1;
-      if (stockResultSet.getFloat(1) > 0) return 0;
-      if (deleteStatement.executeUpdate("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE CAST(ID AS TEXT) ILIKE '%" + parameter + "%'"+"OR CODE='"+parameter+"'")>0)
+      if (deleteStatement.executeUpdate("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '%" + parameter + "%'"+"OR CODE='"+parameter+"') AND STOCK=0")>0)
         return 1;
       else
         return -1;
