@@ -10,7 +10,7 @@ public class Purchase {
   private double grandTotal;
 
   public Purchase() {}
-  ;
+
 
   public Purchase(
       int id, String date, int invoice, List<PurchaseItem> purchaseItemList, double grandTotal) {

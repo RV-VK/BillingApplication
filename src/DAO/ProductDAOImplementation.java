@@ -38,7 +38,7 @@ public class ProductDAOImplementation implements ProductDAO {
    * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product table.
    * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
    * @throws SQLException Exception thrown based on SQL syntax.
-   * @throws ApplicationErrorException xception thrown due to Persistence problems.
+   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
   private void handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, SQLException, ApplicationErrorException {
     if (e.getSQLState().equals("23503")) {

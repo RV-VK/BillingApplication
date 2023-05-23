@@ -1,8 +1,5 @@
 package Entity;
 
-import DBConnection.DBHelper;
-import java.sql.*;
-
 public class Product {
   private int id;
   private String code;
@@ -31,21 +28,6 @@ public class Product {
     this.price = price;
   }
 
-  public Product(
-      String code,
-      String name,
-      String unitcode,
-      String type,
-      float availableQuantity,
-      double price,
-      double costPrice) {
-    this.code = code;
-    this.name = name;
-    this.unitcode = unitcode;
-    this.type = type;
-    this.availableQuantity = availableQuantity;
-    this.price = price;
-  }
 
   public Product(
       String code,

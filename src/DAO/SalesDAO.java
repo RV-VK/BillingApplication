@@ -51,7 +51,7 @@ public interface SalesDAO {
   List<Sales> list(String searchText) throws ApplicationErrorException;
 
   /**
-   * This method delets an entry in the Sales table and the corresponding entries in the Sales items table.
+   * This method deletes an entry in the Sales table and the corresponding entries in the Sales items table.
    *
    * @param id Input id to perform delete.
    * @return resultCode - Integer.

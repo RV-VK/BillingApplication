@@ -89,7 +89,7 @@ public class UserServiceImplementation implements UserService {
       throw new InvalidTemplateException(">> Invalid Password!!");
     if (user.getPhoneNumber() != 0
         && !String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
-      throw new InvalidTemplateException(">> Invalid Phonenumber!!");
+      throw new InvalidTemplateException(">> Invalid Phone-number!!");
     if (user.getUserType() != null && !userTypeList.contains(user.getUserType()))
       throw new InvalidTemplateException(">> Invalid Usertype!!");
     return true;
