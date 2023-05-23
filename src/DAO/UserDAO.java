@@ -60,7 +60,7 @@ public interface UserDAO {
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
    */
-  boolean edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException;
+  User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException;
 
   /**
    * This method deleted an entry in the User table based on the given parameter.

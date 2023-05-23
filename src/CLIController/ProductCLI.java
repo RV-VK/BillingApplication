@@ -427,20 +427,20 @@ public class ProductCLI {
         return;
       }
     }
-    int statusCode;
+    Product editedProduct;
     try {
-      statusCode = productService.edit(product);
+      editedProduct = productService.edit(product);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
     }
-    if (statusCode == 1) {
+    if (editedProduct != null) {
       System.out.println(">> Product Edited Successfully");
-    } else if (statusCode == -1) {
+      System.out.println(editedProduct);
+    }
+    else {
       System.out.println(">> Product edit failed!!!");
       System.out.println(">>Please check the Id you have entered!!!");
-    } else if (statusCode == 0) {
-      System.out.println(">>Try \"product edit help\" for proper syntax");
     }
   }
 

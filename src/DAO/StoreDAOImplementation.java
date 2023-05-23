@@ -45,10 +45,10 @@ public class StoreDAOImplementation implements StoreDAO {
 
 
   @Override
-  public int edit(Store store) throws SQLException, ApplicationErrorException {
+  public Store edit(Store store) throws SQLException, ApplicationErrorException {
     try {
       String editQuery =
-          "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER)";
+          "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER) RETURNING *";
       PreparedStatement editStatement = storeConnection.prepareStatement(editQuery);
       setParameters(editStatement,store);
       if (store.getPhoneNumber() == 0) {
@@ -56,11 +56,8 @@ public class StoreDAOImplementation implements StoreDAO {
       } else {
         editStatement.setLong(2, store.getPhoneNumber());
       }
-      if (editStatement.executeUpdate() > 0) {
-        return 1;
-      } else {
-        return -1;
-      }
+      ResultSet editStoreResultSet=editStatement.executeQuery();
+      return getStoreFromResultSet(editStoreResultSet);
     } catch (Exception e) {
       storeConnection.rollback();
       System.out.println(e.getMessage());

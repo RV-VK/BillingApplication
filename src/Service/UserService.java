@@ -55,7 +55,7 @@ public interface UserService {
    * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
    *     table.
    */
-  int edit(User user)
+  User edit(User user)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,

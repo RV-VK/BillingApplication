@@ -43,14 +43,16 @@ public class ProductDAOImplementation implements ProductDAO {
   private void handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, SQLException, ApplicationErrorException {
     if (e.getSQLState().equals("23503")) {
       throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
-    } else if (e.getSQLState().equals("23505")) {
+    }
+    else if (e.getSQLState().equals("23505")) {
       if (e.getMessage().contains("product_name"))
         throw new UniqueConstraintException(
                 ">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
       else
         throw new UniqueConstraintException(
                 ">> Code must be unique!!!\n>> The code you have entered already exists!!!");
-    } else {
+    }
+    else {
       throw new ApplicationErrorException(
               ">> Application has went into an Error!!!\n>>Please Try again");
     }
@@ -174,10 +176,10 @@ public class ProductDAOImplementation implements ProductDAO {
   }
 
   @Override
-  public boolean edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
+  public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
     try {
       String editQuery =
-          "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE) WHERE ID=? ";
+          "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE) WHERE ID=? RETURNING *";
       PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
       setParameters(editStatement, product);
       if (product.getPrice() == 0) {
@@ -186,11 +188,12 @@ public class ProductDAOImplementation implements ProductDAO {
         editStatement.setDouble(5, product.getPrice());
       }
       editStatement.setInt(6, product.getId());
-        return editStatement.executeUpdate() > 0;
+      ResultSet editProductResultSet=editStatement.executeQuery();
+      return getProductFromResultSet(editProductResultSet);
     } catch (SQLException e) {
       productConnection.rollback();
       handleException(e);
-      return false;
+      return null;
     }
   }
 
@@ -224,7 +227,6 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-
   public int updateStock(String code,float stock) throws ApplicationErrorException {
     try{
     return productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+"+stock+" WHERE CODE='"+code+"'");
@@ -234,12 +236,4 @@ public class ProductDAOImplementation implements ProductDAO {
     }
   }
 
-  public int updatePrice(String code,double price) throws ApplicationErrorException {
-    try{
-      return productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET PRICE="+price+" WHERE CODE='"+code+"'");
-    }catch(Exception e)
-    {
-      throw new ApplicationErrorException(e.getMessage());
-    }
-  }
 }

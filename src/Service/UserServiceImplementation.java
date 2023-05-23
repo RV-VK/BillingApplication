@@ -53,18 +53,13 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public int edit(User user)
+  public User edit(User user)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
           InvalidTemplateException {
-    if (!validate(user)) return 0;
-    boolean status = userDAO.edit(user);
-    if (status) {
-      return 1;
-    } else {
-      return -1;
-    }
+    validate(user);
+    return userDAO.edit(user);
   }
 
   @Override

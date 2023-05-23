@@ -36,7 +36,7 @@ public interface UnitDAO {
    * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
    */
 
-  int edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException;
+  Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException;
 
   /**
    * This method deletes an entry in the Unit table.

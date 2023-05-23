@@ -22,7 +22,7 @@ public interface StoreDAO {
    * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
    */
 
-  int edit(Store store) throws SQLException, ApplicationErrorException;
+  Store edit(Store store) throws SQLException, ApplicationErrorException;
 
   /**
    * This method deleted the store Entry in the Store table.

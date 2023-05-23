@@ -55,7 +55,7 @@ public interface ProductService {
    * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
    *     table.
    */
-  int edit(Product product)
+  Product edit(Product product)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
@@ -71,21 +71,4 @@ public interface ProductService {
    */
   int delete(String parameter) throws ApplicationErrorException;
 
-  /**This method invokes the ProductDAO and serves the stock Update function.
-   *
-   * @param code Product Code
-   * @param stock updated Stock
-   * @return statusCode - Integer
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
-  int updateStock(String code,String stock) throws ApplicationErrorException;
-
-  /**This method invokes the ProductDAO and serves the Price Update function.
-   *
-   * @param code Product code
-   * @param price updated Price
-   * @return statusCode - Integer
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
-  int updatePrice(String code,String price) throws ApplicationErrorException;
 }

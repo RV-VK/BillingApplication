@@ -69,12 +69,12 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
   @Override
-  public int edit(Unit unit)
+  public Unit edit(Unit unit)
       throws ApplicationErrorException, SQLException, UniqueConstraintException {
     try {
       unitConnection.setAutoCommit(false);
       String editQuery =
-          "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=?";
+          "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=? RETURNING *";
       PreparedStatement editStatement = unitConnection.prepareStatement(editQuery);
       setParameters(editStatement,unit);
       try {
@@ -83,14 +83,11 @@ public class UnitDAOImplementation implements UnitDAO {
         editStatement.setNull(4, Types.BOOLEAN);
       }
       editStatement.setInt(5, unit.getId());
-      if (editStatement.executeUpdate() > 0) {
-        unitConnection.commit();
-        unitConnection.setAutoCommit(true);
-        return 1;
-      } else return -1;
+      ResultSet editUnitResultSet=editStatement.executeQuery();
+      return getUnitFromResultSet(editUnitResultSet);
     } catch (SQLException e) {
       handleException(e);
-      return -1;
+      return null;
     }
   }
 

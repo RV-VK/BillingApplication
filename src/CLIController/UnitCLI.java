@@ -194,10 +194,12 @@ public class UnitCLI {
         unit.setCode(editAttributes.get(index + 1).trim());
       } else if (editAttributes.get(index).trim().equals("description")) {
         unit.setDescription(editAttributes.get(index + 1).trim());
-      } else if (editAttributes.get(index).trim().equals("isdividable")){
-        if(editAttributes.get(index+1).trim().equals("true")||editAttributes.get(index+1).trim().equals("false")) {
-           isDividable=Boolean.parseBoolean(editAttributes.get(index + 1).trim());
-        }else {System.out.println(">>Invalid Entry for Unitcode!! Must be either true or false ");
+      } else if (editAttributes.get(index).trim().equals("isdividable")) {
+        if (editAttributes.get(index + 1).trim().equals("true")
+            || editAttributes.get(index + 1).trim().equals("false")) {
+          isDividable = Boolean.parseBoolean(editAttributes.get(index + 1).trim());
+        } else {
+          System.out.println(">>Invalid Entry for Unitcode!! Must be either true or false ");
           return;
         }
         unit.setIsDividable(isDividable);
@@ -207,20 +209,19 @@ public class UnitCLI {
         return;
       }
     }
-    int statusCode;
+    Unit editedUnit;
     try {
-      statusCode = unitService.edit(unit);
+      editedUnit = unitService.edit(unit);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
     }
-    if (statusCode == 1) {
+    if (editedUnit != null) {
       System.out.println(">> Unit Edited Successfully!!!");
-    } else if (statusCode == -1) {
+      System.out.println(editedUnit);
+    } else {
       System.out.println(">> Unit Edit failed!!!");
       System.out.println(">> Please check the Id you have entered!!!");
-    } else if (statusCode == 0) {
-      System.out.println(">> Try \"unit edit help:\" for proper syntax!!!");
     }
   }
 

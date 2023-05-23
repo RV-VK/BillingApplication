@@ -69,7 +69,7 @@ public interface ProductDAO {
    * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
    *     table.
    */
-  boolean edit(Product product)
+  Product edit(Product product)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
@@ -93,23 +93,5 @@ public interface ProductDAO {
    */
   Product findByCode(String code) throws ApplicationErrorException;
 
-  /**
-   * This method updates the Stock column of Product based on given product code.
-   *
-   * @param code Product code
-   * @param stock Stock to be updated
-   * @return updated Stock - Float
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
-  int updateStock(String code, float stock) throws ApplicationErrorException;
 
-  /**
-   * This method updates the Price column of Product based on given product code.
-   *
-   * @param code Product code
-   * @param price Price to be updated
-   * @return updated Price - Double
-   * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-   */
-  int updatePrice(String code, double price) throws ApplicationErrorException;
 }

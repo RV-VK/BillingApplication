@@ -30,11 +30,9 @@ public class UnitServiceImplementation implements UnitService {
 
 
   @Override
-  public int edit(Unit unit)
+  public Unit edit(Unit unit)
       throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
-    if (!validate(unit)) {
-      return 0;
-    }
+    validate(unit);
     return unitDAO.edit(unit);
   }
 

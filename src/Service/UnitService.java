@@ -41,7 +41,7 @@ public interface UnitService {
    * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
    *     table.
    */
-  int edit(Unit unit)
+  Unit edit(Unit unit)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,

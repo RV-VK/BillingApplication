@@ -22,8 +22,9 @@ public class ProductServiceImplementation implements ProductService {
           UniqueConstraintException,
           UnitCodeViolationException,
           InvalidTemplateException {
-    if (validate(product)) return productDAO.create(product);
-    else return null;
+    validate(product);
+    return productDAO.create(product);
+
   }
 
   public int count() throws ApplicationErrorException {
@@ -53,39 +54,20 @@ public class ProductServiceImplementation implements ProductService {
     return null;
   }
 
-  public int edit(Product product)
+  public Product edit(Product product)
       throws SQLException,
           ApplicationErrorException,
           UniqueConstraintException,
           UnitCodeViolationException,
           InvalidTemplateException {
-    if (!validate(product)) return 0;
-    boolean status = productDAO.edit(product);
-    if (status) {
-      return 1;
-    } else {
-      return -1;
-    }
+    validate(product);
+    return productDAO.edit(product);
   }
 
  public int delete(String parameter) throws ApplicationErrorException {
     return productDAO.delete(parameter);
   }
 
-
-  public int updateStock(String code,String stock) throws ApplicationErrorException {
-    if (stock.matches(NUMBER_REGEX) && code.matches(CODE_REGEX))
-      return productDAO.updateStock(code, Float.parseFloat(stock));
-    else return -1;
-  }
-
-
-  public int updatePrice(String code,String price) throws ApplicationErrorException{
-    if(price.matches(NUMBER_REGEX) && code.matches(CODE_REGEX))
-      return productDAO.updatePrice(code,Double.parseDouble(price));
-    else
-      return -1;
-  }
   /**
    * This method validates the Product attributes.
    *

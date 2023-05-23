@@ -133,7 +133,6 @@ public class StoreCLI {
     }
   }
 
-
   /**
    * This method serves the Edit function.
    *
@@ -146,7 +145,7 @@ public class StoreCLI {
         store.setName(editAttributes.get(index + 1).trim());
       } else if (editAttributes.get(index).trim().equals("phonenumber")) {
         try {
-          phoneNumber = Long.parseLong(editAttributes.get(index+1).trim());
+          phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());
         } catch (NumberFormatException e) {
           System.out.println(">> PhoneNumber must be numeric!!");
           System.out.println(">> Try \"store edit help\" for proper syntax!!");
@@ -156,31 +155,29 @@ public class StoreCLI {
       } else if (editAttributes.get(index).trim().equals("address")) {
         store.setAddress(editAttributes.get(index + 1).trim());
       } else if (editAttributes.get(index).trim().equals("gstnumber")) {
-          GSTNumber = editAttributes.get(index + 1).trim();
-          store.setGstCode(GSTNumber);
+        GSTNumber = editAttributes.get(index + 1).trim();
+        store.setGstCode(GSTNumber);
       } else {
         System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
         System.out.println(">> Try \"store edit help\" for proper Syntax");
         return;
       }
     }
-    int statusCode;
+    Store createdStore;
     try {
-      statusCode = storeService.edit(store);
+      createdStore = storeService.edit(store);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
     }
-    if (statusCode == 1) {
+    if (createdStore != null) {
       System.out.println(">> Store Edited Successfully!!!");
-    } else if (statusCode == -1) {
+      System.out.println(createdStore);
+    } else {
       System.out.println(">> Store Edit failed!!!");
       System.out.println(">> Please check the name you have entered!!!");
-    } else if (statusCode == 0) {
-      System.out.println(">> Try \"store edit help:\" for proper syntax!!!");
     }
-  }
-
+}
   /**
    * This method handles the presentation layer of the Delete function.
    *

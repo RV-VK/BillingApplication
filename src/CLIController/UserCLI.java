@@ -403,20 +403,20 @@ public class UserCLI {
         return;
       }
     }
-    int statusCode;
+    User editedUser;
     try {
-      statusCode = userService.edit(user);
+      editedUser = userService.edit(user);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return;
     }
-    if (statusCode == 1) {
-      System.out.println(">> User Edited Succesfully");
-    } else if (statusCode == -1) {
+    if (editedUser != null) {
+      System.out.println(">> User Edited Successfully");
+      System.out.println(editedUser);
+    }
+    else {
       System.out.println(">> User edit failed!!!");
       System.out.println(">>Please check the Id you have entered!!!");
-    } else if (statusCode == 0) {
-      System.out.println(">>Try \"user edit help\" for proper syntax");
     }
   }
 

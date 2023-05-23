@@ -21,11 +21,9 @@ public class StoreServiceImplementation implements StoreService {
   }
 
   @Override
-  public int edit(Store store)
+  public Store edit(Store store)
       throws SQLException, ApplicationErrorException, InvalidTemplateException {
-    if (!validate(store)) {
-      return 0;
-    }
+    validate(store);
     return storeDAO.edit(store);
   }
 

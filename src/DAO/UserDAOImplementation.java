@@ -171,14 +171,13 @@ public class UserDAOImplementation implements UserDAO {
 
 
   @Override
-  public boolean edit(User user)
+  public User edit(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
-    Connection editConnection = DBHelper.getConnection();
     try {
-      editConnection.setAutoCommit(false);
+      userConnection.setAutoCommit(false);
       String editQuery =
-          "UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=?";
-      PreparedStatement editStatement = editConnection.prepareStatement(editQuery);
+          "UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=? RETURNING *";
+      PreparedStatement editStatement = userConnection.prepareStatement(editQuery);
       setParameters(editStatement,user);
       if (user.getPhoneNumber() == 0) {
         editStatement.setNull(6, Types.BIGINT);
@@ -186,15 +185,11 @@ public class UserDAOImplementation implements UserDAO {
         editStatement.setLong(6, user.getPhoneNumber());
       }
       editStatement.setInt(7, user.getId());
-      if (editStatement.executeUpdate() > 0) {
-        editConnection.commit();
-        editConnection.setAutoCommit(true);
-        return true;
-      }
-      return false;
+      ResultSet editUserResultSet=editStatement.executeQuery();
+      return getUserFromResultSet(editUserResultSet);
     } catch (SQLException e) {
       handleException(e);
-      return false;
+      return null;
       }
   }
 
