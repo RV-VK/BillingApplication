@@ -45,7 +45,7 @@ public interface ProductDAO {
    * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
    *     non-existing page is prompted.
    */
-  List list(String attribute, String searchText, int pageLength, int offset)
+  List<Product> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException, PageCountOutOfBoundsException;
 
   /**
@@ -55,7 +55,7 @@ public interface ProductDAO {
    * @return List - Products
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
-  List list(String searchText) throws ApplicationErrorException;
+  List<Product> list(String searchText) throws ApplicationErrorException;
 
   /**
    * This method updates the attributes of the product entry in the Product table

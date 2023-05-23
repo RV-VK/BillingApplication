@@ -38,7 +38,7 @@ public interface SalesDAO {
    * @return List - Sales.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
-  List list(String attribute, String searchText, int pageLength, int offset)
+  List<Sales> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException;
 
   /**
@@ -48,7 +48,7 @@ public interface SalesDAO {
    * @return List - Sales.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
-  List list(String searchText) throws ApplicationErrorException;
+  List<Sales> list(String searchText) throws ApplicationErrorException;
 
   /**
    * This method delets an entry in the Sales table and the corresponding entries in the Sales items table.

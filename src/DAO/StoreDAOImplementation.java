@@ -5,7 +5,7 @@ import Entity.Store;
 import java.sql.*;
 
 public class StoreDAOImplementation implements StoreDAO {
-  private Connection storeConnection = DBHelper.getConnection();
+  private final Connection storeConnection = DBHelper.getConnection();
 
 
 
@@ -18,8 +18,7 @@ public class StoreDAOImplementation implements StoreDAO {
       setParameters(unitCreateStatement,store);
       ResultSet storeCreateResultSet = unitCreateStatement.executeQuery();
       storeCreateResultSet.next();
-      Store createdStore =getStoreFromResultSet(storeCreateResultSet);
-      return createdStore;
+      return getStoreFromResultSet(storeCreateResultSet);
     } catch (SQLException e) {
       storeConnection.rollback();
       if(e.getSQLState().equals("23514"))
@@ -30,12 +29,11 @@ public class StoreDAOImplementation implements StoreDAO {
     }
   }
 
-  private PreparedStatement setParameters(PreparedStatement statement,Store store) throws SQLException {
+  private void setParameters(PreparedStatement statement, Store store) throws SQLException {
     statement.setString(1, store.getName());
     statement.setLong(2, store.getPhoneNumber());
     statement.setString(3, store.getAddress());
     statement.setString(4, store.getGstCode());
-    return statement;
   }
   private Store getStoreFromResultSet(ResultSet resultSet) throws SQLException {
     return  new Store(

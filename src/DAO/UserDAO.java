@@ -34,7 +34,7 @@ public interface UserDAO {
    * @throws ApplicationErrorException Exception thrown due to persistence problems
    */
 
-  List list(String searchText) throws ApplicationErrorException;
+  List<User> list(String searchText) throws ApplicationErrorException;
 
   /**
    * This method lists the users in the user table based on the given searchable attribute
@@ -48,7 +48,7 @@ public interface UserDAO {
    * @throws ApplicationErrorException Exception thrown due to persistence problems
    */
 
-  List list(String attribute, String searchText, int pageLength, int offset)
+  List<User> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException;
 
   /**

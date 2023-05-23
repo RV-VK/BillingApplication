@@ -35,7 +35,7 @@ public interface PurchaseDAO {
    * @return List - Purchase.
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
-  List list(String attribute, String searchText, int pageLength, int offset)
+  List<Purchase> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException;
 
 
@@ -45,7 +45,7 @@ public interface PurchaseDAO {
    * @return List - Purchase
    * @throws ApplicationErrorException Exception thrown due to Persistence problems.
    */
-  List list(String searchText) throws ApplicationErrorException;
+  List<Purchase> list(String searchText) throws ApplicationErrorException;
 
 
   /**

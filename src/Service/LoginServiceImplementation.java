@@ -9,7 +9,7 @@ import Entity.User;
 import java.sql.SQLException;
 
 public class LoginServiceImplementation implements  LoginService{
-    private UserDAO userDAO=new UserDAOImplementation();
+    private final UserDAO userDAO=new UserDAOImplementation();
 
 
     @Override

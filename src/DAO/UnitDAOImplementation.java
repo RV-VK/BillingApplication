@@ -2,14 +2,12 @@ package DAO;
 
 import DBConnection.DBHelper;
 import Entity.Unit;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UnitDAOImplementation implements UnitDAO {
-  private Connection unitConnection = DBHelper.getConnection();
+  private final Connection unitConnection = DBHelper.getConnection();
 
 
   @Override
@@ -22,29 +20,23 @@ public class UnitDAOImplementation implements UnitDAO {
       setParameters(unitCreateStatement,unit);
       ResultSet unitCreateResultSet = unitCreateStatement.executeQuery();
       unitCreateResultSet.next();
-      Unit createdUnit =getUnitFromResultSet(unitCreateResultSet);
-      return createdUnit;
+      return getUnitFromResultSet(unitCreateResultSet);
     } catch (SQLException e) {
       handleException(e);
       return null;
     }
   }
 
-  private PreparedStatement setParameters(PreparedStatement statement, Unit unit) throws SQLException {
+  private void setParameters(PreparedStatement statement, Unit unit) throws SQLException {
     statement.setString(1, unit.getName());
     statement.setString(2, unit.getCode());
     statement.setString(3, unit.getDescription());
     statement.setBoolean(4, unit.getIsDividable());
-    return statement;
   }
   
   private Unit getUnitFromResultSet(ResultSet resultSet) throws SQLException {
     boolean isDividable;
-    if (resultSet.getString(5).equals("t")) {
-      isDividable = true;
-    } else {
-      isDividable = false;
-    }
+    isDividable = resultSet.getString(5).equals("t");
     return new Unit(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
             isDividable);
   }

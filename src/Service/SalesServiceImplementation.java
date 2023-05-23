@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SalesServiceImplementation implements SalesService {
-  private SalesDAO salesDAO = new SalesDAOImplementation();
+  private final SalesDAO salesDAO = new SalesDAOImplementation();
 
 
 
@@ -36,8 +36,7 @@ public class SalesServiceImplementation implements SalesService {
       }
     }
     sales.setGrandTotal(grandtotal);
-    Sales createdSale = salesDAO.create(sales);
-    return createdSale;
+    return salesDAO.create(sales);
   }
 
 

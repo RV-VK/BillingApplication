@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAOImplementation implements UserDAO {
-  private Connection userConnection = DBHelper.getConnection();
+  private final Connection userConnection = DBHelper.getConnection();
   private List<User> userList = new ArrayList<>();
 
 
@@ -22,8 +22,7 @@ public class UserDAOImplementation implements UserDAO {
       setParameters(userCreateStatement,user);
       ResultSet userCreateResultSet = userCreateStatement.executeQuery();
       userCreateResultSet.next();
-      User createdUser=getUserFromResultSet(userCreateResultSet);
-      return createdUser;
+      return getUserFromResultSet(userCreateResultSet);
     } catch (SQLException e) {
       handleException(e);
       return null;
@@ -34,18 +33,16 @@ public class UserDAOImplementation implements UserDAO {
    * Private method to set User parameters for Prepared Statement.
    *
    * @param statement Statement to be Set.
-   * @param user User Entity
-   * @return Prepared Statement
+   * @param user      User Entity
    * @throws SQLException Exception thrown based on SQL syntax.
    */
-  private PreparedStatement setParameters(PreparedStatement statement,User user) throws SQLException {
+  private void setParameters(PreparedStatement statement, User user) throws SQLException {
     statement.setString(1, user.getUserName());
     statement.setString(2, user.getUserType());
     statement.setString(3, user.getPassWord());
     statement.setString(4, user.getFirstName());
     statement.setString(5, user.getLastName());
     statement.setLong(6, user.getPhoneNumber());
-    return statement;
   }
 
   /**
@@ -130,9 +127,8 @@ public class UserDAOImplementation implements UserDAO {
 
 
   @Override
-  public List list(String attribute, String searchText, int pageLength, int offset)
+  public List<User> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException {
-    int count;
     try {
       String EntryCount = "SELECT COUNT(*) OVER() FROM USERS WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID";
       String listQuery = "SELECT * FROM USERS WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;

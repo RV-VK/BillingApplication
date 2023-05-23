@@ -19,9 +19,10 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
       PreparedStatement purchaseEntryStatement = purchaseConnection.prepareStatement("INSERT INTO PURCHASE(DATE,INVOICE,GRANDTOTAL) VALUES(?,?,?) RETURNING *");
       setPurchase(purchaseEntryStatement, purchase);
       ResultSet purchaseEntryResultSet = purchaseEntryStatement.executeQuery();
-      Purchase purchaseEntry = new Purchase();
-      while (purchaseEntryResultSet.next())
-        purchaseEntry = getPurchaseFromResultSet(purchaseEntryResultSet, purchaseEntry);
+      Purchase purchaseEntry=new Purchase();
+      while (purchaseEntryResultSet.next()) {
+        getPurchaseFromResultSet(purchaseEntryResultSet, purchaseEntry);
+      }
       List<PurchaseItem> purchaseItemList = new ArrayList<>();
       PreparedStatement purchaseItemInsertStatement = purchaseConnection.prepareStatement("INSERT INTO PURCHASEITEMS(INVOICE,PRODUCTCODE,QUANTITY,COSTPRICE) VALUES(?,?,?,?) RETURNING *");
       ResultSet purchaseItemInsertResultSet;
@@ -45,31 +46,28 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
     }
   }
 
-  private PreparedStatement setPurchase(PreparedStatement statement, Purchase purchase)
+  private void setPurchase(PreparedStatement statement, Purchase purchase)
       throws SQLException {
     statement.setDate(1, Date.valueOf(purchase.getDate()));
     statement.setInt(2, purchase.getInvoice());
     statement.setDouble(3, purchase.getGrandTotal());
-    return statement;
   }
 
-  private PreparedStatement setPurchaseItems(
+  private void setPurchaseItems(
       PreparedStatement statement, PurchaseItem purchaseItem, Purchase purchase)
       throws SQLException {
     statement.setInt(1, purchase.getInvoice());
     statement.setString(2, purchaseItem.getProduct().getCode());
     statement.setFloat(3, purchaseItem.getQuantity());
     statement.setDouble(4, purchaseItem.getUnitPurchasePrice());
-    return statement;
   }
 
-  private Purchase getPurchaseFromResultSet(ResultSet resultSet, Purchase purchase)
+  private void getPurchaseFromResultSet(ResultSet resultSet, Purchase purchase)
       throws SQLException {
     purchase.setId(resultSet.getInt(1));
     purchase.setDate(String.valueOf(resultSet.getDate(2)));
     purchase.setInvoice(resultSet.getInt(3));
     purchase.setGrandTotal(resultSet.getDouble(4));
-    return purchase;
   }
 
   private PurchaseItem getPurchaseItemFromResultSet(ResultSet resultSet, Product product)
@@ -96,7 +94,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   }
 
   @Override
-  public List list(String attribute, String searchText, int pageLength, int offset)
+  public List<Purchase> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException {
     int count;
     try {
@@ -130,7 +128,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
   }
 
   @Override
-  public List list(String searchText) throws ApplicationErrorException {
+  public List<Purchase> list(String searchText) throws ApplicationErrorException {
     try {
       String listQuery =
           "SELECT * FROM PURCHASE WHERE CAST(ID AS TEXT) ILIKE '"

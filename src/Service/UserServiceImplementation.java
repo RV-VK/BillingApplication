@@ -29,7 +29,7 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public List list(HashMap<String, String> listattributes)
+  public List<User> list(HashMap<String, String> listattributes)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
     List<User> userList;
     if (Collections.frequency(listattributes.values(), null) == 0

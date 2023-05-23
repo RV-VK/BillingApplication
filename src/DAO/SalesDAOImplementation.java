@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SalesDAOImplementation implements SalesDAO {
-  private Connection salesConnection = DBHelper.getConnection();
+  private final Connection salesConnection = DBHelper.getConnection();
   private List<Sales> salesList = new ArrayList<>();
 
 
@@ -21,7 +21,7 @@ public class SalesDAOImplementation implements SalesDAO {
       ResultSet salesEntryResultSet = salesEntryStatement.executeQuery();
       Sales salesEntry = new Sales();
       while (salesEntryResultSet.next()) {
-          salesEntry=getSalesFromResultSet(salesEntryResultSet,salesEntry);
+          getSalesFromResultSet(salesEntryResultSet,salesEntry);
       }
       List<SalesItem> salesItemList = new ArrayList<>();
       ResultSet salesItemInsertResultSet;
@@ -46,25 +46,22 @@ public class SalesDAOImplementation implements SalesDAO {
     }
   }
 
-  private PreparedStatement setSales(PreparedStatement statement, Sales sales) throws SQLException {
+  private void setSales(PreparedStatement statement, Sales sales) throws SQLException {
     statement.setDate(1, Date.valueOf(sales.getDate()));
     statement.setDouble(2, sales.getGrandTotal());
-    return statement;
   }
 
-  private PreparedStatement setSalesItems(PreparedStatement statement,SalesItem salesItem, Sales sales) throws SQLException {
+  private void setSalesItems(PreparedStatement statement, SalesItem salesItem, Sales sales) throws SQLException {
     statement.setInt(1, sales.getId());
     statement.setString(2, salesItem.getProduct().getCode());
     statement.setFloat(3, salesItem.getQuantity());
     statement.setDouble(4, salesItem.getProduct().getPrice());
-    return statement;
   }
 
-  private Sales getSalesFromResultSet(ResultSet resultSet,Sales sales) throws SQLException {
+  private void getSalesFromResultSet(ResultSet resultSet, Sales sales) throws SQLException {
     sales.setId(resultSet.getInt(1));
     sales.setDate(String.valueOf(resultSet.getDate(2)));
     sales.setGrandTotal(resultSet.getDouble(3));
-    return sales;
   }
 
   private SalesItem getSalesItemFromResultSet(ResultSet resultSet,Product product) throws SQLException {
@@ -93,7 +90,7 @@ public class SalesDAOImplementation implements SalesDAO {
 
 
   @Override
-  public List list(String attribute, String searchText, int pageLength, int offset)
+  public List<Sales> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException {
     int count;
     try {
@@ -128,7 +125,7 @@ public class SalesDAOImplementation implements SalesDAO {
 
 
   @Override
-  public List list(String searchText) throws ApplicationErrorException {
+  public List<Sales> list(String searchText) throws ApplicationErrorException {
     try {
       String listQuery =
           "SELECT * FROM SALES WHERE CAST(ID AS TEXT) '"
