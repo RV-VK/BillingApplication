@@ -134,7 +134,6 @@ public class ProductDAOImplementation implements ProductDAO {
   @Override
   public List<Product> list(String attribute, String searchText, int pageLength, int offset)
       throws ApplicationErrorException, PageCountOutOfBoundsException {
-    int count;
     try {
       String EntryCount="SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
       String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE("+searchText+"," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
@@ -187,9 +186,7 @@ public class ProductDAOImplementation implements ProductDAO {
         editStatement.setDouble(5, product.getPrice());
       }
       editStatement.setInt(6, product.getId());
-      if (editStatement.executeUpdate() > 0)
-        return true;
-      else return false;
+        return editStatement.executeUpdate() > 0;
     } catch (SQLException e) {
       productConnection.rollback();
       handleException(e);
