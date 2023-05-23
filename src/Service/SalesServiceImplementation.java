@@ -1,6 +1,7 @@
 package Service;
 
 import DAO.*;
+import Entity.Product;
 import Entity.Sales;
 import Entity.SalesItem;
 
@@ -18,15 +19,15 @@ public class SalesServiceImplementation implements SalesService {
   public Sales create(Sales sales)
       throws ApplicationErrorException, SQLException, UnDividableEntityException {
     boolean isDividable;
+    double grandtotal=0.0;
     ProductDAO getProductByCode = new ProductDAOImplementation();
     UnitDAO getUnitByCode = new UnitDAOImplementation();
     for (SalesItem salesItem : sales.getSalesItemList()) {
       try {
-        isDividable =
-            getUnitByCode
-                .findByCode(
-                    (getProductByCode.findByCode(salesItem.getProduct().getCode())).getunitcode())
-                .getIsDividable();
+        Product product=getProductByCode.findByCode(salesItem.getProduct().getCode());
+        salesItem.setProduct(product);
+        isDividable=getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
+        grandtotal+=salesItem.getProduct().getPrice()*salesItem.getQuantity();
       } catch (NullPointerException e) {
         return new Sales();
       }
@@ -34,6 +35,7 @@ public class SalesServiceImplementation implements SalesService {
         throw new UnDividableEntityException(">> Product "+salesItem.getProduct().getCode()+" is not a dividable product");
       }
     }
+    sales.setGrandTotal(grandtotal);
     Sales createdSale = salesDAO.create(sales);
     return createdSale;
   }

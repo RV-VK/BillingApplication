@@ -17,7 +17,6 @@ public class SalesDAOImplementation implements SalesDAO {
       salesConnection.setAutoCommit(false);
       PreparedStatement salesEntryStatement = salesConnection.prepareStatement("INSERT INTO SALES(DATE,GRANDTOTAL) VALUES(?,?) RETURNING *");
       PreparedStatement salesItemInsertStatement = salesConnection.prepareStatement( "INSERT INTO SALESITEMS (ID, PRODUCTCODE, QUANTITY, SALESPRICE) VALUES (?,?,?,?) RETURNING *");
-      PreparedStatement grandTotalUpdateStatement = salesConnection.prepareStatement("UPDATE SALES SET GRANDTOTAL=? WHERE ID=?");
       setSales(salesEntryStatement,sales);
       ResultSet salesEntryResultSet = salesEntryStatement.executeQuery();
       Sales salesEntry = new Sales();
@@ -26,29 +25,16 @@ public class SalesDAOImplementation implements SalesDAO {
       }
       List<SalesItem> salesItemList = new ArrayList<>();
       ResultSet salesItemInsertResultSet;
-      double price;
-      float stock;
-      String productName;
-      double grandTotal = 0.0;
       for (SalesItem salesItem : sales.getSalesItemList()) {
-        Product product=new ProductDAOImplementation().findByCode(salesItem.getProduct().getCode());
-        price = product.getPrice();
-        stock = product.getAvailableQuantity();
-        productName = product.getName();
-        grandTotal += price * salesItem.getQuantity();
-        if (stock < salesItem.getQuantity())
+        if (salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity())
           return null;
-        setSalesItems(salesItemInsertStatement,salesItem,salesEntry,price);
+        setSalesItems(salesItemInsertStatement,salesItem,salesEntry);
         salesItemInsertResultSet = salesItemInsertStatement.executeQuery();
-        new ProductDAOImplementation().updateStock(salesItem.getProduct().getCode(),stock-salesItem.getQuantity());
+        new ProductDAOImplementation().updateStock(salesItem.getProduct().getCode(),-salesItem.getQuantity());
         while (salesItemInsertResultSet.next()) {
-          salesItemList.add(getSalesItemFromResultSet(salesItemInsertResultSet,productName));
+          salesItemList.add(getSalesItemFromResultSet(salesItemInsertResultSet,salesItem.getProduct()));
         }
       }
-      grandTotalUpdateStatement.setDouble(1, grandTotal);
-      grandTotalUpdateStatement.setInt(2, salesEntry.getId());
-      grandTotalUpdateStatement.executeUpdate();
-      salesEntry.setGrandTotal(grandTotal);
       salesEntry.setSalesItemList(salesItemList);
       salesConnection.commit();
       salesConnection.setAutoCommit(true);
@@ -66,11 +52,11 @@ public class SalesDAOImplementation implements SalesDAO {
     return statement;
   }
 
-  private PreparedStatement setSalesItems(PreparedStatement statement,SalesItem salesItem, Sales sales,double price) throws SQLException {
+  private PreparedStatement setSalesItems(PreparedStatement statement,SalesItem salesItem, Sales sales) throws SQLException {
     statement.setInt(1, sales.getId());
     statement.setString(2, salesItem.getProduct().getCode());
     statement.setFloat(3, salesItem.getQuantity());
-    statement.setDouble(4, price);
+    statement.setDouble(4, salesItem.getProduct().getPrice());
     return statement;
   }
 
@@ -81,9 +67,9 @@ public class SalesDAOImplementation implements SalesDAO {
     return sales;
   }
 
-  private SalesItem getSalesItemFromResultSet(ResultSet resultSet,String name) throws SQLException {
+  private SalesItem getSalesItemFromResultSet(ResultSet resultSet,Product product) throws SQLException {
     return new SalesItem(
-            new Product(resultSet.getString(2), name),
+            product,
             resultSet.getFloat(3),
             resultSet.getDouble(4));
   }
@@ -159,7 +145,6 @@ public class SalesDAOImplementation implements SalesDAO {
     }
   }
 
-
   /**
    * This method serves the listDAO function.
    *
@@ -167,7 +152,8 @@ public class SalesDAOImplementation implements SalesDAO {
    * @return List - Sales.
    * @throws SQLException Exception thrown based on SQL syntax.
    */
-  private List<Sales> listHelper(ResultSet resultSet) throws SQLException {
+  private List<Sales> listHelper(ResultSet resultSet)
+      throws SQLException, ApplicationErrorException {
     while (resultSet.next()) {
       Sales listedSale = new Sales();
       getSalesFromResultSet(resultSet,listedSale);
@@ -179,7 +165,7 @@ public class SalesDAOImplementation implements SalesDAO {
       listSalesItemStatement.setInt(1, sales.getId());
       ResultSet listSalesResultSet = listSalesItemStatement.executeQuery();
       while (listSalesResultSet.next())
-        salesItemList.add(getSalesItemFromResultSet(listSalesResultSet,listSalesResultSet.getString(1)));
+        salesItemList.add(getSalesItemFromResultSet(listSalesResultSet,new ProductDAOImplementation().findByCode(listSalesResultSet.getString(2))));
       sales.setSalesItemList(salesItemList);
     }
     return salesList;

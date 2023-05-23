@@ -342,8 +342,9 @@ public class SalesCLI {
                 + salesItem.getUnitSalesPrice()
                 + "], ");
       }
-      System.out.print("] ");
+
         System.out.print(sales.getGrandTotal());
+      System.out.print("] ");
       System.out.println();
     }
 
