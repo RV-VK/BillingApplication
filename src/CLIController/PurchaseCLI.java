@@ -85,9 +85,9 @@ public class PurchaseCLI {
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
-      if(createdPurchase.getDate()==null)
-        System.out.println(">> The product code you have entered do not exist!! Please check the product codes");
-      else if (createdPurchase != null) {
+      if(createdPurchase==null)
+        System.out.println(">> Not a dividable Entity!!Please check the quantity you have entered");
+      else if (createdPurchase.getDate()!= null) {
         System.out.println(
             "**********************************************************************************");
         System.out.println(
@@ -117,9 +117,8 @@ public class PurchaseCLI {
         System.out.println(
             "----------------------------------------------------------------------------------");
       }
-      else{
-        System.out.println(">> Not a dividable Entity!!Please check the quantity you have entered");
-      }
+      else
+        System.out.println(">> The product code you have entered do not exist!! Please check the product codes");
     }
   }
 
@@ -253,7 +252,6 @@ public class PurchaseCLI {
           listAttributesMap.put("Searchtext", "'"+searchText+"'");
           listAttributesMap.put("Pagelength", "20");
           listAttributesMap.put("Pagenumber", String.valueOf(1));
-          purchaseList = purchaseService.list(listAttributesMap);
           listHelper(listAttributesMap);
         } else {
           System.out.println("Given attribute is not a searchable attribute!!");

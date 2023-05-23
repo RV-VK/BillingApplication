@@ -1,6 +1,7 @@
 package Service;
 
 import DAO.*;
+import Entity.Product;
 import Entity.Purchase;
 import Entity.PurchaseItem;
 import java.sql.SQLException;
@@ -15,18 +16,15 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
   @Override
-  public Purchase create(Purchase purchase)
-      throws ApplicationErrorException, SQLException {
+  public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException {
     ProductDAO productDAO = new ProductDAOImplementation();
     UnitDAO getUnitByCode = new UnitDAOImplementation();
     boolean isDividable;
     for (PurchaseItem purchaseItem : purchase.getPurchaseItemList()) {
       try {
-        isDividable =
-            getUnitByCode
-                .findByCode(
-                    (productDAO.findByCode(purchaseItem.getProduct().getCode())).getunitcode())
-                .getIsDividable();
+        Product product=productDAO.findByCode(purchaseItem.getProduct().getCode());
+        purchaseItem.setProduct(product);
+        isDividable=getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
       } catch (NullPointerException e) {
         return new Purchase();
       }

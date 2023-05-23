@@ -17,8 +17,6 @@ public class SalesDAOImplementation implements SalesDAO {
       salesConnection.setAutoCommit(false);
       PreparedStatement salesEntryStatement = salesConnection.prepareStatement("INSERT INTO SALES(DATE,GRANDTOTAL) VALUES(?,?) RETURNING *");
       PreparedStatement salesItemInsertStatement = salesConnection.prepareStatement( "INSERT INTO SALESITEMS (ID, PRODUCTCODE, QUANTITY, SALESPRICE) VALUES (?,?,?,?) RETURNING *");
-      PreparedStatement salesPriceStatement = salesConnection.prepareStatement("SELECT PRICE,STOCK,NAME FROM PRODUCT WHERE CODE=?");
-      PreparedStatement stockUpdateStatement = salesConnection.prepareStatement("UPDATE PRODUCT SET STOCK=STOCK-? WHERE CODE=?");
       PreparedStatement grandTotalUpdateStatement = salesConnection.prepareStatement("UPDATE SALES SET GRANDTOTAL=? WHERE ID=?");
       setSales(salesEntryStatement,sales);
       ResultSet salesEntryResultSet = salesEntryStatement.executeQuery();
@@ -33,22 +31,16 @@ public class SalesDAOImplementation implements SalesDAO {
       String productName;
       double grandTotal = 0.0;
       for (SalesItem salesItem : sales.getSalesItemList()) {
-        salesPriceStatement.setString(1, salesItem.getProduct().getCode());
-        ResultSet salesPriceResultSet = salesPriceStatement.executeQuery();
-        salesPriceResultSet.next();
-        price = salesPriceResultSet.getDouble(1);
-        stock = salesPriceResultSet.getFloat(2);
-        productName = salesPriceResultSet.getString(3);
+        Product product=new ProductDAOImplementation().findByCode(salesItem.getProduct().getCode());
+        price = product.getPrice();
+        stock = product.getAvailableQuantity();
+        productName = product.getName();
         grandTotal += price * salesItem.getQuantity();
-        if (stock < salesItem.getQuantity()) {
-          salesConnection.rollback();
+        if (stock < salesItem.getQuantity())
           return null;
-        }
         setSalesItems(salesItemInsertStatement,salesItem,salesEntry,price);
         salesItemInsertResultSet = salesItemInsertStatement.executeQuery();
-        stockUpdateStatement.setFloat(1, salesItem.getQuantity());
-        stockUpdateStatement.setString(2, salesItem.getProduct().getCode());
-        stockUpdateStatement.executeUpdate();
+        new ProductDAOImplementation().updateStock(salesItem.getProduct().getCode(),stock-salesItem.getQuantity());
         while (salesItemInsertResultSet.next()) {
           salesItemList.add(getSalesItemFromResultSet(salesItemInsertResultSet,productName));
         }
