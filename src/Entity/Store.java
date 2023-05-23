@@ -46,4 +46,14 @@ public class Store {
   public void setGstCode(String gstCode) {
     this.gstCode = gstCode;
   }
+
+  @Override
+  public String toString() {
+    return "Store{" +
+            "name='" + name + '\'' +
+            ", phoneNumber=" + phoneNumber +
+            ", address='" + address + '\'' +
+            ", gstCode='" + gstCode + '\'' +
+            '}';
+  }
 }

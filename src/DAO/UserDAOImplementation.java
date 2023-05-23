@@ -174,7 +174,6 @@ public class UserDAOImplementation implements UserDAO {
   public User edit(User user)
       throws SQLException, ApplicationErrorException, UniqueConstraintException {
     try {
-      userConnection.setAutoCommit(false);
       String editQuery =
           "UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=? RETURNING *";
       PreparedStatement editStatement = userConnection.prepareStatement(editQuery);
@@ -186,6 +185,7 @@ public class UserDAOImplementation implements UserDAO {
       }
       editStatement.setInt(7, user.getId());
       ResultSet editUserResultSet=editStatement.executeQuery();
+      editUserResultSet.next();
       return getUserFromResultSet(editUserResultSet);
     } catch (SQLException e) {
       handleException(e);

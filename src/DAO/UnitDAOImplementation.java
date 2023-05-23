@@ -72,7 +72,6 @@ public class UnitDAOImplementation implements UnitDAO {
   public Unit edit(Unit unit)
       throws ApplicationErrorException, SQLException, UniqueConstraintException {
     try {
-      unitConnection.setAutoCommit(false);
       String editQuery =
           "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=? RETURNING *";
       PreparedStatement editStatement = unitConnection.prepareStatement(editQuery);
@@ -84,6 +83,7 @@ public class UnitDAOImplementation implements UnitDAO {
       }
       editStatement.setInt(5, unit.getId());
       ResultSet editUnitResultSet=editStatement.executeQuery();
+      editUnitResultSet.next();
       return getUnitFromResultSet(editUnitResultSet);
     } catch (SQLException e) {
       handleException(e);

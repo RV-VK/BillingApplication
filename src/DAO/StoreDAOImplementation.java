@@ -57,9 +57,9 @@ public class StoreDAOImplementation implements StoreDAO {
         editStatement.setLong(2, store.getPhoneNumber());
       }
       ResultSet editStoreResultSet=editStatement.executeQuery();
+      editStoreResultSet.next();
       return getStoreFromResultSet(editStoreResultSet);
     } catch (Exception e) {
-      storeConnection.rollback();
       System.out.println(e.getMessage());
       throw new ApplicationErrorException(
           "Application has went into an Error!!!\n Please Try again");

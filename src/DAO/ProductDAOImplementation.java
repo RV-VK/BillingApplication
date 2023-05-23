@@ -189,9 +189,9 @@ public class ProductDAOImplementation implements ProductDAO {
       }
       editStatement.setInt(6, product.getId());
       ResultSet editProductResultSet=editStatement.executeQuery();
+      editProductResultSet.next();
       return getProductFromResultSet(editProductResultSet);
     } catch (SQLException e) {
-      productConnection.rollback();
       handleException(e);
       return null;
     }
