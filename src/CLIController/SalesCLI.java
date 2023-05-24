@@ -4,7 +4,6 @@ import DAO.ApplicationErrorException;
 import Entity.Product;
 import Entity.Sales;
 import Entity.SalesItem;
-import Service.InvalidTemplateException;
 import Service.SalesService;
 import Service.SalesServiceImplementation;
 
@@ -224,7 +223,7 @@ public class SalesCLI {
 	/**
 	 * This method serves the List function.
 	 *
-	 * @param listAttributesMap
+	 * @param listAttributesMap Attribute List for List function.
 	 */
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
@@ -232,8 +231,8 @@ public class SalesCLI {
 			if(salesList == null) {
 				if(! listAttributesMap.get("Searchtext").equals("id")) {
 					System.out.println(">> Given SearchText does not exist!!!");
-					return;
-				} else return;
+				}
+				return;
 			}
 			for(Sales sales: salesList) {
 				System.out.print("id: " + sales.getId() + ", date: " + sales.getDate() + ", ");

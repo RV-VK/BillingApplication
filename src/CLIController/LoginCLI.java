@@ -23,7 +23,7 @@ public class LoginCLI {
 	/**
 	 * Login View Main
 	 **/
-	public static void main(String args[]) throws SQLException, UniqueConstraintException, ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException {
+	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException {
 		if(loginService.checkIfInitialSetup()) {
 
 			System.out.println("\t\t\t\t\t\t*********************************************************\n" + "\t\t\t\t\t\t*********************   WELCOME   ***********************\n" + "\t\t\t\t\t\t*********************************************************\n\n");

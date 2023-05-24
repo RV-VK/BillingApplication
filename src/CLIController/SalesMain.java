@@ -29,35 +29,27 @@ public class SalesMain {
 				case "sales":
 					SalesCLI salesCLI = new SalesCLI();
 					switch(operationString) {
-						case "count":
-							salesCLI.count(commandList);
-							break;
-						case "list":
-							salesCLI.list(commandList);
-							break;
-						case "delete":
-							salesCLI.delete(commandList);
-							break;
-						case "help":
-							System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
-							break;
-						default:
+						case "count" -> salesCLI.count(commandList);
+						case "list" -> salesCLI.list(commandList);
+						case "delete" -> salesCLI.delete(commandList);
+						case "help" ->
+								System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
+						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								salesCLI.Create(command);
 							} else {
 								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
 								System.out.println("Try either \"help\" for proper syntax or \"sales help\" if you are trying to start a purchase!");
 							}
+						}
 					}
 				case "product":
 					ProductCLI productCLI = new ProductCLI();
-					switch(operationString) {
-						case "list":
-							productCLI.list(commandList);
-							break;
-						default:
-							System.out.println("Invalid operation for command \"" + commandString + "\"");
-							System.out.println("Try \"Help\" for proper syntax");
+					if(operationString.equals("list")) {
+						productCLI.list(commandList);
+					} else {
+						System.out.println("Invalid operation for command \"" + commandString + "\"");
+						System.out.println("Try \"Help\" for proper syntax");
 					}
 				case "help":
 					System.out.println("product\n" + "\t    list\n");

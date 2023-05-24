@@ -14,7 +14,7 @@ public class UnitCLI {
 	private String unitcode;
 	private String description;
 	private boolean isDividable;
-	private UnitService unitService = new UnitServiceImplementation();
+	private final UnitService unitService = new UnitServiceImplementation();
 	private final Scanner scanner = new Scanner(System.in);
 
 	/**
@@ -29,7 +29,7 @@ public class UnitCLI {
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
-			List<String> unitAttributes = List.of(parameters.split("\\,"));
+			List<String> unitAttributes = List.of(parameters.split(","));
 			createHelper(unitAttributes);
 			return;
 		}
@@ -150,24 +150,24 @@ public class UnitCLI {
 		}
 		unit.setId(id);
 		for(int index = 2 ; index < editAttributes.size() ; index = index + 2) {
-			if(editAttributes.get(index).trim().equals("name")) {
-				unit.setName(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("code")) {
-				unit.setCode(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("description")) {
-				unit.setDescription(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("isdividable")) {
-				if(editAttributes.get(index + 1).trim().equals("true") || editAttributes.get(index + 1).trim().equals("false")) {
-					isDividable = Boolean.parseBoolean(editAttributes.get(index + 1).trim());
-				} else {
-					System.out.println(">>Invalid Entry for Unitcode!! Must be either true or false ");
+			switch(editAttributes.get(index).trim()) {
+				case "name" -> unit.setName(editAttributes.get(index + 1).trim());
+				case "code" -> unit.setCode(editAttributes.get(index + 1).trim());
+				case "description" -> unit.setDescription(editAttributes.get(index + 1).trim());
+				case "isdividable" -> {
+					if(editAttributes.get(index + 1).trim().equals("true") || editAttributes.get(index + 1).trim().equals("false")) {
+						isDividable = Boolean.parseBoolean(editAttributes.get(index + 1).trim());
+					} else {
+						System.out.println(">>Invalid Entry for Unitcode!! Must be either true or false ");
+						return;
+					}
+					unit.setIsDividable(isDividable);
+				}
+				default -> {
+					System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
+					FeedBackPrinter.printHelpMessage("unit", "edit");
 					return;
 				}
-				unit.setIsDividable(isDividable);
-			} else {
-				System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
-				FeedBackPrinter.printHelpMessage("unit", "edit");
-				return;
 			}
 		}
 		Unit editedUnit;

@@ -13,7 +13,7 @@ public class StoreCLI {
 	private long phoneNumber;
 	private String GSTNumber;
 	private String address;
-	private StoreService storeService = new StoreServiceImplementation();
+	private final StoreService storeService = new StoreServiceImplementation();
 	private final Scanner scanner = new Scanner(System.in);
 
 
@@ -29,7 +29,7 @@ public class StoreCLI {
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
-			List<String> storeAttributes = List.of(parameters.split("\\,"));
+			List<String> storeAttributes = List.of(parameters.split(","));
 			createHelper(storeAttributes);
 			return;
 		}
@@ -120,26 +120,28 @@ public class StoreCLI {
 	private void editHelper(List<String> editAttributes) {
 		Store store = new Store();
 		for(int index = 0 ; index < editAttributes.size() ; index = index + 2) {
-			if(editAttributes.get(index).trim().equals("name")) {
-				store.setName(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("phonenumber")) {
-				try {
-					phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());
-				} catch(NumberFormatException e) {
-					System.out.println(">> PhoneNumber must be numeric!!");
+			switch(editAttributes.get(index).trim()) {
+				case "name" -> store.setName(editAttributes.get(index + 1).trim());
+				case "phonenumber" -> {
+					try {
+						phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());
+					} catch(NumberFormatException e) {
+						System.out.println(">> PhoneNumber must be numeric!!");
+						FeedBackPrinter.printHelpMessage("store", "edit");
+						return;
+					}
+					store.setPhoneNumber(phoneNumber);
+				}
+				case "address" -> store.setAddress(editAttributes.get(index + 1).trim());
+				case "gstnumber" -> {
+					GSTNumber = editAttributes.get(index + 1).trim();
+					store.setGstCode(GSTNumber);
+				}
+				default -> {
+					System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
 					FeedBackPrinter.printHelpMessage("store", "edit");
 					return;
 				}
-				store.setPhoneNumber(phoneNumber);
-			} else if(editAttributes.get(index).trim().equals("address")) {
-				store.setAddress(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("gstnumber")) {
-				GSTNumber = editAttributes.get(index + 1).trim();
-				store.setGstCode(GSTNumber);
-			} else {
-				System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
-				FeedBackPrinter.printHelpMessage("store", "edit");
-				return;
 			}
 		}
 		Store editedStore;

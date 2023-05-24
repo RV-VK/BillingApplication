@@ -3,7 +3,6 @@ package CLIController;
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import Entity.Product;
-import Service.InvalidTemplateException;
 import Service.ProductService;
 import Service.ProductServiceImplementation;
 
@@ -53,7 +52,7 @@ public class ProductCLI {
 	/**
 	 * This method serves the create function
 	 *
-	 * @param productAttributes
+	 * @param productAttributes Attributes of Product for Creation.
 	 */
 	private void createHelper(List<String> productAttributes) {
 		if(productAttributes.size() < 5) {

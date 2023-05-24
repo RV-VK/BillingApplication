@@ -23,11 +23,11 @@ public class PurchaseCLI {
 	private String attribute;
 	private String searchText;
 	private Purchase createdPurchase;
-	private List<String> purchaseAttributes = Arrays.asList("id", "date", "invoice");
-	private PurchaseService purchaseService = new PurchaseServiceImplementation();
+	private final List<String> purchaseAttributes = Arrays.asList("id", "date", "invoice");
+	private final PurchaseService purchaseService = new PurchaseServiceImplementation();
 	private List<Purchase> purchaseList;
-	private Scanner scanner = new Scanner(System.in);
-	private HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final Scanner scanner = new Scanner(System.in);
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 
 
 	/**

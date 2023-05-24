@@ -40,7 +40,7 @@ public class UserCLI {
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
-			List<String> userAttributes = List.of(parameters.split("\\,"));
+			List<String> userAttributes = List.of(parameters.split(","));
 			createHelper(userAttributes);
 			return;
 		}
@@ -50,7 +50,7 @@ public class UserCLI {
 	/**
 	 * This method serves the create function.
 	 *
-	 * @param userAttributes
+	 * @param userAttributes Attributes of User for Creation.
 	 */
 	private void createHelper(List<String> userAttributes) {
 		if(userAttributes.size() < 6) {
@@ -273,29 +273,27 @@ public class UserCLI {
 		}
 		user.setId(id);
 		for(int index = 2 ; index < editAttributes.size() ; index = index + 2) {
-			if(editAttributes.get(index).trim().equals("username")) {
-				user.setUserName(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("usertype")) {
-				user.setUserType(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("password")) {
-				user.setPassWord(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("firstname")) {
-				user.setFirstName(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("lastname")) {
-				user.setLastName(editAttributes.get(index + 1).trim());
-			} else if(editAttributes.get(index).trim().equals("phonenumber")) {
-				try {
-					phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());
-				} catch(NumberFormatException e) {
-					System.out.println(">> Phonenumber must be numeric!!");
+			switch(editAttributes.get(index).trim()) {
+				case "username" -> user.setUserName(editAttributes.get(index + 1).trim());
+				case "usertype" -> user.setUserType(editAttributes.get(index + 1).trim());
+				case "password" -> user.setPassWord(editAttributes.get(index + 1).trim());
+				case "firstname" -> user.setFirstName(editAttributes.get(index + 1).trim());
+				case "lastname" -> user.setLastName(editAttributes.get(index + 1).trim());
+				case "phonenumber" -> {
+					try {
+						phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());
+					} catch(NumberFormatException e) {
+						System.out.println(">> Phonenumber must be numeric!!");
+						System.out.println(">> Try \"user edit help\" for proper syntax");
+						return;
+					}
+					user.setPhoneNumber(phoneNumber);
+				}
+				default -> {
+					System.out.println(">> Invalid attribute given!!! : " + editAttributes.get(index));
 					System.out.println(">> Try \"user edit help\" for proper syntax");
 					return;
 				}
-				user.setPhoneNumber(phoneNumber);
-			} else {
-				System.out.println(">> Invalid attribute given!!! : " + editAttributes.get(index));
-				System.out.println(">> Try \"user edit help\" for proper syntax");
-				return;
 			}
 		}
 		User editedUser;
