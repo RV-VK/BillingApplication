@@ -87,17 +87,7 @@ public class PurchaseCLI {
 				System.out.println(e.getMessage());
 			}
 			if(createdPurchase.getDate() != null) {
-				System.out.println("**********************************************************************************");
-				System.out.println("\t\tPURCHASE BILL " + createdPurchase.getId() + "\t\tINVOICE NO " + createdPurchase.getInvoice());
-				System.out.println("**********************************************************************************");
-				System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
-				System.out.println("----------------------------------------------------------------------------------");
-				for(int j = 0 ; j < createdPurchase.getPurchaseItemList().size() ; j++) {
-					System.out.printf("%d\t\t%-15s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", j + 1, createdPurchase.getPurchaseItemList().get(j).getProduct().getName(), createdPurchase.getPurchaseItemList().get(j).getQuantity(), createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice(), (createdPurchase.getPurchaseItemList().get(j).getQuantity() * createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice()));
-				}
-				System.out.println("----------------------------------------------------------------------------------");
-				System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdPurchase.getGrandTotal());
-				System.out.println("----------------------------------------------------------------------------------");
+				printPurchaseBill();
 			} else
 				System.out.println(">> The product code you have entered do not exist!! Please check the product codes");
 		}
@@ -319,5 +309,20 @@ public class PurchaseCLI {
 		listAttributesMap.put("Pagenumber", PageNumber);
 		listAttributesMap.put("Attribute", Attribute);
 		listAttributesMap.put("Searchtext", SearchText);
+	}
+
+	private void printPurchaseBill()
+	{
+		System.out.println("**********************************************************************************");
+		System.out.println("\t\tPURCHASE BILL " + createdPurchase.getId() + "\t\tINVOICE NO " + createdPurchase.getInvoice());
+		System.out.println("**********************************************************************************");
+		System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
+		System.out.println("----------------------------------------------------------------------------------");
+		for(int j = 0 ; j < createdPurchase.getPurchaseItemList().size() ; j++) {
+			System.out.printf("%d\t\t%-15s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", j + 1, createdPurchase.getPurchaseItemList().get(j).getProduct().getName(), createdPurchase.getPurchaseItemList().get(j).getQuantity(), createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice(), (createdPurchase.getPurchaseItemList().get(j).getQuantity() * createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice()));
+		}
+		System.out.println("----------------------------------------------------------------------------------");
+		System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdPurchase.getGrandTotal());
+		System.out.println("----------------------------------------------------------------------------------");
 	}
 }

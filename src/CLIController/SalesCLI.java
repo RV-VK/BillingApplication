@@ -12,7 +12,7 @@ import java.util.*;
 
 public class SalesCLI {
 	private String salesDate;
-	private List<SalesItem> salesItemList = new ArrayList<>();
+	private final List<SalesItem> salesItemList = new ArrayList<>();
 	private double grandTotal;
 	private String code;
 	private float quantity;
@@ -20,10 +20,11 @@ public class SalesCLI {
 	private int pageNumber;
 	private String attribute;
 	private String searchText;
-	private HashMap<String, String> listAttributesMap = new HashMap<>();
-	private List<String> saleAttributes = Arrays.asList("id", "date");
-	private SalesService salesService = new SalesServiceImplementation();
-	private Scanner scanner = new Scanner(System.in);
+	private Sales createdSale;
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final List<String> saleAttributes = Arrays.asList("id", "date");
+	private final SalesService salesService = new SalesServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
 	private List<Sales> salesList;
 
 
@@ -69,7 +70,6 @@ public class SalesCLI {
 				grandTotal = 0;
 			}
 			Sales sales = new Sales(salesDate, salesItemList, grandTotal);
-			Sales createdSale;
 			try {
 				createdSale = salesService.create(sales);
 			} catch(Exception e) {
@@ -79,17 +79,7 @@ public class SalesCLI {
 			if(createdSale == null) {
 				System.out.println(">> Out of Stock Product Entered Please check the entered products!!");
 			} else if(createdSale.getDate() != null) {
-				System.out.println("**********************************************************************************");
-				System.out.println("\t\tSALES BILL " + createdSale.getId());
-				System.out.println("**********************************************************************************");
-				System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
-				System.out.println("----------------------------------------------------------------------------------");
-				for(int i = 0 ; i < createdSale.getSalesItemList().size() ; i++) {
-					System.out.printf("%d\t\t%-20s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
-				}
-				System.out.println("----------------------------------------------------------------------------------");
-				System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdSale.getGrandTotal());
-				System.out.println("----------------------------------------------------------------------------------");
+				printSalesBill();
 			} else if(createdSale.getDate() == null) {
 				System.out.println(">> Non-Existing Product Code Entered!! Please check the Product codes!");
 			}
@@ -262,7 +252,6 @@ public class SalesCLI {
 		}
 	}
 
-
 	/**
 	 * This method handles the presentation layer of the Delete function.
 	 *
@@ -314,5 +303,19 @@ public class SalesCLI {
 		listAttributesMap.put("Pagenumber", PageNumber);
 		listAttributesMap.put("Attribute", Attribute);
 		listAttributesMap.put("Searchtext", SearchText);
+	}
+
+	private void printSalesBill() {
+		System.out.println("**********************************************************************************");
+		System.out.println("\t\tSALES BILL " + createdSale.getId());
+		System.out.println("**********************************************************************************");
+		System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
+		System.out.println("----------------------------------------------------------------------------------");
+		for(int i = 0 ; i < createdSale.getSalesItemList().size() ; i++) {
+			System.out.printf("%d\t\t%-20s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
+		}
+		System.out.println("----------------------------------------------------------------------------------");
+		System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdSale.getGrandTotal());
+		System.out.println("----------------------------------------------------------------------------------");
 	}
 }

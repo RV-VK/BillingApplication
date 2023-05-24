@@ -29,6 +29,7 @@ public class ProductCLI {
 	private final ProductService productService = new ProductServiceImplementation();
 	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 	private final Scanner scanner = new Scanner(System.in);
+	private final String NUMBER_REGEX="^\\d+(\\.\\d+)?$";
 
 	/**
 	 * This method handles the presentation layer for the create function.
@@ -243,7 +244,7 @@ public class ProductCLI {
 			}
 			List<String> productAttributes = List.of(parameters.split("[,:]"));
 			editHelper(productAttributes);
-		} else if(arguments.size() != 14) {
+		} else if(arguments.size() < 14) {
 			System.out.println(">>Insufficient Arguments for command \"product edit\"");
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
@@ -338,12 +339,11 @@ public class ProductCLI {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problem.
 	 */
 	public void delete(List<String> arguments) throws ApplicationErrorException {
-		String numberRegex = "^[0-9]*$";
 		String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
 				FeedBackPrinter.printProductHelp("delete");
-			} else if(arguments.get(2).matches(numberRegex)) {
+			} else if(arguments.get(2).matches(NUMBER_REGEX)) {
 				deleteHelper(arguments.get(2));
 			} else {
 				System.out.println(">> Invalid format for id!!!");

@@ -17,7 +17,6 @@ public class StoreServiceImplementation implements StoreService {
 	public Store create(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		validate(store);
 		return storeDAO.create(store);
-
 	}
 
 	@Override
