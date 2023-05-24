@@ -21,7 +21,7 @@ public interface StoreService {
 	 * This method invokes the DAO of the Store entity and serves the Edit function.
 	 *
 	 * @param store Edited store.
-	 * @return resultCode - Integer.
+	 * @return Store - Resulted Store after Edit.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */

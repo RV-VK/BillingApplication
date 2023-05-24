@@ -55,7 +55,7 @@ public interface UserDAO {
 	 * This method updates the attributes of the User entry in the user table.
 	 *
 	 * @param user The updated User Entry.
-	 * @return status - Boolean
+	 * @return User - Resulted User Entity.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table

@@ -44,7 +44,7 @@ public interface ProductService {
 	 * This method invokes the Product DAO object and serves the edit function.
 	 *
 	 * @param product Edited Product
-	 * @return resultCode - Integer
+	 * @return Product - Resulted Product after Edit.
 	 * @throws SQLException               Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
 	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL

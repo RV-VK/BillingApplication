@@ -57,7 +57,7 @@ public interface ProductDAO {
 	 * This method updates the attributes of the product entry in the Product table
 	 *
 	 * @param product The Updated Product entry
-	 * @return status - Boolean
+	 * @return Product - Result Product
 	 * @throws SQLException               Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
 	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL

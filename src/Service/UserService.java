@@ -45,7 +45,7 @@ public interface UserService {
 	 * This method invokes the DAO of the User entity and serves the Edit function.
 	 *
 	 * @param user Edited user.
-	 * @return resultCode - Integer.
+	 * @return User - Resulted User after Edit.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL

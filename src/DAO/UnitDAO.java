@@ -31,7 +31,7 @@ public interface UnitDAO {
 	 * This method updates the attributes of the Unit entry in the Unit table.
 	 *
 	 * @param unit Updated Unit.
-	 * @return resultCode - Integer.
+	 * @return Unit - Resulted Unit.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table

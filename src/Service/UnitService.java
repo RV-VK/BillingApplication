@@ -32,7 +32,7 @@ public interface UnitService {
 	 * This method invokes the DAO of the Unit entity and serves the Edit function.
 	 *
 	 * @param unit Edited Unit.
-	 * @return resultCode - Integer.
+	 * @return Unit - Resulted Unit after Edit.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL

@@ -20,7 +20,7 @@ public interface StoreDAO {
 	 * This method updates the attributes of the Store entry in the Store table.
 	 *
 	 * @param store Updated Store entity.
-	 * @return statusCode - Integer.
+	 * @return Store - Resulted store.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
