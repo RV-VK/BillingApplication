@@ -24,7 +24,7 @@ public class StoreCLI {
 	 */
 	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> Create store using the following template,\n" + "     name, phone number, address, gst number\n" + " \n" + "\tname  - text, mandatory with 3 to 30 chars\t\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\n" + "\taddress - text, mandatory\n" + "\tgst number - text, 15 digit, mandatory");
+				FeedBackPrinter.printStoreHelp("create");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -87,7 +87,7 @@ public class StoreCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^name:\\s*([A-Za-z0-9\\s]+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> Edit store uing the following template\t\n" + "\n" + "name, phone number, address, gst number\n" + " \n" + "\tname  - text, mandatory with 3 to 30 chars\t\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\n" + "\taddress - text, mandatory\n" + "\tgst number - text, 15 digit, mandatory");
+			FeedBackPrinter.printStoreHelp("edit");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
@@ -166,7 +166,7 @@ public class StoreCLI {
 	 */
 	public void delete(List<String> arguments) throws ApplicationErrorException {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> delete store using the following template\n" + "\tstore delete \n");
+			FeedBackPrinter.printStoreHelp("delete");
 		} else if(arguments.size() == 2) {
 			System.out.print("Are you sure want to delete the Store? This will delete all you product/purchase/sales data y/n ? : ");
 			String prompt = scanner.nextLine();

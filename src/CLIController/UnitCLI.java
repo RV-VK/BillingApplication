@@ -24,7 +24,7 @@ public class UnitCLI {
 	 */
 	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> Create unit using the following template,\n" + "     name, code, description, isdividable\n" + "     \n" + "     name - text, mandatory with 3 to 30 chars\t\n" + "     code - text, maximum 4 char, mandatory\n" + "     description - text\n" + "     isdividable - boolean, mandatory\n" + "    ");
+			FeedBackPrinter.printUnitHelp("create");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -84,8 +84,7 @@ public class UnitCLI {
 	public void list(List<String> arguments) throws ApplicationErrorException {
 		List<Unit> unitList;
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> List unit with the following options\n" + ">> unit list - will list all the units");
-
+			FeedBackPrinter.printUnitHelp("list");
 		} else if(arguments.size() == 2) {
 			unitList = unitService.list();
 			for(Unit unit: unitList) {
@@ -106,7 +105,7 @@ public class UnitCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> Edit unit using the following template\n" + "id: <id - 6>, name: <name-edited>, code: <code>,  description: <description>, isdividable: <isdividable>\n" + "\n" + ">> You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n" + ">> id: <id - 6>, name: <name>, code: <code>\n" + "\n" + ">> You can not give empty or null values to the mandatory attributes.\n" + ">> id: <id - 6>, name: , code: null\n" + "\n" + "\t\t name - text, mandatory with 3 to 30 chars\t\n" + "     code - text, maximum 4 char, mandatory\n" + "     description - text\n" + "     isdividable - boolean, mandatory");
+			FeedBackPrinter.printUnitHelp("edit");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
@@ -198,7 +197,7 @@ public class UnitCLI {
 		String codeRegex = "^[a-zA-Z]{1,4}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(">> delete unit using the following template\n" + "\t \tcode\n" + "\t \n" + "\t  code - text, min 3 - 30 char, mandatory,existing\n");
+				FeedBackPrinter.printUnitHelp("delete");
 			} else if(arguments.get(2).matches(codeRegex)) {
 				System.out.print(">> Are you Sure you want to delete the Unit y/n :");
 				String prompt = scanner.nextLine();

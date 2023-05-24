@@ -18,9 +18,9 @@ public class AdminMain {
 	 */
 	public static void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException {
 		scanner = new Scanner(System.in);
-		System.out.println(">> Try \"help\" to know better!\n");
+		System.out.println("\n\n>> Try \"help\" to know better!\n");
 		do {
-			System.out.print("> ");
+			System.out.print("\n> ");
 			String command = scanner.nextLine();
 			List<String> commandList=splitCommand(command);
 			String commandString = commandList.get(0);

@@ -113,7 +113,7 @@ public class PurchaseCLI {
 		int purchaseCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println("Count Purchase using the following Template\n" + "> purchase count -d <date>\n" + "\n" + ">> count : <number>\n" + "\n" + "> purchase count\n" + "\n" + ">> count : <number>\n" + "\n" + "> purchase count -c <category>\n" + "\n" + ">> count : <number>\n");
+				FeedBackPrinter.printPurchaseHelp("count");
 			} else {
 				System.out.println(">> Invalid command given!!!");
 				System.out.println(">> Try \"purchase count help\" for proper syntax!!");
@@ -152,35 +152,23 @@ public class PurchaseCLI {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void List(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-		listAttributesMap.put("Pagelength", null);
-		listAttributesMap.put("Pagenumber", null);
-		listAttributesMap.put("Attribute", null);
-		listAttributesMap.put("Searchtext", null);
+		setMap(listAttributesMap,null,null,null,null);
 		if(arguments.size() == 3) if(arguments.get(2).equals("help")) {
-			System.out.println(">> List purchase with the following options\n" + ">> purchase list - will list all the purchases default to maximum upto 20 purchases\n" + ">> purchase list -p 10 - pageable list shows 10 purchases as default\n" + ">> purchase list -p 10 3 - pageable list shows 10 purchases in 3rd page, ie., purchase from 21 to 30\n" + "\n" + ">> Use only the following attributes: id, date, invoice\n" + ">> purchase list -s <attr>: searchtext - search the purchase with the given search text in all the given attribute\n" + ">> purchase list -s <attr>: searchtext -p 10 6 - pageable list shows 10 purchases in 6th page with the given search text in the given attribute\n" + "\n" + "> purchase list -s <date> : <23-03-2023> -p 5 2 \n" + "> purchase list -s <invoice> : <785263>");
+			FeedBackPrinter.printPurchaseHelp("list");
 			return;
 		}
 		if(arguments.size() == 2) {
-			listAttributesMap.put("Pagelength", "20");
-			listAttributesMap.put("Pagenumber", "1");
-			listAttributesMap.put("Attribute", "id");
+			setMap(listAttributesMap,"20","1","id",null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
 			pageLength = 0;
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size input");
-					System.out.println(">> Try \"purchase list help\" for proper syntax");
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(1));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),"1","id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
-				String searchText = arguments.get(3).trim();
-				listAttributesMap.put("Searchtext", searchText);
+				searchText = arguments.get(3).trim();
+				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
 				System.out.println(">> Invalid Extension given");
@@ -188,27 +176,16 @@ public class PurchaseCLI {
 			}
 		} else if(arguments.size() == 5) {
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-					pageNumber = Integer.parseInt(arguments.get(4));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size (or) page Number input");
-					System.out.println(">> Try \"purchase list help\" for proper syntax");
-					return;
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				if((pageNumber = validateNumber(arguments.get(4), "PageNumber")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),"id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(purchaseAttributes.contains(attribute)) {
-					listAttributesMap.put("Attribute", attribute);
-					listAttributesMap.put("Searchtext", "'" + searchText + "'");
-					listAttributesMap.put("Pagelength", "20");
-					listAttributesMap.put("Pagenumber", String.valueOf(1));
+					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
 					System.out.println("Given attribute is not a searchable attribute!!");
@@ -223,19 +200,10 @@ public class PurchaseCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(purchaseAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size input");
-							System.out.println(">> Try \"purchase list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", "1");
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),"1",attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -254,20 +222,11 @@ public class PurchaseCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(purchaseAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-							pageNumber = Integer.parseInt(arguments.get(7));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size (or) page Number input");
-							System.out.println(">> Try \"purchase list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println("Invalid Extension Given!!!");
@@ -328,8 +287,7 @@ public class PurchaseCLI {
 		String numberRegex = "^[0-9]{1,10}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(">> Delete purchase using following command \n" + "\n" + ">> purchase delete <invoice>\n" + "\t\tinvoice - numeric, mandatory\n" + "\t\t");
-				return;
+				FeedBackPrinter.printPurchaseHelp("delete");
 			} else if(arguments.get(2).matches(numberRegex)) {
 				System.out.println(">> Are you sure want to delete the Purchase Entry y/n ? : ");
 				String prompt = scanner.nextLine();
@@ -352,5 +310,23 @@ public class PurchaseCLI {
 				System.out.println("Try \"purchase delete help\" for proper syntax!!!");
 			}
 		}
+	}
+
+	private int validateNumber(String number, String name) {
+		int result;
+		try {
+			result = Integer.parseInt(number);
+		} catch(Exception e) {
+			System.out.println("Invalid " + name + "! Must be a number");
+			return - 1;
+		}
+		return result;
+	}
+	private void setMap(HashMap<String,String> listAttributesMap,String PageLength,String PageNumber,String Attribute,String SearchText)
+	{
+		listAttributesMap.put("Pagelength",PageLength);
+		listAttributesMap.put("Pagenumber", PageNumber);
+		listAttributesMap.put("Attribute", Attribute);
+		listAttributesMap.put("Searchtext", SearchText);
 	}
 }

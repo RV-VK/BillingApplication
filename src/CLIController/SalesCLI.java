@@ -76,32 +76,19 @@ public class SalesCLI {
 				return;
 			}
 			if(createdSale == null) {
-				System.out.println(
-						">> Out of Stock Product Entered Please check the entered products!!");
+				System.out.println(">> Out of Stock Product Entered Please check the entered products!!");
 			} else if(createdSale.getDate() != null) {
-				System.out.println(
-						"**********************************************************************************");
+				System.out.println("**********************************************************************************");
 				System.out.println("\t\tSALES BILL " + createdSale.getId());
-				System.out.println(
-						"**********************************************************************************");
+				System.out.println("**********************************************************************************");
 				System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
-				System.out.println(
-						"----------------------------------------------------------------------------------");
+				System.out.println("----------------------------------------------------------------------------------");
 				for(int i = 0 ; i < createdSale.getSalesItemList().size() ; i++) {
-					System.out.printf(
-							"%d\t\t%-20s\t\t\t%.1f\t\t%.2f\t\t%.2f%n",
-							i + 1,
-							createdSale.getSalesItemList().get(i).getProduct().getName(),
-							createdSale.getSalesItemList().get(i).getQuantity(),
-							createdSale.getSalesItemList().get(i).getUnitSalesPrice(),
-							(createdSale.getSalesItemList().get(i).getQuantity()
-									* createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
+					System.out.printf("%d\t\t%-20s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
 				}
-				System.out.println(
-						"----------------------------------------------------------------------------------");
+				System.out.println("----------------------------------------------------------------------------------");
 				System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdSale.getGrandTotal());
-				System.out.println(
-						"----------------------------------------------------------------------------------");
+				System.out.println("----------------------------------------------------------------------------------");
 			} else if(createdSale.getDate() == null) {
 				System.out.println(">> Non-Existing Product Code Entered!! Please check the Product codes!");
 			}
@@ -117,18 +104,7 @@ public class SalesCLI {
 	public void count(List<String> arguments) throws ApplicationErrorException {
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						"Count Sales using the Following Template\n sales count -d <date>\n"
-								+ "\n"
-								+ ">> count : <number>\n"
-								+ "\n"
-								+ "> sales count\n"
-								+ "\n"
-								+ ">> count : <number>\n"
-								+ "\n"
-								+ "> sales count -c <category>\n"
-								+ "\n"
-								+ ">> count : <number>\n");
+				FeedBackPrinter.printSalesHelp("count");
 			} else {
 				System.out.println(">> Invalid command given!!!");
 				System.out.println(">> Try \"sales count  help\" for proper syntax!!");
@@ -166,48 +142,25 @@ public class SalesCLI {
 	 * @param arguments Command arguments.
 	 */
 	public void list(List<String> arguments) {
-		listAttributesMap.put("Pagelength", null);
-		listAttributesMap.put("Pagenumber", null);
-		listAttributesMap.put("Attribute", null);
-		listAttributesMap.put("Searchtext", null);
+		setMap(listAttributesMap,null,null,null,null);
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						" >> List sales with the following options\n"
-								+ ">> sales list - will list all the sales default to maximum upto 20 sales\n"
-								+ ">> sales list -p 10 - pageable list shows 10 sales as default\n"
-								+ ">> sales list -p 10 3 - pagable list shows 10 sales in 3rd page, ie., sale from 21 to 30\n"
-								+ "\n"
-								+ ">> Use only the following attributes: id, date\n"
-								+ ">> sales list -s <attr>: searchtext - search the sale with the given search text in all the given attribute\n"
-								+ ">> sales list -s <attr>: searchtext -p 10 6 - pagable list shows 10 sales in 6th page with the given search text in the given attribute\n"
-								+ "\n"
-								+ "> sales list -s <date> : <23/03/2023> -p 5 2 \n"
-								+ "> sales list -s <id> : <10>\n");
+				FeedBackPrinter.printSalesHelp("list");
 				return;
 			}
 		}
 		if(arguments.size() == 2) {
-			listAttributesMap.put("Pagelength", "20");
-			listAttributesMap.put("Pagenumber", "1");
-			listAttributesMap.put("Attribute", "id");
+			setMap(listAttributesMap,"20","1","id",null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
 			pageLength = 0;
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size input");
-					System.out.println(">> Try \"sales list help\" for proper syntax");
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(1));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),"1","id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				searchText = arguments.get(3).trim();
-				listAttributesMap.put("Searchtext", searchText);
+				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
 				System.out.println(">> Invalid Extension given");
@@ -215,27 +168,16 @@ public class SalesCLI {
 			}
 		} else if(arguments.size() == 5) {
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-					pageNumber = Integer.parseInt(arguments.get(4));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size (or) page Number input");
-					System.out.println(">> Try \"sales list help\" for proper syntax");
-					return;
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				if((pageNumber = validateNumber(arguments.get(4), "PageNumber")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),"id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(saleAttributes.contains(attribute)) {
-					listAttributesMap.put("Attribute", attribute);
-					listAttributesMap.put("Searchtext", "'" + searchText + "'");
-					listAttributesMap.put("Pagelength", "20");
-					listAttributesMap.put("Pagenumber", String.valueOf(1));
+					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
 					System.out.println("Given attribute is not a searchable attribute!!");
@@ -250,19 +192,10 @@ public class SalesCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(saleAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size input");
-							System.out.println(">> Try \"sales list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", "1");
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),"1",attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -281,20 +214,11 @@ public class SalesCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(saleAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-							pageNumber = Integer.parseInt(arguments.get(7));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size (or) page Number input");
-							System.out.println(">> Try \"sales list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println("Invalid Extension Given!!!");
@@ -327,21 +251,13 @@ public class SalesCLI {
 				if(! listAttributesMap.get("Searchtext").equals("id")) {
 					System.out.println(">> Given SearchText does not exist!!!");
 					return;
-				} else
-					return;
+				} else return;
 			}
 			for(Sales sales: salesList) {
 				System.out.print("id: " + sales.getId() + ", date: " + sales.getDate() + ", ");
 				System.out.print("[");
 				for(SalesItem salesItem: sales.getSalesItemList()) {
-					System.out.print(
-							"[name: "
-									+ salesItem.getProduct().getName()
-									+ ", quantity: "
-									+ salesItem.getQuantity()
-									+ ", price: "
-									+ salesItem.getUnitSalesPrice()
-									+ "], ");
+					System.out.print("[name: " + salesItem.getProduct().getName() + ", quantity: " + salesItem.getQuantity() + ", price: " + salesItem.getUnitSalesPrice() + "], ");
 				}
 
 				System.out.print(sales.getGrandTotal());
@@ -365,11 +281,7 @@ public class SalesCLI {
 		String numberRegex = "^[0-9]{1,10}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						">> >> Delete sales using following command \n"
-								+ "\n"
-								+ ">> sales delete <id>\n"
-								+ "\t\tid - numeric, mandatory");
+				FeedBackPrinter.printSalesHelp("delete");
 			} else if(arguments.get(2).matches(numberRegex)) {
 				System.out.println(">> Are you sure you want to delete the Sales Entry y/n : ");
 				String prompt = scanner.nextLine();
@@ -392,5 +304,23 @@ public class SalesCLI {
 				System.out.println(">> Try \"sales delete help\" for proper syntax");
 			}
 		}
+	}
+
+	private int validateNumber(String number, String name) {
+		int result;
+		try {
+			result = Integer.parseInt(number);
+		} catch(Exception e) {
+			System.out.println("Invalid " + name + "! Must be a number");
+			return - 1;
+		}
+		return result;
+	}
+	private void setMap(HashMap<String,String> listAttributesMap,String PageLength,String PageNumber,String Attribute,String SearchText)
+	{
+		listAttributesMap.put("Pagelength",PageLength);
+		listAttributesMap.put("Pagenumber", PageNumber);
+		listAttributesMap.put("Attribute", Attribute);
+		listAttributesMap.put("Searchtext", SearchText);
 	}
 }

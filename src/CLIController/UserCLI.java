@@ -35,7 +35,7 @@ public class UserCLI {
 	public void create(List<String> arguments) {
 		Scanner scanner = new Scanner(System.in);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> create user using following template\n" + ">>  usertype, username,  password, first name, last name, phone number\n" + "\tusertype - text, purchase/sales, mandatory\n" + "\tusername - text, min 3 - 30 char, mandatory\n" + "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n" + "\tfirstname - text, mandatory with 3 to 30 chars\n" + "\tlastname  - text, optional\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t\n");
+			FeedBackPrinter.printUserHelp("create");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -113,32 +113,22 @@ public class UserCLI {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-		listAttributesMap.put("Pagelength", null);
-		listAttributesMap.put("Pagenumber", null);
-		listAttributesMap.put("Attribute", null);
-		listAttributesMap.put("Searchtext", null);
+		setMap(listAttributesMap,null,null,null,null);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> List user with the following options\n" + ">> user list - will list all the users default to maximum upto 20 users\n" + ">> user list -p 10 - pageable list shows 10 users as default\n" + ">> user list -p 10 3 - pagable list shows 10 users in 3rd page, ie., user from 21 to 30\n" + ">> user list -s searchtext - search the user with the given search text in all the searchable attributes\n" + ">> user list -s <attr>: searchtext - search the user with the given search text in all the given attribute\n" + ">> user list -s <attr>: searchtext -p 10 6 - pagable list shows 10 users in 6th page with the given search text in the given attribute\n");
+		FeedBackPrinter.printUserHelp("list");
 		} else if(arguments.size() == 2) {
-			listAttributesMap.put("Pagelength", "20");
-			listAttributesMap.put("Pagenumber", "1");
-			listAttributesMap.put("Attribute", "id");
+			setMap(listAttributesMap,"20","1","id",null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-				} catch(Exception e) {
-					System.out.println(">> Invalid Page Size input!!!");
-					System.out.println(">> Try \"user list help\" for proper syntax");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) {
+					return;
 				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", "1");
-				listAttributesMap.put("Attribute", "id");
+				setMap(listAttributesMap,String.valueOf(pageLength),"1","id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				searchText = arguments.get(3).trim();
-				listAttributesMap.put("Searchtext", searchText);
+				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
 				System.out.println(">> Invalid Extension given");
@@ -148,27 +138,16 @@ public class UserCLI {
 			pageLength = 0;
 			pageNumber = 0;
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-					pageNumber = Integer.parseInt(arguments.get(4));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size (or) page Number input");
-					System.out.println(">> Try \"product list help\" for proper syntax");
-					return;
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				if((pageNumber = validateNumber(arguments.get(4), "PageNumber")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),"id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(userAttributes.contains(attribute)) {
-					listAttributesMap.put("Attribute", attribute);
-					listAttributesMap.put("Searchtext", "'" + searchText + "'");
-					listAttributesMap.put("Pagelength", "20");
-					listAttributesMap.put("Pagenumber", "1");
+					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
 					System.out.println(">> Given attribute is not a Searchable attribute!!!");
@@ -183,19 +162,10 @@ public class UserCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(userAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size input");
-							System.out.println(">> Try \"product list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", "1");
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),"1",attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -214,20 +184,11 @@ public class UserCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(userAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-							pageNumber = Integer.parseInt(arguments.get(7));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size (or) page Number input");
-							System.out.println(">> Try \"user list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println("Invalid Extension Given!!!");
@@ -280,7 +241,7 @@ public class UserCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.printf(">> Edit user using following template. Copy the user data from the list, edit the attribute values. \n>> id: <id - 6>, usertype: <usertype-edited>, username: <username>,  password: <password>, first name: <first name>, last name: <last name>, phone number: <phone number>\n\n>> You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n>> id: <id - 6>, usertype: <usertype-edited>, username: <username-edited>\n\n>> You can not give empty or null values to the mandatory attributes.\n>> id: <id - 6>, usertype: , username: null\n\t\n\tid\t\t\t - number, mandatory\t\n\tusertype - text, purchase/sales, mandatory\n\tuse\trname - text, min 3 - 30 char, mandatory\n\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n\tfirstname - text, mandatory with 3 to 30 chars\n\tlastname  - text, optional\n\tphone - number, mandatory, ten digits, digit start with 9/8/7/6%n");
+			FeedBackPrinter.printUserHelp("edit");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
@@ -373,7 +334,7 @@ public class UserCLI {
 		String nameregex = "^[a-zA-Z0-9]{3,30}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(">> delete user using the following template\n" + "\t username\n" + "\t \n" + "\t  username - text, min 3 - 30 char, mandatory,existing\n" + "\n");
+				FeedBackPrinter.printUserHelp("delete");
 			} else if(arguments.get(2).matches(nameregex)) {
 				System.out.println(">> Are you sure want to delete the User y/n ? : ");
 				String prompt = scanner.nextLine();
@@ -395,5 +356,24 @@ public class UserCLI {
 				System.out.println("Try \"user delete help\" for proper syntax");
 			}
 		}
+	}
+
+	private int validateNumber(String number, String name) {
+		int result;
+		try {
+			result = Integer.parseInt(number);
+		} catch(Exception e) {
+			System.out.println("Invalid " + name + "! Must be a number");
+			return - 1;
+		}
+		return result;
+	}
+
+	private void setMap(HashMap<String,String> listAttributesMap,String PageLength,String PageNumber,String Attribute,String SearchText)
+	{
+		listAttributesMap.put("Pagelength",PageLength);
+		listAttributesMap.put("Pagenumber", PageNumber);
+		listAttributesMap.put("Attribute", Attribute);
+		listAttributesMap.put("Searchtext", SearchText);
 	}
 }

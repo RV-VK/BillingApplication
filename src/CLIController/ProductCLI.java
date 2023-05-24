@@ -3,6 +3,7 @@ package CLIController;
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import Entity.Product;
+import Service.InvalidTemplateException;
 import Service.ProductService;
 import Service.ProductServiceImplementation;
 
@@ -37,7 +38,7 @@ public class ProductCLI {
 	 */
 	public void Create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> create product using the following template\n" + ">> code, name, unit, type, price, stock\n" + "\t\n" + "\tcode - text, min - 2 - 6, mandatory\n" + "\tname - text, min 3 - 30 char, mandatory\n" + "\tunitcode - text, kg/l/piece/combo, mandatory\n" + "\ttype - text, between enumerated values, mandatory \n" + "\tprice - number, mandatory\n" + "\tstock - number, default 0\n" + "\t\n" + ">\tproduct create code, productname, unitcode, type, price, stock\n" + "                         or\n" + "> product create :enter\n" + "code, name, unitcode, type, price, stock\n");
+			FeedBackPrinter.printProductHelp("create");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -107,33 +108,20 @@ public class ProductCLI {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-		listAttributesMap.put("Pagelength", null);
-		listAttributesMap.put("Pagenumber", null);
-		listAttributesMap.put("Attribute", null);
-		listAttributesMap.put("Searchtext", null);
+		setMap(listAttributesMap,null,null,null,null);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> List product with the following options\n" + ">> product list - will list all the products default to maximum upto 20 products\n" + ">> product list -p 10 - pageable list shows 10 products as default\n" + ">> product list -p 10 3 - pagable list shows 10 products in 3rd page, ie., product from 21 to 30\n" + ">> product list -s searchtext - search the product with the given search text in all the searchable attributes\n" + ">> product list -s <attr>: searchtext - search the product with the given search text in all the given attribute\n" + ">> product list -s <attr>: searchtext -p 10 6 - pagable list shows 10 products in 6th page with the given search text in the given attribute\n");
+			FeedBackPrinter.printProductHelp("list");
 		} else if(arguments.size() == 2) {
-			listAttributesMap.put("Pagelength", "20");
-			listAttributesMap.put("Pagenumber", "1");
-			listAttributesMap.put("Attribute", "id");
+			setMap(listAttributesMap,"20","1","id",null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size input");
-					System.out.println(">> Try \"product list help\" for proper syntax");
-					return;
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(1));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),"1","id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				searchText = arguments.get(3).trim();
-				listAttributesMap.put("Searchtext", searchText);
+				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
 				System.out.println(">> Invalid Extension given");
@@ -141,27 +129,16 @@ public class ProductCLI {
 			}
 		} else if(arguments.size() == 5) {
 			if(arguments.get(2).equals("-p")) {
-				try {
-					pageLength = Integer.parseInt(arguments.get(3));
-					pageNumber = Integer.parseInt(arguments.get(4));
-				} catch(Exception e) {
-					System.out.println(">> Invalid page Size (or) page Number input");
-					System.out.println(">> Try \"product list help\" for proper syntax");
-					return;
-				}
-				listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-				listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
-				listAttributesMap.put("Attribute", "id");
+				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
+				if((pageNumber = validateNumber(arguments.get(4), "PageNumber")) < 0) return;
+				setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),"id",null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(productAttributes.contains(attribute)) {
-					listAttributesMap.put("Attribute", attribute);
-					listAttributesMap.put("Searchtext", "'" + searchText + "'");
-					listAttributesMap.put("Pagelength", "20");
-					listAttributesMap.put("Pagenumber", String.valueOf(1));
+					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
 					System.out.println(">> Given attribute is not a searchable attribute!!");
@@ -177,19 +154,10 @@ public class ProductCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(productAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size input");
-							System.out.println(">> Try \"product list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", "1");
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),"1",attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -209,20 +177,11 @@ public class ProductCLI {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
-				listAttributesMap.put("Attribute", attribute);
-				listAttributesMap.put("Searchtext", "'" + searchText + "'");
 				if(productAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
-						try {
-							pageLength = Integer.parseInt(arguments.get(6));
-							pageNumber = Integer.parseInt(arguments.get(7));
-						} catch(Exception e) {
-							System.out.println(">> Invalid page Size (or) page Number input");
-							System.out.println(">> Try \"product list help\" for proper syntax");
-							return;
-						}
-						listAttributesMap.put("Pagelength", String.valueOf(pageLength));
-						listAttributesMap.put("Pagenumber", String.valueOf(pageNumber));
+						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
+						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
+						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Extension Given!!!");
@@ -288,7 +247,7 @@ public class ProductCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(">> Edit product using following template. Copy the product data from the list, edit the attribute values. \n" + ">> id: <id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>\n" + "\n" + ">> You can also restrict the product data by editable attributes. Id attribute is mandatory for all the edit operation.\n" + ">> id: <id - 6>, name: <name-edited>, unitcode: <unitcode-edited>\n" + "\n" + ">> You can not give empty or null values to the mandatory attributes.\n" + ">> id: <id - 6>, name: , unitcode: null\n" + ">>\n" + " \n" + " \tid\t - number, mandatory\t\n" + "\tname - text, min 3 - 30 char, mandatory\n" + "\tunitcode - text, kg/l/piece/combo, mandatory\n" + "\ttype - text, between enumerated values, mandatory \n" + "\tcostprice - numeric, mandatory\n" + "\t\n" + ">\tproduct edit id:<id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>\n" + "                         or\n" + "> product edit :enter\n" + "> id: <id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>");
+			FeedBackPrinter.printProductHelp("edit");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
@@ -397,7 +356,7 @@ public class ProductCLI {
 		String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println("> product delete help \n" + ">> delete product using the following template\n" + "\t\n" + "\t\tproductid - numeric, existing\n" + ">> product delete -c <code>\n" + "\t \n" + "\n" + "> product delete <id>");
+				FeedBackPrinter.printProductHelp("delete");
 			} else if(arguments.get(2).matches(numberRegex)) {
 				deleteHelper(arguments.get(2));
 			} else {
@@ -428,7 +387,7 @@ public class ProductCLI {
 		String prompt = scanner.nextLine();
 		if(prompt.equals("y")) {
 			if(productService.delete(parameter) == 1) {
-				System.out.println("Product Deletion Successfull!!!");
+				System.out.println("Product Deletion Successfully!!!");
 			} else if(productService.delete(parameter) == - 1) {
 				System.out.println(">> Product Deletion Failed!!!");
 				System.out.println(">> Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
@@ -439,5 +398,23 @@ public class ProductCLI {
 		} else {
 			System.out.println(">> Invalid delete prompt!!! Please select between y/n");
 		}
+	}
+
+	private int validateNumber(String number, String name) {
+		int result;
+		try {
+			result = Integer.parseInt(number);
+		} catch(Exception e) {
+			System.out.println("Invalid " + name + "! Must be a number");
+			return - 1;
+		}
+		return result;
+	}
+	private void setMap(HashMap<String,String> listAttributesMap,String PageLength,String PageNumber,String Attribute,String SearchText)
+	{
+		listAttributesMap.put("Pagelength",PageLength);
+		listAttributesMap.put("Pagenumber", PageNumber);
+		listAttributesMap.put("Attribute", Attribute);
+		listAttributesMap.put("Searchtext", SearchText);
 	}
 }
