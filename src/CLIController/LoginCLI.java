@@ -2,9 +2,7 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
-import DAO.UniqueConstraintException;
 import Entity.User;
-import Service.InvalidTemplateException;
 import Service.LoginService;
 import Service.LoginServiceImplementation;
 
@@ -26,10 +24,24 @@ public class LoginCLI {
 	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException {
 		if(loginService.checkIfInitialSetup()) {
 
-			System.out.println("\t\t\t\t\t\t*********************************************************\n" + "\t\t\t\t\t\t*********************   WELCOME   ***********************\n" + "\t\t\t\t\t\t*********************************************************\n\n");
+			System.out.println("""
+					\t\t\t\t\t\t*********************************************************
+					\t\t\t\t\t\t*********************   WELCOME   ***********************
+					\t\t\t\t\t\t*********************************************************
+
+					""");
 			System.out.println("> Welcome to the Billing software setup. You have to create admin user to continue with the setup.\n\n");
 			do {
-				System.out.println(">> create user using following template\n" + ">>  usertype, username,  password, first name, last name, phone number\n" + "\tusertype - text, purchase/sales, mandatory\n" + "\tusername - text, min 3 - 30 char, mandatory\n" + "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n" + "\tfirstname - text, mandatory with 3 to 30 chars\n" + "\tlastname  - text, optional\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t\n");
+				System.out.println("""
+						>> create user using following template
+						>>  usertype, username,  password, first name, last name, phone number
+						\tusertype - text, purchase/sales, mandatory
+						\tusername - text, min 3 - 30 char, mandatory
+						\tpassword - text, alphanumeric, special char, min 8 char, mandatory
+						\tfirstname - text, mandatory with 3 to 30 chars
+						\tlastname  - text, optional
+						\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t
+						""");
 				System.out.println("\n");
 				System.out.print(">> Enter the Admin Username: ");
 				userName = scanner.nextLine();
@@ -75,11 +87,10 @@ public class LoginCLI {
 	/**
 	 * The Presentation Layer of the Login function.
 	 *
-	 * @throws SQLException                  Exception thrown based on SQL syntax.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	private static void Login() throws SQLException, PageCountOutOfBoundsException, ApplicationErrorException {
+	private static void Login() throws PageCountOutOfBoundsException, ApplicationErrorException {
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");

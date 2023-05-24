@@ -45,7 +45,7 @@ public class SalesCLI {
 				String item = commandEntities[i].replaceAll("[\\[\\]]", "");
 				String[] itemVariables = item.split(",");
 				if(itemVariables.length < 2) {
-					System.out.println(">> Please provide sufficient detailes for product " + i);
+					System.out.println(">> Please provide sufficient details for product " + i);
 					System.out.println(">> Try \"sales help\" for proper syntax");
 				}
 				if(itemVariables.length > 2) {

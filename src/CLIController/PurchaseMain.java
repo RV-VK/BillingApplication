@@ -33,7 +33,17 @@ public class PurchaseMain {
 						case "list" -> purchaseCLI.List(commandList);
 						case "delete" -> purchaseCLI.Delete(commandList);
 						case "help" ->
-								System.out.println(">> purchase products using following command\n" + "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n" + "\n" + "\t  date - format( YYYY-MM-DD ), mandatory\n" + "\t\tinvoice - numbers, mandatory\n" + "\t\t\n" + "\t\tThe following purchase items should be given as array of items\n" + "\t\tcode - text, min 2 - 6 char, mandatory\n" + "\t\tquantity - numbers, mandatory\n" + "\t\tcostprice - numbers, mandatory");
+								System.out.println("""
+										>> purchase products using following command
+										purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+
+										\t  date - format( YYYY-MM-DD ), mandatory
+										\t\tinvoice - numbers, mandatory
+										\t\t
+										\t\tThe following purchase items should be given as array of items
+										\t\tcode - text, min 2 - 6 char, mandatory
+										\t\tquantity - numbers, mandatory
+										\t\tcostprice - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								purchaseCLI.Create(command);
@@ -54,8 +64,16 @@ public class PurchaseMain {
 					}
 				}
 				case "help" -> {
-					System.out.println("product\n" + "\t    list\n");
-					System.out.println("purchase \n" + "\t\t\tcreate - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....\n" + "\t\t\tcount\n" + "\t\t\tlist\n" + "\t\t\tdelete - invoice");
+					System.out.println("""
+							product
+							\t    list
+							""");
+					System.out.println("""
+							purchase\s
+							\t\t\tcreate - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+							\t\t\tcount
+							\t\t\tlist
+							\t\t\tdelete - invoice""");
 				}
 				default -> System.out.println("Invalid Command! Not found!");
 			}

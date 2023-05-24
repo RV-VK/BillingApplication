@@ -33,7 +33,13 @@ public class SalesMain {
 						case "list" -> salesCLI.list(commandList);
 						case "delete" -> salesCLI.delete(commandList);
 						case "help" ->
-								System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
+								System.out.println("""
+										>> sell products using following command
+
+										sales date, [code1, quantity1], [code2, quantity2]....
+
+										\t\tcode - text, min 3 - 30 char, mandatory
+										\t\tquantity - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								salesCLI.Create(command);
@@ -52,8 +58,16 @@ public class SalesMain {
 						System.out.println("Try \"Help\" for proper syntax");
 					}
 				case "help":
-					System.out.println("product\n" + "\t    list\n");
-					System.out.println("sales\n" + "\t\t\tcreate - date, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....\n" + "\t\t\tcount\n" + "\t\t\tlist\n" + "\t\t\tdelete - id");
+					System.out.println("""
+							product
+							\t    list
+							""");
+					System.out.println("""
+							sales
+							\t\t\tcreate - date, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+							\t\t\tcount
+							\t\t\tlist
+							\t\t\tdelete - id""");
 					break;
 				default:
 					System.out.println("Invalid Command! Not found!");

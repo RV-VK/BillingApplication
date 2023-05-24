@@ -92,7 +92,17 @@ public class AdminMain {
 							purchaseCLI.Delete(commandList);
 							break;
 						case "help":
-							System.out.println(">> purchase products using following command\n" + "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n" + "\n" + "\t  date - format( YYYY-MM-DD ), mandatory\n" + "\t\tinvoice - numbers, mandatory\n" + "\t\t\n" + "\t\tThe following purchase items should be given as array of items\n" + "\t\tcode - text, min 2 - 6 char, mandatory\n" + "\t\tquantity - numbers, mandatory\n" + "\t\tcostprice - numbers, mandatory");
+							System.out.println("""
+									>> purchase products using following command
+									purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+
+									\t  date - format( YYYY-MM-DD ), mandatory
+									\t\tinvoice - numbers, mandatory
+									\t\t
+									\t\tThe following purchase items should be given as array of items
+									\t\tcode - text, min 2 - 6 char, mandatory
+									\t\tquantity - numbers, mandatory
+									\t\tcostprice - numbers, mandatory""");
 						default:
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								purchaseCLI.Create(command);
@@ -109,7 +119,13 @@ public class AdminMain {
 						case "list" -> salesCLI.list(commandList);
 						case "delete" -> salesCLI.delete(commandList);
 						case "help" ->
-								System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
+								System.out.println("""
+										>> sell products using following command
+
+										sales date, [code1, quantity1], [code2, quantity2]....
+
+										\t\tcode - text, min 3 - 30 char, mandatory
+										\t\tquantity - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								salesCLI.Create(command);
@@ -121,7 +137,37 @@ public class AdminMain {
 					}
 				}
 				case "help" -> {
-					String help = "\t\tstore\n" + "\t\t\tcreate  - name, phone number, address, gst number\n" + "\t\t\tedit - name, phone number, address, gst number\n" + "\t\t\tdelete - y/n with admin password\n" + "\t\t\n" + "\t\tuser\n" + "\t\t\tcreate - usertype, username,  password, first name, last name, phone number\n" + "\t\t\tcount \n" + "\t\t\tlist \n" + "\t\t\tedit - usertype, username,  password, first name, last name, phone number\n" + "\t\t\tdelete - y/n with username\n" + "\t       \n" + "\t       product\n" + "\t\t    \tcreate - productname,unit,type,costprice\n" + "\t\t    \tcount\n" + "\t\t    \tlist\n" + "\t\t    \tedit - productname,unit,type,costprice\n" + "\t\t    \tdelete - y/n with productname or productid\n" + "\t       \n" + "\t       unit\n" + "\t \t\tcreate - name, code, description, isdividable\n" + "\t \t\tlist -\n" + "\t \t\tedit - name, code, description, isdividable\n" + "\t \t\tdelete - code\n" + "\t       \n" + "\t       stock\n" + "\t    \t\tupdate - code, quantity\n" + "\t       \n" + "\t       price\n" + "\t    \t\tupdate - code, price";
+					String help = """
+							\t\tstore
+							\t\t\tcreate  - name, phone number, address, gst number
+							\t\t\tedit - name, phone number, address, gst number
+							\t\t\tdelete - y/n with admin password
+							\t\t
+							\t\tuser
+							\t\t\tcreate - usertype, username,  password, first name, last name, phone number
+							\t\t\tcount\s
+							\t\t\tlist\s
+							\t\t\tedit - usertype, username,  password, first name, last name, phone number
+							\t\t\tdelete - y/n with username
+							\t      \s
+							\t       product
+							\t\t    \tcreate - productname,unit,type,costprice
+							\t\t    \tcount
+							\t\t    \tlist
+							\t\t    \tedit - productname,unit,type,costprice
+							\t\t    \tdelete - y/n with productname or productid
+							\t      \s
+							\t       unit
+							\t \t\tcreate - name, code, description, isdividable
+							\t \t\tlist -
+							\t \t\tedit - name, code, description, isdividable
+							\t \t\tdelete - code
+							\t      \s
+							\t       stock
+							\t    \t\tupdate - code, quantity
+							\t      \s
+							\t       price
+							\t    \t\tupdate - code, price""";
 					System.out.println(help);
 				}
 				default -> System.out.println("Invalid Command! Not Found!");
