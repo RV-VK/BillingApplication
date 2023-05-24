@@ -26,17 +26,15 @@ public class ProductServiceImplementation implements ProductService {
 
 	public List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<Product> productList;
-		if(Collections.frequency(listattributes.values(), null) == 0 || Collections.frequency(listattributes.values(), null) == 1) {
+		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
+			productList = productDAO.list(listattributes.get("Searchtext"));
+		} else {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
 			productList = productDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
-			return productList;
-		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
-			productList = productDAO.list(listattributes.get("Searchtext"));
-			return productList;
 		}
-		return null;
+		return productList;
 	}
 
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException {

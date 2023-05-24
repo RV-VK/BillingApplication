@@ -53,17 +53,15 @@ public class SalesServiceImplementation implements SalesService {
 	@Override
 	public List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<Sales> salesList;
-		if(Collections.frequency(listAttributes.values(), null) == 0 || Collections.frequency(listAttributes.values(), null) == 1) {
+		if(Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1 && listAttributes.get("Searchtext") != null) {
+			salesList = salesDAO.list(listAttributes.get("Searchtext"));
+		} else  {
 			int pageLength = Integer.parseInt(listAttributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listAttributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
 			salesList = salesDAO.list(listAttributes.get("Attribute"), listAttributes.get("Searchtext"), pageLength, offset);
-			return salesList;
-		} else if(Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1 && listAttributes.get("Searchtext") != null) {
-			salesList = salesDAO.list(listAttributes.get("Searchtext"));
-			return salesList;
 		}
-		return null;
+		return salesList;
 	}
 
 

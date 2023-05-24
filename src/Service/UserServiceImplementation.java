@@ -28,17 +28,15 @@ public class UserServiceImplementation implements UserService {
 	@Override
 	public List<User> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<User> userList;
-		if(Collections.frequency(listattributes.values(), null) == 0 || Collections.frequency(listattributes.values(), null) == 1) {
+		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
+			userList = userDAO.list(listattributes.get("Searchtext"));
+		} else {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
 			userList = userDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
-			return userList;
-		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
-			userList = userDAO.list(listattributes.get("Searchtext"));
-			return userList;
 		}
-		return null;
+		return userList;
 	}
 
 	@Override
