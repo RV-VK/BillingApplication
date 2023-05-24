@@ -8,32 +8,31 @@ import Entity.User;
 
 import java.sql.SQLException;
 
-public class LoginServiceImplementation implements  LoginService{
-    private final UserDAO userDAO=new UserDAOImplementation();
+public class LoginServiceImplementation implements LoginService {
+	private final UserDAO userDAO = new UserDAOImplementation();
 
 
-    @Override
-    public boolean checkIfInitialSetup() throws SQLException {
-        return userDAO.checkIfInitialSetup();
-    }
+	@Override
+	public boolean checkIfInitialSetup() throws SQLException {
+		return userDAO.checkIfInitialSetup();
+	}
 
-  @Override
-  public User createUser(User user)
-      throws UniqueConstraintException,
-          SQLException,
-          ApplicationErrorException,
-          InvalidTemplateException {
-        UserService userService=new UserServiceImplementation();
-        return userService.create(user);
-    }
+	@Override
+	public User createUser(User user)
+			throws UniqueConstraintException,
+			SQLException,
+			ApplicationErrorException,
+			InvalidTemplateException {
+		UserService userService = new UserServiceImplementation();
+		return userService.create(user);
+	}
 
 
-
-  @Override
-  public String login(String userName, String passWord)
-      throws SQLException, ApplicationErrorException {
-        return userDAO.login(userName,passWord);
-    }
+	@Override
+	public String login(String userName, String passWord)
+			throws SQLException, ApplicationErrorException {
+		return userDAO.login(userName, passWord);
+	}
 
 
 }
