@@ -275,8 +275,7 @@ public class ProductCLI {
 			System.out.println(">> Invalid Command!! Try \"help\"");
 			return;
 		}
-		ProductService countProduct = new ProductServiceImplementation();
-		int productCount = countProduct.count();
+		int productCount = productService.count();
 		System.out.println(">> ProductCount " + productCount);
 	}
 
