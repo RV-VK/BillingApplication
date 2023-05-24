@@ -24,7 +24,7 @@ public class StoreCLI {
 	 */
 	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-				FeedBackPrinter.printStoreHelp("create");
+			FeedBackPrinter.printStoreHelp("create");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -44,12 +44,12 @@ public class StoreCLI {
 	private void createHelper(List<String> storeAttributes) {
 		if(storeAttributes.size() < 4) {
 			System.out.println(">> Insufficient arguments for command \"store create\"");
-			System.out.println(">> Try \"store create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("store", "create");
 			return;
 		}
 		if(storeAttributes.size() > 4) {
 			System.out.println(">> Too many arguments for command \"store create\"");
-			System.out.println(">> Try \"store create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("store", "create");
 			return;
 		}
 		name = storeAttributes.get(0).trim();
@@ -59,7 +59,7 @@ public class StoreCLI {
 			phoneNumber = Long.parseLong(storeAttributes.get(1).trim());
 		} catch(Exception e) {
 			System.out.println(">> Invalid format for 2nd argument \"phonenumber\"");
-			System.out.println(">> Try \"store create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("store", "create");
 			return;
 		}
 
@@ -92,17 +92,17 @@ public class StoreCLI {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
 			if(! parameters.matches(editCommandRegex)) {
-				System.out.println(">> Invalid command Format!\n>> Try \"unit edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"store edit help for proper syntax!");
 				return;
 			}
 			List<String> storeAttributes = List.of(parameters.split("[,:]"));
 			editHelper(storeAttributes);
 		} else if(arguments.size() > 10) {
 			System.out.println(">> Too many Arguments for command \"store edit\"");
-			System.out.println(">> Try \"store edit help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("store", "edit");
 		} else if(arguments.size() < 4) {
 			System.out.println(">> Insufficient arguments for command \"store edit\"");
-			System.out.println(">> Try \"store edit help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("store", "edit");
 		} else {
 			if(! command.substring(11).matches(editCommandRegex)) {
 				System.out.println(">> Invalid command Format!\n>> Try \"store edit help for proper syntax!");
@@ -127,7 +127,7 @@ public class StoreCLI {
 					phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());
 				} catch(NumberFormatException e) {
 					System.out.println(">> PhoneNumber must be numeric!!");
-					System.out.println(">> Try \"store edit help\" for proper syntax!!");
+					FeedBackPrinter.printHelpMessage("store", "edit");
 					return;
 				}
 				store.setPhoneNumber(phoneNumber);
@@ -138,20 +138,20 @@ public class StoreCLI {
 				store.setGstCode(GSTNumber);
 			} else {
 				System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
-				System.out.println(">> Try \"store edit help\" for proper Syntax");
+				FeedBackPrinter.printHelpMessage("store", "edit");
 				return;
 			}
 		}
-		Store createdStore;
+		Store editedStore;
 		try {
-			createdStore = storeService.edit(store);
+			editedStore = storeService.edit(store);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			return;
 		}
-		if(createdStore != null) {
+		if(editedStore != null) {
 			System.out.println(">> Store Edited Successfully!!!");
-			System.out.println(createdStore);
+			System.out.println(editedStore);
 		} else {
 			System.out.println(">> Store Edit failed!!!");
 			System.out.println(">> Please check the name you have entered!!!");
@@ -189,7 +189,7 @@ public class StoreCLI {
 			}
 		} else {
 			System.out.println(">> Invalid Command!!!");
-			System.out.println("Try \"store delete help\" for proper syntax!!!");
+			FeedBackPrinter.printHelpMessage("store", "delete");
 		}
 	}
 }

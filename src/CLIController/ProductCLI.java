@@ -29,7 +29,6 @@ public class ProductCLI {
 	private final ProductService productService = new ProductServiceImplementation();
 	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 	private final Scanner scanner = new Scanner(System.in);
-	private final String helpMessage = ">> Try \"product create help for proper syntax";
 
 	/**
 	 * This method handles the presentation layer for the create function.
@@ -58,11 +57,11 @@ public class ProductCLI {
 	private void createHelper(List<String> productAttributes) {
 		if(productAttributes.size() < 5) {
 			System.out.println(">>Insufficient Arguments for command \"product create\"");
-			System.out.println(helpMessage);
+			FeedBackPrinter.printHelpMessage("product", "create");
 			return;
 		} else if(productAttributes.size() > 6) {
 			System.out.println(">>Too many arguments for command \"product create \"");
-			System.out.println(helpMessage);
+			FeedBackPrinter.printHelpMessage("product", "create");
 			return;
 		}
 		code = productAttributes.get(0).trim();
@@ -82,7 +81,7 @@ public class ProductCLI {
 			} catch(Exception e) {
 				System.out.println(stock);
 				System.out.println(">>Invalid format for 5th argument \"stock\"");
-				System.out.println(helpMessage);
+				FeedBackPrinter.printHelpMessage("product", "create");
 				return;
 			}
 		}
@@ -157,7 +156,7 @@ public class ProductCLI {
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
-						System.out.println(">> Try \"product list help\" for proper syntax");
+						FeedBackPrinter.printHelpMessage("product", "list");
 					}
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("product", productAttributes);
@@ -249,7 +248,7 @@ public class ProductCLI {
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
 			System.out.println(">> For every Edit operation the first argument must be product's ID");
-			System.out.println(">> Try \"product edit help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("product", "edit");
 		} else {
 			if(! command.substring(13).matches(editCommandRegex)) {
 				System.out.println(">> Invalid command Format!\n>> Try \"product edit help for proper syntax!");
@@ -272,12 +271,12 @@ public class ProductCLI {
 			id = Integer.parseInt(editAttributes.get(1).trim());
 		} catch(Exception e) {
 			System.out.println(">> Id must be a Number!");
-			System.out.println(">> Please Try \"product edit help\" for proper Syntax");
+			FeedBackPrinter.printHelpMessage("product", "edit");
 		}
 		product.setId(id);
 		if(product.getId() == 0) {
 			System.out.println(">> Id should not be null");
-			System.out.println(">> Try \"product edit help\" for proper Syntax");
+			FeedBackPrinter.printHelpMessage("product", "edit");
 			return;
 		}
 		for(int index = 2 ; index < editAttributes.size() ; index = index + 2) {
@@ -308,7 +307,7 @@ public class ProductCLI {
 					product.setPrice(price);
 				} else {
 					System.out.println(">> Invalid attribute given!!! : " + editAttributes.get(index));
-					System.out.println(">> Try \"product edit help\" for proper syntax");
+					FeedBackPrinter.printHelpMessage("product", "edit");
 					return;
 				}
 			} catch(IndexOutOfBoundsException e) {
@@ -348,18 +347,18 @@ public class ProductCLI {
 				deleteHelper(arguments.get(2));
 			} else {
 				System.out.println(">> Invalid format for id!!!");
-				System.out.println("Try \"product delete help\" for proper syntax");
+				FeedBackPrinter.printHelpMessage("product", "delete");
 			}
 		} else if(arguments.size() == 4 && arguments.get(2).equals("-c")) {
 			if(arguments.get(3).matches(productcodeRegex)) {
 				deleteHelper(arguments.get(3));
 			} else {
 				System.out.println(">> Invalid format for product Code!!!");
-				System.out.println("Try \"product delete help\" for proper syntax");
+				FeedBackPrinter.printHelpMessage("product", "delete");
 			}
 		} else {
 			System.out.println("Invalid command format");
-			System.out.println("Try \"product delete help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("product", "delete");
 		}
 	}
 

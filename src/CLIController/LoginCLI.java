@@ -94,7 +94,7 @@ public class LoginCLI {
 				return;
 			}
 			if(userType != null) {
-				System.out.print("\n\n\n\t\t\t\t\t____________WELCOME " + userName+" TO THE BILLING SOFTWARE_____________________");
+				System.out.print("\n\n\n\t\t\t\t\t____________WELCOME " + userName + " TO THE BILLING SOFTWARE_____________________");
 				//Split User control Here
 				if(userType.equalsIgnoreCase("Admin")) {
 					AdminMain.AdminView();

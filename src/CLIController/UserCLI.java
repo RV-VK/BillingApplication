@@ -55,12 +55,12 @@ public class UserCLI {
 	private void createHelper(List<String> userAttributes) {
 		if(userAttributes.size() < 6) {
 			System.out.println("Insufficient arguments for command \"user create\"");
-			System.out.println("Try \"user create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("user", "create");
 			return;
 		}
 		if(userAttributes.size() > 6) {
 			System.out.println("Too many arguments for command \"user create\"");
-			System.out.println("Try \"user create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("user", "create");
 			return;
 		}
 		userType = userAttributes.get(0).trim();
@@ -73,7 +73,7 @@ public class UserCLI {
 			phoneNumber = Long.parseLong(userAttributes.get(5).trim());
 		} catch(Exception e) {
 			System.out.println(">> Invalid format for 6th argument \"phonenumber\"");
-			System.out.println(">> Try \"user create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("user", "create");
 		}
 		User user = new User(userType, userName, passWord, firstName, lastName, phoneNumber);
 		User createdUser;
@@ -113,22 +113,22 @@ public class UserCLI {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-		setMap(listAttributesMap,null,null,null,null);
+		setMap(listAttributesMap, null, null, null, null);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-		FeedBackPrinter.printUserHelp("list");
+			FeedBackPrinter.printUserHelp("list");
 		} else if(arguments.size() == 2) {
-			setMap(listAttributesMap,"20","1","id",null);
+			setMap(listAttributesMap, "20", "1", "id", null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-p")) {
 				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) {
 					return;
 				}
-				setMap(listAttributesMap,String.valueOf(pageLength),"1","id",null);
+				setMap(listAttributesMap, String.valueOf(pageLength), "1", "id", null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				searchText = arguments.get(3).trim();
-				setMap(listAttributesMap,null,null,null,searchText);
+				setMap(listAttributesMap, null, null, null, searchText);
 				listHelper(listAttributesMap);
 			} else {
 				FeedBackPrinter.printInvalidExtension("user");
@@ -139,17 +139,17 @@ public class UserCLI {
 			if(arguments.get(2).equals("-p")) {
 				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
 				if((pageNumber = validateNumber(arguments.get(4), "PageNumber")) < 0) return;
-				setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),"id",null);
+				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), "id", null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(userAttributes.contains(attribute)) {
-					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
+					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
 					listHelper(listAttributesMap);
 				} else {
-					FeedBackPrinter.printNonSearchableAttribute("user",userAttributes);
+					FeedBackPrinter.printNonSearchableAttribute("user", userAttributes);
 				}
 			} else {
 				FeedBackPrinter.printInvalidExtension("user");
@@ -162,14 +162,14 @@ public class UserCLI {
 				if(userAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap,String.valueOf(pageLength),"1",attribute,"'"+searchText+"'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
-						System.out.println("Try \"user list help\" for proper syntax");
+						FeedBackPrinter.printHelpMessage("user", "list");
 					}
 				} else {
-					FeedBackPrinter.printNonSearchableAttribute("user",userAttributes);
+					FeedBackPrinter.printNonSearchableAttribute("user", userAttributes);
 				}
 			} else {
 				FeedBackPrinter.printInvalidExtension("user");
@@ -183,13 +183,13 @@ public class UserCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("user");
 					}
 				} else {
-					FeedBackPrinter.printNonSearchableAttribute("user",userAttributes);
+					FeedBackPrinter.printNonSearchableAttribute("user", userAttributes);
 				}
 			} else {
 				FeedBackPrinter.printInvalidExtension("user");
@@ -248,7 +248,7 @@ public class UserCLI {
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
 			System.out.println(">> For every Edit operation the first argument must be user's ID");
-			System.out.println(">> Try \"user edit help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("user", "edit");
 		} else {
 			if(! command.substring(10).matches(editCommandRegex)) {
 				System.out.println(">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
@@ -269,7 +269,7 @@ public class UserCLI {
 			id = Integer.parseInt(editAttributes.get(1).trim());
 		} catch(Exception e) {
 			System.out.println(">> Id must be a Number!");
-			System.out.println(">> Please Try \"user edit help\" for proper Syntax");
+			FeedBackPrinter.printHelpMessage("user", "edit");
 		}
 		user.setId(id);
 		for(int index = 2 ; index < editAttributes.size() ; index = index + 2) {
@@ -334,7 +334,7 @@ public class UserCLI {
 					} else if(userService.delete(arguments.get(2)) == - 1) {
 						System.out.println(">> User Deletion Failed!!!");
 						System.out.println(">> Please check the username you have entered!!!");
-						System.out.println("Try \"user delete help\" for proper syntax");
+						FeedBackPrinter.printHelpMessage("user", "delete");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled");
@@ -343,7 +343,7 @@ public class UserCLI {
 				}
 			} else {
 				System.out.println(">> Invalid format for username!!!");
-				System.out.println("Try \"user delete help\" for proper syntax");
+				FeedBackPrinter.printHelpMessage("user", "delete");
 			}
 		}
 	}
@@ -359,9 +359,8 @@ public class UserCLI {
 		return result;
 	}
 
-	private void setMap(HashMap<String,String> listAttributesMap,String PageLength,String PageNumber,String Attribute,String SearchText)
-	{
-		listAttributesMap.put("Pagelength",PageLength);
+	private void setMap(HashMap<String, String> listAttributesMap, String PageLength, String PageNumber, String Attribute, String SearchText) {
+		listAttributesMap.put("Pagelength", PageLength);
 		listAttributesMap.put("Pagenumber", PageNumber);
 		listAttributesMap.put("Attribute", Attribute);
 		listAttributesMap.put("Searchtext", SearchText);

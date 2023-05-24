@@ -21,7 +21,7 @@ public class PurchaseMain {
 		do {
 			System.out.print("> ");
 			String command = scanner.nextLine();
-			List<String> commandList=splitCommand(command);
+			List<String> commandList = splitCommand(command);
 			String commandString = commandList.get(0);
 			String operationString = "";
 			if(commandList.size() > 1) operationString = commandList.get(1);
@@ -70,8 +70,8 @@ public class PurchaseMain {
 			}
 		} while(true);
 	}
-	private static List<String> splitCommand(String command)
-	{
+
+	private static List<String> splitCommand(String command) {
 		String[] parts;
 		String[] commandlet;
 		if(command.contains(",")) {

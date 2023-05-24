@@ -44,12 +44,12 @@ public class UnitCLI {
 	private void createHelper(List<String> unitAttributes) {
 		if(unitAttributes.size() < 4) {
 			System.out.println(">> Insufficient arguments for command \"unit create\"");
-			System.out.println(">> Try \"unit create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("unit", "create");
 			return;
 		}
 		if(unitAttributes.size() > 4) {
 			System.out.println(">> Too many arguments for command \"unit create\"");
-			System.out.println(">> Try \"unit create help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("unit", "create");
 			return;
 		}
 		name = unitAttributes.get(0).trim();
@@ -91,8 +91,7 @@ public class UnitCLI {
 				System.out.println(">> id: " + unit.getId() + ", name: " + unit.getName() + ", code: " + unit.getCode() + ", description: " + unit.getDescription() + ", isdividable: " + unit.getIsDividable());
 			}
 		} else {
-			System.out.println(">> Invalid command format!!!");
-			System.out.println(">> Try \"unit list help\" for proper syntax");
+			FeedBackPrinter.printInvalidFormat("unit");
 		}
 	}
 
@@ -117,14 +116,14 @@ public class UnitCLI {
 			editHelper(unitAttributes);
 		} else if(arguments.size() > 12) {
 			System.out.println(">> Too many Arguments for command \"unit edit\"");
-			System.out.println(">> Try \"unit edit help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("unit", "edit");
 		} else if(arguments.size() < 6) {
 			System.out.println(">> Insufficient arguments for command \"unit edit\"");
 			System.out.println(">> Try \"unit edit help\" for proper syntax");
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
 			System.out.println(">> For every Edit operation the first argument must be unit's ID");
-			System.out.println(">> Try \"unit edit help\" for proper syntax");
+			FeedBackPrinter.printHelpMessage("unit", "edit");
 		} else {
 			if(! command.substring(10).matches(editCommandRegex)) {
 				System.out.println(">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
@@ -146,7 +145,7 @@ public class UnitCLI {
 			id = Integer.parseInt(editAttributes.get(1).trim());
 		} catch(Exception e) {
 			System.out.println(">> Id must be a number");
-			System.out.println(">> Please Try \"unit edit help\" for proper Syntax");
+			FeedBackPrinter.printHelpMessage("unit", "edit");
 			return;
 		}
 		unit.setId(id);
@@ -167,7 +166,7 @@ public class UnitCLI {
 				unit.setIsDividable(isDividable);
 			} else {
 				System.out.println(">> Invalid attribute given!!!: " + editAttributes.get(index));
-				System.out.println(">> Try \"unit edit help\" for proper Syntax");
+				FeedBackPrinter.printHelpMessage("unit", "edit");
 				return;
 			}
 		}
@@ -207,7 +206,7 @@ public class UnitCLI {
 					} else if(unitService.delete(arguments.get(2)) == - 1) {
 						System.out.println(">> Unit deletion failed!!!");
 						System.out.println(">> Please check the unitcode you have entered!!!");
-						System.out.println("Try \"unit delete help\" for proper syntax");
+						FeedBackPrinter.printHelpMessage("unit", "delete");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled");
@@ -216,7 +215,7 @@ public class UnitCLI {
 				}
 			} else {
 				System.out.println(">> Invalid format for unitCode!!!");
-				System.out.println("Try \"unit delete help\" for proper syntax");
+				FeedBackPrinter.printHelpMessage("unit", "delete");
 			}
 		}
 	}
