@@ -21,7 +21,6 @@ public class AdminMain {
 	 */
 	public static void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException {
 		scanner = new Scanner(System.in);
-		System.out.println(" TO THE BILLING SOFTWARE_____________________");
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
 			System.out.print("> ");

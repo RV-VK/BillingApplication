@@ -94,7 +94,7 @@ public class LoginCLI {
 				return;
 			}
 			if(userType != null) {
-				System.out.print("\n\n\n\t\t\t\t\t____________WELCOME " + userName);
+				System.out.print("\n\n\n\t\t\t\t\t____________WELCOME " + userName+" TO THE BILLING SOFTWARE_____________________");
 				/**
 				 * Split control Here
 				 */
