@@ -9,6 +9,10 @@ import Service.UserServiceImplementation;
 import java.util.*;
 
 public class UserCLI {
+	private final UserService userService = new UserServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final List<String> userAttributes = Arrays.asList("id", "usertype", "username", "password", "firstname", "lastname", "phonenumber");
 	private int id;
 	private String userType;
 	private String userName;
@@ -21,11 +25,6 @@ public class UserCLI {
 	private String attribute;
 	private String searchText;
 	private List<User> userList;
-	private final UserService userService = new UserServiceImplementation();
-	private final Scanner scanner = new Scanner(System.in);
-	private final HashMap<String, String> listAttributesMap = new HashMap<>();
-
-	private final List<String> userAttributes = Arrays.asList("id", "usertype", "username", "password", "firstname", "lastname", "phonenumber");
 
 	/**
 	 * This method handles the presentation layer of the Create function.

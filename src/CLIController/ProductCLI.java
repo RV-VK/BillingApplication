@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ProductCLI {
+	private final List<String> productAttributes = Arrays.asList("id", "code", "name", "unitcode", "type", "price", "stock", "costprice");
+	private final ProductService productService = new ProductServiceImplementation();
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final Scanner scanner = new Scanner(System.in);
+	private final String NUMBER_REGEX = "^\\d+(\\.\\d+)?$";
 	private int id;
 	private String code;
 	private String name;
@@ -24,11 +29,6 @@ public class ProductCLI {
 	private String attribute;
 	private String searchText;
 	private List<Product> resultList;
-	private final List<String> productAttributes = Arrays.asList("id", "code", "name", "unitcode", "type", "price", "stock", "costprice");
-	private final ProductService productService = new ProductServiceImplementation();
-	private final HashMap<String, String> listAttributesMap = new HashMap<>();
-	private final Scanner scanner = new Scanner(System.in);
-	private final String NUMBER_REGEX="^\\d+(\\.\\d+)?$";
 
 	/**
 	 * This method handles the presentation layer for the create function.
@@ -280,16 +280,12 @@ public class ProductCLI {
 			return;
 		}
 		for(int index = 2 ; index < editAttributes.size() ; index = index + 2) {
-			try {
-				if(editAttributes.get(index).trim().equals("name")) {
-					product.setName(editAttributes.get(index + 1).trim());
-				} else if(editAttributes.get(index).trim().equals("code") && ! editAttributes.get(index).contains("unitcode")) {
-					product.setCode(editAttributes.get(index + 1).trim());
-				} else if(editAttributes.get(index).trim().equals("unitcode")) {
-					product.setunitcode(editAttributes.get(index + 1).trim());
-				} else if(editAttributes.get(index).trim().equals("type")) {
-					product.setType(editAttributes.get(index + 1).trim());
-				} else if(editAttributes.get(index).trim().equals("stock")) {
+			switch(editAttributes.get(index).trim()) {
+				case "name" -> product.setName(editAttributes.get(index + 1).trim());
+				case "code" -> product.setCode(editAttributes.get(index + 1).trim());
+				case "unitcode" -> product.setunitcode(editAttributes.get(index + 1).trim());
+				case "type" -> product.setType(editAttributes.get(index + 1).trim());
+				case "stock" -> {
 					try {
 						stock = Float.parseFloat(editAttributes.get(index + 1));
 					} catch(Exception e) {
@@ -297,7 +293,8 @@ public class ProductCLI {
 						return;
 					}
 					product.setAvailableQuantity(stock);
-				} else if(editAttributes.get(index).trim().equals("price")) {
+				}
+				case "price" -> {
 					try {
 						price = Double.parseDouble(editAttributes.get(index + 1));
 					} catch(Exception e) {
@@ -305,14 +302,12 @@ public class ProductCLI {
 						return;
 					}
 					product.setPrice(price);
-				} else {
+				}
+				default -> {
 					System.out.println(">> Invalid attribute given!!! : " + editAttributes.get(index));
-					FeedBackPrinter.printHelpMessage("product", "edit");
+					System.out.println(">> Try \"product edit help\" for proper syntax");
 					return;
 				}
-			} catch(IndexOutOfBoundsException e) {
-				System.out.println(">> Edit Attributes should be separated with \":\"\n Try \"product edit help\" for syntax");
-				return;
 			}
 		}
 		Product editedProduct;
