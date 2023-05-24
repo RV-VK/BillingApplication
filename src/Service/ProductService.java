@@ -19,12 +19,7 @@ public interface ProductService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	Product create(Product product)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			UnitCodeViolationException,
-			InvalidTemplateException;
+	Product create(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the ProductDAO object and serves the Count function.
@@ -43,8 +38,7 @@ public interface ProductService {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	List<Product> list(HashMap<String, String> listattributes)
-			throws ApplicationErrorException, PageCountOutOfBoundsException;
+	List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException;
 
 	/**
 	 * This method invokes the Product DAO object and serves the edit function.
@@ -58,12 +52,7 @@ public interface ProductService {
 	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
 	 *                                    table.
 	 */
-	Product edit(Product product)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			UnitCodeViolationException,
-			InvalidTemplateException;
+	Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the ProductDAO object and serves the delete function

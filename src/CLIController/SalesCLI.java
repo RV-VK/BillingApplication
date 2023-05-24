@@ -1,7 +1,9 @@
 package CLIController;
 
 import DAO.ApplicationErrorException;
-import Entity.*;
+import Entity.Product;
+import Entity.Sales;
+import Entity.SalesItem;
 import Service.SalesService;
 import Service.SalesServiceImplementation;
 

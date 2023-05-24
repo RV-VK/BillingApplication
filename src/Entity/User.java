@@ -12,13 +12,7 @@ public class User {
 	public User() {
 	}
 
-	public User(
-			String userType,
-			String userName,
-			String passWord,
-			String firstName,
-			String lastName,
-			long phoneNumber) {
+	public User(String userType, String userName, String passWord, String firstName, String lastName, long phoneNumber) {
 		this.userType = userType;
 		this.userName = userName;
 		this.passWord = passWord;
@@ -27,14 +21,7 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public User(
-			int id,
-			String userType,
-			String userName,
-			String passWord,
-			String firstName,
-			String lastName,
-			long phoneNumber) {
+	public User(int id, String userType, String userName, String passWord, String firstName, String lastName, long phoneNumber) {
 		this.id = id;
 		this.userType = userType;
 		this.userName = userName;
@@ -102,26 +89,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User{"
-				+ "id="
-				+ id
-				+ ", userType='"
-				+ userType
-				+ '\''
-				+ ", userName='"
-				+ userName
-				+ '\''
-				+ ", passWord='"
-				+ passWord
-				+ '\''
-				+ ", firstName='"
-				+ firstName
-				+ '\''
-				+ ", lastName='"
-				+ lastName
-				+ '\''
-				+ ", phoneNumber="
-				+ phoneNumber
-				+ '}';
+		return "User{" + "id=" + id + ", userType='" + userType + '\'' + ", userName='" + userName + '\'' + ", passWord='" + passWord + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", phoneNumber=" + phoneNumber + '}';
 	}
 }

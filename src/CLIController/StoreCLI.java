@@ -24,14 +24,7 @@ public class StoreCLI {
 	 */
 	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> Create store using the following template,\n"
-							+ "     name, phone number, address, gst number\n"
-							+ " \n"
-							+ "\tname  - text, mandatory with 3 to 30 chars\t\n"
-							+ "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\n"
-							+ "\taddress - text, mandatory\n"
-							+ "\tgst number - text, 15 digit, mandatory");
+			System.out.println(">> Create store using the following template,\n" + "     name, phone number, address, gst number\n" + " \n" + "\tname  - text, mandatory with 3 to 30 chars\t\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\n" + "\taddress - text, mandatory\n" + "\tgst number - text, 15 digit, mandatory");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -79,8 +72,7 @@ public class StoreCLI {
 			System.out.println(e.getMessage());
 			return;
 		}
-		if(createdStore == null)
-			System.out.println(">> Store already exists!!");
+		if(createdStore == null) System.out.println(">> Store already exists!!");
 		else if(createdStore.getName() != null) {
 			System.out.println(">> Store Created Successfully!!!");
 		}
@@ -95,21 +87,12 @@ public class StoreCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^name:\\s*([A-Za-z0-9\\s]+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> Edit store uing the following template\t\n"
-							+ "\n"
-							+ "name, phone number, address, gst number\n"
-							+ " \n"
-							+ "\tname  - text, mandatory with 3 to 30 chars\t\n"
-							+ "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\n"
-							+ "\taddress - text, mandatory\n"
-							+ "\tgst number - text, 15 digit, mandatory");
+			System.out.println(">> Edit store uing the following template\t\n" + "\n" + "name, phone number, address, gst number\n" + " \n" + "\tname  - text, mandatory with 3 to 30 chars\t\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\n" + "\taddress - text, mandatory\n" + "\tgst number - text, 15 digit, mandatory");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
 			if(! parameters.matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"unit edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"unit edit help for proper syntax!");
 				return;
 			}
 			List<String> storeAttributes = List.of(parameters.split("[,:]"));
@@ -122,8 +105,7 @@ public class StoreCLI {
 			System.out.println(">> Try \"store edit help\" for proper syntax");
 		} else {
 			if(! command.substring(11).matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"store edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"store edit help for proper syntax!");
 				return;
 			}
 			editHelper(arguments.subList(2, arguments.size()));
@@ -186,8 +168,7 @@ public class StoreCLI {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
 			System.out.println(">> delete store using the following template\n" + "\tstore delete \n");
 		} else if(arguments.size() == 2) {
-			System.out.print(
-					"Are you sure want to delete the Store? This will delete all you product/purchase/sales data y/n ? : ");
+			System.out.print("Are you sure want to delete the Store? This will delete all you product/purchase/sales data y/n ? : ");
 			String prompt = scanner.nextLine();
 			if(prompt.equals("y")) {
 				System.out.print(">> Enter admin password to delete the store: ");

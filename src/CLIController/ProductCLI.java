@@ -6,7 +6,10 @@ import Entity.Product;
 import Service.ProductService;
 import Service.ProductServiceImplementation;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 public class ProductCLI {
 	private int id;
@@ -21,8 +24,7 @@ public class ProductCLI {
 	private String attribute;
 	private String searchText;
 	private List<Product> resultList;
-	private final List<String> productAttributes =
-			Arrays.asList("id", "code", "name", "unitcode", "type", "price", "stock", "costprice");
+	private final List<String> productAttributes = Arrays.asList("id", "code", "name", "unitcode", "type", "price", "stock", "costprice");
 	private final ProductService productService = new ProductServiceImplementation();
 	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 	private final Scanner scanner = new Scanner(System.in);
@@ -35,21 +37,7 @@ public class ProductCLI {
 	 */
 	public void Create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> create product using the following template\n"
-							+ ">> code, name, unit, type, price, stock\n"
-							+ "\t\n"
-							+ "\tcode - text, min - 2 - 6, mandatory\n"
-							+ "\tname - text, min 3 - 30 char, mandatory\n"
-							+ "\tunitcode - text, kg/l/piece/combo, mandatory\n"
-							+ "\ttype - text, between enumerated values, mandatory \n"
-							+ "\tprice - number, mandatory\n"
-							+ "\tstock - number, default 0\n"
-							+ "\t\n"
-							+ ">\tproduct create code, productname, unitcode, type, price, stock\n"
-							+ "                         or\n"
-							+ "> product create :enter\n"
-							+ "code, name, unitcode, type, price, stock\n");
+			System.out.println(">> create product using the following template\n" + ">> code, name, unit, type, price, stock\n" + "\t\n" + "\tcode - text, min - 2 - 6, mandatory\n" + "\tname - text, min 3 - 30 char, mandatory\n" + "\tunitcode - text, kg/l/piece/combo, mandatory\n" + "\ttype - text, between enumerated values, mandatory \n" + "\tprice - number, mandatory\n" + "\tstock - number, default 0\n" + "\t\n" + ">\tproduct create code, productname, unitcode, type, price, stock\n" + "                         or\n" + "> product create :enter\n" + "code, name, unitcode, type, price, stock\n");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -118,21 +106,13 @@ public class ProductCLI {
 	 * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in Product table.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public void list(List<String> arguments)
-			throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributesMap.put("Pagelength", null);
 		listAttributesMap.put("Pagenumber", null);
 		listAttributesMap.put("Attribute", null);
 		listAttributesMap.put("Searchtext", null);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> List product with the following options\n"
-							+ ">> product list - will list all the products default to maximum upto 20 products\n"
-							+ ">> product list -p 10 - pageable list shows 10 products as default\n"
-							+ ">> product list -p 10 3 - pagable list shows 10 products in 3rd page, ie., product from 21 to 30\n"
-							+ ">> product list -s searchtext - search the product with the given search text in all the searchable attributes\n"
-							+ ">> product list -s <attr>: searchtext - search the product with the given search text in all the given attribute\n"
-							+ ">> product list -s <attr>: searchtext -p 10 6 - pagable list shows 10 products in 6th page with the given search text in the given attribute\n");
+			System.out.println(">> List product with the following options\n" + ">> product list - will list all the products default to maximum upto 20 products\n" + ">> product list -p 10 - pageable list shows 10 products as default\n" + ">> product list -p 10 3 - pagable list shows 10 products in 3rd page, ie., product from 21 to 30\n" + ">> product list -s searchtext - search the product with the given search text in all the searchable attributes\n" + ">> product list -s <attr>: searchtext - search the product with the given search text in all the given attribute\n" + ">> product list -s <attr>: searchtext -p 10 6 - pagable list shows 10 products in 6th page with the given search text in the given attribute\n");
 		} else if(arguments.size() == 2) {
 			listAttributesMap.put("Pagelength", "20");
 			listAttributesMap.put("Pagenumber", "1");
@@ -278,21 +258,7 @@ public class ProductCLI {
 				System.out.println(">> Given SearchText does not exist!!!");
 			}
 			for(Product resultProduct: resultList) {
-				System.out.println(
-						">> id: "
-								+ resultProduct.getId()
-								+ ", code: "
-								+ resultProduct.getCode()
-								+ ", name: "
-								+ resultProduct.getName()
-								+ ", type: "
-								+ resultProduct.getType()
-								+ ", unitcode: "
-								+ resultProduct.getunitcode()
-								+ ", stock: "
-								+ resultProduct.getAvailableQuantity()
-								+ ", price: "
-								+ resultProduct.getPrice());
+				System.out.println(">> id: " + resultProduct.getId() + ", code: " + resultProduct.getCode() + ", name: " + resultProduct.getName() + ", type: " + resultProduct.getType() + ", unitcode: " + resultProduct.getunitcode() + ", stock: " + resultProduct.getAvailableQuantity() + ", price: " + resultProduct.getPrice());
 			}
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -323,40 +289,17 @@ public class ProductCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> Edit product using following template. Copy the product data from the list, edit the attribute values. \n"
-							+ ">> id: <id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>\n"
-							+ "\n"
-							+ ">> You can also restrict the product data by editable attributes. Id attribute is mandatory for all the edit operation.\n"
-							+ ">> id: <id - 6>, name: <name-edited>, unitcode: <unitcode-edited>\n"
-							+ "\n"
-							+ ">> You can not give empty or null values to the mandatory attributes.\n"
-							+ ">> id: <id - 6>, name: , unitcode: null\n"
-							+ ">>\n"
-							+ " \n"
-							+ " \tid\t - number, mandatory\t\n"
-							+ "\tname - text, min 3 - 30 char, mandatory\n"
-							+ "\tunitcode - text, kg/l/piece/combo, mandatory\n"
-							+ "\ttype - text, between enumerated values, mandatory \n"
-							+ "\tcostprice - numeric, mandatory\n"
-							+ "\t\n"
-							+ ">\tproduct edit id:<id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>\n"
-							+ "                         or\n"
-							+ "> product edit :enter\n"
-							+ "> id: <id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>");
+			System.out.println(">> Edit product using following template. Copy the product data from the list, edit the attribute values. \n" + ">> id: <id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>\n" + "\n" + ">> You can also restrict the product data by editable attributes. Id attribute is mandatory for all the edit operation.\n" + ">> id: <id - 6>, name: <name-edited>, unitcode: <unitcode-edited>\n" + "\n" + ">> You can not give empty or null values to the mandatory attributes.\n" + ">> id: <id - 6>, name: , unitcode: null\n" + ">>\n" + " \n" + " \tid\t - number, mandatory\t\n" + "\tname - text, min 3 - 30 char, mandatory\n" + "\tunitcode - text, kg/l/piece/combo, mandatory\n" + "\ttype - text, between enumerated values, mandatory \n" + "\tcostprice - numeric, mandatory\n" + "\t\n" + ">\tproduct edit id:<id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>\n" + "                         or\n" + "> product edit :enter\n" + "> id: <id - 6>, name: <name-edited>, unitcode: <unitcode>,  type: <type>, price: <price>");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
 			if(! parameters.matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"product edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"product edit help for proper syntax!");
 				return;
 			}
 			List<String> productAttributes = List.of(parameters.split("[,:]"));
 			editHelper(productAttributes);
-		} else if(arguments.size() > 14) {
-			System.out.println(">>Too many Arguments for command \"product edit\"");
-		} else if(arguments.size() < 6) {
+		} else if(arguments.size() != 14) {
 			System.out.println(">>Insufficient Arguments for command \"product edit\"");
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
@@ -364,8 +307,7 @@ public class ProductCLI {
 			System.out.println(">> Try \"product edit help\" for proper syntax");
 		} else {
 			if(! command.substring(13).matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"product edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"product edit help for proper syntax!");
 				return;
 			}
 			editHelper(arguments.subList(2, arguments.size()));
@@ -378,6 +320,8 @@ public class ProductCLI {
 	 * @param editAttributes Attributes of product to be edited.
 	 */
 	private void editHelper(List<String> editAttributes) {
+		if(editAttributes.size() < 12)
+			System.out.println(">> Insufficient arguments for edit!!\n Try \"product edit help\" for proper syntax!");
 		Product product = new Product();
 		try {
 			id = Integer.parseInt(editAttributes.get(1).trim());
@@ -402,8 +346,8 @@ public class ProductCLI {
 				} else if(editAttributes.get(index).trim().equals("type")) {
 					product.setType(editAttributes.get(index + 1).trim());
 				} else if(editAttributes.get(index).trim().equals("stock")) {
-					try{
-						stock=Float.parseFloat(editAttributes.get(index+1));
+					try {
+						stock = Float.parseFloat(editAttributes.get(index + 1));
 					} catch(Exception e) {
 						System.out.println("Stock must be numeric!!");
 						return;
@@ -454,15 +398,7 @@ public class ProductCLI {
 		String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						"> product delete help \n"
-								+ ">> delete product using the following template\n"
-								+ "\t\n"
-								+ "\t\tproductid - numeric, existing\n"
-								+ ">> product delete -c <code>\n"
-								+ "\t \n"
-								+ "\n"
-								+ "> product delete <id>");
+				System.out.println("> product delete help \n" + ">> delete product using the following template\n" + "\t\n" + "\t\tproductid - numeric, existing\n" + ">> product delete -c <code>\n" + "\t \n" + "\n" + "> product delete <id>");
 			} else if(arguments.get(2).matches(numberRegex)) {
 				deleteHelper(arguments.get(2));
 			} else {

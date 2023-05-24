@@ -87,34 +87,17 @@ public class PurchaseCLI {
 				System.out.println(e.getMessage());
 			}
 			if(createdPurchase.getDate() != null) {
-				System.out.println(
-						"**********************************************************************************");
-				System.out.println(
-						"\t\tPURCHASE BILL "
-								+ createdPurchase.getId()
-								+ "\t\tINVOICE NO "
-								+ createdPurchase.getInvoice());
-				System.out.println(
-						"**********************************************************************************");
+				System.out.println("**********************************************************************************");
+				System.out.println("\t\tPURCHASE BILL " + createdPurchase.getId() + "\t\tINVOICE NO " + createdPurchase.getInvoice());
+				System.out.println("**********************************************************************************");
 				System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
-				System.out.println(
-						"----------------------------------------------------------------------------------");
+				System.out.println("----------------------------------------------------------------------------------");
 				for(int j = 0 ; j < createdPurchase.getPurchaseItemList().size() ; j++) {
-					System.out.printf(
-							"%d\t\t%-15s\t\t\t%.1f\t\t%.2f\t\t%.2f%n",
-							j + 1,
-							createdPurchase.getPurchaseItemList().get(j).getProduct().getName(),
-							createdPurchase.getPurchaseItemList().get(j).getQuantity(),
-							createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice(),
-							(createdPurchase.getPurchaseItemList().get(j).getQuantity()
-									* createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice()));
+					System.out.printf("%d\t\t%-15s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", j + 1, createdPurchase.getPurchaseItemList().get(j).getProduct().getName(), createdPurchase.getPurchaseItemList().get(j).getQuantity(), createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice(), (createdPurchase.getPurchaseItemList().get(j).getQuantity() * createdPurchase.getPurchaseItemList().get(j).getUnitPurchasePrice()));
 				}
-				System.out.println(
-						"----------------------------------------------------------------------------------");
-				System.out.printf(
-						"GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdPurchase.getGrandTotal());
-				System.out.println(
-						"----------------------------------------------------------------------------------");
+				System.out.println("----------------------------------------------------------------------------------");
+				System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdPurchase.getGrandTotal());
+				System.out.println("----------------------------------------------------------------------------------");
 			} else
 				System.out.println(">> The product code you have entered do not exist!! Please check the product codes");
 		}
@@ -130,19 +113,7 @@ public class PurchaseCLI {
 		int purchaseCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						"Count Purchase using the following Template\n"
-								+ "> purchase count -d <date>\n"
-								+ "\n"
-								+ ">> count : <number>\n"
-								+ "\n"
-								+ "> purchase count\n"
-								+ "\n"
-								+ ">> count : <number>\n"
-								+ "\n"
-								+ "> purchase count -c <category>\n"
-								+ "\n"
-								+ ">> count : <number>\n");
+				System.out.println("Count Purchase using the following Template\n" + "> purchase count -d <date>\n" + "\n" + ">> count : <number>\n" + "\n" + "> purchase count\n" + "\n" + ">> count : <number>\n" + "\n" + "> purchase count -c <category>\n" + "\n" + ">> count : <number>\n");
 			} else {
 				System.out.println(">> Invalid command given!!!");
 				System.out.println(">> Try \"purchase count help\" for proper syntax!!");
@@ -180,28 +151,15 @@ public class PurchaseCLI {
 	 * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in Purchase table.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public void List(List<String> arguments)
-			throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public void List(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributesMap.put("Pagelength", null);
 		listAttributesMap.put("Pagenumber", null);
 		listAttributesMap.put("Attribute", null);
 		listAttributesMap.put("Searchtext", null);
-		if(arguments.size() == 3)
-			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						">> List purchase with the following options\n"
-								+ ">> purchase list - will list all the purchases default to maximum upto 20 purchases\n"
-								+ ">> purchase list -p 10 - pageable list shows 10 purchases as default\n"
-								+ ">> purchase list -p 10 3 - pageable list shows 10 purchases in 3rd page, ie., purchase from 21 to 30\n"
-								+ "\n"
-								+ ">> Use only the following attributes: id, date, invoice\n"
-								+ ">> purchase list -s <attr>: searchtext - search the purchase with the given search text in all the given attribute\n"
-								+ ">> purchase list -s <attr>: searchtext -p 10 6 - pageable list shows 10 purchases in 6th page with the given search text in the given attribute\n"
-								+ "\n"
-								+ "> purchase list -s <date> : <23-03-2023> -p 5 2 \n"
-								+ "> purchase list -s <invoice> : <785263>");
-				return;
-			}
+		if(arguments.size() == 3) if(arguments.get(2).equals("help")) {
+			System.out.println(">> List purchase with the following options\n" + ">> purchase list - will list all the purchases default to maximum upto 20 purchases\n" + ">> purchase list -p 10 - pageable list shows 10 purchases as default\n" + ">> purchase list -p 10 3 - pageable list shows 10 purchases in 3rd page, ie., purchase from 21 to 30\n" + "\n" + ">> Use only the following attributes: id, date, invoice\n" + ">> purchase list -s <attr>: searchtext - search the purchase with the given search text in all the given attribute\n" + ">> purchase list -s <attr>: searchtext -p 10 6 - pageable list shows 10 purchases in 6th page with the given search text in the given attribute\n" + "\n" + "> purchase list -s <date> : <23-03-2023> -p 5 2 \n" + "> purchase list -s <invoice> : <785263>");
+			return;
+		}
 		if(arguments.size() == 2) {
 			listAttributesMap.put("Pagelength", "20");
 			listAttributesMap.put("Pagenumber", "1");
@@ -345,24 +303,10 @@ public class PurchaseCLI {
 				return;
 			}
 			for(Purchase purchase: purchaseList) {
-				System.out.print(
-						"id: "
-								+ purchase.getId()
-								+ ", date: "
-								+ purchase.getDate()
-								+ ", invoice: "
-								+ purchase.getInvoice()
-								+ ", ");
+				System.out.print("id: " + purchase.getId() + ", date: " + purchase.getDate() + ", invoice: " + purchase.getInvoice() + ", ");
 				System.out.print("[");
 				for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
-					System.out.print(
-							"[name: "
-									+ purchaseItem.getProduct().getName()
-									+ ", quantity: "
-									+ purchaseItem.getQuantity()
-									+ ", price: "
-									+ purchaseItem.getUnitPurchasePrice()
-									+ "], ");
+					System.out.print("[name: " + purchaseItem.getProduct().getName() + ", quantity: " + purchaseItem.getQuantity() + ", price: " + purchaseItem.getUnitPurchasePrice() + "], ");
 				}
 				System.out.print(purchase.getGrandTotal() + " ");
 				System.out.print("]");
@@ -384,12 +328,7 @@ public class PurchaseCLI {
 		String numberRegex = "^[0-9]{1,10}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						">> Delete purchase using following command \n"
-								+ "\n"
-								+ ">> purchase delete <invoice>\n"
-								+ "\t\tinvoice - numeric, mandatory\n"
-								+ "\t\t");
+				System.out.println(">> Delete purchase using following command \n" + "\n" + ">> purchase delete <invoice>\n" + "\t\tinvoice - numeric, mandatory\n" + "\t\t");
 				return;
 			} else if(arguments.get(2).matches(numberRegex)) {
 				System.out.println(">> Are you sure want to delete the Purchase Entry y/n ? : ");

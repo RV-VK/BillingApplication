@@ -15,12 +15,7 @@ public class ProductServiceImplementation implements ProductService {
 	private final String CODE_REGEX = "^[a-zA-Z0-9]{2,6}$";
 	private final String UNIT_CODE_REGEX = "^[a-zA-Z]{1,4}$";
 
-	public Product create(Product product)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			UnitCodeViolationException,
-			InvalidTemplateException  {
+	public Product create(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException {
 		validate(product);
 		return productDAO.create(product);
 	}
@@ -29,8 +24,7 @@ public class ProductServiceImplementation implements ProductService {
 		return productDAO.count();
 	}
 
-	public List<Product> list(HashMap<String, String> listattributes)
-			throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<Product> productList;
 		if(Collections.frequency(listattributes.values(), null) == 0 || Collections.frequency(listattributes.values(), null) == 1) {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
@@ -38,20 +32,14 @@ public class ProductServiceImplementation implements ProductService {
 			int offset = (pageLength * pageNumber) - pageLength;
 			productList = productDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
 			return productList;
-		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1
-				&& listattributes.get("Searchtext") != null) {
+		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
 			productList = productDAO.list(listattributes.get("Searchtext"));
 			return productList;
 		}
 		return null;
 	}
 
-	public Product edit(Product product)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			UnitCodeViolationException,
-			InvalidTemplateException {
+	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException {
 		validate(product);
 		return productDAO.edit(product);
 	}

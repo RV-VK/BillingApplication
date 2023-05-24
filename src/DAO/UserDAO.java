@@ -49,8 +49,7 @@ public interface UserDAO {
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
 
-	List<User> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException;
+	List<User> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException;
 
 	/**
 	 * This method updates the attributes of the User entry in the user table.

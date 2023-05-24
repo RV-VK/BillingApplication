@@ -14,16 +14,14 @@ public class StoreServiceImplementation implements StoreService {
 	private final String GST_NUMBER_REGEX = "^[a-zA-Z0-9]{15}$";
 
 	@Override
-	public Store create(Store store)
-			throws SQLException, ApplicationErrorException, InvalidTemplateException {
+	public Store create(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		validate(store);
 		return storeDAO.create(store);
 
 	}
 
 	@Override
-	public Store edit(Store store)
-			throws SQLException, ApplicationErrorException, InvalidTemplateException {
+	public Store edit(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		validate(store);
 		return storeDAO.edit(store);
 	}

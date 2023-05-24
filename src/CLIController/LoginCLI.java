@@ -23,28 +23,13 @@ public class LoginCLI {
 	/**
 	 * Login View Main
 	 **/
-	public static void main(String args[])
-			throws SQLException,
-			UniqueConstraintException,
-			ApplicationErrorException,
-			PageCountOutOfBoundsException, InvalidTemplateException {
+	public static void main(String args[]) throws SQLException, UniqueConstraintException, ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException {
 		if(loginService.checkIfInitialSetup()) {
 
-			System.out.println(
-					"\t\t\t\t\t\t*********************************************************\n"
-							+ "\t\t\t\t\t\t*********************   WELCOME   ***********************\n"
-							+ "\t\t\t\t\t\t*********************************************************\n\n");
-			System.out.println(
-					"> Welcome to the Billing software setup. You have to create admin user to continue with the setup.\n\n");
+			System.out.println("\t\t\t\t\t\t*********************************************************\n" + "\t\t\t\t\t\t*********************   WELCOME   ***********************\n" + "\t\t\t\t\t\t*********************************************************\n\n");
+			System.out.println("> Welcome to the Billing software setup. You have to create admin user to continue with the setup.\n\n");
 			do {
-				System.out.println(">> create user using following template\n"
-						+ ">>  usertype, username,  password, first name, last name, phone number\n"
-						+ "\tusertype - text, purchase/sales, mandatory\n"
-						+ "\tusername - text, min 3 - 30 char, mandatory\n"
-						+ "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n"
-						+ "\tfirstname - text, mandatory with 3 to 30 chars\n"
-						+ "\tlastname  - text, optional\n"
-						+ "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t\n");
+				System.out.println(">> create user using following template\n" + ">>  usertype, username,  password, first name, last name, phone number\n" + "\tusertype - text, purchase/sales, mandatory\n" + "\tusername - text, min 3 - 30 char, mandatory\n" + "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n" + "\tfirstname - text, mandatory with 3 to 30 chars\n" + "\tlastname  - text, optional\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t\n");
 				System.out.println("\n");
 				System.out.print(">> Enter the Admin Username: ");
 				userName = scanner.nextLine();
@@ -69,14 +54,17 @@ public class LoginCLI {
 					}
 				}
 				User user = new User("Admin", userName, passWord, firstName, lastName, phoneNumber);
-				User createdUser = loginService.createUser(user);
+				User createdUser;
+				try {
+					createdUser = loginService.createUser(user);
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					continue;
+				}
 				if(createdUser != null) {
 					System.out.println(">> Admin Created Successfully!!");
 					System.out.println(">> You need to Login to Continue to the Billing Software Setup");
 					Login();
-				} else {
-					System.out.println("\n\n>> Invalid format of attributes given for user!!");
-					System.out.println(">> Please Try Again!!\n\n");
 				}
 			} while(true);
 		} else {
@@ -91,8 +79,7 @@ public class LoginCLI {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	private static void Login()
-			throws SQLException, PageCountOutOfBoundsException, ApplicationErrorException {
+	private static void Login() throws SQLException, PageCountOutOfBoundsException, ApplicationErrorException {
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");
@@ -111,12 +98,9 @@ public class LoginCLI {
 				/**
 				 * Split control Here
 				 */
-				if(userType.equalsIgnoreCase("Admin"))
-					AdminMain.AdminView();
-				else if(userType.equalsIgnoreCase("Sales"))
-					SalesMain.SalesView();
-				else if(userType.equalsIgnoreCase("Purchase"))
-					PurchaseMain.PurchaseView();
+				if(userType.equalsIgnoreCase("Admin")) AdminMain.AdminView();
+				else if(userType.equalsIgnoreCase("Sales")) SalesMain.SalesView();
+				else if(userType.equalsIgnoreCase("Purchase")) PurchaseMain.PurchaseView();
 			} else {
 				System.out.println(">> Login credentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.");
 			}

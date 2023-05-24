@@ -58,16 +58,6 @@ public class Sales {
 
 	@Override
 	public String toString() {
-		return "Sales{"
-				+ "id="
-				+ id
-				+ ", date='"
-				+ date
-				+ '\''
-				+ ", salesItemList="
-				+ salesItemList
-				+ ", grandTotal="
-				+ grandTotal
-				+ '}';
+		return "Sales{" + "id=" + id + ", date='" + date + '\'' + ", salesItemList=" + salesItemList + ", grandTotal=" + grandTotal + '}';
 	}
 }

@@ -38,8 +38,7 @@ public interface SalesDAO {
 	 * @return List - Sales.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	List<Sales> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException;
+	List<Sales> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException;
 
 	/**
 	 * This method lists the Entries from the Sales and SalesItem table based on the given search-text.

@@ -18,19 +18,14 @@ public class LoginServiceImplementation implements LoginService {
 	}
 
 	@Override
-	public User createUser(User user)
-			throws UniqueConstraintException,
-			SQLException,
-			ApplicationErrorException,
-			InvalidTemplateException {
+	public User createUser(User user) throws UniqueConstraintException, SQLException, ApplicationErrorException, InvalidTemplateException {
 		UserService userService = new UserServiceImplementation();
 		return userService.create(user);
 	}
 
 
 	@Override
-	public String login(String userName, String passWord)
-			throws SQLException, ApplicationErrorException {
+	public String login(String userName, String passWord) throws SQLException, ApplicationErrorException {
 		return userDAO.login(userName, passWord);
 	}
 

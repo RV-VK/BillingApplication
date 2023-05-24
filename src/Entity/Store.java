@@ -50,11 +50,6 @@ public class Store {
 
 	@Override
 	public String toString() {
-		return "Store{" +
-				"name='" + name + '\'' +
-				", phoneNumber=" + phoneNumber +
-				", address='" + address + '\'' +
-				", gstCode='" + gstCode + '\'' +
-				'}';
+		return "Store{" + "name='" + name + '\'' + ", phoneNumber=" + phoneNumber + ", address='" + address + '\'' + ", gstCode='" + gstCode + '\'' + '}';
 	}
 }

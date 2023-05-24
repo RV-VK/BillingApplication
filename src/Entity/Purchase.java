@@ -13,8 +13,7 @@ public class Purchase {
 	}
 
 
-	public Purchase(
-			int id, String date, int invoice, List<PurchaseItem> purchaseItemList, double grandTotal) {
+	public Purchase(int id, String date, int invoice, List<PurchaseItem> purchaseItemList, double grandTotal) {
 		this.id = id;
 		this.date = date;
 		this.invoice = invoice;
@@ -22,8 +21,7 @@ public class Purchase {
 		this.grandTotal = grandTotal;
 	}
 
-	public Purchase(
-			String date, int invoice, List<PurchaseItem> purchaseItemList, double grandTotal) {
+	public Purchase(String date, int invoice, List<PurchaseItem> purchaseItemList, double grandTotal) {
 		this.date = date;
 		this.invoice = invoice;
 		this.purchaseItemList = purchaseItemList;
@@ -72,18 +70,6 @@ public class Purchase {
 
 	@Override
 	public String toString() {
-		return "Purchase{"
-				+ "id="
-				+ id
-				+ ", date='"
-				+ date
-				+ '\''
-				+ ", invoice="
-				+ invoice
-				+ ", purchaseItemList="
-				+ purchaseItemList
-				+ ", grandTotal="
-				+ grandTotal
-				+ '}';
+		return "Purchase{" + "id=" + id + ", date='" + date + '\'' + ", invoice=" + invoice + ", purchaseItemList=" + purchaseItemList + ", grandTotal=" + grandTotal + '}';
 	}
 }

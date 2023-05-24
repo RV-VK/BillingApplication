@@ -13,11 +13,7 @@ public class ProductDAOImplementation implements ProductDAO {
 
 
 	@Override
-	public Product create(Product product)
-			throws ApplicationErrorException,
-			SQLException,
-			UniqueConstraintException,
-			UnitCodeViolationException {
+	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			PreparedStatement productCreateStatement = productConnection.prepareStatement("INSERT INTO PRODUCT(CODE,NAME,unitcode,TYPE,PRICE,STOCK) VALUES (?,?,?,?,?,?) RETURNING *");
 			setParameters(productCreateStatement, product);
@@ -44,14 +40,11 @@ public class ProductDAOImplementation implements ProductDAO {
 			throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
 		} else if(e.getSQLState().equals("23505")) {
 			if(e.getMessage().contains("product_name"))
-				throw new UniqueConstraintException(
-						">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
+				throw new UniqueConstraintException(">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
 			else
-				throw new UniqueConstraintException(
-						">> Code must be unique!!!\n>> The code you have entered already exists!!!");
+				throw new UniqueConstraintException(">> Code must be unique!!!\n>> The code you have entered already exists!!!");
 		} else {
-			throw new ApplicationErrorException(
-					">> Application has went into an Error!!!\n>>Please Try again");
+			throw new ApplicationErrorException(">> Application has went into an Error!!!\n>>Please Try again");
 		}
 	}
 
@@ -79,13 +72,7 @@ public class ProductDAOImplementation implements ProductDAO {
 	 * @throws SQLException Exception thrown based on SQL syntax.
 	 */
 	private Product getProductFromResultSet(ResultSet resultSet) throws SQLException {
-		return new Product(resultSet.getInt(1),
-				resultSet.getString(2),
-				resultSet.getString(3),
-				resultSet.getString(4),
-				resultSet.getString(5),
-				resultSet.getFloat(6),
-				resultSet.getDouble(7));
+		return new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getFloat(6), resultSet.getDouble(7));
 	}
 
 
@@ -99,42 +86,25 @@ public class ProductDAOImplementation implements ProductDAO {
 			}
 			return count;
 		} catch(Exception e) {
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
 
 	public List<Product> list(String searchText) throws ApplicationErrorException {
 		try {
-			String listQuery = "SELECT * FROM PRODUCT WHERE ( NAME ILIKE '"
-					+ searchText
-					+ "' OR CODE ILIKE '"
-					+ searchText
-					+ "' OR UNITCODE ILIKE '"
-					+ searchText
-					+ "' OR TYPE ILIKE '"
-					+ searchText
-					+ "' OR CAST(ID AS TEXT) ILIKE '"
-					+ searchText
-					+ "' OR CAST(STOCK AS TEXT) ILIKE '"
-					+ searchText
-					+ "' OR CAST(PRICE AS TEXT) ILIKE '"
-					+ searchText
-					+ "' )" + " AND ISDELETED=FALSE";
+			String listQuery = "SELECT * FROM PRODUCT WHERE ( NAME ILIKE '" + searchText + "' OR CODE ILIKE '" + searchText + "' OR UNITCODE ILIKE '" + searchText + "' OR TYPE ILIKE '" + searchText + "' OR CAST(ID AS TEXT) ILIKE '" + searchText + "' OR CAST(STOCK AS TEXT) ILIKE '" + searchText + "' OR CAST(PRICE AS TEXT) ILIKE '" + searchText + "' )" + " AND ISDELETED=FALSE";
 			ResultSet listresultSet = productConnection.createStatement().executeQuery(listQuery);
 			return listHelper(listresultSet);
 		} catch(SQLException e) {
 			e.printStackTrace();
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
 
 	@Override
-	public List<Product> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public List<Product> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		try {
 			String EntryCount = "SELECT COUNT(*) OVER() FROM PRODUCT WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID";
 			String listQuery = "SELECT * FROM PRODUCT WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + "AND ISDELETED=FALSE ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
@@ -153,13 +123,9 @@ public class ProductDAOImplementation implements ProductDAO {
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset) {
 			int pageCount;
-			if(count % pageLength == 0)
-				pageCount = count / pageLength;
-			else
-				pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(
-					">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
-							+ pageCount);
+			if(count % pageLength == 0) pageCount = count / pageLength;
+			else pageCount = (count / pageLength) + 1;
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
 		}
 	}
 
@@ -180,14 +146,11 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			String editQuery =
-					"UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE),STOCK= COALESCE(NULLIF(?,0),STOCK) WHERE ID=? RETURNING *";
+			String editQuery = "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE),STOCK= COALESCE(NULLIF(?,0),STOCK) WHERE ID=? RETURNING *";
 			PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
 			setParameters(editStatement, product);
-			if(product.getPrice() == 0)
-				editStatement.setNull(5, Types.NUMERIC);
-			else
-				editStatement.setDouble(5, product.getPrice());
+			if(product.getPrice() == 0) editStatement.setNull(5, Types.NUMERIC);
+			else editStatement.setDouble(5, product.getPrice());
 			editStatement.setFloat(6, product.getAvailableQuantity());
 			editStatement.setInt(7, product.getId());
 			ResultSet editProductResultSet = editStatement.executeQuery();
@@ -206,12 +169,10 @@ public class ProductDAOImplementation implements ProductDAO {
 			Statement deleteStatement = productConnection.createStatement();
 			if(deleteStatement.executeUpdate("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '%" + parameter + "%'" + "OR CODE='" + parameter + "') AND STOCK=0 ") > 0)
 				return 1;
-			else
-				return - 1;
+			else return - 1;
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
@@ -219,9 +180,7 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
-			ResultSet getProductResultSet =
-					productConnection.createStatement()
-							.executeQuery("SELECT * FROM PRODUCT  WHERE CODE='" + code + "'");
+			ResultSet getProductResultSet = productConnection.createStatement().executeQuery("SELECT * FROM PRODUCT  WHERE CODE='" + code + "'");
 			getProductResultSet.next();
 			return getProductFromResultSet(getProductResultSet);
 		} catch(Exception e) {

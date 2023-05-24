@@ -21,11 +21,7 @@ public interface UserService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table
 	 */
-	User create(User user)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			InvalidTemplateException;
+	User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the count function.
@@ -43,8 +39,7 @@ public interface UserService {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	List<User> list(HashMap<String, String> listattributes)
-			throws ApplicationErrorException, PageCountOutOfBoundsException;
+	List<User> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the Edit function.
@@ -56,11 +51,7 @@ public interface UserService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	User edit(User user)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			InvalidTemplateException;
+	User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the Delete function.

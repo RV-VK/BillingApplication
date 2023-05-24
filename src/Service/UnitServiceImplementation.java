@@ -16,8 +16,7 @@ public class UnitServiceImplementation implements UnitService {
 
 
 	@Override
-	public Unit create(Unit unit)
-			throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
 		validate(unit);
 		return unitDAO.create(unit);
 	}
@@ -30,8 +29,7 @@ public class UnitServiceImplementation implements UnitService {
 
 
 	@Override
-	public Unit edit(Unit unit)
-			throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public Unit edit(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
 		validate(unit);
 		return unitDAO.edit(unit);
 	}

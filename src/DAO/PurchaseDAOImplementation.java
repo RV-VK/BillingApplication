@@ -47,45 +47,37 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 		}
 	}
 
-	private void setPurchase(PreparedStatement statement, Purchase purchase)
-			throws SQLException {
+	private void setPurchase(PreparedStatement statement, Purchase purchase) throws SQLException {
 		statement.setDate(1, Date.valueOf(purchase.getDate()));
 		statement.setInt(2, purchase.getInvoice());
 		statement.setDouble(3, purchase.getGrandTotal());
 	}
 
-	private void setPurchaseItems(
-			PreparedStatement statement, PurchaseItem purchaseItem, Purchase purchase)
-			throws SQLException {
+	private void setPurchaseItems(PreparedStatement statement, PurchaseItem purchaseItem, Purchase purchase) throws SQLException {
 		statement.setInt(1, purchase.getInvoice());
 		statement.setString(2, purchaseItem.getProduct().getCode());
 		statement.setFloat(3, purchaseItem.getQuantity());
 		statement.setDouble(4, purchaseItem.getUnitPurchasePrice());
 	}
 
-	private void getPurchaseFromResultSet(ResultSet resultSet, Purchase purchase)
-			throws SQLException {
+	private void getPurchaseFromResultSet(ResultSet resultSet, Purchase purchase) throws SQLException {
 		purchase.setId(resultSet.getInt(1));
 		purchase.setDate(String.valueOf(resultSet.getDate(2)));
 		purchase.setInvoice(resultSet.getInt(3));
 		purchase.setGrandTotal(resultSet.getDouble(4));
 	}
 
-	private PurchaseItem getPurchaseItemFromResultSet(ResultSet resultSet, Product product)
-			throws SQLException {
-		return new PurchaseItem(product
-				, resultSet.getFloat(3), resultSet.getDouble(4));
+	private PurchaseItem getPurchaseItemFromResultSet(ResultSet resultSet, Product product) throws SQLException {
+		return new PurchaseItem(product, resultSet.getFloat(3), resultSet.getDouble(4));
 	}
 
 	@Override
 	public Integer count(String parameter) throws ApplicationErrorException {
 		try {
 			String countQuery = "SELECT COUNT(ID) FROM PURCHASE";
-			String countQueryByDate =
-					"SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'";
+			String countQueryByDate = "SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'";
 			ResultSet countResultSet;
-			if(parameter == null)
-				countResultSet = purchaseConnection.createStatement().executeQuery(countQuery);
+			if(parameter == null) countResultSet = purchaseConnection.createStatement().executeQuery(countQuery);
 			else countResultSet = purchaseConnection.createStatement().executeQuery(countQueryByDate);
 			countResultSet.next();
 			return countResultSet.getInt(1);
@@ -95,12 +87,10 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	}
 
 	@Override
-	public List<Purchase> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException {
+	public List<Purchase> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException {
 		int count;
 		try {
-			String EntryCount =
-					"SELECT COUNT(*) OVER() FROM PURCHASE WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + " ORDER BY ID";
+			String EntryCount = "SELECT COUNT(*) OVER() FROM PURCHASE WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + " ORDER BY ID";
 			String listQuery = "SELECT * FROM PURCHASE WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
 			PreparedStatement countStatement = purchaseConnection.prepareStatement(EntryCount);
 			PreparedStatement listStatement = purchaseConnection.prepareStatement(listQuery);
@@ -117,29 +107,19 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 		}
 	}
 
-	private void checkPagination(int count, int offset, int pageLength)
-			throws PageCountOutOfBoundsException {
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset) {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(
-					">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
-							+ pageCount);
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
 		}
 	}
 
 	@Override
 	public List<Purchase> list(String searchText) throws ApplicationErrorException {
 		try {
-			String listQuery =
-					"SELECT * FROM PURCHASE WHERE CAST(ID AS TEXT) ILIKE '"
-							+ searchText
-							+ "' OR CAST(DATE AS TEXT) ILIKE '"
-							+ searchText
-							+ "' OR CAST(INVOICE AS TEXT) ILIKE '"
-							+ searchText
-							+ "'";
+			String listQuery = "SELECT * FROM PURCHASE WHERE CAST(ID AS TEXT) ILIKE '" + searchText + "' OR CAST(DATE AS TEXT) ILIKE '" + searchText + "' OR CAST(INVOICE AS TEXT) ILIKE '" + searchText + "'";
 			ResultSet listResultSet = purchaseConnection.createStatement().executeQuery(listQuery);
 			return listHelper(listResultSet);
 		} catch(Exception e) {
@@ -160,17 +140,13 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 			getPurchaseFromResultSet(resultSet, listedPurchase);
 			purchaseList.add(listedPurchase);
 		}
-		PreparedStatement listPurchaseItemsStatement =
-				purchaseConnection.prepareStatement(
-						"SELECT P.NAME,PU.PRODUCTCODE,PU.QUANTITY,PU.COSTPRICE FROM PURCHASEITEMS PU INNER JOIN PRODUCT P ON P.CODE=PU.PRODUCTCODE WHERE PU.INVOICE=?");
+		PreparedStatement listPurchaseItemsStatement = purchaseConnection.prepareStatement("SELECT P.NAME,PU.PRODUCTCODE,PU.QUANTITY,PU.COSTPRICE FROM PURCHASEITEMS PU INNER JOIN PRODUCT P ON P.CODE=PU.PRODUCTCODE WHERE PU.INVOICE=?");
 		for(Purchase purchase: purchaseList) {
 			List<PurchaseItem> purchaseItemList = new ArrayList<>();
 			listPurchaseItemsStatement.setInt(1, purchase.getInvoice());
 			ResultSet listPurchaseResultSet = listPurchaseItemsStatement.executeQuery();
 			while(listPurchaseResultSet.next()) {
-				purchaseItemList.add(
-						getPurchaseItemFromResultSet(
-								listPurchaseResultSet, new ProductDAOImplementation().findByCode(listPurchaseResultSet.getString(2))));
+				purchaseItemList.add(getPurchaseItemFromResultSet(listPurchaseResultSet, new ProductDAOImplementation().findByCode(listPurchaseResultSet.getString(2))));
 			}
 			purchase.setPurchaseItemList(purchaseItemList);
 		}
@@ -181,14 +157,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	@Override
 	public Integer delete(int invoice) throws ApplicationErrorException {
 		try {
-			if(purchaseConnection
-					.createStatement()
-					.executeUpdate("DELETE FROM PURCHASEITEMS WHERE INVOICE='" + invoice + "'")
-					> 0
-					&& purchaseConnection
-					.createStatement()
-					.executeUpdate("DELETE FROM PURCHASE WHERE INVOICE='" + invoice + "'")
-					> 0) {
+			if(purchaseConnection.createStatement().executeUpdate("DELETE FROM PURCHASEITEMS WHERE INVOICE='" + invoice + "'") > 0 && purchaseConnection.createStatement().executeUpdate("DELETE FROM PURCHASE WHERE INVOICE='" + invoice + "'") > 0) {
 				return 1;
 			} else return - 1;
 		} catch(Exception e) {

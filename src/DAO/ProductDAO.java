@@ -19,11 +19,7 @@ public interface ProductDAO {
 	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
 	 *                                    table.
 	 */
-	Product create(Product product)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			UnitCodeViolationException;
+	Product create(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
 	/**
 	 * This Method returns the number of entries in the Product table.
@@ -46,8 +42,7 @@ public interface ProductDAO {
 	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
 	 *                                       non-existing page is prompted.
 	 */
-	List<Product> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException, PageCountOutOfBoundsException;
+	List<Product> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException;
 
 	/**
 	 * This method Lists the products in the product table based on the given search-text.
@@ -70,11 +65,7 @@ public interface ProductDAO {
 	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
 	 *                                    table.
 	 */
-	Product edit(Product product)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			UnitCodeViolationException;
+	Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
 	/**
 	 * This method deletes an entry in the Product table based on the given parameter.

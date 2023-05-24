@@ -12,20 +12,15 @@ public class StoreDAOImplementation implements StoreDAO {
 	@Override
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
-			PreparedStatement unitCreateStatement =
-					storeConnection.prepareStatement(
-							"INSERT INTO STORE(NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (?,?,?,?) RETURNING *");
+			PreparedStatement unitCreateStatement = storeConnection.prepareStatement("INSERT INTO STORE(NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (?,?,?,?) RETURNING *");
 			setParameters(unitCreateStatement, store);
 			ResultSet storeCreateResultSet = unitCreateStatement.executeQuery();
 			storeCreateResultSet.next();
 			return getStoreFromResultSet(storeCreateResultSet);
 		} catch(SQLException e) {
 			storeConnection.rollback();
-			if(e.getSQLState().equals("23514"))
-				return null;
-			else
-				throw new ApplicationErrorException(
-						e.getMessage());
+			if(e.getSQLState().equals("23514")) return null;
+			else throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 
@@ -37,19 +32,14 @@ public class StoreDAOImplementation implements StoreDAO {
 	}
 
 	private Store getStoreFromResultSet(ResultSet resultSet) throws SQLException {
-		return new Store(
-				resultSet.getString(2),
-				resultSet.getLong(3),
-				resultSet.getString(4),
-				resultSet.getString(5));
+		return new Store(resultSet.getString(2), resultSet.getLong(3), resultSet.getString(4), resultSet.getString(5));
 	}
 
 
 	@Override
 	public Store edit(Store store) throws SQLException, ApplicationErrorException {
 		try {
-			String editQuery =
-					"UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER) RETURNING *";
+			String editQuery = "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER) RETURNING *";
 			PreparedStatement editStatement = storeConnection.prepareStatement(editQuery);
 			setParameters(editStatement, store);
 			if(store.getPhoneNumber() == 0) {
@@ -62,8 +52,7 @@ public class StoreDAOImplementation implements StoreDAO {
 			return getStoreFromResultSet(editStoreResultSet);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
@@ -93,8 +82,7 @@ public class StoreDAOImplementation implements StoreDAO {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 }

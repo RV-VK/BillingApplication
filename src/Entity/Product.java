@@ -12,14 +12,7 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(
-			int id,
-			String code,
-			String name,
-			String unitcode,
-			String type,
-			float availableQuantity,
-			double price) {
+	public Product(int id, String code, String name, String unitcode, String type, float availableQuantity, double price) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
@@ -30,13 +23,7 @@ public class Product {
 	}
 
 
-	public Product(
-			String code,
-			String name,
-			String unitcode,
-			String type,
-			float availableQuantity,
-			double price) {
+	public Product(String code, String name, String unitcode, String type, float availableQuantity, double price) {
 		this.code = code;
 		this.name = name;
 		this.unitcode = unitcode;
@@ -113,26 +100,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product{"
-				+ "id="
-				+ id
-				+ ", code='"
-				+ code
-				+ '\''
-				+ ", name='"
-				+ name
-				+ '\''
-				+ ", unitcode='"
-				+ unitcode
-				+ '\''
-				+ ", type='"
-				+ type
-				+ '\''
-				+ ", availableQuantity="
-				+ availableQuantity
-				+ ", price="
-				+ price +
-				'}';
+		return "Product{" + "id=" + id + ", code='" + code + '\'' + ", name='" + name + '\'' + ", unitcode='" + unitcode + '\'' + ", type='" + type + '\'' + ", availableQuantity=" + availableQuantity + ", price=" + price + '}';
 	}
 
 }

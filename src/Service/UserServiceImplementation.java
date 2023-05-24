@@ -15,11 +15,7 @@ public class UserServiceImplementation implements UserService {
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
 
 	@Override
-	public User create(User user)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			InvalidTemplateException {
+	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
 		validate(user);
 		return userDAO.create(user);
 	}
@@ -30,23 +26,15 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public List<User> list(HashMap<String, String> listattributes)
-			throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public List<User> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<User> userList;
-		if(Collections.frequency(listattributes.values(), null) == 0
-				|| Collections.frequency(listattributes.values(), null) == 1) {
+		if(Collections.frequency(listattributes.values(), null) == 0 || Collections.frequency(listattributes.values(), null) == 1) {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
-			userList =
-					userDAO.list(
-							listattributes.get("Attribute"),
-							listattributes.get("Searchtext"),
-							pageLength,
-							offset);
+			userList = userDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
 			return userList;
-		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1
-				&& listattributes.get("Searchtext") != null) {
+		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
 			userList = userDAO.list(listattributes.get("Searchtext"));
 			return userList;
 		}
@@ -54,11 +42,7 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public User edit(User user)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			InvalidTemplateException {
+	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
 		validate(user);
 		return userDAO.edit(user);
 	}
@@ -82,7 +66,7 @@ public class UserServiceImplementation implements UserService {
 			throw new InvalidTemplateException(">> Invalid LastName!!");
 		if(user.getPassWord() != null && ! user.getPassWord().matches(PASSWORD_REGEX))
 			throw new InvalidTemplateException(">> Invalid Password!!");
-		if(user.getPhoneNumber() != 0  && ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
+		if(user.getPhoneNumber() != 0 && ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
 			throw new InvalidTemplateException(">> Invalid Phone-number!!");
 		if(user.getUserType() != null && ! userTypeList.contains(user.getUserType()))
 			throw new InvalidTemplateException(">> Invalid Usertype!!");

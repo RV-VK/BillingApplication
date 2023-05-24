@@ -12,12 +12,9 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
 	@Override
-	public Unit create(Unit unit)
-			throws SQLException, ApplicationErrorException, UniqueConstraintException {
+	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
-			PreparedStatement unitCreateStatement =
-					unitConnection.prepareStatement(
-							"INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (?,?,?,?) RETURNING *");
+			PreparedStatement unitCreateStatement = unitConnection.prepareStatement("INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (?,?,?,?) RETURNING *");
 			setParameters(unitCreateStatement, unit);
 			ResultSet unitCreateResultSet = unitCreateStatement.executeQuery();
 			unitCreateResultSet.next();
@@ -38,17 +35,13 @@ public class UnitDAOImplementation implements UnitDAO {
 	private Unit getUnitFromResultSet(ResultSet resultSet) throws SQLException {
 		boolean isDividable;
 		isDividable = resultSet.getString(5).equals("t");
-		return new Unit(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
-				isDividable);
+		return new Unit(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), isDividable);
 	}
 
-	private void handleException(SQLException e)
-			throws UniqueConstraintException, ApplicationErrorException {
+	private void handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException {
 		if(e.getSQLState().equals("23505"))
-			throw new UniqueConstraintException(
-					">> Unit Code must be unique!!! the Unit code you have entered Already exists");
-		throw new ApplicationErrorException(
-				"Application has went into an Error!!!\n Please Try again");
+			throw new UniqueConstraintException(">> Unit Code must be unique!!! the Unit code you have entered Already exists");
+		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 	}
 
 	@Override
@@ -63,18 +56,15 @@ public class UnitDAOImplementation implements UnitDAO {
 			return unitList;
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
 
 	@Override
-	public Unit edit(Unit unit)
-			throws ApplicationErrorException, SQLException, UniqueConstraintException {
+	public Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException {
 		try {
-			String editQuery =
-					"UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=? RETURNING *";
+			String editQuery = "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=? RETURNING *";
 			PreparedStatement editStatement = unitConnection.prepareStatement(editQuery);
 			setParameters(editStatement, unit);
 			try {
@@ -103,8 +93,7 @@ public class UnitDAOImplementation implements UnitDAO {
 				return 1;
 			}
 		} catch(Exception e) {
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
@@ -113,8 +102,7 @@ public class UnitDAOImplementation implements UnitDAO {
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
 			Statement getUnitStatement = unitConnection.createStatement();
-			ResultSet getUnitResultSet =
-					getUnitStatement.executeQuery("SELECT * FROM UNIT WHERE CODE='" + code + "'");
+			ResultSet getUnitResultSet = getUnitStatement.executeQuery("SELECT * FROM UNIT WHERE CODE='" + code + "'");
 			Unit unit = null;
 			while(getUnitResultSet.next()) {
 				unit = getUnitFromResultSet(getUnitResultSet);

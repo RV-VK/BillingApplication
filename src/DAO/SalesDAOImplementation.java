@@ -27,8 +27,7 @@ public class SalesDAOImplementation implements SalesDAO {
 			List<SalesItem> salesItemList = new ArrayList<>();
 			ResultSet salesItemInsertResultSet;
 			for(SalesItem salesItem: sales.getSalesItemList()) {
-				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity())
-					return null;
+				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity()) return null;
 				setSalesItems(salesItemInsertStatement, salesItem, salesEntry);
 				salesItemInsertResultSet = salesItemInsertStatement.executeQuery();
 				new ProductDAOImplementation().updateStock(salesItem.getProduct().getCode(), - salesItem.getQuantity());
@@ -66,10 +65,7 @@ public class SalesDAOImplementation implements SalesDAO {
 	}
 
 	private SalesItem getSalesItemFromResultSet(ResultSet resultSet, Product product) throws SQLException {
-		return new SalesItem(
-				product,
-				resultSet.getFloat(3),
-				resultSet.getDouble(4));
+		return new SalesItem(product, resultSet.getFloat(3), resultSet.getDouble(4));
 	}
 
 	@Override
@@ -78,10 +74,8 @@ public class SalesDAOImplementation implements SalesDAO {
 			String countQuery = "SELECT COUNT(ID) FROM SALES";
 			String countQueryByDate = "SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'";
 			ResultSet countResultSet;
-			if(parameter == null)
-				countResultSet = salesConnection.createStatement().executeQuery(countQuery);
-			else
-				countResultSet = salesConnection.createStatement().executeQuery(countQueryByDate);
+			if(parameter == null) countResultSet = salesConnection.createStatement().executeQuery(countQuery);
+			else countResultSet = salesConnection.createStatement().executeQuery(countQueryByDate);
 			countResultSet.next();
 			return countResultSet.getInt(1);
 		} catch(Exception e) {
@@ -91,8 +85,7 @@ public class SalesDAOImplementation implements SalesDAO {
 
 
 	@Override
-	public List<Sales> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException {
+	public List<Sales> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException {
 		int count;
 		try {
 			String EntryCount = "SELECT COUNT(*) OVER() FROM SALES WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + " ORDER BY ID";
@@ -100,8 +93,7 @@ public class SalesDAOImplementation implements SalesDAO {
 			PreparedStatement listStatement = salesConnection.prepareStatement(listQuery);
 			PreparedStatement countStatement = salesConnection.prepareStatement(EntryCount);
 			ResultSet countResultSet = countStatement.executeQuery();
-			if(countResultSet.next())
-				count = countResultSet.getInt(1);
+			if(countResultSet.next()) count = countResultSet.getInt(1);
 			else return null;
 			checkPagination(count, offset, pageLength);
 			ResultSet listResultSet = listStatement.executeQuery();
@@ -114,13 +106,9 @@ public class SalesDAOImplementation implements SalesDAO {
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset) {
 			int pageCount;
-			if(count % pageLength == 0)
-				pageCount = count / pageLength;
-			else
-				pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(
-					">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
-							+ pageCount);
+			if(count % pageLength == 0) pageCount = count / pageLength;
+			else pageCount = (count / pageLength) + 1;
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
 		}
 	}
 
@@ -128,14 +116,7 @@ public class SalesDAOImplementation implements SalesDAO {
 	@Override
 	public List<Sales> list(String searchText) throws ApplicationErrorException {
 		try {
-			String listQuery =
-					"SELECT * FROM SALES WHERE CAST(ID AS TEXT) '"
-							+ searchText
-							+ "' OR CAST(DATE AS TEXT) ILIKE '"
-							+ searchText
-							+ "' OR CAST (INVOICE AS TEXT) ILIKE '"
-							+ searchText
-							+ "'";
+			String listQuery = "SELECT * FROM SALES WHERE CAST(ID AS TEXT) '" + searchText + "' OR CAST(DATE AS TEXT) ILIKE '" + searchText + "' OR CAST (INVOICE AS TEXT) ILIKE '" + searchText + "'";
 			ResultSet listResultSet = salesConnection.createStatement().executeQuery(listQuery);
 			return listHelper(listResultSet);
 		} catch(Exception e) {
@@ -150,8 +131,7 @@ public class SalesDAOImplementation implements SalesDAO {
 	 * @return List - Sales.
 	 * @throws SQLException Exception thrown based on SQL syntax.
 	 */
-	private List<Sales> listHelper(ResultSet resultSet)
-			throws SQLException, ApplicationErrorException {
+	private List<Sales> listHelper(ResultSet resultSet) throws SQLException, ApplicationErrorException {
 		while(resultSet.next()) {
 			Sales listedSale = new Sales();
 			getSalesFromResultSet(resultSet, listedSale);
@@ -172,10 +152,8 @@ public class SalesDAOImplementation implements SalesDAO {
 	@Override
 	public Integer delete(int id) throws ApplicationErrorException {
 		try {
-			int salesItemUpdatedCount =
-					salesConnection.createStatement().executeUpdate("DELETE FROM SALESITEMS WHERE ID='" + id + "'");
-			int salesUpdatedCount =
-					salesConnection.createStatement().executeUpdate("DELETE FROM SALES WHERE ID='" + id + "'");
+			int salesItemUpdatedCount = salesConnection.createStatement().executeUpdate("DELETE FROM SALESITEMS WHERE ID='" + id + "'");
+			int salesUpdatedCount = salesConnection.createStatement().executeUpdate("DELETE FROM SALES WHERE ID='" + id + "'");
 			if(salesItemUpdatedCount > 0 && salesUpdatedCount > 0) {
 				return 1;
 			} else return - 1;

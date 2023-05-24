@@ -24,15 +24,7 @@ public class UnitCLI {
 	 */
 	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> Create unit using the following template,\n"
-							+ "     name, code, description, isdividable\n"
-							+ "     \n"
-							+ "     name - text, mandatory with 3 to 30 chars\t\n"
-							+ "     code - text, maximum 4 char, mandatory\n"
-							+ "     description - text\n"
-							+ "     isdividable - boolean, mandatory\n"
-							+ "    ");
+			System.out.println(">> Create unit using the following template,\n" + "     name, code, description, isdividable\n" + "     \n" + "     name - text, mandatory with 3 to 30 chars\t\n" + "     code - text, maximum 4 char, mandatory\n" + "     description - text\n" + "     isdividable - boolean, mandatory\n" + "    ");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -92,23 +84,12 @@ public class UnitCLI {
 	public void list(List<String> arguments) throws ApplicationErrorException {
 		List<Unit> unitList;
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> List unit with the following options\n" + ">> unit list - will list all the units");
+			System.out.println(">> List unit with the following options\n" + ">> unit list - will list all the units");
 
 		} else if(arguments.size() == 2) {
 			unitList = unitService.list();
 			for(Unit unit: unitList) {
-				System.out.println(
-						">> id: "
-								+ unit.getId()
-								+ ", name: "
-								+ unit.getName()
-								+ ", code: "
-								+ unit.getCode()
-								+ ", description: "
-								+ unit.getDescription()
-								+ ", isdividable: "
-								+ unit.getIsDividable());
+				System.out.println(">> id: " + unit.getId() + ", name: " + unit.getName() + ", code: " + unit.getCode() + ", description: " + unit.getDescription() + ", isdividable: " + unit.getIsDividable());
 			}
 		} else {
 			System.out.println(">> Invalid command format!!!");
@@ -125,26 +106,12 @@ public class UnitCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> Edit unit using the following template\n"
-							+ "id: <id - 6>, name: <name-edited>, code: <code>,  description: <description>, isdividable: <isdividable>\n"
-							+ "\n"
-							+ ">> You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n"
-							+ ">> id: <id - 6>, name: <name>, code: <code>\n"
-							+ "\n"
-							+ ">> You can not give empty or null values to the mandatory attributes.\n"
-							+ ">> id: <id - 6>, name: , code: null\n"
-							+ "\n"
-							+ "\t\t name - text, mandatory with 3 to 30 chars\t\n"
-							+ "     code - text, maximum 4 char, mandatory\n"
-							+ "     description - text\n"
-							+ "     isdividable - boolean, mandatory");
+			System.out.println(">> Edit unit using the following template\n" + "id: <id - 6>, name: <name-edited>, code: <code>,  description: <description>, isdividable: <isdividable>\n" + "\n" + ">> You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n" + ">> id: <id - 6>, name: <name>, code: <code>\n" + "\n" + ">> You can not give empty or null values to the mandatory attributes.\n" + ">> id: <id - 6>, name: , code: null\n" + "\n" + "\t\t name - text, mandatory with 3 to 30 chars\t\n" + "     code - text, maximum 4 char, mandatory\n" + "     description - text\n" + "     isdividable - boolean, mandatory");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
 			if(! parameters.matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"unit edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"unit edit help for proper syntax!");
 				return;
 			}
 			List<String> unitAttributes = List.of(parameters.split("[,:]"));
@@ -161,8 +128,7 @@ public class UnitCLI {
 			System.out.println(">> Try \"unit edit help\" for proper syntax");
 		} else {
 			if(! command.substring(10).matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
 				return;
 			}
 			editHelper(arguments.subList(2, arguments.size()));
@@ -193,8 +159,7 @@ public class UnitCLI {
 			} else if(editAttributes.get(index).trim().equals("description")) {
 				unit.setDescription(editAttributes.get(index + 1).trim());
 			} else if(editAttributes.get(index).trim().equals("isdividable")) {
-				if(editAttributes.get(index + 1).trim().equals("true")
-						|| editAttributes.get(index + 1).trim().equals("false")) {
+				if(editAttributes.get(index + 1).trim().equals("true") || editAttributes.get(index + 1).trim().equals("false")) {
 					isDividable = Boolean.parseBoolean(editAttributes.get(index + 1).trim());
 				} else {
 					System.out.println(">>Invalid Entry for Unitcode!! Must be either true or false ");
@@ -233,11 +198,7 @@ public class UnitCLI {
 		String codeRegex = "^[a-zA-Z]{1,4}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						">> delete unit using the following template\n"
-								+ "\t \tcode\n"
-								+ "\t \n"
-								+ "\t  code - text, min 3 - 30 char, mandatory,existing\n");
+				System.out.println(">> delete unit using the following template\n" + "\t \tcode\n" + "\t \n" + "\t  code - text, min 3 - 30 char, mandatory,existing\n");
 			} else if(arguments.get(2).matches(codeRegex)) {
 				System.out.print(">> Are you Sure you want to delete the Unit y/n :");
 				String prompt = scanner.nextLine();

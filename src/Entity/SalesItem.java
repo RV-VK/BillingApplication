@@ -42,13 +42,6 @@ public class SalesItem {
 
 	@Override
 	public String toString() {
-		return "SalesItem{"
-				+ "product="
-				+ product
-				+ ", quantity="
-				+ quantity
-				+ ", unitSalesPrice="
-				+ unitSalesPrice
-				+ '}';
+		return "SalesItem{" + "product=" + product + ", quantity=" + quantity + ", unitSalesPrice=" + unitSalesPrice + '}';
 	}
 }

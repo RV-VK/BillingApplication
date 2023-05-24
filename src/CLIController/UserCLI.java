@@ -25,9 +25,7 @@ public class UserCLI {
 	private final Scanner scanner = new Scanner(System.in);
 	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 
-	private final List<String> userAttributes =
-			Arrays.asList(
-					"id", "usertype", "username", "password", "firstname", "lastname", "phonenumber");
+	private final List<String> userAttributes = Arrays.asList("id", "usertype", "username", "password", "firstname", "lastname", "phonenumber");
 
 	/**
 	 * This method handles the presentation layer of the Create function.
@@ -37,15 +35,7 @@ public class UserCLI {
 	public void create(List<String> arguments) {
 		Scanner scanner = new Scanner(System.in);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> create user using following template\n"
-							+ ">>  usertype, username,  password, first name, last name, phone number\n"
-							+ "\tusertype - text, purchase/sales, mandatory\n"
-							+ "\tusername - text, min 3 - 30 char, mandatory\n"
-							+ "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n"
-							+ "\tfirstname - text, mandatory with 3 to 30 chars\n"
-							+ "\tlastname  - text, optional\n"
-							+ "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t\n");
+			System.out.println(">> create user using following template\n" + ">>  usertype, username,  password, first name, last name, phone number\n" + "\tusertype - text, purchase/sales, mandatory\n" + "\tusername - text, min 3 - 30 char, mandatory\n" + "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n" + "\tfirstname - text, mandatory with 3 to 30 chars\n" + "\tlastname  - text, optional\n" + "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t\n");
 			return;
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
@@ -122,21 +112,13 @@ public class UserCLI {
 	 * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in User table.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public void list(List<String> arguments)
-			throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributesMap.put("Pagelength", null);
 		listAttributesMap.put("Pagenumber", null);
 		listAttributesMap.put("Attribute", null);
 		listAttributesMap.put("Searchtext", null);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> List user with the following options\n"
-							+ ">> user list - will list all the users default to maximum upto 20 users\n"
-							+ ">> user list -p 10 - pageable list shows 10 users as default\n"
-							+ ">> user list -p 10 3 - pagable list shows 10 users in 3rd page, ie., user from 21 to 30\n"
-							+ ">> user list -s searchtext - search the user with the given search text in all the searchable attributes\n"
-							+ ">> user list -s <attr>: searchtext - search the user with the given search text in all the given attribute\n"
-							+ ">> user list -s <attr>: searchtext -p 10 6 - pagable list shows 10 users in 6th page with the given search text in the given attribute\n");
+			System.out.println(">> List user with the following options\n" + ">> user list - will list all the users default to maximum upto 20 users\n" + ">> user list -p 10 - pageable list shows 10 users as default\n" + ">> user list -p 10 3 - pagable list shows 10 users in 3rd page, ie., user from 21 to 30\n" + ">> user list -s searchtext - search the user with the given search text in all the searchable attributes\n" + ">> user list -s <attr>: searchtext - search the user with the given search text in all the given attribute\n" + ">> user list -s <attr>: searchtext -p 10 6 - pagable list shows 10 users in 6th page with the given search text in the given attribute\n");
 		} else if(arguments.size() == 2) {
 			listAttributesMap.put("Pagelength", "20");
 			listAttributesMap.put("Pagenumber", "1");
@@ -281,21 +263,7 @@ public class UserCLI {
 				return;
 			}
 			for(User user: userList) {
-				System.out.println(
-						">> id: "
-								+ user.getId()
-								+ ", usertype: "
-								+ user.getUserType()
-								+ ", username: "
-								+ user.getUserName()
-								+ ", password: "
-								+ user.getPassWord()
-								+ ", firstname: "
-								+ user.getFirstName()
-								+ ", lastname: "
-								+ user.getLastName()
-								+ ", phonenumber: "
-								+ user.getPhoneNumber());
+				System.out.println(">> id: " + user.getId() + ", usertype: " + user.getUserType() + ", username: " + user.getUserName() + ", password: " + user.getPassWord() + ", firstname: " + user.getFirstName() + ", lastname: " + user.getLastName() + ", phonenumber: " + user.getPhoneNumber());
 			}
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -317,8 +285,7 @@ public class UserCLI {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();
 			if(! parameters.matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
 				return;
 			}
 			List<String> userAttributes = List.of(parameters.split("[,:]"));
@@ -333,8 +300,7 @@ public class UserCLI {
 			System.out.println(">> Try \"user edit help\" for proper syntax");
 		} else {
 			if(! command.substring(10).matches(editCommandRegex)) {
-				System.out.println(
-						">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
+				System.out.println(">> Invalid command Format!\n>> Try \"user edit help for proper syntax!");
 				return;
 			}
 			editHelper(arguments.subList(2, arguments.size()));
@@ -407,12 +373,7 @@ public class UserCLI {
 		String nameregex = "^[a-zA-Z0-9]{3,30}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
-				System.out.println(
-						">> delete user using the following template\n"
-								+ "\t username\n"
-								+ "\t \n"
-								+ "\t  username - text, min 3 - 30 char, mandatory,existing\n"
-								+ "\n");
+				System.out.println(">> delete user using the following template\n" + "\t username\n" + "\t \n" + "\t  username - text, min 3 - 30 char, mandatory,existing\n" + "\n");
 			} else if(arguments.get(2).matches(nameregex)) {
 				System.out.println(">> Are you sure want to delete the User y/n ? : ");
 				String prompt = scanner.nextLine();

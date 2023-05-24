@@ -14,9 +14,7 @@ public class DBHelper {
 		Connection connection = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			connection =
-					DriverManager.getConnection(
-							"jdbc:postgresql://localhost:5432/POSDatabase", "postgres", "manikantan1205");
+			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/POSDatabase", "postgres", "manikantan1205");
 		} catch(Exception e) {
 			System.out.println("Application Encountered an Error!");
 		}

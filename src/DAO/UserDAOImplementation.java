@@ -13,12 +13,9 @@ public class UserDAOImplementation implements UserDAO {
 
 
 	@Override
-	public User create(User user)
-			throws SQLException, ApplicationErrorException, UniqueConstraintException {
+	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
-			PreparedStatement userCreateStatement =
-					userConnection.prepareStatement(
-							"INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (?,?,?,?,?,?) RETURNING *");
+			PreparedStatement userCreateStatement = userConnection.prepareStatement("INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (?,?,?,?,?,?) RETURNING *");
 			setParameters(userCreateStatement, user);
 			ResultSet userCreateResultSet = userCreateStatement.executeQuery();
 			userCreateResultSet.next();
@@ -53,14 +50,7 @@ public class UserDAOImplementation implements UserDAO {
 	 * @throws SQLException Exception thrown based on SQL syntax.
 	 */
 	private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
-		return new User(
-				resultSet.getInt(1),
-				resultSet.getString(3),
-				resultSet.getString(2),
-				resultSet.getString(4),
-				resultSet.getString(5),
-				resultSet.getString(6),
-				resultSet.getLong(7));
+		return new User(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getLong(7));
 	}
 
 	/**
@@ -70,14 +60,11 @@ public class UserDAOImplementation implements UserDAO {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	private void handleException(SQLException exception)
-			throws UniqueConstraintException, ApplicationErrorException {
+	private void handleException(SQLException exception) throws UniqueConstraintException, ApplicationErrorException {
 		if(exception.getSQLState().equals("23505")) {
-			throw new UniqueConstraintException(
-					">> UserName must be unique!! The username you have entered already exists!!");
+			throw new UniqueConstraintException(">> UserName must be unique!! The username you have entered already exists!!");
 		}
-		throw new ApplicationErrorException(
-				"Application has went into an Error!!!\n Please Try again");
+		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 	}
 
 
@@ -92,8 +79,7 @@ public class UserDAOImplementation implements UserDAO {
 			}
 			return count;
 		} catch(Exception e) {
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
@@ -101,35 +87,18 @@ public class UserDAOImplementation implements UserDAO {
 	public List<User> list(String searchText) throws ApplicationErrorException {
 		try {
 			Statement listStatement = userConnection.createStatement();
-			String listQuery =
-					"SELECT * FROM USERS WHERE USERTYPE ILIKE '"
-							+ searchText
-							+ "' OR USERNAME ILIKE '"
-							+ searchText
-							+ "' OR FIRSTNAME ILIKE '"
-							+ searchText
-							+ "' OR LASTNAME ILIKE '"
-							+ searchText
-							+ "' OR PASSWORD ILIKE '"
-							+ searchText
-							+ "' OR CAST(PHONENUMBER AS TEXT) ILIKE '"
-							+ searchText
-							+ "' OR CAST(ID AS TEXT) ILIKE '"
-							+ searchText
-							+ "'";
+			String listQuery = "SELECT * FROM USERS WHERE USERTYPE ILIKE '" + searchText + "' OR USERNAME ILIKE '" + searchText + "' OR FIRSTNAME ILIKE '" + searchText + "' OR LASTNAME ILIKE '" + searchText + "' OR PASSWORD ILIKE '" + searchText + "' OR CAST(PHONENUMBER AS TEXT) ILIKE '" + searchText + "' OR CAST(ID AS TEXT) ILIKE '" + searchText + "'";
 			ResultSet listresultSet = listStatement.executeQuery(listQuery);
 			return listHelper(listresultSet);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
 
 	@Override
-	public List<User> list(String attribute, String searchText, int pageLength, int offset)
-			throws ApplicationErrorException {
+	public List<User> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException {
 		try {
 			String EntryCount = "SELECT COUNT(*) OVER() FROM USERS WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + " ORDER BY ID";
 			String listQuery = "SELECT * FROM USERS WHERE " + attribute + "= COALESCE(" + searchText + "," + attribute + ")" + " ORDER BY ID LIMIT " + pageLength + "  OFFSET " + offset;
@@ -148,13 +117,9 @@ public class UserDAOImplementation implements UserDAO {
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset) {
 			int pageCount;
-			if(count % pageLength == 0)
-				pageCount = count / pageLength;
-			else
-				pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(
-					">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination "
-							+ pageCount);
+			if(count % pageLength == 0) pageCount = count / pageLength;
+			else pageCount = (count / pageLength) + 1;
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
 		}
 	}
 
@@ -174,11 +139,9 @@ public class UserDAOImplementation implements UserDAO {
 
 
 	@Override
-	public User edit(User user)
-			throws SQLException, ApplicationErrorException, UniqueConstraintException {
+	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
-			String editQuery =
-					"UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=? RETURNING *";
+			String editQuery = "UPDATE USERS SET USERNAME= COALESCE(?,USERNAME),USERTYPE= COALESCE(?,USERTYPE),PASSWORD= COALESCE(?,PASSWORD),FIRSTNAME= COALESCE(?,FIRSTNAME),LASTNAME= COALESCE(?,LASTNAME),PHONENUMBER=COALESCE(?,PHONENUMBER) WHERE ID=? RETURNING *";
 			PreparedStatement editStatement = userConnection.prepareStatement(editQuery);
 			setParameters(editStatement, user);
 			if(user.getPhoneNumber() == 0) {
@@ -201,35 +164,29 @@ public class UserDAOImplementation implements UserDAO {
 	public Integer delete(String username) throws ApplicationErrorException {
 		try {
 			Statement deleteStatement = userConnection.createStatement();
-			if(deleteStatement.executeUpdate("DELETE FROM USERS WHERE USERNAME='" + username + "'")
-					> 0) {
+			if(deleteStatement.executeUpdate("DELETE FROM USERS WHERE USERNAME='" + username + "'") > 0) {
 				return 1;
 			} else {
 				return - 1;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ApplicationErrorException(
-					"Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
 
 	public Boolean checkIfInitialSetup() throws SQLException {
-		ResultSet resultSet =
-				userConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM USERS WHERE USERTYPE='Admin'");
+		ResultSet resultSet = userConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM USERS WHERE USERTYPE='Admin'");
 		resultSet.next();
 		return resultSet.getInt(1) == 0;
 	}
 
 
 	@Override
-	public String login(String userName, String passWord)
-			throws ApplicationErrorException {
+	public String login(String userName, String passWord) throws ApplicationErrorException {
 		try {
-			ResultSet resultSet = userConnection
-					.createStatement()
-					.executeQuery("SELECT PASSWORD,USERTYPE FROM USERS WHERE USERNAME='" + userName + "'");
+			ResultSet resultSet = userConnection.createStatement().executeQuery("SELECT PASSWORD,USERTYPE FROM USERS WHERE USERNAME='" + userName + "'");
 			if(resultSet.next()) {
 				if(resultSet.getString(1).equals(passWord)) return resultSet.getString(2);
 				else return null;

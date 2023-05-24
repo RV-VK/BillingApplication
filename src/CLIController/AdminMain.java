@@ -19,8 +19,7 @@ public class AdminMain {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws SQLException                  Exception thrown based on SQL syntax.
 	 */
-	public static void AdminView()
-			throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException {
+	public static void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException {
 		scanner = new Scanner(System.in);
 		System.out.println(" TO THE BILLING SOFTWARE_____________________");
 		System.out.println(">> Try \"help\" to know better!\n");
@@ -143,24 +142,13 @@ public class AdminMain {
 							purchaseCLI.Delete(commandlist);
 							break;
 						case "help":
-							System.out.println(
-									">> purchase products using following command\n"
-											+ "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n"
-											+ "\n"
-											+ "\t  date - format( YYYY-MM-DD ), mandatory\n"
-											+ "\t\tinvoice - numbers, mandatory\n"
-											+ "\t\t\n"
-											+ "\t\tThe following purchase items should be given as array of items\n"
-											+ "\t\tcode - text, min 2 - 6 char, mandatory\n"
-											+ "\t\tquantity - numbers, mandatory\n"
-											+ "\t\tcostprice - numbers, mandatory");
+							System.out.println(">> purchase products using following command\n" + "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n" + "\n" + "\t  date - format( YYYY-MM-DD ), mandatory\n" + "\t\tinvoice - numbers, mandatory\n" + "\t\t\n" + "\t\tThe following purchase items should be given as array of items\n" + "\t\tcode - text, min 2 - 6 char, mandatory\n" + "\t\tquantity - numbers, mandatory\n" + "\t\tcostprice - numbers, mandatory");
 						default:
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								purchaseCLI.Create(command);
 							} else {
 								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println(
-										"Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
+								System.out.println("Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
 							}
 					}
 					break;
@@ -177,56 +165,19 @@ public class AdminMain {
 							salesCLI.delete(commandlist);
 							break;
 						case "help":
-							System.out.println(
-									">> sell products using following command\n"
-											+ "\n"
-											+ "sales date, [code1, quantity1], [code2, quantity2]....\n"
-											+ "\n"
-											+ "\t\tcode - text, min 3 - 30 char, mandatory\n"
-											+ "\t\tquantity - numbers, mandatory");
+							System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
 							break;
 						default:
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								salesCLI.Create(command);
 							} else {
 								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println(
-										"Try either \"help\" for proper syntax or \"sales help\" if you are trying to start a purchase!");
+								System.out.println("Try either \"help\" for proper syntax or \"sales help\" if you are trying to start a purchase!");
 							}
 					}
 					break;
 				case "help":
-					String help =
-							"\t\tstore\n"
-									+ "\t\t\tcreate  - name, phone number, address, gst number\n"
-									+ "\t\t\tedit - name, phone number, address, gst number\n"
-									+ "\t\t\tdelete - y/n with admin password\n"
-									+ "\t\t\n"
-									+ "\t\tuser\n"
-									+ "\t\t\tcreate - usertype, username,  password, first name, last name, phone number\n"
-									+ "\t\t\tcount \n"
-									+ "\t\t\tlist \n"
-									+ "\t\t\tedit - usertype, username,  password, first name, last name, phone number\n"
-									+ "\t\t\tdelete - y/n with username\n"
-									+ "\t       \n"
-									+ "\t       product\n"
-									+ "\t\t    \tcreate - productname,unit,type,costprice\n"
-									+ "\t\t    \tcount\n"
-									+ "\t\t    \tlist\n"
-									+ "\t\t    \tedit - productname,unit,type,costprice\n"
-									+ "\t\t    \tdelete - y/n with productname or productid\n"
-									+ "\t       \n"
-									+ "\t       unit\n"
-									+ "\t \t\tcreate - name, code, description, isdividable\n"
-									+ "\t \t\tlist -\n"
-									+ "\t \t\tedit - name, code, description, isdividable\n"
-									+ "\t \t\tdelete - code\n"
-									+ "\t       \n"
-									+ "\t       stock\n"
-									+ "\t    \t\tupdate - code, quantity\n"
-									+ "\t       \n"
-									+ "\t       price\n"
-									+ "\t    \t\tupdate - code, price";
+					String help = "\t\tstore\n" + "\t\t\tcreate  - name, phone number, address, gst number\n" + "\t\t\tedit - name, phone number, address, gst number\n" + "\t\t\tdelete - y/n with admin password\n" + "\t\t\n" + "\t\tuser\n" + "\t\t\tcreate - usertype, username,  password, first name, last name, phone number\n" + "\t\t\tcount \n" + "\t\t\tlist \n" + "\t\t\tedit - usertype, username,  password, first name, last name, phone number\n" + "\t\t\tdelete - y/n with username\n" + "\t       \n" + "\t       product\n" + "\t\t    \tcreate - productname,unit,type,costprice\n" + "\t\t    \tcount\n" + "\t\t    \tlist\n" + "\t\t    \tedit - productname,unit,type,costprice\n" + "\t\t    \tdelete - y/n with productname or productid\n" + "\t       \n" + "\t       unit\n" + "\t \t\tcreate - name, code, description, isdividable\n" + "\t \t\tlist -\n" + "\t \t\tedit - name, code, description, isdividable\n" + "\t \t\tdelete - code\n" + "\t       \n" + "\t       stock\n" + "\t    \t\tupdate - code, quantity\n" + "\t       \n" + "\t       price\n" + "\t    \t\tupdate - code, price";
 					System.out.println(help);
 					break;
 				default:

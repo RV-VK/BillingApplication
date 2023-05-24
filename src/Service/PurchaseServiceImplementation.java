@@ -29,7 +29,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 				return new Purchase();
 			}
 			if(! isDividable && purchaseItem.getQuantity() % 1 != 0) {
-				throw new UnDividableEntityException(">> Product '"+ purchaseItem.getProduct().getCode() + " is not of dividable unit!");
+				throw new UnDividableEntityException(">> Product '" + purchaseItem.getProduct().getCode() + " is not of dividable unit!");
 			}
 		}
 		return purchaseDAO.create(purchase);
@@ -47,22 +47,15 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public List<Purchase> list(HashMap<String, String> listattributes)
-			throws ApplicationErrorException {
+	public List<Purchase> list(HashMap<String, String> listattributes) throws ApplicationErrorException {
 		List<Purchase> purchaseList;
 		if(Collections.frequency(listattributes.values(), null) == 0 || Collections.frequency(listattributes.values(), null) == 1) {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
-			purchaseList =
-					purchaseDAO.list(
-							listattributes.get("Attribute"),
-							listattributes.get("Searchtext"),
-							pageLength,
-							offset);
+			purchaseList = purchaseDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
 			return purchaseList;
-		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1
-				&& listattributes.get("Searchtext") != null) {
+		} else if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
 			purchaseList = purchaseDAO.list(listattributes.get("Searchtext"));
 			return purchaseList;
 		}

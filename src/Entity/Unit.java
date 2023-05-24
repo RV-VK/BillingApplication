@@ -67,20 +67,6 @@ public class Unit {
 
 	@Override
 	public String toString() {
-		return "Unit{"
-				+ "id="
-				+ id
-				+ ", name='"
-				+ name
-				+ '\''
-				+ ", code='"
-				+ code
-				+ '\''
-				+ ", description='"
-				+ description
-				+ '\''
-				+ ", isDividable="
-				+ isDividable
-				+ '}';
+		return "Unit{" + "id=" + id + ", name='" + name + '\'' + ", code='" + code + '\'' + ", description='" + description + '\'' + ", isDividable=" + isDividable + '}';
 	}
 }

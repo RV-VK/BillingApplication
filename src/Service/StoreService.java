@@ -15,8 +15,7 @@ public interface StoreService {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Store create(Store store)
-			throws SQLException, ApplicationErrorException, InvalidTemplateException;
+	Store create(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Store entity and serves the Edit function.

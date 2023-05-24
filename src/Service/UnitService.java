@@ -18,11 +18,7 @@ public interface UnitService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	Unit create(Unit unit)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			InvalidTemplateException;
+	Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Unit entity and serves the List function.
@@ -42,11 +38,7 @@ public interface UnitService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	Unit edit(Unit unit)
-			throws SQLException,
-			ApplicationErrorException,
-			UniqueConstraintException,
-			InvalidTemplateException;
+	Unit edit(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Unit entity and serves the Delete function.

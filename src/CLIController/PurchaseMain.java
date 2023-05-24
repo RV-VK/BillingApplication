@@ -57,25 +57,14 @@ public class PurchaseMain {
 							purchaseCLI.Delete(commandlist);
 							break;
 						case "help":
-							System.out.println(
-									">> purchase products using following command\n"
-											+ "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n"
-											+ "\n"
-											+ "\t  date - format( YYYY-MM-DD ), mandatory\n"
-											+ "\t\tinvoice - numbers, mandatory\n"
-											+ "\t\t\n"
-											+ "\t\tThe following purchase items should be given as array of items\n"
-											+ "\t\tcode - text, min 2 - 6 char, mandatory\n"
-											+ "\t\tquantity - numbers, mandatory\n"
-											+ "\t\tcostprice - numbers, mandatory");
+							System.out.println(">> purchase products using following command\n" + "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n" + "\n" + "\t  date - format( YYYY-MM-DD ), mandatory\n" + "\t\tinvoice - numbers, mandatory\n" + "\t\t\n" + "\t\tThe following purchase items should be given as array of items\n" + "\t\tcode - text, min 2 - 6 char, mandatory\n" + "\t\tquantity - numbers, mandatory\n" + "\t\tcostprice - numbers, mandatory");
 							break;
 						default:
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								purchaseCLI.Create(command);
 							} else {
 								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println(
-										"Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
+								System.out.println("Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
 							}
 					}
 					break;
@@ -91,13 +80,8 @@ public class PurchaseMain {
 					}
 					break;
 				case "help":
-					System.out.println("product\n"
-							+ "\t    list\n");
-					System.out.println("purchase \n"
-							+ "\t\t\tcreate - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....\n"
-							+ "\t\t\tcount\n"
-							+ "\t\t\tlist\n"
-							+ "\t\t\tdelete - invoice");
+					System.out.println("product\n" + "\t    list\n");
+					System.out.println("purchase \n" + "\t\t\tcreate - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....\n" + "\t\t\tcount\n" + "\t\t\tlist\n" + "\t\t\tdelete - invoice");
 					break;
 				default:
 					System.out.println("Invalid Command! Not found!");
