@@ -35,5 +35,5 @@ public interface StoreDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	int delete(String adminPassword) throws ApplicationErrorException;
+	Integer delete(String adminPassword) throws ApplicationErrorException;
 }

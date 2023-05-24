@@ -18,7 +18,7 @@ public interface PurchaseService {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException;
+	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException;
 
 	/**
 	 * This method invokes the DAO of the Purchase entity and serves the Count function.
@@ -27,7 +27,7 @@ public interface PurchaseService {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count(String parameter) throws ApplicationErrorException;
+	Integer count(String parameter) throws ApplicationErrorException;
 
 
 	/**
@@ -47,5 +47,5 @@ public interface PurchaseService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(String invoice) throws ApplicationErrorException;
+	Integer delete(String invoice) throws ApplicationErrorException;
 }

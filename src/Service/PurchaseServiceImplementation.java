@@ -16,20 +16,20 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException {
+	public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException {
 		ProductDAO productDAO = new ProductDAOImplementation();
-		UnitDAO getUnitByCode = new UnitDAOImplementation();
+		UnitDAO unitDAO = new UnitDAOImplementation();
 		boolean isDividable;
 		for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
 			try {
 				Product product = productDAO.findByCode(purchaseItem.getProduct().getCode());
 				purchaseItem.setProduct(product);
-				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
+				isDividable = unitDAO.findByCode(product.getunitcode()).getIsDividable();
 			} catch(NullPointerException e) {
 				return new Purchase();
 			}
 			if(! isDividable && purchaseItem.getQuantity() % 1 != 0) {
-				return null;
+				throw new UnDividableEntityException(">> Product '"+ purchaseItem.getProduct().getCode() + " is not of dividable unit!");
 			}
 		}
 		return purchaseDAO.create(purchase);
@@ -37,7 +37,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public int count(String parameter) throws ApplicationErrorException {
+	public Integer count(String parameter) throws ApplicationErrorException {
 		String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 		if(parameter != null) {
 			if(! parameter.matches(dateRegex)) return - 1;
@@ -50,8 +50,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 	public List<Purchase> list(HashMap<String, String> listattributes)
 			throws ApplicationErrorException {
 		List<Purchase> purchaseList;
-		if(Collections.frequency(listattributes.values(), null) == 0
-				|| Collections.frequency(listattributes.values(), null) == 1) {
+		if(Collections.frequency(listattributes.values(), null) == 0 || Collections.frequency(listattributes.values(), null) == 1) {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
@@ -72,7 +71,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public int delete(String invoice) throws ApplicationErrorException {
+	public Integer delete(String invoice) throws ApplicationErrorException {
 		return purchaseDAO.delete(Integer.parseInt(invoice));
 	}
 }

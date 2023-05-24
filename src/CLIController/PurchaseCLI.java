@@ -86,9 +86,7 @@ public class PurchaseCLI {
 			} catch(Exception e) {
 				System.out.println(e.getMessage());
 			}
-			if(createdPurchase == null)
-				System.out.println(">> Not a dividable Entity!!Please check the quantity you have entered");
-			else if(createdPurchase.getDate() != null) {
+			if(createdPurchase.getDate() != null) {
 				System.out.println(
 						"**********************************************************************************");
 				System.out.println(
@@ -145,12 +143,11 @@ public class PurchaseCLI {
 								+ "> purchase count -c <category>\n"
 								+ "\n"
 								+ ">> count : <number>\n");
-				return;
 			} else {
 				System.out.println(">> Invalid command given!!!");
 				System.out.println(">> Try \"purchase count help\" for proper syntax!!");
-				return;
 			}
+			return;
 		}
 		if(arguments.size() == 2) {
 			purchaseCount = purchaseService.count(null);
@@ -344,9 +341,8 @@ public class PurchaseCLI {
 			if(purchaseList == null) {
 				if(! listAttributesMap.get("Searchtext").equals("id")) {
 					System.out.println(">>Given SearchText does not exist!!!");
-					return;
-				} else
-					return;
+				}
+				return;
 			}
 			for(Purchase purchase: purchaseList) {
 				System.out.print(

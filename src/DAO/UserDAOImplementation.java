@@ -82,7 +82,7 @@ public class UserDAOImplementation implements UserDAO {
 
 
 	@Override
-	public int count() throws ApplicationErrorException {
+	public Integer count() throws ApplicationErrorException {
 		try {
 			Statement countStatement = userConnection.createStatement();
 			ResultSet countResultSet = countStatement.executeQuery("SELECT COUNT(ID) FROM USERS");
@@ -198,7 +198,7 @@ public class UserDAOImplementation implements UserDAO {
 
 
 	@Override
-	public int delete(String username) throws ApplicationErrorException {
+	public Integer delete(String username) throws ApplicationErrorException {
 		try {
 			Statement deleteStatement = userConnection.createStatement();
 			if(deleteStatement.executeUpdate("DELETE FROM USERS WHERE USERNAME='" + username + "'")
@@ -215,7 +215,7 @@ public class UserDAOImplementation implements UserDAO {
 	}
 
 
-	public boolean checkIfInitialSetup() throws SQLException {
+	public Boolean checkIfInitialSetup() throws SQLException {
 		ResultSet resultSet =
 				userConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM USERS WHERE USERTYPE='Admin'");
 		resultSet.next();

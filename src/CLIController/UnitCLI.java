@@ -77,10 +77,8 @@ public class UnitCLI {
 			System.out.println(e.getMessage());
 			return;
 		}
-		if(createdUnit == null) {
-			System.out.println(">> Try \"unit create help\" for proper syntax");
-		} else if(createdUnit != null) {
-			System.out.println("Unit creation Succesful!!");
+		if(createdUnit != null) {
+			System.out.println("Unit creation Successful!!");
 			System.out.println(createdUnit);
 		}
 	}
@@ -213,7 +211,6 @@ public class UnitCLI {
 		try {
 			editedUnit = unitService.edit(unit);
 		} catch(Exception e) {
-			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return;
 		}

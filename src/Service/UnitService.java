@@ -55,5 +55,5 @@ public interface UnitService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(String code) throws ApplicationErrorException;
+	Integer delete(String code) throws ApplicationErrorException;
 }

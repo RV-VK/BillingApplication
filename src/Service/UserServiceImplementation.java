@@ -20,12 +20,12 @@ public class UserServiceImplementation implements UserService {
 			ApplicationErrorException,
 			UniqueConstraintException,
 			InvalidTemplateException {
-		if(validate(user)) return userDAO.create(user);
-		else return null;
+		validate(user);
+		return userDAO.create(user);
 	}
 
 	@Override
-	public int count() throws ApplicationErrorException {
+	public Integer count() throws ApplicationErrorException {
 		return userDAO.count();
 	}
 
@@ -64,7 +64,7 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public int delete(String username) throws ApplicationErrorException {
+	public Integer delete(String username) throws ApplicationErrorException {
 		return userDAO.delete(username);
 	}
 
@@ -72,9 +72,8 @@ public class UserServiceImplementation implements UserService {
 	 * This method validates the user attributes.
 	 *
 	 * @param user user to be validated.
-	 * @return status - Boolean.
 	 */
-	private boolean validate(User user) throws InvalidTemplateException {
+	private void validate(User user) throws InvalidTemplateException {
 		if(user.getUserName() != null && ! user.getUserName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid UserName!!");
 		if(user.getFirstName() != null && ! user.getFirstName().matches(NAME_REGEX))
@@ -83,11 +82,9 @@ public class UserServiceImplementation implements UserService {
 			throw new InvalidTemplateException(">> Invalid LastName!!");
 		if(user.getPassWord() != null && ! user.getPassWord().matches(PASSWORD_REGEX))
 			throw new InvalidTemplateException(">> Invalid Password!!");
-		if(user.getPhoneNumber() != 0
-				&& ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
+		if(user.getPhoneNumber() != 0  && ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
 			throw new InvalidTemplateException(">> Invalid Phone-number!!");
 		if(user.getUserType() != null && ! userTypeList.contains(user.getUserType()))
 			throw new InvalidTemplateException(">> Invalid Usertype!!");
-		return true;
 	}
 }

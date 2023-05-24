@@ -25,7 +25,7 @@ public interface SalesDAO {
 	 * @return count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count(String parameter) throws ApplicationErrorException;
+	Integer count(String parameter) throws ApplicationErrorException;
 
 	/**
 	 * This method lists the Sales and SalesItem entries based on the given searchable attribute and
@@ -57,5 +57,5 @@ public interface SalesDAO {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(int id) throws ApplicationErrorException;
+	Integer delete(int id) throws ApplicationErrorException;
 }

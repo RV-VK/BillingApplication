@@ -105,9 +105,7 @@ public class ProductCLI {
 			System.out.println(e.getMessage());
 			return;
 		}
-		if(createdProduct == null) {
-			System.out.println(">> Try \"product create help\" for proper syntax");
-		} else if(createdProduct != null) {
+		if(createdProduct != null) {
 			System.out.println(">> Product Creation Successfull!!");
 			System.out.println(createdProduct);
 		}
@@ -397,19 +395,25 @@ public class ProductCLI {
 			try {
 				if(editAttributes.get(index).trim().equals("name")) {
 					product.setName(editAttributes.get(index + 1).trim());
-				} else if(editAttributes.get(index).trim().equals("code")
-						&& ! editAttributes.get(index).contains("unitcode")) {
+				} else if(editAttributes.get(index).trim().equals("code") && ! editAttributes.get(index).contains("unitcode")) {
 					product.setCode(editAttributes.get(index + 1).trim());
 				} else if(editAttributes.get(index).trim().equals("unitcode")) {
 					product.setunitcode(editAttributes.get(index + 1).trim());
 				} else if(editAttributes.get(index).trim().equals("type")) {
 					product.setType(editAttributes.get(index + 1).trim());
-				} else if(editAttributes.get(index).trim().equals("price")) {
-					float price;
-					try {
-						price = Float.parseFloat(editAttributes.get(index + 1));
+				} else if(editAttributes.get(index).trim().equals("stock")) {
+					try{
+						stock=Float.parseFloat(editAttributes.get(index+1));
 					} catch(Exception e) {
-						System.out.println(">> Price attribute must be a number");
+						System.out.println("Stock must be numeric!!");
+						return;
+					}
+					product.setAvailableQuantity(stock);
+				} else if(editAttributes.get(index).trim().equals("price")) {
+					try {
+						price = Double.parseDouble(editAttributes.get(index + 1));
+					} catch(Exception e) {
+						System.out.println(">> Price attribute must be a number!!");
 						return;
 					}
 					product.setPrice(price);

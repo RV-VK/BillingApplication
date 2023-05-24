@@ -13,7 +13,7 @@ public interface LoginService {
 	 * @return status - Boolean.
 	 * @throws SQLException Exception thrown based on SQL syntax.
 	 */
-	boolean checkIfInitialSetup() throws SQLException;
+	Boolean checkIfInitialSetup() throws SQLException;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the create user function.

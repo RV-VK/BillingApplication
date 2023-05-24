@@ -28,7 +28,7 @@ public interface SalesService {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count(String parameter) throws ApplicationErrorException;
+	Integer count(String parameter) throws ApplicationErrorException;
 
 	/**
 	 * This method invokes the DAO of the Sales entity and serves the List function.
@@ -49,5 +49,5 @@ public interface SalesService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(String id) throws ApplicationErrorException;
+	Integer delete(String id) throws ApplicationErrorException;
 }

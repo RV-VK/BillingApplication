@@ -33,7 +33,7 @@ public interface UserService {
 	 * @return count - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count() throws ApplicationErrorException;
+	Integer count() throws ApplicationErrorException;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the List function.
@@ -69,5 +69,5 @@ public interface UserService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(String username) throws ApplicationErrorException;
+	Integer delete(String username) throws ApplicationErrorException;
 }

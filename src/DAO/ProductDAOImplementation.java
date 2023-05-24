@@ -90,7 +90,7 @@ public class ProductDAOImplementation implements ProductDAO {
 
 
 	@Override
-	public int count() throws ApplicationErrorException {
+	public Integer count() throws ApplicationErrorException {
 		try {
 			ResultSet countResultSet = productConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM PRODUCT");
 			int count = 0;
@@ -108,20 +108,20 @@ public class ProductDAOImplementation implements ProductDAO {
 	public List<Product> list(String searchText) throws ApplicationErrorException {
 		try {
 			String listQuery = "SELECT * FROM PRODUCT WHERE ( NAME ILIKE '"
-							+ searchText
-							+ "' OR CODE ILIKE '"
-							+ searchText
-							+ "' OR UNITCODE ILIKE '"
-							+ searchText
-							+ "' OR TYPE ILIKE '"
-							+ searchText
-							+ "' OR CAST(ID AS TEXT) ILIKE '"
-							+ searchText
-							+ "' OR CAST(STOCK AS TEXT) ILIKE '"
-							+ searchText
-							+ "' OR CAST(PRICE AS TEXT) ILIKE '"
-							+ searchText
-							+ "' )" + " AND ISDELETED=FALSE";
+					+ searchText
+					+ "' OR CODE ILIKE '"
+					+ searchText
+					+ "' OR UNITCODE ILIKE '"
+					+ searchText
+					+ "' OR TYPE ILIKE '"
+					+ searchText
+					+ "' OR CAST(ID AS TEXT) ILIKE '"
+					+ searchText
+					+ "' OR CAST(STOCK AS TEXT) ILIKE '"
+					+ searchText
+					+ "' OR CAST(PRICE AS TEXT) ILIKE '"
+					+ searchText
+					+ "' )" + " AND ISDELETED=FALSE";
 			ResultSet listresultSet = productConnection.createStatement().executeQuery(listQuery);
 			return listHelper(listresultSet);
 		} catch(SQLException e) {
@@ -181,14 +181,15 @@ public class ProductDAOImplementation implements ProductDAO {
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			String editQuery =
-					"UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE) WHERE ID=? RETURNING *";
+					"UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE),STOCK= COALESCE(NULLIF(?,0),STOCK) WHERE ID=? RETURNING *";
 			PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
 			setParameters(editStatement, product);
 			if(product.getPrice() == 0)
 				editStatement.setNull(5, Types.NUMERIC);
 			else
 				editStatement.setDouble(5, product.getPrice());
-			editStatement.setInt(6, product.getId());
+			editStatement.setFloat(6, product.getAvailableQuantity());
+			editStatement.setInt(7, product.getId());
 			ResultSet editProductResultSet = editStatement.executeQuery();
 			editProductResultSet.next();
 			return getProductFromResultSet(editProductResultSet);
@@ -200,7 +201,7 @@ public class ProductDAOImplementation implements ProductDAO {
 
 
 	@Override
-	public int delete(String parameter) throws ApplicationErrorException {
+	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
 			Statement deleteStatement = productConnection.createStatement();
 			if(deleteStatement.executeUpdate("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '%" + parameter + "%'" + "OR CODE='" + parameter + "') AND STOCK=0 ") > 0)
@@ -230,8 +231,8 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	public void updateStock(String code, float stock) throws ApplicationErrorException {
 		try {
-            productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+" + stock + " WHERE CODE='" + code + "'");
-        } catch(Exception e) {
+			productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+" + stock + " WHERE CODE='" + code + "'");
+		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}

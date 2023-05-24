@@ -31,7 +31,7 @@ public interface ProductDAO {
 	 * @return count
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count() throws ApplicationErrorException;
+	Integer count() throws ApplicationErrorException;
 
 	/**
 	 * This method lists the products in the product table based on the given searchable attribute and
@@ -83,7 +83,7 @@ public interface ProductDAO {
 	 * @return resultCode - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(String parameter) throws ApplicationErrorException;
+	Integer delete(String parameter) throws ApplicationErrorException;
 
 	/**
 	 * This method finds the Product by its product code attribute.

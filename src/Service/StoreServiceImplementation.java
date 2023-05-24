@@ -16,8 +16,9 @@ public class StoreServiceImplementation implements StoreService {
 	@Override
 	public Store create(Store store)
 			throws SQLException, ApplicationErrorException, InvalidTemplateException {
-		if(validate(store)) return storeDAO.create(store);
-		else return new Store();
+		validate(store);
+		return storeDAO.create(store);
+
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class StoreServiceImplementation implements StoreService {
 
 
 	@Override
-	public int delete(String adminPassword) throws ApplicationErrorException {
+	public Integer delete(String adminPassword) throws ApplicationErrorException {
 		return storeDAO.delete(adminPassword);
 	}
 
@@ -37,15 +38,13 @@ public class StoreServiceImplementation implements StoreService {
 	 * This method validates the Store attributes.
 	 *
 	 * @param store Store to be validated
-	 * @return status - Boolean
 	 */
-	private boolean validate(Store store) throws InvalidTemplateException {
+	private void validate(Store store) throws InvalidTemplateException {
 		if(store.getName() != null && ! store.getName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid Store Name!!");
 		if(store.getPhoneNumber() != 0 && ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
 			throw new InvalidTemplateException(">> Invalid Phone-number!!");
 		if(store.getGstCode() != null && ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))
 			throw new InvalidTemplateException(">> Invalid GstCode!!");
-		else return true;
 	}
 }

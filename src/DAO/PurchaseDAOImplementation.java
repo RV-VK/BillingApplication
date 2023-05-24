@@ -78,7 +78,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	}
 
 	@Override
-	public int count(String parameter) throws ApplicationErrorException {
+	public Integer count(String parameter) throws ApplicationErrorException {
 		try {
 			String countQuery = "SELECT COUNT(ID) FROM PURCHASE";
 			String countQueryByDate =
@@ -179,7 +179,7 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	}
 
 	@Override
-	public int delete(int invoice) throws ApplicationErrorException {
+	public Integer delete(int invoice) throws ApplicationErrorException {
 		try {
 			if(purchaseConnection
 					.createStatement()

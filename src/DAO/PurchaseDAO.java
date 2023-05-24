@@ -23,7 +23,7 @@ public interface PurchaseDAO {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count(String parameter) throws ApplicationErrorException;
+	Integer count(String parameter) throws ApplicationErrorException;
 
 	/**
 	 * This method Lists the Purchase and PurchaseItem entries based on the given searchable attribute
@@ -57,5 +57,5 @@ public interface PurchaseDAO {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(int invoice) throws ApplicationErrorException;
+	Integer delete(int invoice) throws ApplicationErrorException;
 }

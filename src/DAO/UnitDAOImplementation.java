@@ -94,7 +94,7 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
 	@Override
-	public int delete(String code) throws ApplicationErrorException {
+	public Integer delete(String code) throws ApplicationErrorException {
 		try {
 			Statement deleteStatement = unitConnection.createStatement();
 			if(! (deleteStatement.executeUpdate("DELETE FROM UNIT WHERE CODE='" + code + "'") > 0)) {

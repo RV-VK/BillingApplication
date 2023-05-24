@@ -69,7 +69,7 @@ public class StoreDAOImplementation implements StoreDAO {
 
 
 	@Override
-	public int delete(String adminPassword) throws ApplicationErrorException {
+	public Integer delete(String adminPassword) throws ApplicationErrorException {
 		try {
 			Statement storeExistenceCheckStatement = storeConnection.createStatement();
 			ResultSet storeResultSet = storeExistenceCheckStatement.executeQuery("SELECT * FROM STORE");

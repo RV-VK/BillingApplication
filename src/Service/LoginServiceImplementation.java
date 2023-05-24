@@ -13,7 +13,7 @@ public class LoginServiceImplementation implements LoginService {
 
 
 	@Override
-	public boolean checkIfInitialSetup() throws SQLException {
+	public Boolean checkIfInitialSetup() throws SQLException {
 		return userDAO.checkIfInitialSetup();
 	}
 

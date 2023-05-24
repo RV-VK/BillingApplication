@@ -32,7 +32,7 @@ public interface ProductService {
 	 * @return count - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int count() throws ApplicationErrorException;
+	Integer count() throws ApplicationErrorException;
 
 
 	/**
@@ -72,6 +72,6 @@ public interface ProductService {
 	 * @return resultCode - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	int delete(String parameter) throws ApplicationErrorException;
+	Integer delete(String parameter) throws ApplicationErrorException;
 
 }

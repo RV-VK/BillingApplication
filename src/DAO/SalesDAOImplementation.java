@@ -73,7 +73,7 @@ public class SalesDAOImplementation implements SalesDAO {
 	}
 
 	@Override
-	public int count(String parameter) throws ApplicationErrorException {
+	public Integer count(String parameter) throws ApplicationErrorException {
 		try {
 			String countQuery = "SELECT COUNT(ID) FROM SALES";
 			String countQueryByDate = "SELECT COUNT(*) FROM PURCHASE WHERE CAST(DATE AS TEXT) ILIKE'" + parameter + "'";
@@ -170,7 +170,7 @@ public class SalesDAOImplementation implements SalesDAO {
 	}
 
 	@Override
-	public int delete(int id) throws ApplicationErrorException {
+	public Integer delete(int id) throws ApplicationErrorException {
 		try {
 			int salesItemUpdatedCount =
 					salesConnection.createStatement().executeUpdate("DELETE FROM SALESITEMS WHERE ID='" + id + "'");

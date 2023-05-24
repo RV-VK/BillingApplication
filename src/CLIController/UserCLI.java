@@ -22,10 +22,10 @@ public class UserCLI {
 	private String searchText;
 	private List<User> userList;
 	private final UserService userService = new UserServiceImplementation();
-	private Scanner scanner = new Scanner(System.in);
-	private HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final Scanner scanner = new Scanner(System.in);
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 
-	private List<String> userAttributes =
+	private final List<String> userAttributes =
 			Arrays.asList(
 					"id", "usertype", "username", "password", "firstname", "lastname", "phonenumber");
 
@@ -93,9 +93,7 @@ public class UserCLI {
 			System.out.println(e.getMessage());
 			return;
 		}
-		if(createdUser == null) {
-			System.out.println("Try \"user create help\" for proper syntax");
-		} else if(createdUser != null) {
+		if(createdUser != null) {
 			System.out.println(">> User Creation Successfull!!");
 			System.out.println(createdUser);
 		}
@@ -314,23 +312,7 @@ public class UserCLI {
 	public void edit(List<String> arguments, String command) {
 		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
-			System.out.println(
-					">> Edit user using following template. Copy the user data from the list, edit the attribute values. \n"
-							+ ">> id: <id - 6>, usertype: <usertype-edited>, username: <username>,  password: <password>, first name: <first name>, last name: <last name>, phone number: <phone number>\n"
-							+ "\n"
-							+ ">> You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n"
-							+ ">> id: <id - 6>, usertype: <usertype-edited>, username: <username-edited>\n"
-							+ "\n"
-							+ ">> You can not give empty or null values to the mandatory attributes.\n"
-							+ ">> id: <id - 6>, usertype: , username: null\n"
-							+ "\t\n"
-							+ "\tid\t\t\t - number, mandatory\t\n"
-							+ "\tusertype - text, purchase/sales, mandatory\n"
-							+ "\tuse\trname - text, min 3 - 30 char, mandatory\n"
-							+ "\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n"
-							+ "\tfirstname - text, mandatory with 3 to 30 chars\n"
-							+ "\tlastname  - text, optional\n"
-							+ "\tphone - number, mandatory, ten digits, digit start with 9/8/7/6");
+			System.out.printf(">> Edit user using following template. Copy the user data from the list, edit the attribute values. \n>> id: <id - 6>, usertype: <usertype-edited>, username: <username>,  password: <password>, first name: <first name>, last name: <last name>, phone number: <phone number>\n\n>> You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n>> id: <id - 6>, usertype: <usertype-edited>, username: <username-edited>\n\n>> You can not give empty or null values to the mandatory attributes.\n>> id: <id - 6>, usertype: , username: null\n\t\n\tid\t\t\t - number, mandatory\t\n\tusertype - text, purchase/sales, mandatory\n\tuse\trname - text, min 3 - 30 char, mandatory\n\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n\tfirstname - text, mandatory with 3 to 30 chars\n\tlastname  - text, optional\n\tphone - number, mandatory, ten digits, digit start with 9/8/7/6%n");
 		} else if(arguments.size() == 2) {
 			System.out.print("> ");
 			String parameters = scanner.nextLine();

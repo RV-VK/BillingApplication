@@ -83,8 +83,6 @@ public class StoreCLI {
 			System.out.println(">> Store already exists!!");
 		else if(createdStore.getName() != null) {
 			System.out.println(">> Store Created Successfully!!!");
-		} else if(createdStore.getName() == null) {
-			System.out.println(">> Try \"store create help\" for proper syntax!!");
 		}
 	}
 

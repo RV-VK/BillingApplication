@@ -25,7 +25,7 @@ public interface UserDAO {
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
 
-	int count() throws ApplicationErrorException;
+	Integer count() throws ApplicationErrorException;
 
 	/**
 	 * This method Lists the records in the user table based on a given Search-text.
@@ -71,7 +71,7 @@ public interface UserDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	int delete(String parameter) throws ApplicationErrorException;
+	Integer delete(String parameter) throws ApplicationErrorException;
 
 	/**
 	 * This method acts as a helper method to check whether any entry is made on User table so that the control
@@ -81,7 +81,7 @@ public interface UserDAO {
 	 * @throws SQLException Exception thrown due to Persistence problems.
 	 */
 
-	boolean checkIfInitialSetup() throws SQLException;
+	Boolean checkIfInitialSetup() throws SQLException;
 
 	/**
 	 * This method verifies whether the input username and password matches in the user table to enable login for the users.
