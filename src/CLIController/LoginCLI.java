@@ -98,9 +98,13 @@ public class LoginCLI {
 				/**
 				 * Split control Here
 				 */
-				if(userType.equalsIgnoreCase("Admin")) AdminMain.AdminView();
-				else if(userType.equalsIgnoreCase("Sales")) SalesMain.SalesView();
-				else if(userType.equalsIgnoreCase("Purchase")) PurchaseMain.PurchaseView();
+				if(userType.equalsIgnoreCase("Admin")) {
+					AdminMain.AdminView();
+				} else if(userType.equalsIgnoreCase("Sales")) {
+					SalesMain.SalesView();
+				} else if(userType.equalsIgnoreCase("Purchase")) {
+					PurchaseMain.PurchaseView();
+				}
 			} else {
 				System.out.println(">> Login credentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.");
 			}

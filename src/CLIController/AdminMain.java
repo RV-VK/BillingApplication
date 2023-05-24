@@ -4,10 +4,7 @@ import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class AdminMain {
 	static Scanner scanner;
@@ -25,22 +22,7 @@ public class AdminMain {
 		do {
 			System.out.print("> ");
 			String command = scanner.nextLine();
-			String[] parts;
-			String[] commandlet;
-			if(command.contains(",")) {
-				parts = command.split("[,:]");
-				commandlet = parts[0].split(" ");
-			} else {
-				parts = command.split(",");
-				commandlet = command.split(" ");
-			}
-			ArrayList<String> commandlist = new ArrayList<>();
-			if(parts.length == 1) {
-				Collections.addAll(commandlist, commandlet);
-			} else {
-				Collections.addAll(commandlist, commandlet);
-				commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
-			}
+			List<String> commandlist=splitCommand(command);
 			String commandString = commandlist.get(0);
 			String operationString = "";
 			if(commandlist.size() > 1) operationString = commandlist.get(1);
@@ -183,5 +165,25 @@ public class AdminMain {
 					System.out.println("Invalid Command! Not Found!");
 			}
 		} while(true);
+	}
+	private static List<String> splitCommand(String command)
+	{
+		String[] parts;
+		String[] commandlet;
+		if(command.contains(",")) {
+			parts = command.split("[,:]");
+			commandlet = parts[0].split(" ");
+		} else {
+			parts = command.split(",");
+			commandlet = command.split(" ");
+		}
+		ArrayList<String> commandlist = new ArrayList<>();
+		if(parts.length == 1) {
+			Collections.addAll(commandlist, commandlet);
+		} else {
+			Collections.addAll(commandlist, commandlet);
+			commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
+		}
+		return commandlist;
 	}
 }
