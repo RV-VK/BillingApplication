@@ -108,46 +108,42 @@ public class ProductCLI {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-		setMap(listAttributesMap,null,null,null,null);
+		setMap(listAttributesMap, null, null, null, null);
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
 			FeedBackPrinter.printProductHelp("list");
 		} else if(arguments.size() == 2) {
-			setMap(listAttributesMap,"20","1","id",null);
+			setMap(listAttributesMap, "20", "1", "id", null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-p")) {
 				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
-				setMap(listAttributesMap,String.valueOf(pageLength),"1","id",null);
+				setMap(listAttributesMap, String.valueOf(pageLength), "1", "id", null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				searchText = arguments.get(3).trim();
-				setMap(listAttributesMap,null,null,null,searchText);
+				setMap(listAttributesMap, null, null, null, searchText);
 				listHelper(listAttributesMap);
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"product list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("product");
 			}
 		} else if(arguments.size() == 5) {
 			if(arguments.get(2).equals("-p")) {
 				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
 				if((pageNumber = validateNumber(arguments.get(4), "PageNumber")) < 0) return;
-				setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),"id",null);
+				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), "id", null);
 				listHelper(listAttributesMap);
 			} else if(arguments.get(2).equals("-s")) {
 				attribute = arguments.get(3);
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(productAttributes.contains(attribute)) {
-					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
+					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
 					listHelper(listAttributesMap);
 				} else {
-					System.out.println(">> Given attribute is not a searchable attribute!!");
-					System.out.println(">> Searchable Attributes are :" + productAttributes);
-					System.out.println(">> Try \"product list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("product", productAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"product list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("product");
 			}
 		} else if(arguments.size() == 7) {
 			if(arguments.get(2).equals("-s")) {
@@ -157,20 +153,17 @@ public class ProductCLI {
 				if(productAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap,String.valueOf(pageLength),"1",attribute,"'"+searchText+"'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
 						System.out.println(">> Try \"product list help\" for proper syntax");
 					}
 				} else {
-					System.out.println(">> Given attribute is not a searchable attribute!!");
-					System.out.println(">> Searchable Attributes are :" + productAttributes);
-					System.out.println(">> Try \"product list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("product", productAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"product list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("product");
 			}
 		} else if(arguments.size() == 8) {
 			if(arguments.get(2).equals("-s")) {
@@ -181,27 +174,21 @@ public class ProductCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
 						listHelper(listAttributesMap);
 					} else {
-						System.out.println(">> Invalid Extension Given!!!");
-						System.out.println(">> Try \"product list help\" for proper syntax");
+						FeedBackPrinter.printInvalidExtension("product");
 					}
 				} else {
-					System.out.println(">> Given attribute is not a searchable attribute!!");
-					System.out.println(">> Searchable Attributes are :" + productAttributes);
-					System.out.println(">> Try \"product list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("product", productAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"product list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("product");
 			}
 		} else if(arguments.size() == 3) {
-			System.out.println("Invalid command format!!!");
-			System.out.println(">> Try \"product list help\" for proper syntax");
+			FeedBackPrinter.printInvalidFormat("product");
 		} else {
-			System.out.println("Invalid command format!!!");
-			System.out.println(">> Try \"product list help\" for proper syntax");
+			FeedBackPrinter.printInvalidFormat("product");
 		}
 	}
 
@@ -410,9 +397,9 @@ public class ProductCLI {
 		}
 		return result;
 	}
-	private void setMap(HashMap<String,String> listAttributesMap,String PageLength,String PageNumber,String Attribute,String SearchText)
-	{
-		listAttributesMap.put("Pagelength",PageLength);
+
+	private void setMap(HashMap<String, String> listAttributesMap, String PageLength, String PageNumber, String Attribute, String SearchText) {
+		listAttributesMap.put("Pagelength", PageLength);
 		listAttributesMap.put("Pagenumber", PageNumber);
 		listAttributesMap.put("Attribute", Attribute);
 		listAttributesMap.put("Searchtext", SearchText);

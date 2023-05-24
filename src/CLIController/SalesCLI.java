@@ -4,6 +4,7 @@ import DAO.ApplicationErrorException;
 import Entity.Product;
 import Entity.Sales;
 import Entity.SalesItem;
+import Service.InvalidTemplateException;
 import Service.SalesService;
 import Service.SalesServiceImplementation;
 
@@ -163,8 +164,7 @@ public class SalesCLI {
 				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"sales list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("sales");
 			}
 		} else if(arguments.size() == 5) {
 			if(arguments.get(2).equals("-p")) {
@@ -180,12 +180,10 @@ public class SalesCLI {
 					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"sales list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("sales",saleAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"sales list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("sales");
 			}
 		} else if(arguments.size() == 7) {
 			if(arguments.get(2).equals("-s")) {
@@ -202,12 +200,10 @@ public class SalesCLI {
 						System.out.println("Try \"sales list help\" for proper syntax");
 					}
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"sales list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("sales",saleAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"sales list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("sales");
 			}
 		} else if(arguments.size() == 8) {
 			if(arguments.get(2).equals("-s")) {
@@ -221,20 +217,16 @@ public class SalesCLI {
 						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
-						System.out.println("Invalid Extension Given!!!");
-						System.out.println("Try \"sales list help\" for proper syntax");
+						FeedBackPrinter.printInvalidExtension("sales");
 					}
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"sales list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("sales",saleAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"sales list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("sales");
 			}
 		} else {
-			System.out.println("Invalid command format!!!");
-			System.out.println(">> Try \"sales list help\" for proper syntax");
+			FeedBackPrinter.printInvalidFormat("sales");
 		}
 	}
 

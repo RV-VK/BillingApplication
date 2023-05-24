@@ -131,8 +131,7 @@ public class UserCLI {
 				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"user list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("user");
 			}
 		} else if(arguments.size() == 5) {
 			pageLength = 0;
@@ -150,12 +149,10 @@ public class UserCLI {
 					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
-					System.out.println(">> Given attribute is not a Searchable attribute!!!");
-					System.out.println(">> Try \"user list help\" for proper syntax!!!");
+					FeedBackPrinter.printNonSearchableAttribute("user",userAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"user list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("user");
 			}
 		} else if(arguments.size() == 7) {
 			if(arguments.get(2).equals("-s")) {
@@ -172,12 +169,10 @@ public class UserCLI {
 						System.out.println("Try \"user list help\" for proper syntax");
 					}
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"user list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("user",userAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"user list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("user");
 			}
 		} else if(arguments.size() == 8) {
 			if(arguments.get(2).equals("-s")) {
@@ -191,23 +186,18 @@ public class UserCLI {
 						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
-						System.out.println("Invalid Extension Given!!!");
-						System.out.println("Try \"user list help\" for proper syntax");
+						FeedBackPrinter.printInvalidExtension("user");
 					}
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"user list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("user",userAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"product list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("user");
 			}
 		} else if(arguments.size() == 3) {
-			System.out.println("Invalid command format!!!");
-			System.out.println(">> Try \"user list help\" for proper syntax");
+			FeedBackPrinter.printInvalidFormat("user");
 		} else {
-			System.out.println("Invalid command format!!!");
-			System.out.println(">> Try \"user list help\" for proper syntax!!!");
+			FeedBackPrinter.printInvalidFormat("user");
 		}
 	}
 

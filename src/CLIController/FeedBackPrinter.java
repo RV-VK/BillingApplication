@@ -1,5 +1,7 @@
 package CLIController;
 
+import java.util.List;
+
 public class FeedBackPrinter {
 	public static void printProductHelp(String operation) {
 		switch(operation) {
@@ -99,5 +101,21 @@ public class FeedBackPrinter {
 				break;
 
 		}
+	}
+	public static void printInvalidExtension(String Entity)
+	{
+		System.out.println(">> Invalid Extension given");
+		System.out.println(">> Try \""+Entity+" list help\" for proper syntax");
+	}
+	public static void printNonSearchableAttribute(String Entity, List<String> attributes)
+	{
+		System.out.println(">> Given attribute is not a searchable attribute!!");
+		System.out.println(">> Searchable Attributes are :" + attributes);
+		System.out.println(">> Try \""+Entity+" list help\" for proper syntax");
+	}
+	public static void printInvalidFormat(String Entity)
+	{
+		System.out.println("Invalid command format!!!");
+		System.out.println(">> Try \""+Entity+" list help\" for proper syntax");
 	}
 }

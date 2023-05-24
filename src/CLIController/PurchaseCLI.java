@@ -171,8 +171,7 @@ public class PurchaseCLI {
 				setMap(listAttributesMap,null,null,null,searchText);
 				listHelper(listAttributesMap);
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"purchase list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("purchase");
 			}
 		} else if(arguments.size() == 5) {
 			if(arguments.get(2).equals("-p")) {
@@ -188,12 +187,10 @@ public class PurchaseCLI {
 					setMap(listAttributesMap,"20","1",attribute,"'"+searchText+"'");
 					listHelper(listAttributesMap);
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"purchase list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("purchase",purchaseAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"purchase list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("purchase");
 			}
 		} else if(arguments.size() == 7) {
 			if(arguments.get(2).equals("-s")) {
@@ -210,12 +207,10 @@ public class PurchaseCLI {
 						System.out.println("Try \"purchase list help\" for proper syntax");
 					}
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"purchase list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("purchase",purchaseAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"purchase list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("purchase");
 			}
 		} else if(arguments.size() == 8) {
 			if(arguments.get(2).equals("-s")) {
@@ -229,21 +224,17 @@ public class PurchaseCLI {
 						setMap(listAttributesMap,String.valueOf(pageLength),String.valueOf(pageNumber),attribute,"'"+searchText+"'");
 						listHelper(listAttributesMap);
 					} else {
-						System.out.println("Invalid Extension Given!!!");
-						System.out.println("Try \"purchase list help\" for proper syntax");
+						FeedBackPrinter.printInvalidExtension("purchase");
 					}
 				} else {
-					System.out.println("Given attribute is not a searchable attribute!!");
-					System.out.println("Try \"purchase list help\" for proper syntax");
+					FeedBackPrinter.printNonSearchableAttribute("purchase",purchaseAttributes);
 				}
 			} else {
-				System.out.println(">> Invalid Extension given");
-				System.out.println(">> Try \"purchase list help\" for proper syntax");
+				FeedBackPrinter.printInvalidExtension("purchase");
 			}
 
 		} else {
-			System.out.println("Invalid command format!!!");
-			System.out.println(">> Try \"purchase list help\" for proper syntax");
+			FeedBackPrinter.printInvalidFormat("purchase");
 		}
 	}
 
