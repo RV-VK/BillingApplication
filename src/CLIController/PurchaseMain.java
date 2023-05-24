@@ -21,22 +21,22 @@ public class PurchaseMain {
 		do {
 			System.out.print("> ");
 			String command = scanner.nextLine();
-			List<String> commandlist=splitCommand(command);
-			String commandString = commandlist.get(0);
+			List<String> commandList=splitCommand(command);
+			String commandString = commandList.get(0);
 			String operationString = "";
-			if(commandlist.size() > 1) operationString = commandlist.get(1);
+			if(commandList.size() > 1) operationString = commandList.get(1);
 			switch(commandString) {
 				case "purchase":
 					PurchaseCLI purchaseCLI = new PurchaseCLI();
 					switch(operationString) {
 						case "count":
-							purchaseCLI.Count(commandlist);
+							purchaseCLI.Count(commandList);
 							break;
 						case "list":
-							purchaseCLI.List(commandlist);
+							purchaseCLI.List(commandList);
 							break;
 						case "delete":
-							purchaseCLI.Delete(commandlist);
+							purchaseCLI.Delete(commandList);
 							break;
 						case "help":
 							System.out.println(">> purchase products using following command\n" + "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n" + "\n" + "\t  date - format( YYYY-MM-DD ), mandatory\n" + "\t\tinvoice - numbers, mandatory\n" + "\t\t\n" + "\t\tThe following purchase items should be given as array of items\n" + "\t\tcode - text, min 2 - 6 char, mandatory\n" + "\t\tquantity - numbers, mandatory\n" + "\t\tcostprice - numbers, mandatory");
@@ -54,7 +54,7 @@ public class PurchaseMain {
 					ProductCLI productCLI = new ProductCLI();
 					switch(operationString) {
 						case "list":
-							productCLI.list(commandlist);
+							productCLI.list(commandList);
 							break;
 						default:
 							System.out.println("Invalid operation for command \"" + commandString + "\"");
@@ -81,13 +81,13 @@ public class PurchaseMain {
 			parts = command.split(",");
 			commandlet = command.split(" ");
 		}
-		ArrayList<String> commandlist = new ArrayList<>();
+		ArrayList<String> commandList = new ArrayList<>();
 		if(parts.length == 1) {
-			Collections.addAll(commandlist, commandlet);
+			Collections.addAll(commandList, commandlet);
 		} else {
-			Collections.addAll(commandlist, commandlet);
-			commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
 		}
-		return commandlist;
+		return commandList;
 	}
 }

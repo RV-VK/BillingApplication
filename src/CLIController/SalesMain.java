@@ -21,22 +21,22 @@ public class SalesMain {
 		do {
 			System.out.print("> ");
 			String command = scanner.nextLine();
-			List<String> commandlist=splitCommand(command);
-			String commandString = commandlist.get(0);
+			List<String> commandList=splitCommand(command);
+			String commandString = commandList.get(0);
 			String operationString = "";
-			if(commandlist.size() > 1) operationString = commandlist.get(1);
+			if(commandList.size() > 1) operationString = commandList.get(1);
 			switch(commandString) {
 				case "sales":
 					SalesCLI salesCLI = new SalesCLI();
 					switch(operationString) {
 						case "count":
-							salesCLI.count(commandlist);
+							salesCLI.count(commandList);
 							break;
 						case "list":
-							salesCLI.list(commandlist);
+							salesCLI.list(commandList);
 							break;
 						case "delete":
-							salesCLI.delete(commandlist);
+							salesCLI.delete(commandList);
 							break;
 						case "help":
 							System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
@@ -53,7 +53,7 @@ public class SalesMain {
 					ProductCLI productCLI = new ProductCLI();
 					switch(operationString) {
 						case "list":
-							productCLI.list(commandlist);
+							productCLI.list(commandList);
 							break;
 						default:
 							System.out.println("Invalid operation for command \"" + commandString + "\"");
@@ -79,13 +79,13 @@ public class SalesMain {
 			parts = command.split(",");
 			commandlet = command.split(" ");
 		}
-		ArrayList<String> commandlist = new ArrayList<>();
+		ArrayList<String> commandList = new ArrayList<>();
 		if(parts.length == 1) {
-			Collections.addAll(commandlist, commandlet);
+			Collections.addAll(commandList, commandlet);
 		} else {
-			Collections.addAll(commandlist, commandlet);
-			commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
 		}
-		return commandlist;
+		return commandList;
 	}
 }

@@ -22,28 +22,28 @@ public class AdminMain {
 		do {
 			System.out.print("> ");
 			String command = scanner.nextLine();
-			List<String> commandlist=splitCommand(command);
-			String commandString = commandlist.get(0);
+			List<String> commandList=splitCommand(command);
+			String commandString = commandList.get(0);
 			String operationString = "";
-			if(commandlist.size() > 1) operationString = commandlist.get(1);
+			if(commandList.size() > 1) operationString = commandList.get(1);
 			switch(commandString) {
 				case "product":
 					ProductCLI productCLI = new ProductCLI();
 					switch(operationString) {
 						case "create":
-							productCLI.Create(commandlist);
+							productCLI.Create(commandList);
 							break;
 						case "count":
-							productCLI.count(commandlist);
+							productCLI.count(commandList);
 							break;
 						case "list":
-							productCLI.list(commandlist);
+							productCLI.list(commandList);
 							break;
 						case "edit":
-							productCLI.edit(commandlist, command);
+							productCLI.edit(commandList, command);
 							break;
 						case "delete":
-							productCLI.delete(commandlist);
+							productCLI.delete(commandList);
 							break;
 						default:
 							System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
@@ -54,19 +54,19 @@ public class AdminMain {
 					UserCLI userCLI = new UserCLI();
 					switch(operationString) {
 						case "create":
-							userCLI.create(commandlist);
+							userCLI.create(commandList);
 							break;
 						case "count":
-							userCLI.count(commandlist);
+							userCLI.count(commandList);
 							break;
 						case "list":
-							userCLI.list(commandlist);
+							userCLI.list(commandList);
 							break;
 						case "edit":
-							userCLI.edit(commandlist, command);
+							userCLI.edit(commandList, command);
 							break;
 						case "delete":
-							userCLI.delete(commandlist);
+							userCLI.delete(commandList);
 							break;
 						default:
 							System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
@@ -77,13 +77,13 @@ public class AdminMain {
 					StoreCLI storeCLI = new StoreCLI();
 					switch(operationString) {
 						case "create":
-							storeCLI.create(commandlist);
+							storeCLI.create(commandList);
 							break;
 						case "edit":
-							storeCLI.edit(commandlist, command);
+							storeCLI.edit(commandList, command);
 							break;
 						case "delete":
-							storeCLI.delete(commandlist);
+							storeCLI.delete(commandList);
 							break;
 						default:
 							System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
@@ -94,16 +94,16 @@ public class AdminMain {
 					UnitCLI unitCLI = new UnitCLI();
 					switch(operationString) {
 						case "create":
-							unitCLI.create(commandlist);
+							unitCLI.create(commandList);
 							break;
 						case "list":
-							unitCLI.list(commandlist);
+							unitCLI.list(commandList);
 							break;
 						case "edit":
-							unitCLI.edit(commandlist, command);
+							unitCLI.edit(commandList, command);
 							break;
 						case "delete":
-							unitCLI.delete(commandlist);
+							unitCLI.delete(commandList);
 							break;
 						default:
 							System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
@@ -114,13 +114,13 @@ public class AdminMain {
 					PurchaseCLI purchaseCLI = new PurchaseCLI();
 					switch(operationString) {
 						case "count":
-							purchaseCLI.Count(commandlist);
+							purchaseCLI.Count(commandList);
 							break;
 						case "list":
-							purchaseCLI.List(commandlist);
+							purchaseCLI.List(commandList);
 							break;
 						case "delete":
-							purchaseCLI.Delete(commandlist);
+							purchaseCLI.Delete(commandList);
 							break;
 						case "help":
 							System.out.println(">> purchase products using following command\n" + "purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....\n" + "\n" + "\t  date - format( YYYY-MM-DD ), mandatory\n" + "\t\tinvoice - numbers, mandatory\n" + "\t\t\n" + "\t\tThe following purchase items should be given as array of items\n" + "\t\tcode - text, min 2 - 6 char, mandatory\n" + "\t\tquantity - numbers, mandatory\n" + "\t\tcostprice - numbers, mandatory");
@@ -137,13 +137,13 @@ public class AdminMain {
 					SalesCLI salesCLI = new SalesCLI();
 					switch(operationString) {
 						case "count":
-							salesCLI.count(commandlist);
+							salesCLI.count(commandList);
 							break;
 						case "list":
-							salesCLI.list(commandlist);
+							salesCLI.list(commandList);
 							break;
 						case "delete":
-							salesCLI.delete(commandlist);
+							salesCLI.delete(commandList);
 							break;
 						case "help":
 							System.out.println(">> sell products using following command\n" + "\n" + "sales date, [code1, quantity1], [code2, quantity2]....\n" + "\n" + "\t\tcode - text, min 3 - 30 char, mandatory\n" + "\t\tquantity - numbers, mandatory");
@@ -177,13 +177,13 @@ public class AdminMain {
 			parts = command.split(",");
 			commandlet = command.split(" ");
 		}
-		ArrayList<String> commandlist = new ArrayList<>();
+		ArrayList<String> commandList = new ArrayList<>();
 		if(parts.length == 1) {
-			Collections.addAll(commandlist, commandlet);
+			Collections.addAll(commandList, commandlet);
 		} else {
-			Collections.addAll(commandlist, commandlet);
-			commandlist.addAll(Arrays.asList(parts).subList(1, parts.length));
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
 		}
-		return commandlist;
+		return commandList;
 	}
 }
