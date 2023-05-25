@@ -47,7 +47,7 @@ public interface UnitDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	Integer delete(String code) throws ApplicationErrorException;
+	Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException;
 
 	/**
 	 * This method returns a Unit entry based on its attribute code.

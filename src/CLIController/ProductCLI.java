@@ -200,7 +200,10 @@ public class ProductCLI {
 		try {
 			resultList = productService.list(listAttributesMap);
 			if(resultList.size() == 0) {
-				System.out.println(">> Given SearchText does not exist!!!");
+				if(! listAttributesMap.get("Searchtext").equals("id")) {
+					System.out.println(">> Given SearchText does not exist!!!");
+				}
+				return;
 			}
 			for(Product resultProduct: resultList) {
 				System.out.println(">> id: " + resultProduct.getId() + ", code: " + resultProduct.getCode() + ", name: " + resultProduct.getName() + ", type: " + resultProduct.getType() + ", unitcode: " + resultProduct.getunitcode() + ", stock: " + resultProduct.getAvailableQuantity() + ", price: " + resultProduct.getPrice());

@@ -2,6 +2,7 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
+import DAO.UnitCodeViolationException;
 import Entity.User;
 import Service.LoginService;
 import Service.LoginServiceImplementation;
@@ -21,7 +22,7 @@ public class LoginCLI {
 	/**
 	 * Login View Main
 	 **/
-	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException {
+	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException {
 		if(loginService.checkIfInitialSetup()) {
 
 			System.out.println("""
@@ -90,7 +91,7 @@ public class LoginCLI {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	private static void Login() throws PageCountOutOfBoundsException, ApplicationErrorException {
+	private static void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException {
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");

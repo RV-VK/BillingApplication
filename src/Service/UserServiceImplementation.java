@@ -9,7 +9,8 @@ import java.util.*;
 public class UserServiceImplementation implements UserService {
 
 	private final UserDAO userDAO = new UserDAOImplementation();
-	private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
+	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
+	private final String LAST_NAME_REGEX="^[a-zA-Z\\s]{0,30}$";
 	private final String PASSWORD_REGEX = "^[a-zA-Z0-9]{8,30}$";
 	private final List<String> userTypeList = Arrays.asList("Sales", "Purchase", "Admin");
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
@@ -60,7 +61,7 @@ public class UserServiceImplementation implements UserService {
 			throw new InvalidTemplateException(">> Invalid UserName!!");
 		if(user.getFirstName() != null && ! user.getFirstName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid FirstName!!");
-		if(user.getLastName() != null && ! user.getLastName().matches(NAME_REGEX))
+		if(user.getLastName() != null && ! user.getLastName().matches(LAST_NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid LastName!!");
 		if(user.getPassWord() != null && ! user.getPassWord().matches(PASSWORD_REGEX))
 			throw new InvalidTemplateException(">> Invalid Password!!");

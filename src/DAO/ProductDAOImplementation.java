@@ -93,7 +93,7 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	public List<Product> list(String searchText) throws ApplicationErrorException {
 		try {
-			String listQuery = "SELECT * FROM PRODUCT WHERE ( NAME ILIKE '" + searchText + "' OR CODE ILIKE '" + searchText + "' OR UNITCODE ILIKE '" + searchText + "' OR TYPE ILIKE '" + searchText + "' OR CAST(ID AS TEXT) ILIKE '" + searchText + "' OR CAST(STOCK AS TEXT) ILIKE '" + searchText + "' OR CAST(PRICE AS TEXT) ILIKE '" + searchText + "' )" + " AND ISDELETED=FALSE";
+			String listQuery = "SELECT * FROM PRODUCT WHERE ( NAME ILIKE '%" + searchText + "%' OR CODE ILIKE '%" + searchText + "%' OR UNITCODE ILIKE '%" + searchText + "%' OR TYPE ILIKE '%" + searchText + "%' OR CAST(ID AS TEXT) ILIKE '" + searchText + "' OR CAST(STOCK AS TEXT) ILIKE '" + searchText + "' OR CAST(PRICE AS TEXT) ILIKE '" + searchText + "' )" + " AND ISDELETED=FALSE";
 			ResultSet listresultSet = productConnection.createStatement().executeQuery(listQuery);
 			return listHelper(listresultSet);
 		} catch(SQLException e) {

@@ -2,6 +2,7 @@ package Service;
 
 import DAO.ApplicationErrorException;
 import DAO.UniqueConstraintException;
+import DAO.UnitCodeViolationException;
 import Entity.Unit;
 
 import java.sql.SQLException;
@@ -47,5 +48,5 @@ public interface UnitService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer delete(String code) throws ApplicationErrorException;
+	Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException;
 }

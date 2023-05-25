@@ -1,9 +1,6 @@
 package Service;
 
-import DAO.ApplicationErrorException;
-import DAO.UniqueConstraintException;
-import DAO.UnitDAO;
-import DAO.UnitDAOImplementation;
+import DAO.*;
 import Entity.Unit;
 
 import java.sql.SQLException;
@@ -36,7 +33,7 @@ public class UnitServiceImplementation implements UnitService {
 
 
 	@Override
-	public Integer delete(String code) throws ApplicationErrorException {
+	public Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException {
 		return unitDAO.delete(code);
 	}
 

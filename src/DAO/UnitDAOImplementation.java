@@ -84,7 +84,7 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
 	@Override
-	public Integer delete(String code) throws ApplicationErrorException {
+	public Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException {
 		try {
 			Statement deleteStatement = unitConnection.createStatement();
 			if(! (deleteStatement.executeUpdate("DELETE FROM UNIT WHERE CODE='" + code + "'") > 0)) {
@@ -92,7 +92,11 @@ public class UnitDAOImplementation implements UnitDAO {
 			} else {
 				return 1;
 			}
-		} catch(Exception e) {
+		} catch(SQLException e) {
+			if(e.getSQLState().equals("23503"))
+			{
+				throw new UnitCodeViolationException(">> The unitCode is in Use!! Cannot Delete!! Make Sure to delete or Refactor the products with this Unit!");
+			}
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}

@@ -2,6 +2,7 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
+import DAO.UnitCodeViolationException;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -14,7 +15,7 @@ public class AdminMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	public static void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public static void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException {
 		scanner = new Scanner(System.in);
 		System.out.println("\n\n>> Try \"help\" to know better!\n");
 		do {

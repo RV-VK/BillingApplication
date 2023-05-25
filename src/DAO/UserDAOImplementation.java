@@ -87,7 +87,7 @@ public class UserDAOImplementation implements UserDAO {
 	public List<User> list(String searchText) throws ApplicationErrorException {
 		try {
 			Statement listStatement = userConnection.createStatement();
-			String listQuery = "SELECT * FROM USERS WHERE USERTYPE ILIKE '" + searchText + "' OR USERNAME ILIKE '" + searchText + "' OR FIRSTNAME ILIKE '" + searchText + "' OR LASTNAME ILIKE '" + searchText + "' OR PASSWORD ILIKE '" + searchText + "' OR CAST(PHONENUMBER AS TEXT) ILIKE '" + searchText + "' OR CAST(ID AS TEXT) ILIKE '" + searchText + "'";
+			String listQuery = "SELECT * FROM USERS WHERE USERTYPE ILIKE '%" + searchText + "%' OR USERNAME ILIKE '%" + searchText + "%' OR FIRSTNAME ILIKE '%" + searchText + "%' OR LASTNAME ILIKE '%" + searchText + "%' OR PASSWORD ILIKE '" + searchText + "' OR CAST(PHONENUMBER AS TEXT) ILIKE '" + searchText + "' OR CAST(ID AS TEXT) ILIKE '" + searchText + "'";
 			ResultSet listresultSet = listStatement.executeQuery(listQuery);
 			return listHelper(listresultSet);
 		} catch(SQLException e) {
