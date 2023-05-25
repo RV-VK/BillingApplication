@@ -80,10 +80,10 @@ public class SalesMain {
 		String[] commandlet;
 		if(command.contains(",")) {
 			parts = command.split("[,:]");
-			commandlet = parts[0].split(" ");
+			commandlet = parts[0].split("\\s+");
 		} else {
 			parts = command.split(",");
-			commandlet = command.split(" ");
+			commandlet = command.split("\\s+");
 		}
 		ArrayList<String> commandList = new ArrayList<>();
 		if(parts.length == 1) {

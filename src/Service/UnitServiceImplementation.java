@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UnitServiceImplementation implements UnitService {
 	private final UnitDAO unitDAO = new UnitDAOImplementation();
-	private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
+	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
 	private final String CODE_REGEX = "^[a-zA-Z]{1,4}$";
 
 
