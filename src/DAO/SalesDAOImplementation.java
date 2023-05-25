@@ -27,7 +27,6 @@ public class SalesDAOImplementation implements SalesDAO {
 			List<SalesItem> salesItemList = new ArrayList<>();
 			ResultSet salesItemInsertResultSet;
 			for(SalesItem salesItem: sales.getSalesItemList()) {
-				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity()) return null;
 				setSalesItems(salesItemInsertStatement, salesItem, salesEntry);
 				salesItemInsertResultSet = salesItemInsertStatement.executeQuery();
 				new ProductDAOImplementation().updateStock(salesItem.getProduct().getCode(), - salesItem.getQuantity());

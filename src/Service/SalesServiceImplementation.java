@@ -25,6 +25,8 @@ public class SalesServiceImplementation implements SalesService {
 				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());
 				if(product != null)
 					salesItem.setProduct(product);
+				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity())
+					throw new ApplicationErrorException(">> Product '" + salesItem.getProduct().getCode() + "' is out of Stock");
 				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
 				grandtotal += salesItem.getProduct().getPrice() * salesItem.getQuantity();
 			} catch(NullPointerException e) {
