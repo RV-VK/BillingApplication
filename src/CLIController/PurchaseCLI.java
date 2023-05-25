@@ -85,11 +85,9 @@ public class PurchaseCLI {
 				createdPurchase = purchaseService.create(purchase);
 			} catch(Exception e) {
 				System.out.println(e.getMessage());
+				return;
 			}
-			if(createdPurchase.getDate() != null) {
-				printPurchaseBill();
-			} else
-				System.out.println(">> The product code you have entered do not exist!! Please check the product codes");
+			printPurchaseBill();
 		}
 	}
 

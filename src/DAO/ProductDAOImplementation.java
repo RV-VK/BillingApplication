@@ -180,9 +180,10 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
-			ResultSet getProductResultSet = productConnection.createStatement().executeQuery("SELECT * FROM PRODUCT  WHERE CODE='" + code + "'");
-			getProductResultSet.next();
-			return getProductFromResultSet(getProductResultSet);
+			ResultSet getProductResultSet = productConnection.createStatement().executeQuery("SELECT * FROM PRODUCT  WHERE CODE='" + code + "' AND ISDELETED=FALSE");
+			if(getProductResultSet.next())
+				return getProductFromResultSet(getProductResultSet);
+			else return null;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

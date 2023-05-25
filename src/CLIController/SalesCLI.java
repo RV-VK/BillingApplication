@@ -79,8 +79,6 @@ public class SalesCLI {
 				System.out.println(">> Out of Stock Product Entered Please check the entered products!!");
 			} else if(createdSale.getDate() != null) {
 				printSalesBill();
-			} else if(createdSale.getDate() == null) {
-				System.out.println(">> Non-Existing Product Code Entered!! Please check the Product codes!");
 			}
 		}
 	}

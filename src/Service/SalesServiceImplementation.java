@@ -27,7 +27,7 @@ public class SalesServiceImplementation implements SalesService {
 				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
 				grandtotal += salesItem.getProduct().getPrice() * salesItem.getQuantity();
 			} catch(NullPointerException e) {
-				return new Sales();
+				throw new ApplicationErrorException(">> Product code" + salesItem.getProduct().getCode() + " does not exist!");
 			}
 			if((! isDividable && salesItem.getQuantity() % 1 != 0)) {
 				throw new UnDividableEntityException(">> Product " + salesItem.getProduct().getCode() + " is not a dividable product");
