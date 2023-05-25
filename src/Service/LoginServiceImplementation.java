@@ -1,9 +1,6 @@
 package Service;
 
-import DAO.ApplicationErrorException;
-import DAO.UniqueConstraintException;
-import DAO.UserDAO;
-import DAO.UserDAOImplementation;
+import DAO.*;
 import Entity.User;
 
 import java.sql.SQLException;
@@ -14,7 +11,7 @@ public class LoginServiceImplementation implements LoginService {
 
 	@Override
 	public Boolean checkIfInitialSetup() throws SQLException {
-		return userDAO.checkIfInitialSetup();
+		return new StoreDAOImplementation().checkIfStoreExists();
 	}
 
 	@Override

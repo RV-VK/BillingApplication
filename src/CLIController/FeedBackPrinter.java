@@ -271,4 +271,45 @@ public class FeedBackPrinter {
 	public static void printHelpMessage(String Entity, String operation) {
 		System.out.println("Try \"" + Entity + " " + operation + " help for proper syntax");
 	}
+	public static void mainHelp()
+	{
+		System.out.println("""
+				 store
+						create  - name, phone number, address, gst number
+						edit - name, phone number, address, gst number
+						delete - y/n with admin password
+						
+				user
+						create - usertype, username,  password, first name, last name, phone number
+						count 
+						list 
+						edit - usertype, username,  password, first name, last name, phone number
+						delete - y/n with username
+					 
+				product
+				   		create - productname,unit,type,costprice
+				    	count
+				    	list
+				    	edit - productname,unit,type,costprice
+				    	delete - y/n with productname or productid
+					 
+				unit
+						create - name, code, description, isdividable
+						list -
+						edit - name, code, description, isdividable
+						delete - code
+					
+				purchase\s
+						create - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+						count
+						list
+						delete - invoice
+								
+				sales
+						create - date, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+						count
+						list
+						delete - id
+						""");
+	}
 }

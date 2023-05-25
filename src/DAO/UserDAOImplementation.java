@@ -176,12 +176,6 @@ public class UserDAOImplementation implements UserDAO {
 	}
 
 
-	public Boolean checkIfInitialSetup() throws SQLException {
-		ResultSet resultSet = userConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM USERS WHERE USERTYPE='Admin'");
-		resultSet.next();
-		return resultSet.getInt(1) == 0;
-	}
-
 
 	@Override
 	public String login(String userName, String passWord) throws ApplicationErrorException {

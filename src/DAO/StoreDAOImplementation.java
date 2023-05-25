@@ -56,6 +56,12 @@ public class StoreDAOImplementation implements StoreDAO {
 		}
 	}
 
+	public Boolean checkIfStoreExists() throws SQLException {
+		ResultSet resultSet = storeConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM STORE");
+		resultSet.next();
+		return resultSet.getInt(1) == 0;
+	}
+
 
 	@Override
 	public Integer delete(String adminPassword) throws ApplicationErrorException {

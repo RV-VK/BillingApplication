@@ -80,7 +80,6 @@ public interface UserDAO {
 	 * @throws SQLException Exception thrown due to Persistence problems.
 	 */
 
-	Boolean checkIfInitialSetup() throws SQLException;
 
 	/**
 	 * This method verifies whether the input username and password matches in the user table to enable login for the users.

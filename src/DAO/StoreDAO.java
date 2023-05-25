@@ -36,4 +36,6 @@ public interface StoreDAO {
 	 */
 
 	Integer delete(String adminPassword) throws ApplicationErrorException;
+
+	Boolean checkIfStoreExists() throws SQLException;
 }
