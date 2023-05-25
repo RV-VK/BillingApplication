@@ -5,21 +5,19 @@ import java.sql.DriverManager;
 
 public class DBHelper {
 
-  /**
-   * This method establishes a connection with DB Layer
-   *
-   * @return connection Object.
-   */
-  public static Connection getConnection() {
-    Connection connection = null;
-    try {
-      Class.forName("org.postgresql.Driver");
-      connection =
-          DriverManager.getConnection(
-              "jdbc:postgresql://localhost:5432/POSDatabase", "postgres", "manikantan1205");
-    } catch (Exception e) {
-      System.out.println("Application Encountered an Error!");
-    }
-    return connection;
-  }
+	/**
+	 * This method establishes a connection with DB Layer
+	 *
+	 * @return connection Object.
+	 */
+	public static Connection getConnection() {
+		Connection connection = null;
+		try {
+			Class.forName("org.postgresql.Driver");
+			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/POSDatabase", "postgres", "manikantan1205");
+		} catch(Exception e) {
+			System.out.println("Application Encountered an Error!");
+		}
+		return connection;
+	}
 }
