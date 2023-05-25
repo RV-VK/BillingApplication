@@ -23,13 +23,14 @@ public class PurchaseServiceImplementation implements PurchaseService {
 		for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
 			try {
 				Product product = productDAO.findByCode(purchaseItem.getProduct().getCode());
-				purchaseItem.setProduct(product);
+				if(product != null)
+					purchaseItem.setProduct(product);
 				isDividable = unitDAO.findByCode(product.getunitcode()).getIsDividable();
 			} catch(NullPointerException e) {
-				throw new ApplicationErrorException(">> Product '"+purchaseItem.getProduct().getCode() + " does not exists!");
+				throw new ApplicationErrorException(">> Product code '"+purchaseItem.getProduct().getCode() + "' does not exists!");
 			}
 			if(! isDividable && purchaseItem.getQuantity() % 1 != 0) {
-				throw new UnDividableEntityException(">> Product '" + purchaseItem.getProduct().getCode() + " is not of dividable unit!");
+				throw new UnDividableEntityException(">> Product code '" + purchaseItem.getProduct().getCode() + "' is not of dividable unit!");
 			}
 		}
 		return purchaseDAO.create(purchase);
