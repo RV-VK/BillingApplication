@@ -209,7 +209,7 @@ public class UserCLI {
 		try {
 			userList = userService.list(listAttributesMap);
 			if(userList == null) {
-				if(! listAttributesMap.get("Searchtext").equals("id")) {
+				if( listAttributesMap.get("Searchtext")!=null) {
 					System.out.println(">> Given SearchText does not exist!!!");
 				}
 				return;

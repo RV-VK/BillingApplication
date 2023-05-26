@@ -200,7 +200,7 @@ public class ProductCLI {
 		try {
 			resultList = productService.list(listAttributesMap);
 			if(resultList.size() == 0) {
-				if(! listAttributesMap.get("Searchtext").equals("id")) {
+				if( listAttributesMap.get("Searchtext")!=null) {
 					System.out.println(">> Given SearchText does not exist!!!");
 				}
 				return;

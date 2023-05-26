@@ -223,7 +223,7 @@ public class SalesCLI {
 		try {
 			salesList = salesService.list(listAttributesMap);
 			if(salesList == null) {
-				if(! listAttributesMap.get("Searchtext").equals("id")) {
+				if( listAttributesMap.get("Searchtext")!=null) {
 					System.out.println(">> Given SearchText does not exist!!!");
 				}
 				return;
