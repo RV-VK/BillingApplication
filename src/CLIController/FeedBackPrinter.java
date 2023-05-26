@@ -78,7 +78,11 @@ public class FeedBackPrinter {
 							\tpassword - text, alphanumeric, special char, min 8 char, mandatory
 							\tfirstname - text, mandatory with 3 to 30 chars
 							\tlastname  - text, optional
-							\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t
+							\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\
+							\t> user create userid, usertype, username,  password, first name, last name, phone number
+							\t								or
+							\t> user create :enter
+							\tusertype, username,  password, first name, last name, phone number
 							""");
 			case "list" ->
 					System.out.println("""
@@ -98,6 +102,7 @@ public class FeedBackPrinter {
 							\t username
 							\t\s
 							\t  username - text, min 3 - 30 char, mandatory,existing
+							\t > user delete <username>
 
 							""");
 		}
@@ -105,15 +110,20 @@ public class FeedBackPrinter {
 
 	public static void printStoreHelp(String operation) {
 		switch(operation) {
-			case "create" ->
-					System.out.println("""
+			case "create" -> System.out.println("""
 							>> Create store using the following template,
 							     name, phone number, address, gst number
 							\s
 							\tname  - text, mandatory with 3 to 30 chars\t
 							\tphone - number, mandatory, ten digits, digit start with 9/8/7/6
 							\taddress - text, mandatory
-							\tgst number - text, 15 digit, mandatory""");
+							\tgst number - text, 15 digit, mandatory
+							\t> store create name, phone number, address, gst number
+							\t					or
+							\t> store create :enter
+							\t> name, phone number, address, gst number    \s
+							""");
+
 			case "edit" ->
 					System.out.println("""
 							>> Edit store using the following template\t
@@ -123,7 +133,16 @@ public class FeedBackPrinter {
 							\tname  - text, mandatory with 3 to 30 chars\t
 							\tphone - number, mandatory, ten digits, digit start with 9/8/7/6
 							\taddress - text, mandatory
-							\tgst number - text, 15 digit, mandatory""");
+							\tgst number - text, 15 digit, mandatory
+														
+							\t> store edit name: <name>, phonenumber: <phonenumber>, address: <address>, gst number: <gstnumber>
+							\t   					or
+							\t> store edit :enter
+							\t> name: <name>, phonenumber: <phonenumber>, address: <address>, gstnumber: <gstnumber>
+							   
+														
+														
+							""");
 			case "delete" -> System.out.println("""
 					>> delete store using the following template
 					\tstore delete\s
@@ -142,6 +161,10 @@ public class FeedBackPrinter {
 							     code - text, maximum 4 char, mandatory
 							     description - text
 							     isdividable - boolean, mandatory
+							     > unit create name, code, description, isdividable
+							     							or
+							     	unit create :enter
+							     	name, code, description, isdividable
 							   \s""");
 			case "list" ->
 					System.out.println(">> List unit with the following options\n" + ">> unit list - will list all the units");
@@ -166,6 +189,7 @@ public class FeedBackPrinter {
 							\t \tcode
 							\t\s
 							\t  code - text, min 3 - 30 char, mandatory,existing
+							\t  > unit delete <code>
 							""");
 		}
 
@@ -271,45 +295,55 @@ public class FeedBackPrinter {
 	public static void printHelpMessage(String Entity, String operation) {
 		System.out.println("Try \"" + Entity + " " + operation + " help for proper syntax");
 	}
-	public static void mainHelp()
-	{
+	public static void mainHelp() {
 		System.out.println("""
-				 store
-						create  - name, phone number, address, gst number
-						edit - name, phone number, address, gst number
-						delete - y/n with admin password
-						
-				user
-						create - usertype, username,  password, first name, last name, phone number
-						count 
-						list 
-						edit - usertype, username,  password, first name, last name, phone number
-						delete - y/n with username
-					 
-				product
-				   		create - productname,unit,type,costprice
-				    	count
-				    	list
-				    	edit - productname,unit,type,costprice
-				    	delete - y/n with productname or productid
-					 
-				unit
-						create - name, code, description, isdividable
-						list -
-						edit - name, code, description, isdividable
-						delete - code
-					
-				purchase\s
-						create - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
-						count
-						list
-						delete - invoice
-								
-				sales
-						create - date, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
-						count
-						list
-						delete - id
-						""");
+                __________________________________________________________________________________
+                store
+                        create  - name, phone number, address, gst number
+                        edit - name, phone number, address, gst number
+                        delete - y/n with admin password
+                _________________________________________________________________________________
+                ___________________________________________________________________________________
+                user
+                        create - usertype, username,  password, first name, last name, phone number
+                        count
+                        list
+                        edit - usertype, username,  password, first name, last name, phone number
+                        delete - y/n with username
+                ____________________________________________________________________________________
+				
+                ____________________________________________________________________________________
+                product
+                           create - productname,unit,type,costprice
+                        count
+                        list
+                        edit - productname,unit,type,costprice
+                        delete - y/n with productname or productid
+                _____________________________________________________________________________________
+				
+                _____________________________________________________________________________________
+                unit
+                        create - name, code, description, isdividable
+                        list -
+                        edit - name, code, description, isdividable
+                        delete - code
+                _____________________________________________________________________________________
+				
+                _____________________________________________________________________________________________________
+                purchase\s
+                        create - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+                        count
+                        list
+                        delete - invoice
+                _____________________________________________________________________________________________________
+				
+                ______________________________________________________________________________________________________
+                sales
+                        create - date, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+                        count
+                        list
+                        delete - id
+                ______________________________________________________________________________________________________
+                        """);
 	}
 }

@@ -13,6 +13,8 @@ import java.util.List;
 public class PurchaseServiceImplementation implements PurchaseService {
 
 	private final PurchaseDAO purchaseDAO = new PurchaseDAOImplementation();
+	private final String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
+
 
 
 	@Override
@@ -39,7 +41,6 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 	@Override
 	public Integer count(String parameter) throws ApplicationErrorException {
-		String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 		if(parameter != null) {
 			if(! parameter.matches(dateRegex)) return - 1;
 		}
@@ -48,7 +49,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public List<Purchase> list(HashMap<String, String> listattributes) throws ApplicationErrorException {
+	public List<Purchase> list(HashMap<String, String> listattributes) throws ApplicationErrorException, InvalidTemplateException {
 		List<Purchase> purchaseList;
 		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
 			purchaseList = purchaseDAO.list(listattributes.get("Searchtext"));
@@ -56,6 +57,9 @@ public class PurchaseServiceImplementation implements PurchaseService {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
+			if(listattributes.get("Attribute").equals("date"))
+				if(! (listattributes.get("Searchtext").replace("'","").matches(dateRegex)))
+					throw new InvalidTemplateException(">> Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
 			purchaseList = purchaseDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
 		}
 		return purchaseList;

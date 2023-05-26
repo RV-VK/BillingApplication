@@ -12,6 +12,7 @@ import java.util.List;
 
 public class SalesServiceImplementation implements SalesService {
 	private final SalesDAO salesDAO = new SalesDAOImplementation();
+	private final String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 
 
 	@Override
@@ -43,7 +44,6 @@ public class SalesServiceImplementation implements SalesService {
 
 	@Override
 	public Integer count(String parameter) throws ApplicationErrorException {
-		String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 		if(parameter != null) {
 			if(! parameter.matches(dateRegex)) {
 				return - 1;
@@ -54,7 +54,7 @@ public class SalesServiceImplementation implements SalesService {
 
 
 	@Override
-	public List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException {
 		List<Sales> salesList;
 		if(Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1 && listAttributes.get("Searchtext") != null) {
 			salesList = salesDAO.list(listAttributes.get("Searchtext"));
@@ -62,6 +62,10 @@ public class SalesServiceImplementation implements SalesService {
 			int pageLength = Integer.parseInt(listAttributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listAttributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
+			if(listAttributes.get("Attribute").equals("date")) {
+				if(! (listAttributes.get("Searchtext").replace("'","").matches(dateRegex)))
+					throw new InvalidTemplateException(">> Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
+			}
 			salesList = salesDAO.list(listAttributes.get("Attribute"), listAttributes.get("Searchtext"), pageLength, offset);
 		}
 		return salesList;

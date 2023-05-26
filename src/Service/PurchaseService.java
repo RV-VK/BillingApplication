@@ -37,7 +37,7 @@ public interface PurchaseService {
 	 * @return List - Purchase.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	List<Purchase> list(HashMap<String, String> listattributes) throws PageCountOutOfBoundsException, ApplicationErrorException;
+	List<Purchase> list(HashMap<String, String> listattributes) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Purchase entity and serves the Delete function.

@@ -112,6 +112,7 @@ public class AdminMain {
 										\t\tcode - text, min 2 - 6 char, mandatory
 										\t\tquantity - numbers, mandatory
 										\t\tcostprice - numbers, mandatory""");
+								break;
 							default:
 								if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 									purchaseCLI.Create(command);

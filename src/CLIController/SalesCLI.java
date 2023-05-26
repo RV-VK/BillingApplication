@@ -106,7 +106,7 @@ public class SalesCLI {
 				int salesCount = salesService.count(parameter);
 				if(salesCount > 0) System.out.println(">> SalesCount " + salesCount);
 				else {
-					System.out.println(">> Given Date or Category not found!!!");
+					System.out.println(">> Given Date not found!!!");
 					System.out.println(">> Please Try with an existing searchtext");
 				}
 			} else {

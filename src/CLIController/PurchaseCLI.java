@@ -119,7 +119,7 @@ public class PurchaseCLI {
 				purchaseCount = purchaseService.count(parameter);
 				if(purchaseCount > 0) System.out.println(">> PurchaseCount " + purchaseCount);
 				else {
-					System.out.println(">> Given Date or Category not found!!!");
+					System.out.println(">> Given Date not found!!!");
 					System.out.println(">>Please Try with an existing searchtext");
 				}
 			} else {

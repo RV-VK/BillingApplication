@@ -2,11 +2,14 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
+import DAO.UnitCodeViolationException;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class SalesMain {
-	static Scanner scanner;
+	private static final List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
+	private static Scanner scanner;
 
 	/**
 	 * Sales user View Control.
@@ -14,9 +17,8 @@ public class SalesMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	public static void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public static void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException, UnitCodeViolationException {
 		scanner = new Scanner(System.in);
-		System.out.println(" TO THE BILLING SOFTWARE_____________________");
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
 			System.out.print("> ");
@@ -32,14 +34,13 @@ public class SalesMain {
 						case "count" -> salesCLI.count(commandList);
 						case "list" -> salesCLI.list(commandList);
 						case "delete" -> salesCLI.delete(commandList);
-						case "help" ->
-								System.out.println("""
-										>> sell products using following command
+						case "help" -> System.out.println("""
+								>> sell products using following command
 
-										sales date, [code1, quantity1], [code2, quantity2]....
+								sales date, [code1, quantity1], [code2, quantity2]....
 
-										\t\tcode - text, min 3 - 30 char, mandatory
-										\t\tquantity - numbers, mandatory""");
+								\t\tcode - text, min 3 - 30 char, mandatory
+								\t\tquantity - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								salesCLI.Create(command);
@@ -69,11 +70,21 @@ public class SalesMain {
 							\t\t\tlist
 							\t\t\tdelete - id""");
 					break;
+				case "exit":
+					System.exit(0);
+				    break;
+				case "logout":
+					LoginCLI.Login();
+					break;
 				default:
-					System.out.println("Invalid Command! Not found!");
-			}
-		} while(true);
-	}
+					if(commandEntityList.contains(commandString)) {
+						System.out.println("Non-Permitted Action!! These actions are only Permitted for Admin user");
+					} else
+						System.out.println("Invalid Command ! Not found!!");
+
+		}
+	} while(true);
+}
 
 	private static List<String> splitCommand(String command) {
 		String[] parts;

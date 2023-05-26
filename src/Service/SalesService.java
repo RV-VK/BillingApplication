@@ -37,7 +37,7 @@ public interface SalesService {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException;
+	List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException;
 
 
 	/**

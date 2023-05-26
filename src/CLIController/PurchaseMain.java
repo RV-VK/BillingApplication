@@ -2,21 +2,22 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
+import DAO.UnitCodeViolationException;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class PurchaseMain {
-	static Scanner scanner;
-
+	private static Scanner scanner;
+	private static List<String> commandEntityList=Arrays.asList("product","user","store","unit","sales");
 	/**
 	 * Purchase user View Control.
 	 *
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public static void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public static void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException {
 		scanner = new Scanner(System.in);
-		System.out.println(" TO THE BILLING SOFTWARE_____________________");
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
 			System.out.print("> ");
@@ -75,7 +76,16 @@ public class PurchaseMain {
 							\t\t\tlist
 							\t\t\tdelete - invoice""");
 				}
-				default -> System.out.println("Invalid Command! Not found!");
+				case "exit" -> System.exit(0);
+				case "logout" -> LoginCLI.Login();
+				default -> {
+					if(commandEntityList.contains(commandString))
+					{
+						System.out.println("Non-Permitted Action!! These actions are only Permitted for Admin user");
+					}
+					else
+						System.out.println("Invalid Command ! Not found!!");
+				}
 			}
 		} while(true);
 	}
