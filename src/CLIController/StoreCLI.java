@@ -178,6 +178,7 @@ public class StoreCLI {
 				int resultCode = storeService.delete(password);
 				if(resultCode == 1) {
 					System.out.println(">> Store deleted Successfully !!! GOOD BYE !");
+					System.exit(0);
 				} else if(resultCode == - 1) {
 					System.out.println(">> Unable to delete Store!");
 					System.out.println(">> Invalid Admin Password");

@@ -18,7 +18,6 @@ public class StoreDAOImplementation implements StoreDAO {
 			storeCreateResultSet.next();
 			return getStoreFromResultSet(storeCreateResultSet);
 		} catch(SQLException e) {
-			storeConnection.rollback();
 			if(e.getSQLState().equals("23514")) return null;
 			else throw new ApplicationErrorException(e.getMessage());
 		}
@@ -66,16 +65,14 @@ public class StoreDAOImplementation implements StoreDAO {
 	@Override
 	public Integer delete(String adminPassword) throws ApplicationErrorException {
 		try {
-			Statement storeExistenceCheckStatement = storeConnection.createStatement();
-			ResultSet storeResultSet = storeExistenceCheckStatement.executeQuery("SELECT * FROM STORE");
-			if(storeResultSet.next()) {
+			if(!checkIfStoreExists()) {
 				Statement passwordCheckStatement = storeConnection.createStatement();
 				ResultSet adminPasswordResultSet = passwordCheckStatement.executeQuery("SELECT PASSWORD FROM USERS WHERE USERTYPE='Admin'");
 				if(adminPasswordResultSet.next()) {
 					String originalPassword = adminPasswordResultSet.getString(1);
 					if(originalPassword.equals(adminPassword)) {
 						Statement deleteStatement = storeConnection.createStatement();
-						deleteStatement.execute("DELETE FROM STORE");
+						deleteStatement.execute("TRUNCATE PRODUCT,USERS,UNIT,STORE,PURCHASE,PURCHASEITEMS,SALESITEMS,SALES");
 						return 1;
 					} else {
 						return - 1;

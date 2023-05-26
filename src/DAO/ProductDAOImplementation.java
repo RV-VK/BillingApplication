@@ -146,7 +146,7 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			String editQuery = "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE),STOCK= COALESCE(NULLIF(?,0),STOCK) WHERE ID=? RETURNING *";
+			String editQuery = "UPDATE PRODUCT SET CODE= COALESCE(?,CODE),NAME= COALESCE(?,NAME),UNITCODE= COALESCE(?,UNITCODE),TYPE= COALESCE(?,TYPE),PRICE= COALESCE(?,PRICE),STOCK= COALESCE(NULLIF(?,0),STOCK) WHERE ID=? AND ISDELETED=FALSE RETURNING *";
 			PreparedStatement editStatement = productConnection.prepareStatement(editQuery);
 			setParameters(editStatement, product);
 			if(product.getPrice() == 0) editStatement.setNull(5, Types.NUMERIC);
@@ -196,5 +196,4 @@ public class ProductDAOImplementation implements ProductDAO {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
-
 }

@@ -147,6 +147,8 @@ public class AdminMain {
 					case "help" -> {
 						FeedBackPrinter.mainHelp();
 					}
+					case "exit" -> System.exit(0);
+					case "logout" -> LoginCLI.Login();
 					default -> System.out.println("Invalid Command! Not Found!");
 				}
 			}
