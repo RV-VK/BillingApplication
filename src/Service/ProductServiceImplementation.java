@@ -27,7 +27,7 @@ public class ProductServiceImplementation implements ProductService {
 	public List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<Product> productList;
 		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
-			productList = productDAO.list(listattributes.get("Searchtext"));
+			productList = productDAO.searchList(listattributes.get("Searchtext"));
 		} else {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));

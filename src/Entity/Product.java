@@ -6,7 +6,7 @@ public class Product {
 	private String name;
 	private String unitcode;
 	private String type;
-	private float availableQuantity;
+	private float stock;
 	private double price;
 
 	public Product() {
@@ -18,7 +18,7 @@ public class Product {
 		this.name = name;
 		this.unitcode = unitcode;
 		this.type = type;
-		this.availableQuantity = availableQuantity;
+		this.stock = availableQuantity;
 		this.price = price;
 	}
 
@@ -28,7 +28,7 @@ public class Product {
 		this.name = name;
 		this.unitcode = unitcode;
 		this.type = type;
-		this.availableQuantity = availableQuantity;
+		this.stock = availableQuantity;
 		this.price = price;
 	}
 
@@ -82,11 +82,11 @@ public class Product {
 	}
 
 	public float getAvailableQuantity() {
-		return availableQuantity;
+		return stock;
 	}
 
 	public void setAvailableQuantity(float availableQuantity) {
-		this.availableQuantity = availableQuantity;
+		this.stock = availableQuantity;
 	}
 
 	public double getPrice() {
@@ -100,7 +100,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product{" + "id=" + id + ", code='" + code + '\'' + ", name='" + name + '\'' + ", unitcode='" + unitcode + '\'' + ", type='" + type + '\'' + ", availableQuantity=" + availableQuantity + ", price=" + price + '}';
+		return "Product{" + "id=" + id + ", code='" + code + '\'' + ", name='" + name + '\'' + ", unitcode='" + unitcode + '\'' + ", type='" + type + '\'' + ", availableQuantity=" + stock + ", price=" + price + '}';
 	}
 
 }

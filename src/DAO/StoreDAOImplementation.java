@@ -1,6 +1,6 @@
 package DAO;
 
-import DBConnection.DBHelper;
+import SQLSession.DBHelper;
 import Entity.Store;
 
 import java.sql.*;

@@ -1,6 +1,6 @@
 package DAO;
 
-import DBConnection.DBHelper;
+import SQLSession.DBHelper;
 import Entity.Product;
 import Entity.Purchase;
 import Entity.PurchaseItem;
