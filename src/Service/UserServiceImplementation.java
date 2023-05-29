@@ -30,7 +30,7 @@ public class UserServiceImplementation implements UserService {
 	public List<User> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<User> userList;
 		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
-			userList = userDAO.list(listattributes.get("Searchtext"));
+			userList = userDAO.searchList(listattributes.get("Searchtext"));
 		} else {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));

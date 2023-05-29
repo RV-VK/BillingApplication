@@ -22,7 +22,7 @@ public class LoginServiceImplementation implements LoginService {
 
 
 	@Override
-	public String login(String userName, String passWord) throws SQLException, ApplicationErrorException {
+	public User login(String userName, String passWord) throws SQLException, ApplicationErrorException {
 		return userDAO.login(userName, passWord);
 	}
 

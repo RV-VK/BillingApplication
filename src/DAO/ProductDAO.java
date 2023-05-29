@@ -49,7 +49,7 @@ public interface ProductDAO {
 	 *                                       non-existing page is prompted.
 	 */
 
-	@Select("Select * from product where ${attribute} = coalesce(#{searchText},${attribute}) AND isdeleted=false order by id limit #{pageLength} offset #{offset}")
+	@Select("Select * from product where ${attribute} = coalesce(#{searchText}, ${attribute}) AND isdeleted=false order by id limit #{pageLength} offset #{offset}")
 	List<Product> list(@Param("attribute") String attribute,@Param("searchText") String searchText,@Param("pageLength") int pageLength,@Param("offset") int offset) throws ApplicationErrorException, PageCountOutOfBoundsException;
 
 	/**
@@ -76,7 +76,7 @@ public interface ProductDAO {
 	 *                                    table.
 	 */
 
-	@Select("UPDATE PRODUCT SET CODE= COALESCE(#{code},CODE),NAME= COALESCE(#{name},NAME),UNITCODE= COALESCE(#{unitcode},UNITCODE),TYPE= COALESCE(#{type},TYPE),PRICE= COALESCE(NULLIF(#{price},0),PRICE) WHERE ID=#{id} RETURNING *")
+	@Select("UPDATE PRODUCT SET CODE= COALESCE(#{code},CODE),NAME= COALESCE(#{name},NAME),UNITCODE= COALESCE(#{unitcode},UNITCODE),TYPE= COALESCE(#{type},TYPE),PRICE= COALESCE(NULLIF(#{price},0),PRICE),STOCK= COALESCE(NULLIF(#{stock},0),STOCK) WHERE ID=#{id} RETURNING *")
 	Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
 	/**

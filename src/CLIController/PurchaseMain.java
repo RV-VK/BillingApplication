@@ -8,15 +8,16 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class PurchaseMain {
-	private static Scanner scanner;
-	private static List<String> commandEntityList=Arrays.asList("product","user","store","unit","sales");
+	private  Scanner scanner;
+	private  List<String> commandEntityList=Arrays.asList("product","user","store","unit","sales");
+	private LoginCLI loginCLI;
 	/**
 	 * Purchase user View Control.
 	 *
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public static void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException {
+	public  void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException {
 		scanner = new Scanner(System.in);
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
@@ -30,9 +31,9 @@ public class PurchaseMain {
 				case "purchase" -> {
 					PurchaseCLI purchaseCLI = new PurchaseCLI();
 					switch(operationString) {
-						case "count" -> purchaseCLI.Count(commandList);
-						case "list" -> purchaseCLI.List(commandList);
-						case "delete" -> purchaseCLI.Delete(commandList);
+						case "count" -> purchaseCLI.count(commandList);
+						case "list" -> purchaseCLI.list(commandList);
+						case "delete" -> purchaseCLI.delete(commandList);
 						case "help" ->
 								System.out.println("""
 										>> purchase products using following command
@@ -47,7 +48,7 @@ public class PurchaseMain {
 										\t\tcostprice - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-								purchaseCLI.Create(command);
+								purchaseCLI.create(command);
 							} else {
 								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
 								System.out.println("Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
@@ -77,7 +78,7 @@ public class PurchaseMain {
 							\t\t\tdelete - invoice""");
 				}
 				case "exit" -> System.exit(0);
-				case "logout" -> LoginCLI.Login();
+				case "logout" -> loginCLI.Login();
 				default -> {
 					if(commandEntityList.contains(commandString))
 					{

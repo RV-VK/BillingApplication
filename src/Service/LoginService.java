@@ -36,5 +36,5 @@ public interface LoginService {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	String login(String userName, String passWord) throws SQLException, ApplicationErrorException;
+	User login(String userName, String passWord) throws SQLException, ApplicationErrorException;
 }

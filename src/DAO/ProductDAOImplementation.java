@@ -13,18 +13,15 @@ import java.util.List;
 
 public class ProductDAOImplementation implements ProductDAO {
 	private final Connection productConnection = DBHelper.getConnection();
-	private SqlSessionFactory sqlSessionFactory;
-	private SqlSession sqlSession;
-	private ProductDAO productMapper;
+	private final SqlSessionFactory sqlSessionFactory=MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession =sqlSessionFactory.openSession();
+	private final ProductDAO productMapper  = sqlSession.getMapper(ProductDAO.class);
 	private List<Product> productList = new ArrayList<>();
 
 
 	@Override
 	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			Product createdProduct = productMapper.create(product);
 			sqlSession.commit();
 			sqlSession.close();
@@ -60,9 +57,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Integer count() throws ApplicationErrorException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.count();
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -73,9 +67,6 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	public List<Product> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.searchList(searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -86,9 +77,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public List<Product> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.list(attribute, searchText, pageLength, offset);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -108,9 +96,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			Product editedProduct = productMapper.edit(product);
 			sqlSession.commit();
 			sqlSession.close();
@@ -125,12 +110,8 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			int rowsAffected = productMapper.delete(parameter);
 			sqlSession.commit();
-			sqlSession.close();
 			return rowsAffected;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -140,9 +121,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
-			sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.findByCode(code);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());

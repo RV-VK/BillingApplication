@@ -8,8 +8,29 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class SalesMain {
-	private static final List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
-	private static Scanner scanner;
+	private final List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
+	private Scanner scanner;
+	private LoginCLI loginCLI;
+
+	private static List<String> splitCommand(String command) {
+		String[] parts;
+		String[] commandlet;
+		if(command.contains(",")) {
+			parts = command.split("[,:]");
+			commandlet = parts[0].split("\\s+");
+		} else {
+			parts = command.split(",");
+			commandlet = command.split("\\s+");
+		}
+		ArrayList<String> commandList = new ArrayList<>();
+		if(parts.length == 1) {
+			Collections.addAll(commandList, commandlet);
+		} else {
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
+		}
+		return commandList;
+	}
 
 	/**
 	 * Sales user View Control.
@@ -17,7 +38,7 @@ public class SalesMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	public static void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException, UnitCodeViolationException {
+	public void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException, UnitCodeViolationException {
 		scanner = new Scanner(System.in);
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
@@ -43,7 +64,7 @@ public class SalesMain {
 								\t\tquantity - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-								salesCLI.Create(command);
+								salesCLI.create(command);
 							} else {
 								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
 								System.out.println("Try either \"help\" for proper syntax or \"sales help\" if you are trying to start a purchase!");
@@ -74,7 +95,7 @@ public class SalesMain {
 					System.exit(0);
 				    break;
 				case "logout":
-					LoginCLI.Login();
+					loginCLI.Login();
 					break;
 				default:
 					if(commandEntityList.contains(commandString)) {
@@ -85,24 +106,4 @@ public class SalesMain {
 		}
 	} while(true);
 }
-
-	private static List<String> splitCommand(String command) {
-		String[] parts;
-		String[] commandlet;
-		if(command.contains(",")) {
-			parts = command.split("[,:]");
-			commandlet = parts[0].split("\\s+");
-		} else {
-			parts = command.split(",");
-			commandlet = command.split("\\s+");
-		}
-		ArrayList<String> commandList = new ArrayList<>();
-		if(parts.length == 1) {
-			Collections.addAll(commandList, commandlet);
-		} else {
-			Collections.addAll(commandList, commandlet);
-			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
-		}
-		return commandList;
-	}
 }

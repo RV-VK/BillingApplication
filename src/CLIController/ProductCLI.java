@@ -35,7 +35,7 @@ public class ProductCLI {
 	 *
 	 * @param arguments - List of Command arguments.
 	 */
-	public void Create(List<String> arguments) {
+	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
 			FeedBackPrinter.printProductHelp("create");
 			return;
@@ -370,8 +370,8 @@ public class ProductCLI {
 		String prompt = scanner.nextLine();
 		if(prompt.equals("y")) {
 			if(productService.delete(parameter) == 1) {
-				System.out.println("Product Deletion Successfully!!!");
-			} else if(productService.delete(parameter) == - 1) {
+				System.out.println("Product Deleted Successfully!!!");
+			} else if(productService.delete(parameter) == 0) {
 				System.out.println(">> Product Deletion Failed!!!");
 				System.out.println(">> Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
 				System.out.println(">> Try \"product delete help\" for proper syntax");

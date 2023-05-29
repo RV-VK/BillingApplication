@@ -3,159 +3,22 @@ package CLIController;
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import DAO.UnitCodeViolationException;
+import Service.LoginService;
 import Service.LoginServiceImplementation;
 
 import java.sql.SQLException;
 import java.util.*;
 
 public class AdminMain {
-	static Scanner scanner;
-	/**
-	 * The Admin View Control.
-	 *
-	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
-	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
-	 */
-	public static void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException {
-		scanner = new Scanner(System.in);
-		System.out.println("\n\n>> Try \"help\" to know better!\n");
-		do {
-			System.out.print("\n> ");
-			String command = scanner.nextLine();
-			List<String> commandList = splitCommand(command);
-			String commandString = commandList.get(0);
-			String operationString = "";
-			if(commandList.size() > 1) operationString = commandList.get(1);
-			if( (new LoginServiceImplementation().checkIfInitialSetup())) {
-				if(commandString.equals("store") && operationString.equals("create"))
-					new StoreCLI().create(commandList);
-				else {
-					System.out.println(">> Please Create a Store to Proceed!! You need to Register your store before Proceeding to further Billing CLI functions!!");
-					FeedBackPrinter.printStoreHelp("create");
-				}
-			} else {
-				switch(commandString) {
-					case "product" -> {
-						ProductCLI productCLI = new ProductCLI();
-						switch(operationString) {
-							case "create" -> productCLI.Create(commandList);
-							case "count" -> productCLI.count(commandList);
-							case "list" -> productCLI.list(commandList);
-							case "edit" -> productCLI.edit(commandList, command);
-							case "delete" -> productCLI.delete(commandList);
-							default -> {
-								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println("Try \"help\" for proper syntax");
-							}
-						}
-					}
-					case "user" -> {
-						UserCLI userCLI = new UserCLI();
-						switch(operationString) {
-							case "create" -> userCLI.create(commandList);
-							case "count" -> userCLI.count(commandList);
-							case "list" -> userCLI.list(commandList);
-							case "edit" -> userCLI.edit(commandList, command);
-							case "delete" -> userCLI.delete(commandList);
-							default -> {
-								System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println(">> Try \"help\" for proper syntax");
-							}
-						}
-					}
-					case "store" -> {
-						StoreCLI storeCLI = new StoreCLI();
-						switch(operationString) {
-							case "create" -> storeCLI.create(commandList);
-							case "edit" -> storeCLI.edit(commandList, command);
-							case "delete" -> storeCLI.delete(commandList);
-							default -> {
-								System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println(">> Try \"help\" for proper syntax");
-							}
-						}
-					}
-					case "unit" -> {
-						UnitCLI unitCLI = new UnitCLI();
-						switch(operationString) {
-							case "create" -> unitCLI.create(commandList);
-							case "list" -> unitCLI.list(commandList);
-							case "edit" -> unitCLI.edit(commandList, command);
-							case "delete" -> unitCLI.delete(commandList);
-							default -> {
-								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-								System.out.println("Try \"help\" for proper syntax");
-							}
-						}
-					}
-					case "purchase" -> {
-						PurchaseCLI purchaseCLI = new PurchaseCLI();
-						switch(operationString) {
-							case "count":
-								purchaseCLI.Count(commandList);
-								break;
-							case "list":
-								purchaseCLI.List(commandList);
-								break;
-							case "delete":
-								purchaseCLI.Delete(commandList);
-								break;
-							case "help":
-								System.out.println("""
-										>> purchase products using following command
-										purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
-
-										\t  date - format( YYYY-MM-DD ), mandatory
-										\t\tinvoice - numbers, mandatory
-										\t\t
-										\t\tThe following purchase items should be given as array of items
-										\t\tcode - text, min 2 - 6 char, mandatory
-										\t\tquantity - numbers, mandatory
-										\t\tcostprice - numbers, mandatory""");
-								break;
-							default:
-								if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-									purchaseCLI.Create(command);
-								} else {
-									System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-									System.out.println("Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
-								}
-						}
-					}
-					case "sales" -> {
-						SalesCLI salesCLI = new SalesCLI();
-						switch(operationString) {
-							case "count" -> salesCLI.count(commandList);
-							case "list" -> salesCLI.list(commandList);
-							case "delete" -> salesCLI.delete(commandList);
-							case "help" -> System.out.println("""
-									>> sell products using following command
-
-									sales date, [code1, quantity1], [code2, quantity2]....
-
-									\t\tcode - text, min 3 - 30 char, mandatory
-									\t\tquantity - numbers, mandatory""");
-							default -> {
-								if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
-									salesCLI.Create(command);
-								} else {
-									System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
-									System.out.println("Try either \"help\" for proper syntax or \"sales help\" if you are trying to start a purchase!");
-								}
-							}
-						}
-					}
-					case "help" -> {
-						FeedBackPrinter.mainHelp();
-					}
-					case "exit" -> System.exit(0);
-					case "logout" -> LoginCLI.Login();
-					default -> System.out.println("Invalid Command! Not Found!");
-				}
-			}
-		} while(true);
-
-	}
+	private  Scanner scanner;
+	private  LoginService loginService=new LoginServiceImplementation();
+	private LoginCLI loginCLI;
+	private ProductCLI productCLI = new ProductCLI();
+	private UserCLI userCLI = new UserCLI();
+	private StoreCLI storeCLI = new StoreCLI();
+	private UnitCLI unitCLI = new UnitCLI();
+	private PurchaseCLI purchaseCLI = new PurchaseCLI();
+	private SalesCLI salesCLI = new SalesCLI();
 
 	private static List<String> splitCommand(String command) {
 		String[] parts;
@@ -175,5 +38,146 @@ public class AdminMain {
 			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
 		}
 		return commandList;
+	}
+
+	/**
+	 * The Admin View Control.
+	 *
+	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
+	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+	 */
+	public  void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException {
+		scanner = new Scanner(System.in);
+		System.out.println("\n\n>> Try \"help\" to know better!\n");
+		do {
+			System.out.print("\n> ");
+			String command = scanner.nextLine();
+			List<String> commandList = splitCommand(command);
+			String commandString = commandList.get(0);
+			String operationString = "";
+			if(commandList.size() > 1) operationString = commandList.get(1);
+			if((loginService.checkIfInitialSetup())) {
+				if(commandString.equals("store") && operationString.equals("create"))
+					new StoreCLI().create(commandList);
+				else {
+					System.out.println(">> Please Create a Store to Proceed!! You need to Register your store before Proceeding to further Billing CLI functions!!");
+					FeedBackPrinter.printStoreHelp("create");
+				}
+			} else {
+				switch(commandString) {
+					case "product" -> {
+						switch(operationString) {
+							case "create" -> productCLI.create(commandList);
+							case "count" -> productCLI.count(commandList);
+							case "list" -> productCLI.list(commandList);
+							case "edit" -> productCLI.edit(commandList, command);
+							case "delete" -> productCLI.delete(commandList);
+							default -> {
+								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
+								System.out.println("Try \"help\" for proper syntax");
+							}
+						}
+					}
+					case "user" -> {
+						switch(operationString) {
+							case "create" -> userCLI.create(commandList);
+							case "count" -> userCLI.count(commandList);
+							case "list" -> userCLI.list(commandList);
+							case "edit" -> userCLI.edit(commandList, command);
+							case "delete" -> userCLI.delete(commandList);
+							default -> {
+								System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
+								System.out.println(">> Try \"help\" for proper syntax");
+							}
+						}
+					}
+					case "store" -> {
+						switch(operationString) {
+							case "create" -> storeCLI.create(commandList);
+							case "edit" -> storeCLI.edit(commandList, command);
+							case "delete" -> storeCLI.delete(commandList);
+							default -> {
+								System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
+								System.out.println(">> Try \"help\" for proper syntax");
+							}
+						}
+					}
+					case "unit" -> {
+						switch(operationString) {
+							case "create" -> unitCLI.create(commandList);
+							case "list" -> unitCLI.list(commandList);
+							case "edit" -> unitCLI.edit(commandList, command);
+							case "delete" -> unitCLI.delete(commandList);
+							default -> {
+								System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
+								System.out.println("Try \"help\" for proper syntax");
+							}
+						}
+					}
+					case "purchase" -> {
+						switch(operationString) {
+							case "count":
+								purchaseCLI.count(commandList);
+								break;
+							case "list":
+								purchaseCLI.list(commandList);
+								break;
+							case "delete":
+								purchaseCLI.delete(commandList);
+								break;
+							case "help":
+								System.out.println("""
+										>> purchase products using following command
+										purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+
+										\t  date - format( YYYY-MM-DD ), mandatory
+										\t\tinvoice - numbers, mandatory
+										\t\t
+										\t\tThe following purchase items should be given as array of items
+										\t\tcode - text, min 2 - 6 char, mandatory
+										\t\tquantity - numbers, mandatory
+										\t\tcostprice - numbers, mandatory""");
+								break;
+							default:
+								if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
+									purchaseCLI.create(command);
+								} else {
+									System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
+									System.out.println("Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
+								}
+						}
+					}
+					case "sales" -> {
+						switch(operationString) {
+							case "count" -> salesCLI.count(commandList);
+							case "list" -> salesCLI.list(commandList);
+							case "delete" -> salesCLI.delete(commandList);
+							case "help" -> System.out.println("""
+									>> sell products using following command
+
+									sales date, [code1, quantity1], [code2, quantity2]....
+
+									\t\tcode - text, min 3 - 30 char, mandatory
+									\t\tquantity - numbers, mandatory""");
+							default -> {
+								if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
+									salesCLI.create(command);
+								} else {
+									System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
+									System.out.println("Try either \"help\" for proper syntax or \"sales help\" if you are trying to start a purchase!");
+								}
+							}
+						}
+					}
+					case "help" -> {
+						FeedBackPrinter.mainHelp();
+					}
+					case "exit" -> System.exit(0);
+					case "logout" -> loginCLI.Login();
+					default -> System.out.println("Invalid Command! Not Found!");
+				}
+			}
+		} while(true);
+
 	}
 }

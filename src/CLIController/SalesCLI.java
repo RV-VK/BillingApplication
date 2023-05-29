@@ -32,7 +32,7 @@ public class SalesCLI {
 	 *
 	 * @param command Command String.
 	 */
-	public void Create(String command) {
+	public void create(String command) {
 		String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		String[] commandEntities = command.split(",\\s*(?=\\[)");
 		if(commandEntities.length < 1) {

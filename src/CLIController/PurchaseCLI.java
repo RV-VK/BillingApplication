@@ -35,7 +35,7 @@ public class PurchaseCLI {
 	 *
 	 * @param command Command String.
 	 */
-	public void Create(String command) {
+	public void create(String command) {
 		String productCodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		String[] commandEntities = command.split(",\\s*(?=\\[)");
 		if(commandEntities.length < 1) {
@@ -97,7 +97,7 @@ public class PurchaseCLI {
 	 * @param arguments Command arguments
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void Count(List<String> arguments) throws ApplicationErrorException {
+	public void count(List<String> arguments) throws ApplicationErrorException {
 		int purchaseCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
@@ -139,7 +139,7 @@ public class PurchaseCLI {
 	 * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in Purchase table.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public void List(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
 		setMap(listAttributesMap, null, null, null, null);
 		if(arguments.size() == 3) if(arguments.get(2).equals("help")) {
 			FeedBackPrinter.printPurchaseHelp("list");
@@ -261,7 +261,7 @@ public class PurchaseCLI {
 	 * @param arguments Command arguments.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void Delete(List<String> arguments) throws ApplicationErrorException {
+	public void delete(List<String> arguments) throws ApplicationErrorException {
 		PurchaseService purchaseDeleteService = new PurchaseServiceImplementation();
 		String numberRegex = "^[0-9]{1,10}$";
 		if(arguments.size() == 3) {
