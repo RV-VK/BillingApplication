@@ -4,6 +4,7 @@ import Entity.User;
 import SQLSession.DBHelper;
 import Entity.Store;
 import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -20,8 +21,11 @@ public class StoreDAOImplementation implements StoreDAO {
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
 			return storeMapper.create(store);
-		} catch(SQLException e) {
-//			if(e.getSQLState().equals("23514")) return null;
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			SQLException sqlException = (SQLException) cause;
+			if(sqlException.getSQLState().equals("23514"))
+				return null;
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}

@@ -20,7 +20,7 @@ public interface UnitDAO {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
 	 */
 	@Select("INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (#{name},#{code},#{description},#{isDividable}) RETURNING *")
-	Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException;
+	Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
 
 	/**
@@ -43,7 +43,7 @@ public interface UnitDAO {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
 	 */
 	@Select("UPDATE UNIT SET NAME= COALESCE(#{name},NAME), CODE=COALESCE(#{code},CODE), DESCRIPTION=COALESCE(#{description},DESCRIPTION), ISDIVIDABLE=COALESCE(#{isDividable},ISDIVIDABLE) WHERE ID=#{id} RETURNING *")
-	Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException;
+	Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException;
 
 
 	/**
@@ -54,7 +54,7 @@ public interface UnitDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 	@Delete("DELETE FROM UNIT WHERE CODE=#{code}")
-	Integer delete(String code) throws ApplicationErrorException;
+	Integer delete(String code) throws ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
 
 	/**

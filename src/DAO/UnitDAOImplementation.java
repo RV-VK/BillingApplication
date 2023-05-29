@@ -3,6 +3,7 @@ package DAO;
 import SQLSession.DBHelper;
 import Entity.Unit;
 import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -18,18 +19,21 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
 	@Override
-	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException {
+	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			return unitMapper.create(unit);
-		} catch(SQLException e) {
-			handleException(e);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
 			return null;
 		}
 	}
 
-	private void handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException {
+	private void handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException, UnitCodeViolationException {
 		if(e.getSQLState().equals("23505"))
 			throw new UniqueConstraintException(">> Unit Code must be unique!!! the Unit code you have entered Already exists");
+		else if(e.getSQLState().equals("23503"))
+			throw new UnitCodeViolationException(">> Unit code in use!! Cannot edit or delete!!");
 		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 	}
 
@@ -45,22 +49,25 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
 	@Override
-	public Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException {
+	public Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			return unitMapper.edit(unit);
-		} catch(SQLException e) {
-			handleException(e);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
 			return null;
 		}
 	}
 
 
 	@Override
-	public Integer delete(String code) throws ApplicationErrorException {
+	public Integer delete(String code) throws ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			return unitMapper.delete(code);
-		} catch(Exception e) {
-			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
+			return null;
 		}
 	}
 

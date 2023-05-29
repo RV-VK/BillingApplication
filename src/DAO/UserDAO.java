@@ -30,8 +30,8 @@ public interface UserDAO {
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
 
-	@Select("SELECT COUNT(ID) FROM USERS")
-	Integer count() throws ApplicationErrorException;
+	@Select("SELECT COUNT(*) FROM USERS WHERE  #{attribute} = COALESCE(#{searchText},#{attribute})")
+	Integer count(@Param("attribute") String attribute,@Param("searchText") String searchText) throws ApplicationErrorException;
 
 	/**
 	 * This method Lists the records in the user table based on a given Search-text.

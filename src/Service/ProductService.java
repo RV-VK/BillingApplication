@@ -27,7 +27,7 @@ public interface ProductService {
 	 * @return count - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer count() throws ApplicationErrorException;
+	Integer count(String attribute, String searchText) throws ApplicationErrorException;
 
 
 	/**

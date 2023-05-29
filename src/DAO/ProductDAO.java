@@ -32,8 +32,8 @@ public interface ProductDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	@Select("select count(id) from product")
-	Integer count() throws ApplicationErrorException;
+	@Select("SELECT count(*) FROM product WHERE ${attribute} = COALESCE(#{searchText}, ${attribute}) AND isdeleted = false")
+	Integer count(@Param("attribute") String attribute, @Param("searchText") String searchText) throws ApplicationErrorException;
 
 	/**
 	 * This method lists the products in the product table based on the given searchable attribute and
@@ -59,9 +59,11 @@ public interface ProductDAO {
 	 * @return List - Products
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-
 	@Select("SELECT * FROM PRODUCT WHERE ( NAME ILIKE '" + "%${searchText}%" + "' OR CODE ILIKE '" + "%${searchText}%" + "' OR UNITCODE ILIKE '" + "%${searchText}%" + "' OR TYPE ILIKE '" + "%${searchText}%" + "' OR CAST(ID AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(STOCK AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(PRICE AS TEXT) ILIKE '" + "%${searchText}%" + "' )" + " AND ISDELETED=FALSE")
 	List<Product> searchList(String searchText) throws ApplicationErrorException;
+
+
+
 
 	/**
 	 * This method updates the attributes of the product entry in the Product table

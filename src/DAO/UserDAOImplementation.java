@@ -2,6 +2,7 @@ package DAO;
 
 import Entity.User;
 import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -9,16 +10,17 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserDAOImplementation implements UserDAO {
-	private final SqlSessionFactory sqlSessionFactory= MyBatisSession.getSqlSessionFactory();
-	private final SqlSession sqlSession =sqlSessionFactory.openSession();
-	private final UserDAO userMapper  = sqlSession.getMapper(UserDAO.class);
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final UserDAO userMapper = sqlSession.getMapper(UserDAO.class);
 
 	@Override
 	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
-		try{
-		return userMapper.create(user);
-		} catch( SQLException e) {
-			handleException(e);
+		try {
+			return userMapper.create(user);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
 			return null;
 		}
 	}
@@ -38,9 +40,9 @@ public class UserDAOImplementation implements UserDAO {
 	}
 
 	@Override
-	public Integer count() throws ApplicationErrorException {
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
 		try {
-			return userMapper.count();
+			return userMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
@@ -60,6 +62,8 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public List<User> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException {
 		try {
+			Integer count = userMapper.count(attribute, searchText);
+			checkPagination(count, offset, pageLength);
 			return userMapper.list(attribute, searchText, pageLength, offset);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -80,8 +84,9 @@ public class UserDAOImplementation implements UserDAO {
 	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
 			return userMapper.edit(user);
-		} catch(SQLException e) {
-			handleException(e);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
 			return null;
 		}
 	}
@@ -101,11 +106,9 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public User login(String userName, String passWord) throws ApplicationErrorException {
 		try {
-			User user=userMapper.login(userName,passWord);
-			if(user!=null && user.getPassWord().equals(passWord))
-				return user;
-			else
-				return null;
+			User user = userMapper.login(userName, passWord);
+			if(user != null && user.getPassWord().equals(passWord)) return user;
+			else return null;
 		} catch(SQLException e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

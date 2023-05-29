@@ -20,8 +20,8 @@ public class ProductServiceImplementation implements ProductService {
 		return productDAO.create(product);
 	}
 
-	public Integer count() throws ApplicationErrorException {
-		return productDAO.count();
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
+		return productDAO.count(attribute, searchText);
 	}
 
 	public List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {

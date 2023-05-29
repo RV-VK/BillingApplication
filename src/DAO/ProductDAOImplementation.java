@@ -3,12 +3,12 @@ package DAO;
 import Entity.Product;
 import SQLSession.DBHelper;
 import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAOImplementation implements ProductDAO {
@@ -16,15 +16,15 @@ public class ProductDAOImplementation implements ProductDAO {
 	private final SqlSessionFactory sqlSessionFactory=MyBatisSession.getSqlSessionFactory();
 	private final SqlSession sqlSession =sqlSessionFactory.openSession();
 	private final ProductDAO productMapper  = sqlSession.getMapper(ProductDAO.class);
-	private List<Product> productList = new ArrayList<>();
 
 
 	@Override
 	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			return productMapper.create(product);
-		} catch(SQLException e) {
-			handleException(e);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
 			return null;
 		}
 	}
@@ -47,14 +47,14 @@ public class ProductDAOImplementation implements ProductDAO {
 			else
 				throw new UniqueConstraintException(">> Code must be unique!!!\n>> The code you have entered already exists!!!");
 		} else {
-			throw new ApplicationErrorException(">> Application has went into an Error!!!\n>>Please Try again");
+			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 
 	@Override
-	public Integer count() throws ApplicationErrorException {
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
 		try {
-			return productMapper.count();
+			return productMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -73,6 +73,8 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public List<Product> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		try {
+			Integer count = productMapper.count(attribute,searchText);
+			checkPagination(count,offset,pageLength);
 			return productMapper.list(attribute, searchText, pageLength, offset);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -88,17 +90,16 @@ public class ProductDAOImplementation implements ProductDAO {
 		}
 	}
 
-
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
 			return productMapper.edit(product);
-		} catch(SQLException e) {
-			handleException(e);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			handleException((SQLException) cause);
 			return null;
 		}
 	}
-
 
 	@Override
 	public Integer delete(String parameter) throws ApplicationErrorException {

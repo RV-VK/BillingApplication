@@ -22,8 +22,8 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public Integer count() throws ApplicationErrorException {
-		return userDAO.count();
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
+		return userDAO.count(attribute, searchText);
 	}
 
 	@Override

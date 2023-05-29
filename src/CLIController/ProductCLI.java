@@ -223,7 +223,7 @@ public class ProductCLI {
 			System.out.println(">> Invalid Command!! Try \"help\"");
 			return;
 		}
-		int productCount = productService.count();
+		int productCount = productService.count("id", null);
 		System.out.println(">> ProductCount " + productCount);
 	}
 

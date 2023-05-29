@@ -99,7 +99,7 @@ public class UserCLI {
 			System.out.println(">> Invalid Command!! Try \"help\"");
 			return;
 		}
-		int userCount = userService.count();
+		int userCount = userService.count("id", null);
 		System.out.println(">> User Count " + userCount);
 	}
 
