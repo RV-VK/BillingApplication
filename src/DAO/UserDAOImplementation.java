@@ -1,29 +1,22 @@
 package DAO;
 
-import SQLSession.DBHelper;
 import Entity.User;
 import SQLSession.MyBatisSession;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDAOImplementation implements UserDAO {
-	private final Connection userConnection = DBHelper.getConnection();
 	private final SqlSessionFactory sqlSessionFactory= MyBatisSession.getSqlSessionFactory();
 	private final SqlSession sqlSession =sqlSessionFactory.openSession();
 	private final UserDAO userMapper  = sqlSession.getMapper(UserDAO.class);
-	private List<User> userList = new ArrayList<>();
 
 	@Override
 	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try{
-		User createdUser = userMapper.create(user);
-		sqlSession.commit();
-		sqlSession.close();
-		return createdUser;
+		return userMapper.create(user);
 		} catch( SQLException e) {
 			handleException(e);
 			return null;
@@ -86,10 +79,7 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
-			User editedUser = userMapper.edit(user);
-			sqlSession.commit();
-			sqlSession.close();
-			return editedUser;
+			return userMapper.edit(user);
 		} catch(SQLException e) {
 			handleException(e);
 			return null;
@@ -100,16 +90,12 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public Integer delete(String username) throws ApplicationErrorException {
 		try {
-			int rowsAffected = userMapper.delete(username);
-			sqlSession.commit();
-			sqlSession.close();
-			return rowsAffected;
+			return userMapper.delete(username);
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
-
 
 
 	@Override

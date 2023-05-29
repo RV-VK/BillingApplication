@@ -19,16 +19,16 @@ public class LoginCLI {
 	private static String firstName;
 	private static String lastName;
 	private static Long phoneNumber;
-	private AdminMain adminMain;
-	private PurchaseMain purchaseMain;
-	private SalesMain salesMain;
+	private AdminMain adminMain = new AdminMain();
+	private PurchaseMain purchaseMain = new PurchaseMain();
+	private SalesMain salesMain = new SalesMain();
 
 	/**
 	 * Login View Main
 	 **/
 	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException {
-		LoginCLI loginCLI=new LoginCLI();
-		if(loginService.checkIfInitialSetup()) {
+		LoginCLI loginCLI = new LoginCLI();
+		if(!loginService.checkIfInitialSetup()) {
 
 			System.out.println("""
 					\t\t\t\t\t\t*********************************************************
@@ -86,7 +86,7 @@ public class LoginCLI {
 				}
 			} while(true);
 		} else {
-
+			loginCLI.Login();
 		}
 	}
 
@@ -96,7 +96,7 @@ public class LoginCLI {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public  void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException {
+	public void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException {
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");
@@ -110,11 +110,11 @@ public class LoginCLI {
 				System.out.println(e.getMessage());
 				return;
 			}
-			if(user!= null) {
+			if(user != null) {
 				System.out.print("\n\n\n\t\t\t\t\t____________WELCOME " + userName + " TO THE BILLING SOFTWARE_____________________");
 				//Split User control Here
 				if(user.getUserType().equalsIgnoreCase("Admin")) {
-					adminMain.AdminView();
+					adminMain.AdminView(userName);
 				} else if(user.getUserType().equalsIgnoreCase("Sales")) {
 					salesMain.SalesView();
 				} else if(user.getUserType().equalsIgnoreCase("Purchase")) {

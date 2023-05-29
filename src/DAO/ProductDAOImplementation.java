@@ -22,10 +22,7 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			Product createdProduct = productMapper.create(product);
-			sqlSession.commit();
-			sqlSession.close();
-			return createdProduct;
+			return productMapper.create(product);
 		} catch(SQLException e) {
 			handleException(e);
 			return null;
@@ -64,7 +61,6 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	}
 
-
 	public List<Product> searchList(String searchText) throws ApplicationErrorException {
 		try {
 			return productMapper.searchList(searchText);
@@ -96,10 +92,7 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			Product editedProduct = productMapper.edit(product);
-			sqlSession.commit();
-			sqlSession.close();
-			return editedProduct;
+			return productMapper.edit(product);
 		} catch(SQLException e) {
 			handleException(e);
 			return null;
@@ -110,9 +103,7 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
-			int rowsAffected = productMapper.delete(parameter);
-			sqlSession.commit();
-			return rowsAffected;
+			return productMapper.delete(parameter);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

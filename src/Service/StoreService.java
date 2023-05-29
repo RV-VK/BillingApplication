@@ -34,5 +34,5 @@ public interface StoreService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer delete(String adminPassword) throws ApplicationErrorException;
+	Integer delete(String userName, String adminPassword) throws ApplicationErrorException;
 }

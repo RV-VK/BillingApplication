@@ -27,8 +27,8 @@ public class StoreServiceImplementation implements StoreService {
 
 
 	@Override
-	public Integer delete(String adminPassword) throws ApplicationErrorException {
-		return storeDAO.delete(adminPassword);
+	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
+		return storeDAO.delete(userName, adminPassword);
 	}
 
 	/**

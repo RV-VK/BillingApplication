@@ -10,7 +10,7 @@ public class LoginServiceImplementation implements LoginService {
 
 
 	@Override
-	public Boolean checkIfInitialSetup() throws SQLException {
+	public Boolean checkIfInitialSetup() throws ApplicationErrorException {
 		return new StoreDAOImplementation().checkIfStoreExists();
 	}
 

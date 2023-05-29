@@ -10,15 +10,15 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class AdminMain {
-	private  Scanner scanner;
-	private  LoginService loginService=new LoginServiceImplementation();
-	private LoginCLI loginCLI;
-	private ProductCLI productCLI = new ProductCLI();
-	private UserCLI userCLI = new UserCLI();
-	private StoreCLI storeCLI = new StoreCLI();
-	private UnitCLI unitCLI = new UnitCLI();
-	private PurchaseCLI purchaseCLI = new PurchaseCLI();
-	private SalesCLI salesCLI = new SalesCLI();
+	private Scanner scanner;
+	private final LoginService loginService=new LoginServiceImplementation();
+	private  LoginCLI loginCLI;
+	private final ProductCLI productCLI = new ProductCLI();
+	private final UserCLI userCLI = new UserCLI();
+	private final StoreCLI storeCLI = new StoreCLI();
+	private final UnitCLI unitCLI = new UnitCLI();
+	private final PurchaseCLI purchaseCLI = new PurchaseCLI();
+	private final SalesCLI salesCLI = new SalesCLI();
 
 	private static List<String> splitCommand(String command) {
 		String[] parts;
@@ -46,8 +46,8 @@ public class AdminMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	public  void AdminView() throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException {
-		scanner = new Scanner(System.in);
+	public  void AdminView(String userName) throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException {
+		scanner=new Scanner(System.in);
 		System.out.println("\n\n>> Try \"help\" to know better!\n");
 		do {
 			System.out.print("\n> ");
@@ -56,7 +56,7 @@ public class AdminMain {
 			String commandString = commandList.get(0);
 			String operationString = "";
 			if(commandList.size() > 1) operationString = commandList.get(1);
-			if((loginService.checkIfInitialSetup())) {
+			if(!loginService.checkIfInitialSetup()) {
 				if(commandString.equals("store") && operationString.equals("create"))
 					new StoreCLI().create(commandList);
 				else {
@@ -95,7 +95,7 @@ public class AdminMain {
 						switch(operationString) {
 							case "create" -> storeCLI.create(commandList);
 							case "edit" -> storeCLI.edit(commandList, command);
-							case "delete" -> storeCLI.delete(commandList);
+							case "delete" -> storeCLI.delete(commandList,userName);
 							default -> {
 								System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
 								System.out.println(">> Try \"help\" for proper syntax");
@@ -116,35 +116,28 @@ public class AdminMain {
 					}
 					case "purchase" -> {
 						switch(operationString) {
-							case "count":
-								purchaseCLI.count(commandList);
-								break;
-							case "list":
-								purchaseCLI.list(commandList);
-								break;
-							case "delete":
-								purchaseCLI.delete(commandList);
-								break;
-							case "help":
-								System.out.println("""
-										>> purchase products using following command
-										purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+							case "count" -> purchaseCLI.count(commandList);
+							case "list" -> purchaseCLI.list(commandList);
+							case "delete" -> purchaseCLI.delete(commandList);
+							case "help" -> System.out.println("""
+									>> purchase products using following command
+									purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
 
-										\t  date - format( YYYY-MM-DD ), mandatory
-										\t\tinvoice - numbers, mandatory
-										\t\t
-										\t\tThe following purchase items should be given as array of items
-										\t\tcode - text, min 2 - 6 char, mandatory
-										\t\tquantity - numbers, mandatory
-										\t\tcostprice - numbers, mandatory""");
-								break;
-							default:
+									\t  date - format( YYYY-MM-DD ), mandatory
+									\t\tinvoice - numbers, mandatory
+									\t\t
+									\t\tThe following purchase items should be given as array of items
+									\t\tcode - text, min 2 - 6 char, mandatory
+									\t\tquantity - numbers, mandatory
+									\t\tcostprice - numbers, mandatory""");
+							default -> {
 								if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 									purchaseCLI.create(command);
 								} else {
 									System.out.println("Invalid operation for command " + "\"" + commandString + "\"");
 									System.out.println("Try either \"help\" for proper syntax or \"purchase help\" if you are trying to start a purchase!");
 								}
+							}
 						}
 					}
 					case "sales" -> {
@@ -169,11 +162,12 @@ public class AdminMain {
 							}
 						}
 					}
-					case "help" -> {
-						FeedBackPrinter.mainHelp();
-					}
+					case "help" -> FeedBackPrinter.mainHelp();
 					case "exit" -> System.exit(0);
-					case "logout" -> loginCLI.Login();
+					case "logout" -> {
+						loginCLI=new LoginCLI();
+						loginCLI.Login();
+					}
 					default -> System.out.println("Invalid Command! Not Found!");
 				}
 			}

@@ -2,40 +2,29 @@ package DAO;
 
 import SQLSession.DBHelper;
 import Entity.Unit;
+import SQLSession.MyBatisSession;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UnitDAOImplementation implements UnitDAO {
-	private final Connection unitConnection = DBHelper.getConnection();
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final UnitDAO unitMapper = sqlSession.getMapper(UnitDAO.class);
+	private List<Unit> unitList = new ArrayList<>();
 
 
 	@Override
 	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
-			PreparedStatement unitCreateStatement = unitConnection.prepareStatement("INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (?,?,?,?) RETURNING *");
-			setParameters(unitCreateStatement, unit);
-			ResultSet unitCreateResultSet = unitCreateStatement.executeQuery();
-			unitCreateResultSet.next();
-			return getUnitFromResultSet(unitCreateResultSet);
+			return unitMapper.create(unit);
 		} catch(SQLException e) {
 			handleException(e);
 			return null;
 		}
-	}
-
-	private void setParameters(PreparedStatement statement, Unit unit) throws SQLException {
-		statement.setString(1, unit.getName());
-		statement.setString(2, unit.getCode());
-		statement.setString(3, unit.getDescription());
-		statement.setBoolean(4, unit.getIsDividable());
-	}
-
-	private Unit getUnitFromResultSet(ResultSet resultSet) throws SQLException {
-		boolean isDividable;
-		isDividable = resultSet.getString(5).equals("t");
-		return new Unit(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), isDividable);
 	}
 
 	private void handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException {
@@ -46,14 +35,8 @@ public class UnitDAOImplementation implements UnitDAO {
 
 	@Override
 	public List<Unit> list() throws ApplicationErrorException {
-		List<Unit> unitList = new ArrayList<>();
 		try {
-			Statement listStatement = unitConnection.createStatement();
-			ResultSet listResultSet = listStatement.executeQuery("SELECT * FROM UNIT ORDER BY CODE");
-			while(listResultSet.next()) {
-				unitList.add(getUnitFromResultSet(listResultSet));
-			}
-			return unitList;
+			return unitMapper.list();
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -64,18 +47,7 @@ public class UnitDAOImplementation implements UnitDAO {
 	@Override
 	public Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException {
 		try {
-			String editQuery = "UPDATE UNIT SET NAME= COALESCE(?,NAME),CODE= COALESCE(?,CODE), DESCRIPTION= COALESCE(?,DESCRIPTION),ISDIVIDABLE= COALESCE(?,ISDIVIDABLE) WHERE ID=? RETURNING *";
-			PreparedStatement editStatement = unitConnection.prepareStatement(editQuery);
-			setParameters(editStatement, unit);
-			try {
-				editStatement.setBoolean(4, unit.getIsDividable());
-			} catch(Exception e) {
-				editStatement.setNull(4, Types.BOOLEAN);
-			}
-			editStatement.setInt(5, unit.getId());
-			ResultSet editUnitResultSet = editStatement.executeQuery();
-			editUnitResultSet.next();
-			return getUnitFromResultSet(editUnitResultSet);
+			return unitMapper.edit(unit);
 		} catch(SQLException e) {
 			handleException(e);
 			return null;
@@ -84,19 +56,10 @@ public class UnitDAOImplementation implements UnitDAO {
 
 
 	@Override
-	public Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException {
+	public Integer delete(String code) throws ApplicationErrorException {
 		try {
-			Statement deleteStatement = unitConnection.createStatement();
-			if(! (deleteStatement.executeUpdate("DELETE FROM UNIT WHERE CODE='" + code + "'") > 0)) {
-				return - 1;
-			} else {
-				return 1;
-			}
-		} catch(SQLException e) {
-			if(e.getSQLState().equals("23503"))
-			{
-				throw new UnitCodeViolationException(">> The unitCode is in Use!! Cannot Delete!! Make Sure to delete or Refactor the products with this Unit!");
-			}
+			return unitMapper.delete(code);
+		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
@@ -105,13 +68,7 @@ public class UnitDAOImplementation implements UnitDAO {
 	@Override
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
-			Statement getUnitStatement = unitConnection.createStatement();
-			ResultSet getUnitResultSet = getUnitStatement.executeQuery("SELECT * FROM UNIT WHERE CODE='" + code + "'");
-			Unit unit = null;
-			while(getUnitResultSet.next()) {
-				unit = getUnitFromResultSet(getUnitResultSet);
-			}
-			return unit;
+			return unitMapper.findByCode(code);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

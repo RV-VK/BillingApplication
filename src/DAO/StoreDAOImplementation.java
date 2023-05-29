@@ -1,88 +1,58 @@
 package DAO;
 
+import Entity.User;
 import SQLSession.DBHelper;
 import Entity.Store;
+import SQLSession.MyBatisSession;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.*;
 
 public class StoreDAOImplementation implements StoreDAO {
-	private final Connection storeConnection = DBHelper.getConnection();
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final StoreDAO storeMapper = sqlSession.getMapper(StoreDAO.class);
+	private final UserDAO userDAO = new UserDAOImplementation();
 
 
 	@Override
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
-			PreparedStatement unitCreateStatement = storeConnection.prepareStatement("INSERT INTO STORE(NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (?,?,?,?) RETURNING *");
-			setParameters(unitCreateStatement, store);
-			ResultSet storeCreateResultSet = unitCreateStatement.executeQuery();
-			storeCreateResultSet.next();
-			return getStoreFromResultSet(storeCreateResultSet);
+			return storeMapper.create(store);
 		} catch(SQLException e) {
-			if(e.getSQLState().equals("23514")) return null;
-			else throw new ApplicationErrorException(e.getMessage());
+//			if(e.getSQLState().equals("23514")) return null;
+			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
-
-	private void setParameters(PreparedStatement statement, Store store) throws SQLException {
-		statement.setString(1, store.getName());
-		statement.setLong(2, store.getPhoneNumber());
-		statement.setString(3, store.getAddress());
-		statement.setString(4, store.getGstCode());
-	}
-
-	private Store getStoreFromResultSet(ResultSet resultSet) throws SQLException {
-		return new Store(resultSet.getString(2), resultSet.getLong(3), resultSet.getString(4), resultSet.getString(5));
-	}
-
 
 	@Override
 	public Store edit(Store store) throws SQLException, ApplicationErrorException {
 		try {
-			String editQuery = "UPDATE STORE SET NAME= COALESCE(?,NAME),PHONENUMBER= COALESCE(?,PHONENUMBER),ADDRESS= COALESCE(?,ADDRESS),GSTNUMBER=COALESCE(?,GSTNUMBER) RETURNING *";
-			PreparedStatement editStatement = storeConnection.prepareStatement(editQuery);
-			setParameters(editStatement, store);
-			if(store.getPhoneNumber() == 0) {
-				editStatement.setNull(2, Types.BIGINT);
-			} else {
-				editStatement.setLong(2, store.getPhoneNumber());
-			}
-			ResultSet editStoreResultSet = editStatement.executeQuery();
-			editStoreResultSet.next();
-			return getStoreFromResultSet(editStoreResultSet);
+			return storeMapper.edit(store);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
 	}
 
-	public Boolean checkIfStoreExists() throws SQLException {
-		ResultSet resultSet = storeConnection.createStatement().executeQuery("SELECT COUNT(ID) FROM STORE");
-		resultSet.next();
-		return resultSet.getInt(1) == 0;
+	public Boolean checkIfStoreExists() throws ApplicationErrorException {
+		try {
+			return storeMapper.checkIfStoreExists();
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
 	}
 
-
 	@Override
-	public Integer delete(String adminPassword) throws ApplicationErrorException {
+	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
 		try {
-			if(!checkIfStoreExists()) {
-				Statement passwordCheckStatement = storeConnection.createStatement();
-				ResultSet adminPasswordResultSet = passwordCheckStatement.executeQuery("SELECT PASSWORD FROM USERS WHERE USERTYPE='Admin'");
-				if(adminPasswordResultSet.next()) {
-					String originalPassword = adminPasswordResultSet.getString(1);
-					if(originalPassword.equals(adminPassword)) {
-						Statement deleteStatement = storeConnection.createStatement();
-						deleteStatement.execute("TRUNCATE PRODUCT,USERS,UNIT,STORE,PURCHASE,PURCHASEITEMS,SALESITEMS,SALES");
-						return 1;
-					} else {
-						return - 1;
-					}
-				} else {
-					return - 1;
-				}
-			} else {
-				return 0;
-			}
+			User user = userDAO.login(userName, adminPassword);
+			if(user==null)
+				return -1;
+			else
+				return storeMapper.delete(userName, adminPassword);
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
