@@ -121,7 +121,7 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	public void updateStock(String code, float stock) throws ApplicationErrorException {
 		try {
-			productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=" + stock + " WHERE CODE='" + code + "'");
+			productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+" + stock + " WHERE CODE='" + code + "'");
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

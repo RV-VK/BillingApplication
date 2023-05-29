@@ -100,7 +100,7 @@ public interface ProductDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	@Select("SELECT * FROM PRODUCT WHERE CODE=#{code}")
+	@Select("SELECT * FROM PRODUCT WHERE CODE=#{code} AND ISDELETED=FALSE")
 	Product findByCode(String code) throws ApplicationErrorException;
 
 

@@ -5,6 +5,7 @@ import Entity.Product;
 import Entity.Purchase;
 import Entity.PurchaseItem;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException {
+	public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException, UniqueConstraintException {
 		ProductDAO productDAO = new ProductDAOImplementation();
 		UnitDAO unitDAO = new UnitDAOImplementation();
 		boolean isDividable;
@@ -40,11 +41,13 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 
 	@Override
-	public Integer count(String parameter) throws ApplicationErrorException {
-		if(parameter != null) {
-			if(! parameter.matches(dateRegex)) return - 1;
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException {
+		if(searchText != null) {
+			if(searchText.matches(dateRegex))
+				return purchaseDAO.count(attribute, searchText);
+			else throw new InvalidTemplateException(">> Invalid format for Date!! Must be in YYYY-MM-DD!!");
 		}
-		return purchaseDAO.count(parameter);
+		return purchaseDAO.count(attribute,null);
 	}
 
 
@@ -52,7 +55,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 	public List<Purchase> list(HashMap<String, String> listattributes) throws ApplicationErrorException, InvalidTemplateException {
 		List<Purchase> purchaseList;
 		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
-			purchaseList = purchaseDAO.list(listattributes.get("Searchtext"));
+			purchaseList = purchaseDAO.searchList(listattributes.get("Searchtext"));
 		} else {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));

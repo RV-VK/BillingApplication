@@ -32,14 +32,15 @@ public class Product {
 		this.price = price;
 	}
 
+	public Product(String code) {
+		this.code = code;
+	}
+
 	public Product(String code, String name) {
 		this.code = code;
 		this.name = name;
 	}
 
-	public Product(String code) {
-		this.code = code;
-	}
 
 	public int getId() {
 		return id;

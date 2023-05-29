@@ -13,7 +13,7 @@ public class UnitServiceImplementation implements UnitService {
 
 
 	@Override
-	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException, UnitCodeViolationException {
 		validate(unit);
 		return unitDAO.create(unit);
 	}
@@ -26,14 +26,14 @@ public class UnitServiceImplementation implements UnitService {
 
 
 	@Override
-	public Unit edit(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public Unit edit(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException, UnitCodeViolationException {
 		validate(unit);
 		return unitDAO.edit(unit);
 	}
 
 
 	@Override
-	public Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException {
+	public Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException, UniqueConstraintException {
 		return unitDAO.delete(code);
 	}
 

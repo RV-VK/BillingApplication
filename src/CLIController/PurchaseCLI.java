@@ -5,6 +5,7 @@ import DAO.PageCountOutOfBoundsException;
 import Entity.Product;
 import Entity.Purchase;
 import Entity.PurchaseItem;
+import Service.InvalidTemplateException;
 import Service.PurchaseService;
 import Service.PurchaseServiceImplementation;
 
@@ -51,6 +52,7 @@ public class PurchaseCLI {
 				System.out.println(">> Try \"purchase help\" for proper syntax!!");
 				return;
 			}
+			purchaseItemList.clear();
 			for(int i = 1 ; i < commandEntities.length ; i++) {
 				String item = commandEntities[i].replaceAll("[\\[\\]]", "");
 				String[] itemVariables = item.split(",");
@@ -97,7 +99,7 @@ public class PurchaseCLI {
 	 * @param arguments Command arguments
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void count(List<String> arguments) throws ApplicationErrorException {
+	public void count(List<String> arguments) throws ApplicationErrorException, InvalidTemplateException {
 		int purchaseCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
@@ -109,14 +111,14 @@ public class PurchaseCLI {
 			return;
 		}
 		if(arguments.size() == 2) {
-			purchaseCount = purchaseService.count(null);
+			purchaseCount = purchaseService.count("id", null);
 			System.out.println(">> PurchaseCount " + purchaseCount);
 			return;
 		}
 		if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
-				purchaseCount = purchaseService.count(parameter);
+				purchaseCount = purchaseService.count("date", parameter);
 				if(purchaseCount > 0) System.out.println(">> PurchaseCount " + purchaseCount);
 				else {
 					System.out.println(">> Given Date not found!!!");

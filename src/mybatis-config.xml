@@ -21,5 +21,6 @@
         <mapper class="DAO.StoreDAO" />
         <mapper class="DAO.PurchaseDAO"/>
         <mapper class="DAO.SalesDAO" />
+        <mapper class="DAO.PurchaseItemMapper"/>
     </mappers>
 </configuration>

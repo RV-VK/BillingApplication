@@ -3,6 +3,7 @@ package CLIController;
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import DAO.UnitCodeViolationException;
+import Service.InvalidTemplateException;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -38,7 +39,7 @@ public class SalesMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	public void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException, UnitCodeViolationException {
+	public void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException, UnitCodeViolationException, InvalidTemplateException {
 		scanner = new Scanner(System.in);
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {

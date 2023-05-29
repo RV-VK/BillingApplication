@@ -41,6 +41,7 @@ public class SalesCLI {
 		} else {
 			String[] commandArguments = commandEntities[0].split("\\s+");
 			salesDate = commandArguments[1].trim().replace(",", "");
+			salesItemList.clear();
 			for(int i = 1 ; i < commandEntities.length ; i++) {
 				String item = commandEntities[i].replaceAll("[\\[\\]]", "");
 				String[] itemVariables = item.split(",");

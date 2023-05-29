@@ -4,6 +4,7 @@ import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import DAO.UnitCodeViolationException;
 import Entity.User;
+import Service.InvalidTemplateException;
 import Service.LoginService;
 import Service.LoginServiceImplementation;
 import Service.PurchaseService;
@@ -26,7 +27,7 @@ public class LoginCLI {
 	/**
 	 * Login View Main
 	 **/
-	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException {
+	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, InvalidTemplateException {
 		LoginCLI loginCLI = new LoginCLI();
 		if(!loginService.checkIfInitialSetup()) {
 
@@ -96,7 +97,7 @@ public class LoginCLI {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException {
+	public void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException, InvalidTemplateException {
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");

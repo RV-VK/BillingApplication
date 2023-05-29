@@ -1,7 +1,11 @@
 package DAO;
 
 import Entity.Purchase;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,16 +18,18 @@ public interface PurchaseDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException;
+	@Select("INSERT INTO PURCHASE(DATE,INVOICE,GRANDTOTAL) VALUES(CAST(#{date} AS DATE),#{invoice},#{grandTotal}) RETURNING *")
+	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UniqueConstraintException;
 
 	/**
 	 * This method counts the number of entries in the Purchase table based on date parameter.
 	 *
-	 * @param parameter Date of Purchase
+	 * @param searchText searchText to be counted.
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer count(String parameter) throws ApplicationErrorException;
+	@Select("SELECT COUNT(ID) FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText}, ${attribute})")
+	Integer count(@Param("attribute") String attribute,@Param("searchText") String  searchText) throws ApplicationErrorException;
 
 	/**
 	 * This method Lists the Purchase and PurchaseItem entries based on the given searchable attribute
@@ -36,7 +42,8 @@ public interface PurchaseDAO {
 	 * @return List - Purchase.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	List<Purchase> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException;
+	@Select("SELECT * FROM PURCHASE WHERE #{attribute} = COALESCE(#{searchText} ,#{attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
+	List<Purchase> list(@Param("attribute") String attribute,@Param("searchText") String searchText,@Param("pageLength") int pageLength,@Param("offset") int offset) throws ApplicationErrorException;
 
 
 	/**
@@ -46,7 +53,8 @@ public interface PurchaseDAO {
 	 * @return List - Purchase
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	List<Purchase> list(String searchText) throws ApplicationErrorException;
+	@Select("SELECT * FROM PURCHASE WHERE CAST(ID AS TEXT) ILIKE '%${searchText}%' OR CAST(DATE AS TEXT) ILIKE '%${searchText}%' OR CAST(INVOICE AS TEXT) ILIKE  '%${searchText}%'")
+	List<Purchase> searchList(String searchText) throws ApplicationErrorException;
 
 
 	/**
@@ -56,5 +64,6 @@ public interface PurchaseDAO {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
+	@Delete("DELETE FROM PURCHASE WHERE INVOICE= #{invoice}")
 	Integer delete(int invoice) throws ApplicationErrorException;
 }
