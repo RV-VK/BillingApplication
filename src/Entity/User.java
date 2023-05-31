@@ -1,13 +1,13 @@
 package Entity;
 
 public class User {
-	private int id;
+	private Integer id;
 	private String userType;
 	private String userName;
 	private String passWord;
 	private String firstName;
 	private String lastName;
-	private long phoneNumber;
+	private Long phoneNumber;
 
 	public User() {
 	}
@@ -31,11 +31,11 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -79,11 +79,11 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public long getPhoneNumber() {
+	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(long phoneNumber) {
+	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

@@ -2,8 +2,21 @@ package Entity;
 
 public class SalesItem {
 	private Product product;
-	private float quantity;
-	private double unitSalesPrice;
+	private Float quantity;
+	private Double unitSalesPrice;
+
+	public SalesItem(String code, float quantity, double unitSalesPrice) {
+		this.product = new Product(code);
+		this.quantity = quantity;
+		this.unitSalesPrice = unitSalesPrice;
+	}
+
+	public SalesItem(String code, String name, float quantity, double unitSalesPrice) {
+		this.product = new Product(code, name);
+		this.quantity = quantity;
+		this.unitSalesPrice = unitSalesPrice;
+	}
+
 
 	public SalesItem(Product product, float quantity, double unitSalesPrice) {
 		this.product = product;
@@ -24,19 +37,19 @@ public class SalesItem {
 		this.product = product;
 	}
 
-	public float getQuantity() {
+	public Float getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(float quantity) {
+	public void setQuantity(Float quantity) {
 		this.quantity = quantity;
 	}
 
-	public double getUnitSalesPrice() {
+	public Double getUnitSalesPrice() {
 		return unitSalesPrice;
 	}
 
-	public void setUnitSalesPrice(double unitSalesPrice) {
+	public void setUnitSalesPrice(Double unitSalesPrice) {
 		this.unitSalesPrice = unitSalesPrice;
 	}
 

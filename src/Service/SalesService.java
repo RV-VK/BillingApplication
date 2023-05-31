@@ -27,7 +27,7 @@ public interface SalesService {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer count(String parameter) throws ApplicationErrorException;
+	Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Sales entity and serves the List function.

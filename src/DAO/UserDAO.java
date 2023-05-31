@@ -4,7 +4,6 @@ import Entity.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,8 +29,8 @@ public interface UserDAO {
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
 
-	@Select("SELECT COUNT(*) FROM USERS WHERE  #{attribute} = COALESCE(#{searchText},#{attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") String searchText) throws ApplicationErrorException;
+	@Select("SELECT COUNT(*) FROM USERS WHERE  ${attribute} = COALESCE(#{searchText},${attribute})")
+	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
 
 	/**
 	 * This method Lists the records in the user table based on a given Search-text.
@@ -57,7 +56,7 @@ public interface UserDAO {
 	 */
 
 	@Select("SELECT *  FROM USERS WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
-	List<User> list(@Param("attribute") String attribute,@Param("searchText") String searchText,@Param("pageLength") int pageLength,@Param("offset") int offset) throws ApplicationErrorException;
+	List<User> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
 
 	/**
 	 * This method updates the attributes of the User entry in the user table.

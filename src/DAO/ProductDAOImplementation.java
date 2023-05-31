@@ -1,30 +1,29 @@
 package DAO;
 
 import Entity.Product;
-import SQLSession.DBHelper;
 import SQLSession.MyBatisSession;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class ProductDAOImplementation implements ProductDAO {
-	private final Connection productConnection = DBHelper.getConnection();
-	private final SqlSessionFactory sqlSessionFactory=MyBatisSession.getSqlSessionFactory();
-	private final SqlSession sqlSession =sqlSessionFactory.openSession();
-	private final ProductDAO productMapper  = sqlSession.getMapper(ProductDAO.class);
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 
+	private SqlSession sqlSession;
+	private ProductDAO productMapper;
 
 	@Override
 	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.create(product);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
-			handleException((SQLException) cause);
+			handleException((SQLException)cause);
 			return null;
 		}
 	}
@@ -35,10 +34,9 @@ public class ProductDAOImplementation implements ProductDAO {
 	 * @param e Exception Object
 	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product table.
 	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL table
-	 * @throws SQLException               Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
 	 */
-	private void handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, SQLException, ApplicationErrorException {
+	private void handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, ApplicationErrorException {
 		if(e.getSQLState().equals("23503")) {
 			throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
 		} else if(e.getSQLState().equals("23505")) {
@@ -52,8 +50,10 @@ public class ProductDAOImplementation implements ProductDAO {
 	}
 
 	@Override
-	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -63,6 +63,8 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	public List<Product> searchList(String searchText) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.searchList(searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -71,18 +73,27 @@ public class ProductDAOImplementation implements ProductDAO {
 
 
 	@Override
-	public List<Product> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
+	public List<Product> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		try {
-			Integer count = productMapper.count(attribute,searchText);
-			checkPagination(count,offset,pageLength);
-			return productMapper.list(attribute, searchText, pageLength, offset);
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
+			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Double numericParameter = Double.parseDouble((String)searchText);
+				Integer count = productMapper.count(attribute, numericParameter);
+				checkPagination(count, offset, pageLength);
+				return productMapper.list(attribute, numericParameter, pageLength, offset);
+			} else {
+				Integer count = productMapper.count(attribute, searchText);
+				checkPagination(count, offset, pageLength);
+				return productMapper.list(attribute, searchText, pageLength, offset);
+			}
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
-		if(count <= offset) {
+		if(count <= offset && count != 0) {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
@@ -93,10 +104,12 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.edit(product);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
-			handleException((SQLException) cause);
+			handleException((SQLException)cause);
 			return null;
 		}
 	}
@@ -104,6 +117,8 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.delete(parameter);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -113,17 +128,12 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.findByCode(code);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 
-	public void updateStock(String code, float stock) throws ApplicationErrorException {
-		try {
-			productConnection.createStatement().executeUpdate("UPDATE PRODUCT SET STOCK=STOCK+" + stock + " WHERE CODE='" + code + "'");
-		} catch(Exception e) {
-			throw new ApplicationErrorException(e.getMessage());
-		}
-	}
 }

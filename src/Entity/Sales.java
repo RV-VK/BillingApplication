@@ -3,10 +3,10 @@ package Entity;
 import java.util.List;
 
 public class Sales {
-	private int id;
+	private Integer id;
 	private String date;
 	private List<SalesItem> salesItemList;
-	private double grandTotal;
+	private Double grandTotal;
 
 	public Sales() {
 	}
@@ -24,11 +24,11 @@ public class Sales {
 		this.grandTotal = grandTotal;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -48,11 +48,11 @@ public class Sales {
 		this.salesItemList = salesItemList;
 	}
 
-	public double getGrandTotal() {
+	public Double getGrandTotal() {
 		return grandTotal;
 	}
 
-	public void setGrandTotal(double grandTotal) {
+	public void setGrandTotal(Double grandTotal) {
 		this.grandTotal = grandTotal;
 	}
 

@@ -11,12 +11,14 @@ import java.util.List;
 
 public class UserDAOImplementation implements UserDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private final SqlSession sqlSession = sqlSessionFactory.openSession();
-	private final UserDAO userMapper = sqlSession.getMapper(UserDAO.class);
+	private SqlSession sqlSession;
+	private UserDAO userMapper;
 
 	@Override
 	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
 			return userMapper.create(user);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -40,8 +42,10 @@ public class UserDAOImplementation implements UserDAO {
 	}
 
 	@Override
-	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
 			return userMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -51,6 +55,8 @@ public class UserDAOImplementation implements UserDAO {
 
 	public List<User> searchList(String searchText) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
 			return userMapper.searchList(searchText);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -60,18 +66,27 @@ public class UserDAOImplementation implements UserDAO {
 
 
 	@Override
-	public List<User> list(String attribute, String searchText, int pageLength, int offset) throws ApplicationErrorException {
+	public List<User> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		try {
-			Integer count = userMapper.count(attribute, searchText);
-			checkPagination(count, offset, pageLength);
-			return userMapper.list(attribute, searchText, pageLength, offset);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
+			if(searchText!= null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Double numericParameter = Double.parseDouble((String)searchText);
+				Integer count = userMapper.count(attribute,numericParameter);
+				checkPagination(count, offset, pageLength);
+				return userMapper.list(attribute, numericParameter, pageLength, offset);
+			} else {
+				Integer count = userMapper.count(attribute, searchText);
+				checkPagination(count, offset, pageLength);
+				return userMapper.list(attribute, searchText, pageLength, offset);
+			}
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
-		if(count <= offset) {
+		if(count <= offset && count != 0) {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
@@ -83,6 +98,8 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
 			return userMapper.edit(user);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -95,6 +112,8 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public Integer delete(String username) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
 			return userMapper.delete(username);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -106,6 +125,8 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public User login(String userName, String passWord) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserDAO.class);
 			User user = userMapper.login(userName, passWord);
 			if(user != null && user.getPassWord().equals(passWord)) return user;
 			else return null;

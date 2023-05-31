@@ -1,13 +1,13 @@
 package Entity;
 
 public class Product {
-	private int id;
+	private Integer id;
 	private String code;
 	private String name;
 	private String unitcode;
 	private String type;
-	private float stock;
-	private double price;
+	private Float stock;
+	private Double price;
 
 	public Product() {
 	}
@@ -42,11 +42,11 @@ public class Product {
 	}
 
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -90,11 +90,11 @@ public class Product {
 		this.stock = availableQuantity;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

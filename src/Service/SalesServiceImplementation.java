@@ -24,8 +24,7 @@ public class SalesServiceImplementation implements SalesService {
 		for(SalesItem salesItem: sales.getSalesItemList()) {
 			try {
 				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());
-				if(product != null)
-					salesItem.setProduct(product);
+				if(product != null) salesItem.setProduct(product);
 				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity())
 					throw new ApplicationErrorException(">> Product '" + salesItem.getProduct().getCode() + "' is out of Stock");
 				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
@@ -43,13 +42,13 @@ public class SalesServiceImplementation implements SalesService {
 
 
 	@Override
-	public Integer count(String parameter) throws ApplicationErrorException {
-		if(parameter != null) {
-			if(! parameter.matches(dateRegex)) {
-				return - 1;
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException {
+		if(searchText != null) {
+			if(! searchText.matches(dateRegex)) {
+				throw new InvalidTemplateException(">> Invalid Date format!! Must be in YYYY-MM-DD format!");
 			}
 		}
-		return salesDAO.count(parameter);
+		return salesDAO.count(attribute, searchText);
 	}
 
 
@@ -57,13 +56,13 @@ public class SalesServiceImplementation implements SalesService {
 	public List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException {
 		List<Sales> salesList;
 		if(Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1 && listAttributes.get("Searchtext") != null) {
-			salesList = salesDAO.list(listAttributes.get("Searchtext"));
-		} else  {
+			salesList = salesDAO.searchList(listAttributes.get("Searchtext"));
+		} else {
 			int pageLength = Integer.parseInt(listAttributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listAttributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
 			if(listAttributes.get("Attribute").equals("date")) {
-				if(! (listAttributes.get("Searchtext").replace("'","").matches(dateRegex)))
+				if(! (listAttributes.get("Searchtext").replace("'", "").matches(dateRegex)))
 					throw new InvalidTemplateException(">> Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
 			}
 			salesList = salesDAO.list(listAttributes.get("Attribute"), listAttributes.get("Searchtext"), pageLength, offset);

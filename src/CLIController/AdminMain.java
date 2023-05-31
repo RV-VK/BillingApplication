@@ -11,15 +11,15 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class AdminMain {
-	private Scanner scanner;
-	private final LoginService loginService=new LoginServiceImplementation();
-	private  LoginCLI loginCLI;
+	private final LoginService loginService = new LoginServiceImplementation();
 	private final ProductCLI productCLI = new ProductCLI();
 	private final UserCLI userCLI = new UserCLI();
 	private final StoreCLI storeCLI = new StoreCLI();
 	private final UnitCLI unitCLI = new UnitCLI();
 	private final PurchaseCLI purchaseCLI = new PurchaseCLI();
 	private final SalesCLI salesCLI = new SalesCLI();
+	private Scanner scanner;
+	private LoginCLI loginCLI;
 
 	private static List<String> splitCommand(String command) {
 		String[] parts;
@@ -47,8 +47,8 @@ public class AdminMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	public  void AdminView(String userName) throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException, InvalidTemplateException {
-		scanner=new Scanner(System.in);
+	public void AdminView(String userName) throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException, InvalidTemplateException {
+		scanner = new Scanner(System.in);
 		System.out.println("\n\n>> Try \"help\" to know better!\n");
 		do {
 			System.out.print("\n> ");
@@ -57,7 +57,7 @@ public class AdminMain {
 			String commandString = commandList.get(0);
 			String operationString = "";
 			if(commandList.size() > 1) operationString = commandList.get(1);
-			if(!loginService.checkIfInitialSetup()) {
+			if(! loginService.checkIfInitialSetup()) {
 				if(commandString.equals("store") && operationString.equals("create"))
 					new StoreCLI().create(commandList);
 				else {
@@ -96,7 +96,7 @@ public class AdminMain {
 						switch(operationString) {
 							case "create" -> storeCLI.create(commandList);
 							case "edit" -> storeCLI.edit(commandList, command);
-							case "delete" -> storeCLI.delete(commandList,userName);
+							case "delete" -> storeCLI.delete(commandList, userName);
 							default -> {
 								System.out.println(">> Invalid operation for command " + "\"" + commandString + "\"");
 								System.out.println(">> Try \"help\" for proper syntax");
@@ -166,7 +166,7 @@ public class AdminMain {
 					case "help" -> FeedBackPrinter.mainHelp();
 					case "exit" -> System.exit(0);
 					case "logout" -> {
-						loginCLI=new LoginCLI();
+						loginCLI = new LoginCLI();
 						loginCLI.Login();
 					}
 					default -> System.out.println("Invalid Command! Not Found!");

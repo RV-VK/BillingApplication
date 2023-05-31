@@ -3,6 +3,7 @@ package Service;
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
 import DAO.UniqueConstraintException;
+import DAO.UnitCodeViolationException;
 import Entity.Purchase;
 
 import java.sql.Date;
@@ -20,7 +21,7 @@ public interface PurchaseService {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException, UniqueConstraintException;
+	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException, UniqueConstraintException, UnitCodeViolationException;
 
 	/**
 	 * This method invokes the DAO of the Purchase entity and serves the Count function.

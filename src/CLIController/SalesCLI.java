@@ -4,14 +4,19 @@ import DAO.ApplicationErrorException;
 import Entity.Product;
 import Entity.Sales;
 import Entity.SalesItem;
+import Service.InvalidTemplateException;
 import Service.SalesService;
 import Service.SalesServiceImplementation;
 
 import java.util.*;
 
 public class SalesCLI {
-	private String salesDate;
 	private final List<SalesItem> salesItemList = new ArrayList<>();
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final List<String> saleAttributes = Arrays.asList("id", "date");
+	private final SalesService salesService = new SalesServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
+	private String salesDate;
 	private double grandTotal;
 	private String code;
 	private float quantity;
@@ -20,10 +25,6 @@ public class SalesCLI {
 	private String attribute;
 	private String searchText;
 	private Sales createdSale;
-	private final HashMap<String, String> listAttributesMap = new HashMap<>();
-	private final List<String> saleAttributes = Arrays.asList("id", "date");
-	private final SalesService salesService = new SalesServiceImplementation();
-	private final Scanner scanner = new Scanner(System.in);
 	private List<Sales> salesList;
 
 
@@ -86,7 +87,8 @@ public class SalesCLI {
 	 * @param arguments Command arguments.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void count(List<String> arguments) throws ApplicationErrorException {
+	public void count(List<String> arguments) throws ApplicationErrorException, InvalidTemplateException {
+		int salesCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
 				FeedBackPrinter.printSalesHelp("count");
@@ -97,14 +99,19 @@ public class SalesCLI {
 			return;
 		}
 		if(arguments.size() == 2) {
-			int salesCount = salesService.count(null);
+			salesCount = salesService.count("id", null);
 			System.out.println(">> SalesCount :" + salesCount);
 			return;
 		}
 		if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
-				int salesCount = salesService.count(parameter);
+				try {
+					salesCount = salesService.count("date",  parameter);
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					return;
+				}
 				if(salesCount > 0) System.out.println(">> SalesCount " + salesCount);
 				else {
 					System.out.println(">> Given Date not found!!!");
@@ -161,7 +168,7 @@ public class SalesCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(saleAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
+					setMap(listAttributesMap, "20", "1", attribute,  searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("sales", saleAttributes);
@@ -177,7 +184,7 @@ public class SalesCLI {
 				if(saleAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText );
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -198,7 +205,7 @@ public class SalesCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("sales");
@@ -223,8 +230,8 @@ public class SalesCLI {
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
 			salesList = salesService.list(listAttributesMap);
-			if(salesList == null) {
-				if( listAttributesMap.get("Searchtext")!=null) {
+			if(salesList.size() == 0) {
+				if(listAttributesMap.get("Searchtext") != null) {
 					System.out.println(">> Given SearchText does not exist!!!");
 				}
 				return;
@@ -306,7 +313,7 @@ public class SalesCLI {
 		System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
 		System.out.println("----------------------------------------------------------------------------------");
 		for(int i = 0 ; i < createdSale.getSalesItemList().size() ; i++) {
-			System.out.printf("%d\t\t%-20s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
+			System.out.printf("%d\t\t%-15s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
 		}
 		System.out.println("----------------------------------------------------------------------------------");
 		System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdSale.getGrandTotal());

@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UnitCLI {
+	private final UnitService unitService = new UnitServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
 	private int id;
 	private String name;
 	private String unitcode;
 	private String description;
 	private boolean isDividable;
-	private final UnitService unitService = new UnitServiceImplementation();
-	private final Scanner scanner = new Scanner(System.in);
 
 	/**
 	 * This method handles the presentation layer of the Create function.
@@ -202,7 +202,7 @@ public class UnitCLI {
 				System.out.print(">> Are you Sure you want to delete the Unit y/n :");
 				String prompt = scanner.nextLine();
 				if(prompt.equals("y")) {
-					try{
+					try {
 						if(unitService.delete(arguments.get(2)) == 1) {
 							System.out.println(">> Unit deleted Successfully!!!");
 						} else if(unitService.delete(arguments.get(2)) == - 1) {
@@ -210,8 +210,7 @@ public class UnitCLI {
 							System.out.println(">> Please check the unitcode you have entered!!!");
 							FeedBackPrinter.printHelpMessage("unit", "delete");
 						}
-					}catch(Exception e)
-					{
+					} catch(Exception e) {
 						System.out.println(e.getMessage());
 					}
 				} else if(prompt.equals("n")) {

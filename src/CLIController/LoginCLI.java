@@ -29,7 +29,7 @@ public class LoginCLI {
 	 **/
 	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, InvalidTemplateException {
 		LoginCLI loginCLI = new LoginCLI();
-		if(!loginService.checkIfInitialSetup()) {
+		if(! loginService.checkIfInitialSetup()) {
 
 			System.out.println("""
 					\t\t\t\t\t\t*********************************************************

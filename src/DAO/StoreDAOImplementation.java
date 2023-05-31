@@ -1,25 +1,26 @@
 package DAO;
 
-import Entity.User;
-import SQLSession.DBHelper;
 import Entity.Store;
+import Entity.User;
 import SQLSession.MyBatisSession;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.sql.*;
+import java.sql.SQLException;
 
 public class StoreDAOImplementation implements StoreDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private final SqlSession sqlSession = sqlSessionFactory.openSession();
-	private final StoreDAO storeMapper = sqlSession.getMapper(StoreDAO.class);
+	private  SqlSession sqlSession;
+	private  StoreDAO storeMapper;
 	private final UserDAO userDAO = new UserDAOImplementation();
 
 
 	@Override
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreDAO.class);
 			return storeMapper.create(store);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -33,6 +34,8 @@ public class StoreDAOImplementation implements StoreDAO {
 	@Override
 	public Store edit(Store store) throws SQLException, ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreDAO.class);
 			return storeMapper.edit(store);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -42,6 +45,8 @@ public class StoreDAOImplementation implements StoreDAO {
 
 	public Boolean checkIfStoreExists() throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreDAO.class);
 			return storeMapper.checkIfStoreExists();
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -52,6 +57,8 @@ public class StoreDAOImplementation implements StoreDAO {
 	@Override
 	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
 		try {
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreDAO.class);
 			User user = userDAO.login(userName, adminPassword);
 			if(user==null)
 				return -1;

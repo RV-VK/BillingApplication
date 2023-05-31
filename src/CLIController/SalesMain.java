@@ -94,7 +94,7 @@ public class SalesMain {
 					break;
 				case "exit":
 					System.exit(0);
-				    break;
+					break;
 				case "logout":
 					loginCLI.Login();
 					break;
@@ -104,7 +104,7 @@ public class SalesMain {
 					} else
 						System.out.println("Invalid Command ! Not found!!");
 
-		}
-	} while(true);
-}
+			}
+		} while(true);
+	}
 }

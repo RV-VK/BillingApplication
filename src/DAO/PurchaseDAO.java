@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface PurchaseDAO {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
 	@Select("INSERT INTO PURCHASE(DATE,INVOICE,GRANDTOTAL) VALUES(CAST(#{date} AS DATE),#{invoice},#{grandTotal}) RETURNING *")
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UniqueConstraintException;
+	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException;
 
 	/**
 	 * This method counts the number of entries in the Purchase table based on date parameter.
@@ -28,8 +27,8 @@ public interface PurchaseDAO {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT COUNT(ID) FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText}, ${attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") String  searchText) throws ApplicationErrorException;
+	@Select("SELECT COUNT(ID) FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText},${attribute})")
+	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
 
 	/**
 	 * This method Lists the Purchase and PurchaseItem entries based on the given searchable attribute
@@ -42,8 +41,8 @@ public interface PurchaseDAO {
 	 * @return List - Purchase.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM PURCHASE WHERE #{attribute} = COALESCE(#{searchText} ,#{attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
-	List<Purchase> list(@Param("attribute") String attribute,@Param("searchText") String searchText,@Param("pageLength") int pageLength,@Param("offset") int offset) throws ApplicationErrorException;
+	@Select("SELECT * FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
+	List<Purchase> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
 
 
 	/**

@@ -11,6 +11,7 @@
                 <property name="url" value="jdbc:postgresql://localhost:5432/POSDatabase"/>
                 <property name="username" value="postgres"/>
                 <property name="password" value="manikantan1205"/>
+                <property name="defaultAutoCommit" value="true" />
             </dataSource>
         </environment>
     </environments>
@@ -22,5 +23,6 @@
         <mapper class="DAO.PurchaseDAO"/>
         <mapper class="DAO.SalesDAO" />
         <mapper class="DAO.PurchaseItemMapper"/>
+        <mapper class="DAO.SalesItemMapper"/>
     </mappers>
 </configuration>

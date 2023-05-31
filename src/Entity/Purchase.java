@@ -3,11 +3,11 @@ package Entity;
 import java.util.List;
 
 public class Purchase {
-	private int id;
+	private Integer id;
 	private String date;
-	private int invoice;
+	private Integer invoice;
 	private List<PurchaseItem> purchaseItemList;
-	private double grandTotal;
+	private Double grandTotal;
 
 	public Purchase() {
 	}
@@ -28,11 +28,11 @@ public class Purchase {
 		this.grandTotal = grandTotal;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -44,11 +44,11 @@ public class Purchase {
 		this.date = date;
 	}
 
-	public int getInvoice() {
+	public Integer getInvoice() {
 		return invoice;
 	}
 
-	public void setInvoice(int invoice) {
+	public void setInvoice(Integer invoice) {
 		this.invoice = invoice;
 	}
 
@@ -60,11 +60,11 @@ public class Purchase {
 		this.purchaseItemList = purchaseItemList;
 	}
 
-	public double getGrandTotal() {
+	public Double getGrandTotal() {
 		return grandTotal;
 	}
 
-	public void setGrandTotal(double grandTotal) {
+	public void setGrandTotal(Double grandTotal) {
 		this.grandTotal = grandTotal;
 	}
 

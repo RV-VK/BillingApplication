@@ -9,16 +9,37 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class PurchaseMain {
-	private  Scanner scanner;
-	private  List<String> commandEntityList=Arrays.asList("product","user","store","unit","sales");
+	private Scanner scanner;
+	private List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
 	private LoginCLI loginCLI;
+
+	private static List<String> splitCommand(String command) {
+		String[] parts;
+		String[] commandlet;
+		if(command.contains(",")) {
+			parts = command.split("[,:]");
+			commandlet = parts[0].split("\\s+");
+		} else {
+			parts = command.split(",");
+			commandlet = command.split("\\s+");
+		}
+		ArrayList<String> commandList = new ArrayList<>();
+		if(parts.length == 1) {
+			Collections.addAll(commandList, commandlet);
+		} else {
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
+		}
+		return commandList;
+	}
+
 	/**
 	 * Purchase user View Control.
 	 *
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public  void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException, InvalidTemplateException {
+	public void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException, InvalidTemplateException {
 		scanner = new Scanner(System.in);
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
@@ -35,18 +56,17 @@ public class PurchaseMain {
 						case "count" -> purchaseCLI.count(commandList);
 						case "list" -> purchaseCLI.list(commandList);
 						case "delete" -> purchaseCLI.delete(commandList);
-						case "help" ->
-								System.out.println("""
-										>> purchase products using following command
-										purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+						case "help" -> System.out.println("""
+								>> purchase products using following command
+								purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
 
-										\t  date - format( YYYY-MM-DD ), mandatory
-										\t\tinvoice - numbers, mandatory
-										\t\t
-										\t\tThe following purchase items should be given as array of items
-										\t\tcode - text, min 2 - 6 char, mandatory
-										\t\tquantity - numbers, mandatory
-										\t\tcostprice - numbers, mandatory""");
+								\t  date - format( YYYY-MM-DD ), mandatory
+								\t\tinvoice - numbers, mandatory
+								\t\t
+								\t\tThe following purchase items should be given as array of items
+								\t\tcode - text, min 2 - 6 char, mandatory
+								\t\tquantity - numbers, mandatory
+								\t\tcostprice - numbers, mandatory""");
 						default -> {
 							if(operationString.matches("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")) {
 								purchaseCLI.create(command);
@@ -81,34 +101,12 @@ public class PurchaseMain {
 				case "exit" -> System.exit(0);
 				case "logout" -> loginCLI.Login();
 				default -> {
-					if(commandEntityList.contains(commandString))
-					{
+					if(commandEntityList.contains(commandString)) {
 						System.out.println("Non-Permitted Action!! These actions are only Permitted for Admin user");
-					}
-					else
+					} else
 						System.out.println("Invalid Command ! Not found!!");
 				}
 			}
 		} while(true);
-	}
-
-	private static List<String> splitCommand(String command) {
-		String[] parts;
-		String[] commandlet;
-		if(command.contains(",")) {
-			parts = command.split("[,:]");
-			commandlet = parts[0].split("\\s+");
-		} else {
-			parts = command.split(",");
-			commandlet = command.split("\\s+");
-		}
-		ArrayList<String> commandList = new ArrayList<>();
-		if(parts.length == 1) {
-			Collections.addAll(commandList, commandlet);
-		} else {
-			Collections.addAll(commandList, commandlet);
-			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
-		}
-		return commandList;
 	}
 }

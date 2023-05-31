@@ -12,6 +12,10 @@ import Service.PurchaseServiceImplementation;
 import java.util.*;
 
 public class PurchaseCLI {
+	private final List<String> purchaseAttributes = Arrays.asList("id", "date", "invoice");
+	private final PurchaseService purchaseService = new PurchaseServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 	private String purchaseDate;
 	private int invoice;
 	private double grandTotal;
@@ -24,12 +28,7 @@ public class PurchaseCLI {
 	private String attribute;
 	private String searchText;
 	private Purchase createdPurchase;
-	private final List<String> purchaseAttributes = Arrays.asList("id", "date", "invoice");
-	private final PurchaseService purchaseService = new PurchaseServiceImplementation();
 	private List<Purchase> purchaseList;
-	private final Scanner scanner = new Scanner(System.in);
-	private final HashMap<String, String> listAttributesMap = new HashMap<>();
-
 
 	/**
 	 * This method handles the presentation Layer of the Create function.
@@ -118,7 +117,12 @@ public class PurchaseCLI {
 		if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
-				purchaseCount = purchaseService.count("date", parameter);
+				try {
+					purchaseCount = purchaseService.count("date",  parameter);
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					return;
+				}
 				if(purchaseCount > 0) System.out.println(">> PurchaseCount " + purchaseCount);
 				else {
 					System.out.println(">> Given Date not found!!!");
@@ -174,7 +178,7 @@ public class PurchaseCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(purchaseAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
+					setMap(listAttributesMap, "20", "1", attribute,  searchText );
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("purchase", purchaseAttributes);
@@ -190,7 +194,7 @@ public class PurchaseCLI {
 				if(purchaseAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText );
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -211,7 +215,7 @@ public class PurchaseCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute,  searchText );
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("purchase");
@@ -236,8 +240,8 @@ public class PurchaseCLI {
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
 			purchaseList = purchaseService.list(listAttributesMap);
-			if(purchaseList == null) {
-				if( listAttributesMap.get("Searchtext")!=null) {
+			if(purchaseList.size() == 0) {
+				if(listAttributesMap.get("Searchtext") != null) {
 					System.out.println(">>Given SearchText does not exist!!!");
 				}
 				return;
@@ -311,8 +315,7 @@ public class PurchaseCLI {
 		listAttributesMap.put("Searchtext", SearchText);
 	}
 
-	private void printPurchaseBill()
-	{
+	private void printPurchaseBill() {
 		System.out.println("**********************************************************************************");
 		System.out.println("\t\tPURCHASE BILL " + createdPurchase.getId() + "\t\tINVOICE NO " + createdPurchase.getInvoice());
 		System.out.println("**********************************************************************************");

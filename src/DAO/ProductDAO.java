@@ -3,9 +3,8 @@ package DAO;
 import Entity.Product;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+
+import org.apache.ibatis.annotations.*;
 
 public interface ProductDAO {
 
@@ -25,6 +24,7 @@ public interface ProductDAO {
 	@Select("INSERT into product(CODE,NAME,UNITCODE,TYPE,PRICE,STOCK) VALUES (#{code},#{name},#{unitcode},#{type},#{price},#{stock}) RETURNING *")
 	Product create(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
+
 	/**
 	 * This Method returns the number of entries in the Product table.
 	 *
@@ -32,10 +32,10 @@ public interface ProductDAO {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	@Select("SELECT count(*) FROM product WHERE ${attribute} = COALESCE(#{searchText}, ${attribute}) AND isdeleted = false")
-	Integer count(@Param("attribute") String attribute, @Param("searchText") String searchText) throws ApplicationErrorException;
+	@Select("SELECT count(*) FROM product WHERE ${attribute} = COALESCE(#{searchText},${attribute}) AND isdeleted = false")
+	Integer count(@Param("attribute") String attribute, @Param("searchText") Object searchText) throws ApplicationErrorException;
 
-	/**
+	/**java.lang.Object
 	 * This method lists the products in the product table based on the given searchable attribute and
 	 * its corresponding search-text formatted in a pageable manner.
 	 *
@@ -49,8 +49,8 @@ public interface ProductDAO {
 	 *                                       non-existing page is prompted.
 	 */
 
-	@Select("Select * from product where ${attribute} = coalesce(#{searchText}, ${attribute}) AND isdeleted=false order by id limit #{pageLength} offset #{offset}")
-	List<Product> list(@Param("attribute") String attribute,@Param("searchText") String searchText,@Param("pageLength") int pageLength,@Param("offset") int offset) throws ApplicationErrorException, PageCountOutOfBoundsException;
+	@Select("Select * from product where ${attribute} = coalesce(#{searchText},${attribute}) AND isdeleted=false order by id limit #{pageLength} offset #{offset}")
+	List<Product> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException, PageCountOutOfBoundsException;
 
 	/**
 	 * This method Lists the products in the product table based on the given search-text.
@@ -61,7 +61,6 @@ public interface ProductDAO {
 	 */
 	@Select("SELECT * FROM PRODUCT WHERE ( NAME ILIKE '" + "%${searchText}%" + "' OR CODE ILIKE '" + "%${searchText}%" + "' OR UNITCODE ILIKE '" + "%${searchText}%" + "' OR TYPE ILIKE '" + "%${searchText}%" + "' OR CAST(ID AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(STOCK AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(PRICE AS TEXT) ILIKE '" + "%${searchText}%" + "' )" + " AND ISDELETED=FALSE")
 	List<Product> searchList(String searchText) throws ApplicationErrorException;
-
 
 
 
@@ -78,7 +77,7 @@ public interface ProductDAO {
 	 *                                    table.
 	 */
 
-	@Select("UPDATE PRODUCT SET CODE= COALESCE(#{code},CODE),NAME= COALESCE(#{name},NAME),UNITCODE= COALESCE(#{unitcode},UNITCODE),TYPE= COALESCE(#{type},TYPE),PRICE= COALESCE(NULLIF(#{price},0),PRICE),STOCK= COALESCE(NULLIF(#{stock},0),STOCK) WHERE ID=#{id} RETURNING *")
+	@Select("UPDATE PRODUCT SET CODE= COALESCE(#{code},CODE),NAME= COALESCE(#{name},NAME),UNITCODE= COALESCE(#{unitcode},UNITCODE),TYPE= COALESCE(#{type},TYPE),PRICE= COALESCE(NULLIF(#{price},0),PRICE),STOCK= COALESCE(#{stock},STOCK) WHERE ID=#{id} RETURNING *")
 	Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
 
 	/**
@@ -90,6 +89,7 @@ public interface ProductDAO {
 	 */
 
 	@Update("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '${parameter}' OR CODE='${parameter}') AND STOCK=0")
+	@Flush
 	Integer delete(String parameter) throws ApplicationErrorException;
 
 	/**
@@ -101,6 +101,7 @@ public interface ProductDAO {
 	 */
 
 	@Select("SELECT * FROM PRODUCT WHERE CODE=#{code} AND ISDELETED=FALSE")
+	@Flush
 	Product findByCode(String code) throws ApplicationErrorException;
 
 
