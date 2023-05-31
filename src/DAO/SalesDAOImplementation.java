@@ -14,18 +14,15 @@ import java.util.List;
 public class SalesDAOImplementation implements SalesDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	private final ProductDAOImplementation productDAO = new ProductDAOImplementation();
-	private SqlSession sqlSession;
-	private SalesDAO salesMapper;
-	private SalesItemMapper salesItemMapper;
-	private List<SalesItem> salesItemList = new ArrayList<>();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final SalesDAO salesMapper = sqlSession.getMapper(SalesDAO.class);
+	private final SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
+	private final List<SalesItem> salesItemList = new ArrayList<>();
 
 
 	@Override
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesDAO.class);
-			salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			salesItemList.clear();
 			Sales createdSales = salesMapper.create(sales);
 			for(SalesItem salesItem: sales.getSalesItemList()) {
@@ -47,8 +44,6 @@ public class SalesDAOImplementation implements SalesDAO {
 	@Override
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesDAO.class);
 			if(attribute.equals("date"))
 				return salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
 			else
@@ -64,9 +59,6 @@ public class SalesDAOImplementation implements SalesDAO {
 		List<Sales> listedSales;
 		Date dateParameter = null;
 		Integer count, numericParameter;
-		sqlSession = sqlSessionFactory.openSession();
-		salesMapper = sqlSession.getMapper(SalesDAO.class);
-		salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				numericParameter = Integer.parseInt(String.valueOf(searchText));
@@ -103,9 +95,6 @@ public class SalesDAOImplementation implements SalesDAO {
 	@Override
 	public List<Sales> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesDAO.class);
-			salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			List<Sales> listedSales = salesMapper.searchList(searchText);
 			List<SalesItem> listedSalesItems;
 			for(Sales sales: listedSales) {
@@ -122,9 +111,6 @@ public class SalesDAOImplementation implements SalesDAO {
 	@Override
 	public Integer delete(int id) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesDAO.class);
-			salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			Integer salesItemDeleted = salesItemMapper.delete(id);
 			Integer salesDeleted = salesMapper.delete(id);
 			if(salesItemDeleted > 0 && salesDeleted > 0) return 1;

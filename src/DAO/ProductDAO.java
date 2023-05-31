@@ -89,7 +89,6 @@ public interface ProductDAO {
 	 */
 
 	@Update("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '${parameter}' OR CODE='${parameter}') AND STOCK=0")
-	@Flush
 	Integer delete(String parameter) throws ApplicationErrorException;
 
 	/**
@@ -101,7 +100,7 @@ public interface ProductDAO {
 	 */
 
 	@Select("SELECT * FROM PRODUCT WHERE CODE=#{code} AND ISDELETED=FALSE")
-	@Flush
+
 	Product findByCode(String code) throws ApplicationErrorException;
 
 

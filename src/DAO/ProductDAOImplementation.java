@@ -11,8 +11,8 @@ import java.util.List;
 
 public class ProductDAOImplementation implements ProductDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private SqlSession sqlSession = sqlSessionFactory.openSession();
-	private ProductDAO productMapper = sqlSession.getMapper(ProductDAO.class);
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final ProductDAO productMapper = sqlSession.getMapper(ProductDAO.class);
 
 	@Override
 	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {

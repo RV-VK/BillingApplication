@@ -7,20 +7,17 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UnitDAOImplementation implements UnitDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private  SqlSession sqlSession;
-	private  UnitDAO unitMapper;
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final UnitDAO unitMapper = sqlSession.getMapper(UnitDAO.class);
 
 
 	@Override
 	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitDAO.class);
 			return unitMapper.create(unit);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -40,8 +37,6 @@ public class UnitDAOImplementation implements UnitDAO {
 	@Override
 	public List<Unit> list() throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitDAO.class);
 			return unitMapper.list();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -53,8 +48,6 @@ public class UnitDAOImplementation implements UnitDAO {
 	@Override
 	public Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitDAO.class);
 			return unitMapper.edit(unit);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -67,8 +60,6 @@ public class UnitDAOImplementation implements UnitDAO {
 	@Override
 	public Integer delete(String code) throws ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitDAO.class);
 			return unitMapper.delete(code);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -81,8 +72,6 @@ public class UnitDAOImplementation implements UnitDAO {
 	@Override
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitDAO.class);
 			return unitMapper.findByCode(code);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());

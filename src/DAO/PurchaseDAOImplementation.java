@@ -15,17 +15,14 @@ import java.util.List;
 public class PurchaseDAOImplementation implements PurchaseDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	private final ProductDAOImplementation productDAO = new ProductDAOImplementation();
-	private SqlSession sqlSession;
-	private PurchaseDAO purchaseMapper;
-	private PurchaseItemMapper purchaseItemMapper;
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final PurchaseDAO purchaseMapper = sqlSession.getMapper(PurchaseDAO.class);
+	private final PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 	private List<PurchaseItem> purchaseItemList = new ArrayList<>();
 
 	@Override
 	public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			purchaseMapper = sqlSession.getMapper(PurchaseDAO.class);
-			purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			purchaseItemList.clear();
 			Purchase createdPurchase = purchaseMapper.create(purchase);
 			for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
@@ -49,8 +46,6 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	@Override
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			purchaseMapper = sqlSession.getMapper(PurchaseDAO.class);
 			if(attribute.equals("date"))
 				return purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
 			else
@@ -64,9 +59,6 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	public List<Purchase> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		List<Purchase> listedPurchase;
 		Date dateParameter = null;
-		sqlSession = sqlSessionFactory.openSession();
-		purchaseMapper = sqlSession.getMapper(PurchaseDAO.class);
-		purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Integer numericParameter = Integer.parseInt(String.valueOf(searchText));
@@ -102,9 +94,6 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	@Override
 	public List<Purchase> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			purchaseMapper = sqlSession.getMapper(PurchaseDAO.class);
-			purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			List<Purchase> listedPurchase = purchaseMapper.searchList(searchText);
 			List<PurchaseItem> listedPurchaseItems;
 			for(Purchase purchase: listedPurchase) {
@@ -120,9 +109,6 @@ public class PurchaseDAOImplementation implements PurchaseDAO {
 	@Override
 	public Integer delete(int invoice) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			purchaseMapper = sqlSession.getMapper(PurchaseDAO.class);
-			purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);
 			int purchaseDeleted = purchaseMapper.delete(invoice);
 			if(purchaseItemDeleted > 0 && purchaseDeleted > 0) return 1;
