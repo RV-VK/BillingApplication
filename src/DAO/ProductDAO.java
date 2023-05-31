@@ -35,7 +35,7 @@ public interface ProductDAO {
 	@Select("SELECT count(*) FROM product WHERE ${attribute} = COALESCE(#{searchText},${attribute}) AND isdeleted = false")
 	Integer count(@Param("attribute") String attribute, @Param("searchText") Object searchText) throws ApplicationErrorException;
 
-	/**java.lang.Object
+	/**
 	 * This method lists the products in the product table based on the given searchable attribute and
 	 * its corresponding search-text formatted in a pageable manner.
 	 *

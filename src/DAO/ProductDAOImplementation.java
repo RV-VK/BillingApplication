@@ -11,15 +11,12 @@ import java.util.List;
 
 public class ProductDAOImplementation implements ProductDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-
-	private SqlSession sqlSession;
-	private ProductDAO productMapper;
+	private SqlSession sqlSession = sqlSessionFactory.openSession();
+	private ProductDAO productMapper = sqlSession.getMapper(ProductDAO.class);
 
 	@Override
 	public Product create(Product product) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.create(product);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -52,8 +49,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -63,8 +58,6 @@ public class ProductDAOImplementation implements ProductDAO {
 
 	public List<Product> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.searchList(searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -75,8 +68,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public List<Product> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
 				Integer count = productMapper.count(attribute, numericParameter);
@@ -104,8 +95,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.edit(product);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -117,8 +106,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.delete(parameter);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -128,8 +115,6 @@ public class ProductDAOImplementation implements ProductDAO {
 	@Override
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductDAO.class);
 			return productMapper.findByCode(code);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
