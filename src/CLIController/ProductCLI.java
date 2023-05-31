@@ -248,6 +248,8 @@ public class ProductCLI {
 			editHelper(productAttributes);
 		} else if(arguments.size() < 14) {
 			System.out.println(">>Insufficient Arguments for command \"product edit\"");
+		} else if(arguments.size() > 14) {
+			System.out.println(">>Too many Arguments for command \"product edit\"");
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
 			System.out.println(">> For every Edit operation the first argument must be product's ID");

@@ -118,7 +118,7 @@ public class UnitCLI {
 		} else if(arguments.size() > 12) {
 			System.out.println(">> Too many Arguments for command \"unit edit\"");
 			FeedBackPrinter.printHelpMessage("unit", "edit");
-		} else if(arguments.size() < 6) {
+		} else if(arguments.size() < 12) {
 			System.out.println(">> Insufficient arguments for command \"unit edit\"");
 			System.out.println(">> Try \"unit edit help\" for proper syntax");
 		} else if(! arguments.get(2).contains("id")) {

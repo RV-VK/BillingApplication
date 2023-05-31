@@ -103,8 +103,7 @@ public class PurchaseMain {
 				default -> {
 					if(commandEntityList.contains(commandString)) {
 						System.out.println("Non-Permitted Action!! These actions are only Permitted for Admin user");
-					} else
-						System.out.println("Invalid Command ! Not found!!");
+					} else System.out.println("Invalid Command ! Not found!!");
 				}
 			}
 		} while(true);

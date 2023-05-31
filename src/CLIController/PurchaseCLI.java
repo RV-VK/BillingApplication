@@ -118,7 +118,7 @@ public class PurchaseCLI {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
 				try {
-					purchaseCount = purchaseService.count("date",  parameter);
+					purchaseCount = purchaseService.count("date", parameter);
 				} catch(Exception e) {
 					System.out.println(e.getMessage());
 					return;
@@ -178,7 +178,7 @@ public class PurchaseCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(purchaseAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute,  searchText );
+					setMap(listAttributesMap, "20", "1", attribute, searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("purchase", purchaseAttributes);
@@ -194,7 +194,7 @@ public class PurchaseCLI {
 				if(purchaseAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText );
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -215,7 +215,7 @@ public class PurchaseCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute,  searchText );
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("purchase");

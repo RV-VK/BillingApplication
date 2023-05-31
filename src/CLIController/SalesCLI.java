@@ -107,7 +107,7 @@ public class SalesCLI {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
 				try {
-					salesCount = salesService.count("date",  parameter);
+					salesCount = salesService.count("date", parameter);
 				} catch(Exception e) {
 					System.out.println(e.getMessage());
 					return;
@@ -168,7 +168,7 @@ public class SalesCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(saleAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute,  searchText);
+					setMap(listAttributesMap, "20", "1", attribute, searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("sales", saleAttributes);
@@ -184,7 +184,7 @@ public class SalesCLI {
 				if(saleAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText );
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
