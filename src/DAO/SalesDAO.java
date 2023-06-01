@@ -21,7 +21,14 @@ public class SalesDAO {
 	private final SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 	private final List<SalesItem> salesItemList = new ArrayList<>();
 
-
+	/**
+	 * This method is a composite function that creates an entry in both Sales and Sales-items table.
+	 *
+	 * @param sales sales Input Sales.
+	 * @return sales - Created Sales.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 * @throws SQLException              Exception thrown based on SQL syntax.
+	 */
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException {
 		try {
 			salesItemList.clear();
@@ -42,18 +49,34 @@ public class SalesDAO {
 		}
 	}
 
+	/**
+	 * This method counts the number of entries from the sales table based on Given attribute and searchText.
+	 *
+	 * @param attribute  Column to be counted.
+	 * @param searchText Field to be counted.
+	 * @return Integer - Count.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			if(attribute.equals("date"))
-				return salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
-			else
-				return salesMapper.count(attribute, searchText);
+			if(attribute.equals("date")) return salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
+			else return salesMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 
-
+	/**
+	 * This method lists the Sales and SalesItem entries based on the given searchable attribute and
+	 * its corresponding search-text formatted in pageable manner.
+	 *
+	 * @param attribute  The attribute to be looked upon.
+	 * @param searchText The search-text to be found.
+	 * @param pageLength The number of entries that must be listed.
+	 * @param offset     The Page number to be listed.
+	 * @return List - Sales.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
 	public List<Sales> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		List<Sales> listedSales;
 		Date dateParameter = null;
@@ -65,8 +88,7 @@ public class SalesDAO {
 				checkPagination(count, offset, pageLength);
 				listedSales = salesMapper.list(attribute, numericParameter, pageLength, offset);
 			} else {
-				if(searchText != null)
-					dateParameter = Date.valueOf(String.valueOf(searchText));
+				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));
 				count = salesMapper.count(attribute, dateParameter);
 				checkPagination(count, offset, pageLength);
 				listedSales = salesMapper.list(attribute, dateParameter, pageLength, offset);
@@ -83,6 +105,15 @@ public class SalesDAO {
 		}
 	}
 
+	/**
+	 * Private method to check whether the given Pagenumber is Valid or Not exists.
+	 *
+	 * @param count      Total Count of entries.
+	 * @param offset     Index from which the Entries are requested.
+	 * @param pageLength Length for Each page.
+	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
+	 *                                       non-existing page is prompted.
+	 */
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset && count != 0) {
 			int pageCount;
@@ -92,6 +123,13 @@ public class SalesDAO {
 		}
 	}
 
+	/**
+	 * This method lists the Entries from the Sales and SalesItem table based on the given search-text.
+	 *
+	 * @param searchText The search-text to be found.
+	 * @return List - Sales.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
 	public List<Sales> searchList(String searchText) throws ApplicationErrorException {
 		try {
 			List<Sales> listedSales = salesMapper.searchList(searchText);
@@ -106,6 +144,13 @@ public class SalesDAO {
 		}
 	}
 
+	/**
+	 * This method deletes an entry in the Sales table and the corresponding entries in the Sales items table.
+	 *
+	 * @param id Input id to perform delete.
+	 * @return resultCode - Integer.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
 	public Integer delete(int id) throws ApplicationErrorException {
 		try {
 			Integer salesItemDeleted = salesItemMapper.delete(id);

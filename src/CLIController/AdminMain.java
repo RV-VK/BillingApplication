@@ -18,7 +18,6 @@ public class AdminMain {
 	private final UnitCLI unitCLI = new UnitCLI();
 	private final PurchaseCLI purchaseCLI = new PurchaseCLI();
 	private final SalesCLI salesCLI = new SalesCLI();
-	private Scanner scanner;
 	private LoginCLI loginCLI;
 
 	private static List<String> splitCommand(String command) {
@@ -48,7 +47,7 @@ public class AdminMain {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
 	public void AdminView(String userName) throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException, InvalidTemplateException {
-		scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		System.out.println("\n\n>> Try \"help\" to know better!\n");
 		do {
 			System.out.print("\n> ");

@@ -10,7 +10,6 @@ import java.util.*;
 
 public class SalesMain {
 	private final List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
-	private Scanner scanner;
 	private LoginCLI loginCLI;
 
 	private static List<String> splitCommand(String command) {
@@ -40,7 +39,7 @@ public class SalesMain {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
 	public void SalesView() throws ApplicationErrorException, PageCountOutOfBoundsException, SQLException, UnitCodeViolationException, InvalidTemplateException {
-		scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
 			System.out.print("> ");

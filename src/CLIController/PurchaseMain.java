@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class PurchaseMain {
-	private Scanner scanner;
 	private List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
 	private LoginCLI loginCLI;
 
@@ -40,7 +39,7 @@ public class PurchaseMain {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException, InvalidTemplateException {
-		scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		System.out.println(">> Try \"help\" to know better!\n");
 		do {
 			System.out.print("> ");

@@ -19,6 +19,12 @@ public class MyBatisSession {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This method Builds an SqlSessionFactory Object and returns it.
+     *
+     * @return SqlSessionFactory Object.
+     */
     public static SqlSessionFactory getSqlSessionFactory(){
         return sqlSessionFactory;
     }

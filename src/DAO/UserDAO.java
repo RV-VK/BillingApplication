@@ -15,6 +15,13 @@ public class UserDAO {
 	private final SqlSession sqlSession = sqlSessionFactory.openSession();
 	private final UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
+	/**
+	 * This method Creates a User Entry in the User table
+	 *
+	 * @param user Input Object
+	 * @return User Object - created
+	 * @throws Exception Throws Variable Exceptions namely SQLException, UnitCodeViolationException, UniqueConstraintException.
+	 */
 	public User create(User user) throws Exception {
 		try {
 			return userMapper.create(user);
@@ -38,6 +45,14 @@ public class UserDAO {
 		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 	}
 
+	/**
+	 * This method counts the number od entries in the user table.
+	 *
+	 * @param attribute  Column to be counted.
+	 * @param searchText Field to be counted.
+	 * @return count
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems
+	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			return userMapper.count(attribute, searchText);
@@ -46,7 +61,13 @@ public class UserDAO {
 		}
 	}
 
-
+	/**
+	 * This method Lists the records in the user table based on a given Search-text.
+	 *
+	 * @param searchText The search-text that must be found.
+	 * @return List of Users
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems.
+	 */
 	public List<User> searchList(String searchText) throws ApplicationErrorException {
 		try {
 			return userMapper.searchList(searchText);
@@ -56,7 +77,17 @@ public class UserDAO {
 		}
 	}
 
-
+	/**
+	 * This method lists the users in the user table based on the given searchable attribute
+	 * and its corresponding search-text formatted in a pageable manner.
+	 *
+	 * @param attribute  The attribute to be looked upon
+	 * @param searchText The search-text to be found.
+	 * @param pageLength The number of entries that must be listed.
+	 * @param offset     The Page number that has to be listed.
+	 * @return List of Users
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems
+	 */
 	public List<User> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
@@ -74,6 +105,15 @@ public class UserDAO {
 		}
 	}
 
+	/**
+	 * Private method to check whether the given Pagenumber is Valid or Not exists.
+	 *
+	 * @param count      Total Count of entries.
+	 * @param offset     Index from which the Entries are requested.
+	 * @param pageLength Length for Each page.
+	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
+	 *                                       non-existing page is prompted.
+	 */
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset && count != 0) {
 			int pageCount;
@@ -85,7 +125,13 @@ public class UserDAO {
 		}
 	}
 
-
+	/**
+	 * This method updates the attributes of the User entry in the user table.
+	 *
+	 * @param user The updated User Entry.
+	 * @return User - Resulted User Entity.
+	 * @throws Exception Throws Variable Exceptions namely SQLException, UnitCodeViolationException, UniqueConstraintException.
+	 */
 	public User edit(User user) throws Exception {
 		try {
 			return userMapper.edit(user);
@@ -95,7 +141,13 @@ public class UserDAO {
 		}
 	}
 
-
+	/**
+	 * This method deleted an entry in the User table based on the given parameter.
+	 *
+	 * @param username Username to be deleted.
+	 * @return Integer - resultCode
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
 	public Integer delete(String username) throws ApplicationErrorException {
 		try {
 			return userMapper.delete(username);
@@ -105,7 +157,14 @@ public class UserDAO {
 		}
 	}
 
-
+	/**
+	 * This method verifies whether the input username and password matches in the user table to enable login for the users.
+	 *
+	 * @param userName Unique entry username of the user
+	 * @param passWord Password string of the user
+	 * @return String - Usertype or null
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
 	public User login(String userName, String passWord) throws ApplicationErrorException {
 		try {
 			User user = userMapper.login(userName, passWord);
