@@ -23,7 +23,8 @@ public class StoreDAO {
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			SQLException sqlException = (SQLException)cause;
-			if(sqlException.getSQLState().equals("23514")) return null;
+			if(sqlException.getSQLState().equals("23514"))
+				return null;
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
@@ -47,8 +48,10 @@ public class StoreDAO {
 	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
 		try {
 			User user = userDAO.login(userName, adminPassword);
-			if(user == null) return - 1;
-			else return storeMapper.delete(userName, adminPassword);
+			if(user == null)
+				return - 1;
+			else
+				return storeMapper.delete(userName, adminPassword);
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}

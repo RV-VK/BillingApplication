@@ -1,7 +1,6 @@
 package Mapper;
 
 import DAO.ApplicationErrorException;
-import DAO.UniqueConstraintException;
 import Entity.Unit;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
@@ -12,20 +11,20 @@ import java.util.List;
 public interface UnitMapper {
 
 	/**
-	 * This method creates an Entry in the Unit table.
+	 * This Interface method maps the Insert Query with Unit attributes.
 	 *
 	 * @param unit Input Unit
 	 * @return Unit - Created Unit.
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+	 * @throws SQLException This Exception is generalized and throws based on several conditions.
 	 */
 	@Select("INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (#{name},#{code},#{description},#{isDividable}) RETURNING *")
 	Unit create(Unit unit) throws Exception;
 
 
+
+
 	/**
-	 * This method Lists all the entries of the Unit table.
+	 * This Interface method Executes the List query.
 	 *
 	 * @return List - Units.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
@@ -34,21 +33,23 @@ public interface UnitMapper {
 	List<Unit> list() throws ApplicationErrorException;
 
 
+
+
 	/**
-	 * This method updates the attributes of the Unit entry in the Unit table.
+	 * This Interface method maps the Update query with Unit attributes.
 	 *
 	 * @param unit Updated Unit.
 	 * @return Unit - Resulted Unit.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
+	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 */
 	@Select("UPDATE UNIT SET NAME= COALESCE(#{name},NAME), CODE=COALESCE(#{code},CODE), DESCRIPTION=COALESCE(#{description},DESCRIPTION), ISDIVIDABLE=COALESCE(#{isDividable},ISDIVIDABLE) WHERE ID=#{id} RETURNING *")
 	Unit edit(Unit unit) throws Exception;
 
 
+
+
 	/**
-	 * This method deletes an entry in the Unit table.
+	 * This Interface method maps the Delete query with product code attribute.
 	 *
 	 * @param code Input attribute to perform delete.
 	 * @return resultCode - Integer
@@ -58,8 +59,10 @@ public interface UnitMapper {
 	Integer delete(String code) throws Exception;
 
 
+
+
 	/**
-	 * This method returns a Unit entry based on its attribute code.
+	 * This Interface method maps the Select query to find the Unit by its code.
 	 *
 	 * @param code Input code
 	 * @return Unit

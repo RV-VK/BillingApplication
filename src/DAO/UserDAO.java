@@ -77,8 +77,10 @@ public class UserDAO {
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset && count != 0) {
 			int pageCount;
-			if(count % pageLength == 0) pageCount = count / pageLength;
-			else pageCount = (count / pageLength) + 1;
+			if(count % pageLength == 0)
+				pageCount = count / pageLength;
+			else
+				pageCount = (count / pageLength) + 1;
 			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
 		}
 	}
@@ -107,8 +109,10 @@ public class UserDAO {
 	public User login(String userName, String passWord) throws ApplicationErrorException {
 		try {
 			User user = userMapper.login(userName, passWord);
-			if(user != null && user.getPassWord().equals(passWord)) return user;
-			else return null;
+			if(user != null && user.getPassWord().equals(passWord))
+				return user;
+			else
+				return null;
 		} catch(SQLException e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

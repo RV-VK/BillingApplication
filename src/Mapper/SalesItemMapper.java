@@ -7,6 +7,12 @@ import java.util.List;
 
 public interface SalesItemMapper {
 
+	/**
+	 * This method maps the Insert Query with SalesItem entity attributes.
+	 * @param salesItem SalesItem to be inserted.
+	 * @param invoice Invoice number Key.
+	 * @return SalesItem - Created Sales Item.
+	 */
 	@Results({
 			@Result(property = "product.code", column = "productcode"),
 			@Result(property = "quantity", column = "quantity"),
@@ -16,6 +22,13 @@ public interface SalesItemMapper {
 	SalesItem create(@Param("salesItem")SalesItem salesItem, @Param("id") int invoice);
 
 
+
+
+	/**
+	 * This Interface method maps the List Query with id attribute.
+	 * @param id ID for List function.
+	 * @return List of SalesItems.
+	 */
 	@Results({
 			@Result(property = "product.name", column = "name"),
 			@Result(property = "product.code", column = "productcode"),
@@ -25,6 +38,12 @@ public interface SalesItemMapper {
 	@Select("SELECT P.NAME, S.PRODUCTCODE,S.QUANTITY,S.SALESPRICE FROM SALESITEMS S INNER JOIN PRODUCT P ON P.CODE=S.PRODUCTCODE WHERE S.ID=#{id}")
 	List<SalesItem> list(@Param("id") int id);
 
+
+	/**
+	 * This Interface method Maps the Delete query with id attribute.
+	 * @param id ID to be deleted.
+	 * @return Integer - ResultCode.
+	 */
 	@Delete("DELETE FROM SALESITEMS WHERE ID=#{id}")
 	Integer delete(@Param("id") int id);
 

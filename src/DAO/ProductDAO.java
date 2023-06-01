@@ -83,8 +83,10 @@ public class ProductDAO {
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
 		if(count <= offset && count != 0) {
 			int pageCount;
-			if(count % pageLength == 0) pageCount = count / pageLength;
-			else pageCount = (count / pageLength) + 1;
+			if(count % pageLength == 0)
+				pageCount = count / pageLength;
+			else
+				pageCount = (count / pageLength) + 1;
 			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
 		}
 	}
@@ -113,5 +115,4 @@ public class ProductDAO {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
-
 }

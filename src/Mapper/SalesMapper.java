@@ -12,7 +12,7 @@ import java.util.List;
 public interface SalesMapper {
 
 	/**
-	 * This method is a composite function that creates an entry in both Sales and Sales-items table.
+	 * This Interface method maps the Insert Query with the Sales attributes.
 	 *
 	 * @param sales Input Sales.
 	 * @return sales - Created Sales.
@@ -24,8 +24,9 @@ public interface SalesMapper {
 
 
 
+
 	/**
-	 * This method counts the number of entries from the sales table based on date parameter.
+	 * This Interface method maps the Count query with Column and Value attributes.
 	 *
 	 * @param attribute  Attribute for count.
 	 * @param searchText SearchText to be counted.
@@ -37,9 +38,10 @@ public interface SalesMapper {
 
 
 
+
+
 	/**
-	 * This method lists the Sales and SalesItem entries based on the given searchable attribute and
-	 * its corresponding search-text formatted in pageable manner.
+	 * This Interface method maps the List query with List function Attributes.
 	 *
 	 * @param attribute  The attribute to be looked upon.
 	 * @param searchText The search-text to be found.
@@ -53,8 +55,10 @@ public interface SalesMapper {
 
 
 
+
+
 	/**
-	 * This method lists the Entries from the Sales and SalesItem table based on the given search-text.
+	 * This Interface method maps the List query with the searchText attribute.
 	 *
 	 * @param searchText The search-text to be found.
 	 * @return List - Sales.
@@ -66,7 +70,7 @@ public interface SalesMapper {
 
 
 	/**
-	 * This method deletes an entry in the Sales table and the corresponding entries in the Sales items table.
+	 * This Interface method maps the Delete query with id attribute.
 	 *
 	 * @param id Input id to perform delete.
 	 * @return resultCode - Integer.

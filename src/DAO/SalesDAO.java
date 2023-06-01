@@ -44,8 +44,10 @@ public class SalesDAO {
 
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			if(attribute.equals("date")) return salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
-			else return salesMapper.count(attribute, searchText);
+			if(attribute.equals("date"))
+				return salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
+			else
+				return salesMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -63,7 +65,8 @@ public class SalesDAO {
 				checkPagination(count, offset, pageLength);
 				listedSales = salesMapper.list(attribute, numericParameter, pageLength, offset);
 			} else {
-				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));
+				if(searchText != null)
+					dateParameter = Date.valueOf(String.valueOf(searchText));
 				count = salesMapper.count(attribute, dateParameter);
 				checkPagination(count, offset, pageLength);
 				listedSales = salesMapper.list(attribute, dateParameter, pageLength, offset);

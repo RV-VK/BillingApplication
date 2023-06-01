@@ -52,7 +52,8 @@ public class PurchaseDAO {
 		try {
 			if(attribute.equals("date"))
 				return purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
-			else return purchaseMapper.count(attribute, searchText);
+			else
+				return purchaseMapper.count(attribute, searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -68,7 +69,8 @@ public class PurchaseDAO {
 				checkPagination(count, offset, pageLength);
 				listedPurchase = purchaseMapper.list(attribute, numericParameter, pageLength, offset);
 			} else {
-				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));
+				if(searchText != null)
+					dateParameter = Date.valueOf(String.valueOf(searchText));
 				Integer count = purchaseMapper.count(attribute, dateParameter);
 				checkPagination(count, offset, pageLength);
 				listedPurchase = purchaseMapper.list(attribute, dateParameter, pageLength, offset);
