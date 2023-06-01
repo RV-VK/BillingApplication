@@ -1,4 +1,4 @@
-package DAO;
+package Mapper;
 
 import Entity.SalesItem;
 import org.apache.ibatis.annotations.*;

@@ -1,94 +1,116 @@
 package DAO;
 
 import Entity.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import Mapper.UserMapper;
+import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface UserDAO {
+public class UserDAO {
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+	public User create(User user) throws Exception {
+		try {
+			return userMapper.create(user);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
 
 	/**
-	 * This method Creates a User Entry in the User table
+	 * Private method to convert SQL Exception to user readable messages.
 	 *
-	 * @param user Input Object
-	 * @return User Object - created
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 * @param exception Exception Object.
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
-	 */
-	@Select("INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (#{userName},#{userType},#{passWord},#{firstName},#{lastName},#{phoneNumber}) RETURNING *")
-	User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException;
-
-	/**
-	 * This method counts the number od entries in the user table.
-	 *
-	 * @return count - Integer
-	 * @throws ApplicationErrorException Exception thrown due to persistence problems
-	 */
-
-	@Select("SELECT COUNT(*) FROM USERS WHERE  ${attribute} = COALESCE(#{searchText},${attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
-
-	/**
-	 * This method Lists the records in the user table based on a given Search-text.
-	 *
-	 * @param searchText - The search-text that must be found.
-	 * @return List - Users
-	 * @throws ApplicationErrorException Exception thrown due to persistence problems
-	 */
-
-	@Select("SELECT * FROM USERS WHERE ( USERNAME ILIKE '" + "%${searchText}%" + "' OR USERTYPE ILIKE '" + "%${searchText}%" + "' OR PASSWORD ILIKE '" + "%${searchText}%" + "' OR FIRSTNAME ILIKE '" + "%${searchText}%" + "' OR LASTNAME ILIKE '" + "%${searchText}%" + "' OR CAST(ID AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(PHONENUMBER AS TEXT) ILIKE '" + "%${searchText}%" + "')")
-	List<User> searchList(String searchText) throws ApplicationErrorException;
-
-	/**
-	 * This method lists the users in the user table based on the given searchable attribute
-	 * and its corresponding search-text formatted in a pageable manner.
-	 *
-	 * @param attribute  The attribute to be looked upon
-	 * @param searchText The search-text to be found.
-	 * @param pageLength The number of entries that must be listed.
-	 * @param offset     The Page number that has to be listed.
-	 * @return List - Users
-	 * @throws ApplicationErrorException Exception thrown due to persistence problems
-	 */
-
-	@Select("SELECT *  FROM USERS WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
-	List<User> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
-
-	/**
-	 * This method updates the attributes of the User entry in the user table.
-	 *
-	 * @param user The updated User Entry.
-	 * @return User - Resulted User Entity.
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
-	 */
-	@Select("UPDATE USERS SET USERNAME= COALESCE(#{userName},USERNAME),USERTYPE= COALESCE(#{userType},USERTYPE),PASSWORD= COALESCE(#{passWord},PASSWORD),FIRSTNAME= COALESCE(#{firstName},FIRSTNAME),LASTNAME= COALESCE(#{lastName},LASTNAME),PHONENUMBER=COALESCE(NULLIF(#{phoneNumber},0),PHONENUMBER) WHERE ID=#{id} RETURNING *")
-	User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException;
-
-	/**
-	 * This method deleted an entry in the User table based on the given parameter.
-	 *
-	 * @param parameter Input parameter based on which the row is selected to delete.
-	 * @return resultCode - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Delete("DELETE FROM USERS WHERE USERNAME=#{parameter}")
-	Integer delete(String parameter) throws ApplicationErrorException;
+	private Exception handleException(SQLException exception) throws UniqueConstraintException, ApplicationErrorException {
+		if(exception.getSQLState().equals("23505")) {
+			throw new UniqueConstraintException(">> UserName must be unique!! The username you have entered already exists!!");
+		}
+		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+	}
+
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
+		try {
+			return userMapper.count(attribute, searchText);
+		} catch(Exception e) {
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
+	}
 
 
-	/**
-	 * This method verifies whether the input username and password matches in the user table to enable login for the users.
-	 *
-	 * @param userName Unique entry username of the user
-	 * @param passWord Password string of the user
-	 * @return String - Usertype or null
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT PASSWORD,USERTYPE FROM USERS WHERE USERNAME=#{username}")
-	User login(@Param("username") String userName, String passWord) throws SQLException, ApplicationErrorException;
+	public List<User> searchList(String searchText) throws ApplicationErrorException {
+		try {
+			return userMapper.searchList(searchText);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
+	}
+
+
+	public List<User> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
+		try {
+			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Double numericParameter = Double.parseDouble((String)searchText);
+				Integer count = userMapper.count(attribute, numericParameter);
+				checkPagination(count, offset, pageLength);
+				return userMapper.list(attribute, numericParameter, pageLength, offset);
+			} else {
+				Integer count = userMapper.count(attribute, searchText);
+				checkPagination(count, offset, pageLength);
+				return userMapper.list(attribute, searchText, pageLength, offset);
+			}
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
+
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
+		if(count <= offset && count != 0) {
+			int pageCount;
+			if(count % pageLength == 0) pageCount = count / pageLength;
+			else pageCount = (count / pageLength) + 1;
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
+		}
+	}
+
+
+	public User edit(User user) throws Exception {
+		try {
+			return userMapper.edit(user);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
+
+
+	public Integer delete(String username) throws ApplicationErrorException {
+		try {
+			return userMapper.delete(username);
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
+	}
+
+
+	public User login(String userName, String passWord) throws ApplicationErrorException {
+		try {
+			User user = userMapper.login(userName, passWord);
+			if(user != null && user.getPassWord().equals(passWord)) return user;
+			else return null;
+		} catch(SQLException e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 }

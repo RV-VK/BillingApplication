@@ -21,7 +21,7 @@ public interface UserService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table
 	 */
-	User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
+	User create(User user) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the count function.
@@ -51,7 +51,7 @@ public interface UserService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
+	User edit(User user) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the Delete function.

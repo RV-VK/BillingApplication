@@ -3,17 +3,16 @@ package Service;
 import DAO.*;
 import Entity.Unit;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class UnitServiceImplementation implements UnitService {
-	private final UnitDAO unitDAO = new UnitDAOImplementation();
+	private final UnitDAO unitDAO = new UnitDAO();
 	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
 	private final String CODE_REGEX = "^[a-zA-Z]{1,4}$";
 
 
 	@Override
-	public Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException, UnitCodeViolationException {
+	public Unit create(Unit unit) throws Exception {
 		validate(unit);
 		return unitDAO.create(unit);
 	}
@@ -26,14 +25,14 @@ public class UnitServiceImplementation implements UnitService {
 
 
 	@Override
-	public Unit edit(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException, UnitCodeViolationException {
+	public Unit edit(Unit unit) throws Exception {
 		validate(unit);
 		return unitDAO.edit(unit);
 	}
 
 
 	@Override
-	public Integer delete(String code) throws ApplicationErrorException, UnitCodeViolationException, UniqueConstraintException {
+	public Integer delete(String code) throws Exception {
 		return unitDAO.delete(code);
 	}
 

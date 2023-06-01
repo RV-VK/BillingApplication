@@ -3,12 +3,11 @@ package Service;
 import DAO.*;
 import Entity.User;
 
-import java.sql.SQLException;
 import java.util.*;
 
 public class UserServiceImplementation implements UserService {
 
-	private final UserDAO userDAO = new UserDAOImplementation();
+	private final UserDAO userDAO = new UserDAO();
 	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
 	private final String LAST_NAME_REGEX="^[a-zA-Z\\s]{0,30}$";
 	private final String PASSWORD_REGEX = "^[a-zA-Z0-9]{8,30}$";
@@ -16,7 +15,7 @@ public class UserServiceImplementation implements UserService {
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
 
 	@Override
-	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public User create(User user) throws Exception {
 		validate(user);
 		return userDAO.create(user);
 	}
@@ -41,7 +40,7 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public User edit(User user) throws Exception {
 		validate(user);
 		return userDAO.edit(user);
 	}

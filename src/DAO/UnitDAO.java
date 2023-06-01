@@ -1,69 +1,73 @@
 package DAO;
 
 import Entity.Unit;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import Mapper.UnitMapper;
+import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface UnitDAO {
-
-	/**
-	 * This method creates an Entry in the Unit table.
-	 *
-	 * @param unit Input Unit
-	 * @return Unit - Created Unit.
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
-	 */
-	@Select("INSERT INTO UNIT(NAME,CODE,DESCRIPTION,ISDIVIDABLE) VALUES (#{name},#{code},#{description},#{isDividable}) RETURNING *")
-	Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
+public class UnitDAO {
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
 
 
-	/**
-	 * This method Lists all the entries of the Unit table.
-	 *
-	 * @return List - Units.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT * FROM UNIT ORDER BY CODE")
-	List<Unit> list() throws ApplicationErrorException;
+	public Unit create(Unit unit) throws Exception {
+		try {
+			return unitMapper.create(unit);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
+
+	private Exception handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException, UnitCodeViolationException {
+		if(e.getSQLState().equals("23505"))
+			throw new UniqueConstraintException(">> Unit Code must be unique!!! the Unit code you have entered Already exists");
+		else if(e.getSQLState().equals("23503"))
+			throw new UnitCodeViolationException(">> Unit code in use!! Cannot edit or delete!!");
+		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+	}
+
+	public List<Unit> list() throws ApplicationErrorException {
+		try {
+			return unitMapper.list();
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
+	}
 
 
-	/**
-	 * This method updates the attributes of the Unit entry in the Unit table.
-	 *
-	 * @param unit Updated Unit.
-	 * @return Unit - Resulted Unit.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table
-	 */
-	@Select("UPDATE UNIT SET NAME= COALESCE(#{name},NAME), CODE=COALESCE(#{code},CODE), DESCRIPTION=COALESCE(#{description},DESCRIPTION), ISDIVIDABLE=COALESCE(#{isDividable},ISDIVIDABLE) WHERE ID=#{id} RETURNING *")
-	Unit edit(Unit unit) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException;
+	public Unit edit(Unit unit) throws Exception {
+		try {
+			return unitMapper.edit(unit);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
 
 
-	/**
-	 * This method deletes an entry in the Unit table.
-	 *
-	 * @param code Input attribute to perform delete.
-	 * @return resultCode - Integer
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Delete("DELETE FROM UNIT WHERE CODE=#{code}")
-	Integer delete(String code) throws ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
+	public Integer delete(String code) throws Exception {
+		try {
+			return unitMapper.delete(code);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
 
 
-	/**
-	 * This method returns a Unit entry based on its attribute code.
-	 *
-	 * @param code Input code
-	 * @return Unit
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT * FROM UNIT WHERE CODE=#{code}")
-	Unit findByCode(String code) throws ApplicationErrorException;
+	public Unit findByCode(String code) throws ApplicationErrorException {
+		try {
+			return unitMapper.findByCode(code);
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 }

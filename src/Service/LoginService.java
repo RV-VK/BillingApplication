@@ -25,7 +25,7 @@ public interface LoginService {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	User createUser(User user) throws UniqueConstraintException, SQLException, ApplicationErrorException, InvalidTemplateException;
+	User createUser(User user) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the Login function.

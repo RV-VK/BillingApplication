@@ -1,107 +1,117 @@
 package DAO;
 
 import Entity.Product;
+import Mapper.ProductMapper;
+import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.ibatis.annotations.*;
+public class ProductDAO {
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
 
-public interface ProductDAO {
+	public Product create(Product product) throws Exception {
+		try {
+			return productMapper.create(product);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
 
 	/**
-	 * This method creates an entry in the Product table
+	 * Private method to handle SQL Exception and convert it to user readable messages.
 	 *
-	 * @param product Input product
-	 * @return Product - Created product.
-	 * @throws SQLException               Exception thrown based on SQL syntax.
+	 * @param e Exception Object
+	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product table.
+	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL table
 	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
-	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL
-	 *                                    table
-	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
-	 *                                    table.
 	 */
+	private Exception handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, ApplicationErrorException {
+		if(e.getSQLState().equals("23503")) {
+			throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
+		} else if(e.getSQLState().equals("23505")) {
+			if(e.getMessage().contains("product_name"))
+				throw new UniqueConstraintException(">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
+			else
+				throw new UniqueConstraintException(">> Code must be unique!!!\n>> The code you have entered already exists!!!");
+		} else {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
-	@Select("INSERT into product(CODE,NAME,UNITCODE,TYPE,PRICE,STOCK) VALUES (#{code},#{name},#{unitcode},#{type},#{price},#{stock}) RETURNING *")
-	Product create(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
+		try {
+			return productMapper.count(attribute, searchText);
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
 
+	}
 
-	/**
-	 * This Method returns the number of entries in the Product table.
-	 *
-	 * @return count
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-
-	@Select("SELECT count(*) FROM product WHERE ${attribute} = COALESCE(#{searchText},${attribute}) AND isdeleted = false")
-	Integer count(@Param("attribute") String attribute, @Param("searchText") Object searchText) throws ApplicationErrorException;
-
-	/**
-	 * This method lists the products in the product table based on the given searchable attribute and
-	 * its corresponding search-text formatted in a pageable manner.
-	 *
-	 * @param attribute  The attribute to be looked upon
-	 * @param searchText The search-text to be found.
-	 * @param pageLength The number of entries that must be listed.
-	 * @param offset     The Page number that has to be listed.
-	 * @return List - Products
-	 * @throws ApplicationErrorException     Exception thrown due to persistence problems
-	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
-	 *                                       non-existing page is prompted.
-	 */
-
-	@Select("Select * from product where ${attribute} = coalesce(#{searchText},${attribute}) AND isdeleted=false order by id limit #{pageLength} offset #{offset}")
-	List<Product> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException, PageCountOutOfBoundsException;
-
-	/**
-	 * This method Lists the products in the product table based on the given search-text.
-	 *
-	 * @param searchText The search-text that must be found.
-	 * @return List - Products
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT * FROM PRODUCT WHERE ( NAME ILIKE '" + "%${searchText}%" + "' OR CODE ILIKE '" + "%${searchText}%" + "' OR UNITCODE ILIKE '" + "%${searchText}%" + "' OR TYPE ILIKE '" + "%${searchText}%" + "' OR CAST(ID AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(STOCK AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(PRICE AS TEXT) ILIKE '" + "%${searchText}%" + "' )" + " AND ISDELETED=FALSE")
-	List<Product> searchList(String searchText) throws ApplicationErrorException;
+	public List<Product> searchList(String searchText) throws ApplicationErrorException {
+		try {
+			return productMapper.searchList(searchText);
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
 
+	public List<Product> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException, PageCountOutOfBoundsException {
+		try {
+			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Double numericParameter = Double.parseDouble((String)searchText);
+				Integer count = productMapper.count(attribute, numericParameter);
+				checkPagination(count, offset, pageLength);
+				return productMapper.list(attribute, numericParameter, pageLength, offset);
+			} else {
+				Integer count = productMapper.count(attribute, searchText);
+				checkPagination(count, offset, pageLength);
+				return productMapper.list(attribute, searchText, pageLength, offset);
+			}
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
-	/**
-	 * This method updates the attributes of the product entry in the Product table
-	 *
-	 * @param product The Updated Product entry
-	 * @return Product - Result Product
-	 * @throws SQLException               Exception thrown based on SQL syntax.
-	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
-	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL
-	 *                                    table
-	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
-	 *                                    table.
-	 */
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
+		if(count <= offset && count != 0) {
+			int pageCount;
+			if(count % pageLength == 0) pageCount = count / pageLength;
+			else pageCount = (count / pageLength) + 1;
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
+		}
+	}
 
-	@Select("UPDATE PRODUCT SET CODE= COALESCE(#{code},CODE),NAME= COALESCE(#{name},NAME),UNITCODE= COALESCE(#{unitcode},UNITCODE),TYPE= COALESCE(#{type},TYPE),PRICE= COALESCE(NULLIF(#{price},0),PRICE),STOCK= COALESCE(#{stock},STOCK) WHERE ID=#{id} RETURNING *")
-	Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException;
+	public Product edit(Product product) throws Exception {
+		try {
+			return productMapper.edit(product);
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
 
-	/**
-	 * This method deletes an entry in the Product table based on the given parameter.
-	 *
-	 * @param parameter Input parameter based on which the row is selected to delete.
-	 * @return resultCode - Integer
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
+	public Integer delete(String parameter) throws ApplicationErrorException {
+		try {
+			return productMapper.delete(parameter);
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
-	@Update("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '${parameter}' OR CODE='${parameter}') AND STOCK=0")
-	Integer delete(String parameter) throws ApplicationErrorException;
-
-	/**
-	 * This method finds the Product by its product code attribute.
-	 *
-	 * @param code Input product code.
-	 * @return Product
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-
-	@Select("SELECT * FROM PRODUCT WHERE CODE=#{code} AND ISDELETED=FALSE")
-
-	Product findByCode(String code) throws ApplicationErrorException;
-
+	public Product findByCode(String code) throws ApplicationErrorException {
+		try {
+			return productMapper.findByCode(code);
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
 }

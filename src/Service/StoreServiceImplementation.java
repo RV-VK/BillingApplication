@@ -2,13 +2,12 @@ package Service;
 
 import DAO.ApplicationErrorException;
 import DAO.StoreDAO;
-import DAO.StoreDAOImplementation;
 import Entity.Store;
 
 import java.sql.SQLException;
 
 public class StoreServiceImplementation implements StoreService {
-	private final StoreDAO storeDAO = new StoreDAOImplementation();
+	private final StoreDAO storeDAO = new StoreDAO();
 	private final String NAME_REGEX = "^[a-zA-Z0-9\\s]{3,30}$";
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
 	private final String GST_NUMBER_REGEX = "^[a-zA-Z0-9]{15}$";

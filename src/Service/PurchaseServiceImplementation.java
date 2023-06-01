@@ -5,21 +5,20 @@ import Entity.Product;
 import Entity.Purchase;
 import Entity.PurchaseItem;
 
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class PurchaseServiceImplementation implements PurchaseService {
 
-	private final PurchaseDAO purchaseDAO = new PurchaseDAOImplementation();
+	private final PurchaseDAO purchaseDAO = new PurchaseDAO();
 	private final String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 
 
 	@Override
-	public Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException, UniqueConstraintException, UnitCodeViolationException {
-		ProductDAO productDAO = new ProductDAOImplementation();
-		UnitDAO unitDAO = new UnitDAOImplementation();
+	public Purchase create(Purchase purchase) throws Exception {
+		ProductDAO productDAO = new ProductDAO();
+		UnitDAO unitDAO = new UnitDAO();
 		boolean isDividable;
 		for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
 			try {

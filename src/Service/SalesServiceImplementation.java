@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SalesServiceImplementation implements SalesService {
-	private final SalesDAO salesDAO = new SalesDAOImplementation();
+	private final SalesDAO salesDAO = new SalesDAO();
 	private final String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 
 
@@ -19,8 +19,8 @@ public class SalesServiceImplementation implements SalesService {
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException {
 		boolean isDividable;
 		double grandtotal = 0.0;
-		ProductDAO getProductByCode = new ProductDAOImplementation();
-		UnitDAO getUnitByCode = new UnitDAOImplementation();
+		ProductDAO getProductByCode = new ProductDAO();
+		UnitDAO getUnitByCode = new UnitDAO();
 		for(SalesItem salesItem: sales.getSalesItemList()) {
 			try {
 				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());

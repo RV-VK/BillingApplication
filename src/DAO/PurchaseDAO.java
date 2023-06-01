@@ -1,68 +1,120 @@
 package DAO;
 
 import Entity.Purchase;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import Entity.PurchaseItem;
+import Mapper.PurchaseMapper;
+import Mapper.PurchaseItemMapper;
+import SQLSession.MyBatisSession;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public interface PurchaseDAO {
-	/**
-	 * This method is a composite function that creates an entry in both Purchase and PurchaseItems table.
-	 *
-	 * @param purchase Purchase to be entered.
-	 * @return Purchase - Created Purchase Entry.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 * @throws SQLException              Exception thrown based on SQL syntax.
-	 */
-	@Select("INSERT INTO PURCHASE(DATE,INVOICE,GRANDTOTAL) VALUES(CAST(#{date} AS DATE),#{invoice},#{grandTotal}) RETURNING *")
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UniqueConstraintException, UnitCodeViolationException;
+public class PurchaseDAO {
+	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
+	private final ProductDAO productDAO = new ProductDAO();
+	private final SqlSession sqlSession = sqlSessionFactory.openSession();
+	private final PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+	private final PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
+	private List<PurchaseItem> purchaseItemList = new ArrayList<>();
 
-	/**
-	 * This method counts the number of entries in the Purchase table based on date parameter.
-	 *
-	 * @param searchText searchText to be counted.
-	 * @return Count - Integer.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT COUNT(ID) FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText},${attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
+	public Purchase create(Purchase purchase) throws Exception {
+		try {
+			purchaseItemList.clear();
+			Purchase createdPurchase = purchaseMapper.create(purchase);
+			for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
+				PurchaseItem createPurchaseItem = purchaseItemMapper.create(purchaseItem, createdPurchase.getInvoice());
+				createPurchaseItem.setProduct(purchaseItem.getProduct());
+				purchaseItemList.add(createPurchaseItem);
+				purchaseItem.getProduct().setAvailableQuantity(purchaseItem.getProduct().getAvailableQuantity() + purchaseItem.getQuantity());
+				productDAO.edit(purchaseItem.getProduct());
+			}
+			createdPurchase.setPurchaseItemList(purchaseItemList);
+			return createdPurchase;
+		} catch(PersistenceException e) {
+			Throwable cause = e.getCause();
+			throw handleException((SQLException)cause);
+		}
+	}
 
-	/**
-	 * This method Lists the Purchase and PurchaseItem entries based on the given searchable attribute
-	 * and its corresponding search-text formatted in a pageable manner.
-	 *
-	 * @param attribute  The attribute to be looked upon.
-	 * @param searchText The searchtext to be found.
-	 * @param pageLength The number of entries that must be listed.
-	 * @param offset     The Page number to be listed.
-	 * @return List - Purchase.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT * FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
-	List<Purchase> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
+	private Exception handleException(SQLException sqlException) throws UniqueConstraintException, ApplicationErrorException {
+		if(sqlException.getSQLState().equals("23505"))
+			throw new UniqueConstraintException(">> Invoice Id already Exists!!");
+		throw new ApplicationErrorException(sqlException.getMessage());
+	}
 
 
-	/**
-	 * This method lists the entries in the Purchase and PurchaseItems table based on the given search-text.
-	 *
-	 * @param searchText The search-text to be found.
-	 * @return List - Purchase
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Select("SELECT * FROM PURCHASE WHERE CAST(ID AS TEXT) ILIKE '%${searchText}%' OR CAST(DATE AS TEXT) ILIKE '%${searchText}%' OR CAST(INVOICE AS TEXT) ILIKE  '%${searchText}%'")
-	List<Purchase> searchList(String searchText) throws ApplicationErrorException;
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
+		try {
+			if(attribute.equals("date"))
+				return purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
+			else return purchaseMapper.count(attribute, searchText);
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
+	public List<Purchase> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
+		List<Purchase> listedPurchase;
+		Date dateParameter = null;
+		try {
+			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Integer numericParameter = Integer.parseInt(String.valueOf(searchText));
+				Integer count = purchaseMapper.count(attribute, numericParameter);
+				checkPagination(count, offset, pageLength);
+				listedPurchase = purchaseMapper.list(attribute, numericParameter, pageLength, offset);
+			} else {
+				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));
+				Integer count = purchaseMapper.count(attribute, dateParameter);
+				checkPagination(count, offset, pageLength);
+				listedPurchase = purchaseMapper.list(attribute, dateParameter, pageLength, offset);
+			}
+			List<PurchaseItem> listedPurchaseItems;
+			for(Purchase purchase: listedPurchase) {
+				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());
+				purchase.setPurchaseItemList(listedPurchaseItems);
+			}
+			return listedPurchase;
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 
-	/**
-	 * This method deletes an entry in the Purchase table and the corresponding entries in the purchase-items table
-	 *
-	 * @param invoice Input invoice to perform delete.
-	 * @return resultCode - Integer.
-	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
-	 */
-	@Delete("DELETE FROM PURCHASE WHERE INVOICE= #{invoice}")
-	Integer delete(int invoice) throws ApplicationErrorException;
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
+		if(count <= offset && count != 0) {
+			int pageCount;
+			if(count % pageLength == 0) pageCount = count / pageLength;
+			else pageCount = (count / pageLength) + 1;
+			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
+		}
+	}
+
+	public List<Purchase> searchList(String searchText) throws ApplicationErrorException {
+		try {
+			List<Purchase> listedPurchase = purchaseMapper.searchList(searchText);
+			List<PurchaseItem> listedPurchaseItems;
+			for(Purchase purchase: listedPurchase) {
+				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());
+				purchase.setPurchaseItemList(listedPurchaseItems);
+			}
+			return listedPurchase;
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
+
+	public Integer delete(int invoice) throws ApplicationErrorException {
+		try {
+			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);
+			int purchaseDeleted = purchaseMapper.delete(invoice);
+			if(purchaseItemDeleted > 0 && purchaseDeleted > 0) return 1;
+			else return - 1;
+		} catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
+		}
+	}
 }

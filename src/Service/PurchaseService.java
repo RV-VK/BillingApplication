@@ -21,7 +21,7 @@ public interface PurchaseService {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException, UniqueConstraintException, UnitCodeViolationException;
+	Purchase create(Purchase purchase) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the Purchase entity and serves the Count function.

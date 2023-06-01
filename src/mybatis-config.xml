@@ -20,13 +20,13 @@
         </environment>
     </environments>
     <mappers>
-        <mapper class="DAO.ProductDAO" />
-        <mapper class="DAO.UserDAO" />
-        <mapper class="DAO.UnitDAO" />
-        <mapper class="DAO.StoreDAO" />
-        <mapper class="DAO.PurchaseDAO"/>
-        <mapper class="DAO.SalesDAO" />
-        <mapper class="DAO.PurchaseItemMapper"/>
-        <mapper class="DAO.SalesItemMapper"/>
+        <mapper class="Mapper.ProductMapper" />
+        <mapper class="Mapper.UserMapper" />
+        <mapper class="Mapper.UnitMapper" />
+        <mapper class="Mapper.StoreMapper" />
+        <mapper class="Mapper.PurchaseMapper"/>
+        <mapper class="Mapper.SalesMapper" />
+        <mapper class="Mapper.PurchaseItemMapper"/>
+        <mapper class="Mapper.SalesItemMapper"/>
     </mappers>
 </configuration>
