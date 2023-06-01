@@ -12,26 +12,6 @@ public class PurchaseMain {
 	private List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
 	private LoginCLI loginCLI;
 
-	private static List<String> splitCommand(String command) {
-		String[] parts;
-		String[] commandlet;
-		if(command.contains(",")) {
-			parts = command.split("[,:]");
-			commandlet = parts[0].split("\\s+");
-		} else {
-			parts = command.split(",");
-			commandlet = command.split("\\s+");
-		}
-		ArrayList<String> commandList = new ArrayList<>();
-		if(parts.length == 1) {
-			Collections.addAll(commandList, commandlet);
-		} else {
-			Collections.addAll(commandList, commandlet);
-			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
-		}
-		return commandList;
-	}
-
 	/**
 	 * Purchase user View Control.
 	 *
@@ -107,4 +87,24 @@ public class PurchaseMain {
 			}
 		} while(true);
 	}
+	private static List<String> splitCommand(String command) {
+		String[] parts;
+		String[] commandlet;
+		if(command.contains(",")) {
+			parts = command.split("[,:]");
+			commandlet = parts[0].split("\\s+");
+		} else {
+			parts = command.split(",");
+			commandlet = command.split("\\s+");
+		}
+		ArrayList<String> commandList = new ArrayList<>();
+		if(parts.length == 1) {
+			Collections.addAll(commandList, commandlet);
+		} else {
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
+		}
+		return commandList;
+	}
+
 }

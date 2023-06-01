@@ -7,7 +7,6 @@ import Entity.User;
 import Service.InvalidTemplateException;
 import Service.LoginService;
 import Service.LoginServiceImplementation;
-import Service.PurchaseService;
 
 import java.sql.SQLException;
 import java.util.Scanner;
