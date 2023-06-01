@@ -17,7 +17,7 @@ public interface StoreMapper {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	@Select("INSERT INTO STORE (NAME,PHONENUMBER,ADDRESS,GSTNUMBER) VALUES (#{name},#{phoneNumber},#{address},#{gstCode}) RETURNING *")
+	@Select("INSERT INTO store (name, phonenumber, address, gstnumber) VALUES (#{name},#{phoneNumber},#{address},#{gstCode}) RETURNING *")
 	Store create(Store store) throws ApplicationErrorException, SQLException;
 
 
@@ -31,7 +31,7 @@ public interface StoreMapper {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("UPDATE STORE SET NAME=COALESCE(#{name},NAME), PHONENUMBER=COALESCE(NULLIF(#{phoneNumber},0),PHONENUMBER), ADDRESS= COALESCE(#{address},ADDRESS), GSTNUMBER=COALESCE(#{gstCode},GSTNUMBER) RETURNING *")
+	@Select("UPDATE store SET name = COALESCE(#{name}, name), phonenumber = COALESCE(NULLIF(#{phoneNumber},0), phonenumber), address = COALESCE(#{address}, address), gstnumber = COALESCE(#{gstCode}, gstnumber) RETURNING *")
 	Store edit(Store store) throws SQLException, ApplicationErrorException;
 
 

@@ -108,17 +108,19 @@ public class ProductDAO {
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
 	public List<Product> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
+
 		try {
+			Integer count;
 			List<Product> productList;
 			sqlSession = sqlSessionFactory.openSession();
 			productMapper = sqlSession.getMapper(ProductMapper.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
-				Integer count = productMapper.count(attribute, numericParameter);
+				count = productMapper.count(attribute, numericParameter);
 				checkPagination(count, offset, pageLength);
 				productList = productMapper.list(attribute, numericParameter, pageLength, offset);
 			} else {
-				Integer count = productMapper.count(attribute, searchText);
+				count = productMapper.count(attribute, searchText);
 				checkPagination(count, offset, pageLength);
 				productList = productMapper.list(attribute, searchText, pageLength, offset);
 			}

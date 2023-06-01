@@ -280,10 +280,12 @@ public class PurchaseCLI {
 					int resultCode = purchaseDeleteService.delete(arguments.get(2));
 					if(resultCode == 1) {
 						System.out.println(">> Purchase Deleted Successfully!!");
-					} else if(resultCode == - 1) {
+					} else if(resultCode == 0) {
 						System.out.println(">> Purchase Deletion Failed!!!");
 						System.out.println(">> Please check the invoice you have entered!!!");
 						System.out.println(">> Try \"purchase delete help\" for proper syntax");
+					} else {
+						System.out.println(">> Invoice cannot be Null!!");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled!!!");

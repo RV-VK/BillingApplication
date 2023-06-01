@@ -9,7 +9,7 @@ public class UserServiceImplementation implements UserService {
 
 	private final UserDAO userDAO = new UserDAO();
 	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
-	private final String LAST_NAME_REGEX="^[a-zA-Z\\s]{0,30}$";
+	private final String LAST_NAME_REGEX = "^[a-zA-Z\\s]{0,30}$";
 	private final String PASSWORD_REGEX = "^[a-zA-Z0-9]{8,30}$";
 	private final List<String> userTypeList = Arrays.asList("Sales", "Purchase", "Admin");
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
@@ -22,7 +22,7 @@ public class UserServiceImplementation implements UserService {
 
 	@Override
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
-		return userDAO.count(attribute, searchText);
+			return userDAO.count(attribute, searchText);
 	}
 
 	@Override
@@ -47,7 +47,10 @@ public class UserServiceImplementation implements UserService {
 
 	@Override
 	public Integer delete(String username) throws ApplicationErrorException {
-		return userDAO.delete(username);
+		if(username != null)
+			return userDAO.delete(username);
+		else
+			return - 1;
 	}
 
 	/**
@@ -56,6 +59,8 @@ public class UserServiceImplementation implements UserService {
 	 * @param user user to be validated.
 	 */
 	private void validate(User user) throws InvalidTemplateException {
+		if(user == null)
+			throw new NullPointerException(">> User Cannot be Null!!");
 		if(user.getUserName() != null && ! user.getUserName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid UserName!!");
 		if(user.getFirstName() != null && ! user.getFirstName().matches(NAME_REGEX))

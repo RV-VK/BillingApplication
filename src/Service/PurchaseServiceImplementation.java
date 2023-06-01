@@ -20,6 +20,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 		ProductDAO productDAO = new ProductDAO();
 		UnitDAO unitDAO = new UnitDAO();
 		boolean isDividable;
+		validate(purchase);
 		for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
 			try {
 				Product product = productDAO.findByCode(purchaseItem.getProduct().getCode());
@@ -66,6 +67,16 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 	@Override
 	public Integer delete(String invoice) throws ApplicationErrorException {
-		return purchaseDAO.delete(Integer.parseInt(invoice));
+		if(invoice != null)
+			return purchaseDAO.delete(Integer.parseInt(invoice));
+		else
+			return -1;
+	}
+
+	private void validate(Purchase purchase) throws InvalidTemplateException {
+		if(purchase == null)
+			throw new NullPointerException(">> Purchase cannot be Null");
+		if(purchase.getDate() != null && ! purchase.getDate().matches(dateRegex))
+			throw new InvalidTemplateException(">> Date Format is Invalid!! Must be YYYY-MM-DD!!");
 	}
 }

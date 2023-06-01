@@ -377,6 +377,8 @@ public class ProductCLI {
 				System.out.println(">> Product Deletion Failed!!!");
 				System.out.println(">> Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
 				System.out.println(">> Try \"product delete help\" for proper syntax");
+			} else {
+				System.out.println(">> Delete Parameter cant be null!!");
 			}
 		} else if(prompt.equals("n")) {
 			System.out.println(">> Delete operation cancelled");

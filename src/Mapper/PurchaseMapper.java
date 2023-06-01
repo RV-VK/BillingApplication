@@ -17,10 +17,8 @@ public interface PurchaseMapper {
 	 * @return Purchase - Created Purchase Entry.
 	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 */
-	@Select("INSERT INTO PURCHASE(DATE,INVOICE,GRANDTOTAL) VALUES(CAST(#{date} AS DATE),#{invoice},#{grandTotal}) RETURNING *")
+	@Select("INSERT INTO purchase(date, invoice, grandtotal) VALUES(CAST(#{date} AS date), #{invoice}, #{grandTotal}) RETURNING *")
 	Purchase create(Purchase purchase) throws Exception;
-
-
 
 
 	/**
@@ -30,11 +28,8 @@ public interface PurchaseMapper {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT COUNT(ID) FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText},${attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
-
-
-
+	@Select("SELECT COUNT(id) FROM purchase WHERE ${attribute} = COALESCE(#{searchText},${attribute})")
+	Integer count(@Param("attribute") String attribute, @Param("searchText") Object searchText) throws ApplicationErrorException;
 
 
 	/**
@@ -47,11 +42,8 @@ public interface PurchaseMapper {
 	 * @return List - Purchase.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM PURCHASE WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
+	@Select("SELECT * FROM purchase WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
 	List<Purchase> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
-
-
-
 
 
 	/**
@@ -61,11 +53,8 @@ public interface PurchaseMapper {
 	 * @return List - Purchase
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM PURCHASE WHERE CAST(ID AS TEXT) ILIKE '%${searchText}%' OR CAST(DATE AS TEXT) ILIKE '%${searchText}%' OR CAST(INVOICE AS TEXT) ILIKE  '%${searchText}%'")
+	@Select("SELECT * FROM purchase WHERE CAST(id AS TEXT) ILIKE '%${searchText}%' OR CAST(date AS TEXT) ILIKE '%${searchText}%' OR CAST(invoice AS TEXT) ILIKE  '%${searchText}%'")
 	List<Purchase> searchList(String searchText) throws ApplicationErrorException;
-
-
-
 
 
 	/**
@@ -75,6 +64,6 @@ public interface PurchaseMapper {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Delete("DELETE FROM PURCHASE WHERE INVOICE= #{invoice}")
+	@Delete("DELETE FROM purchase WHERE invoice= #{invoice}")
 	Integer delete(int invoice) throws ApplicationErrorException;
 }

@@ -335,6 +335,8 @@ public class UserCLI {
 						System.out.println(">> User Deletion Failed!!!");
 						System.out.println(">> Please check the username you have entered!!!");
 						FeedBackPrinter.printHelpMessage("user", "delete");
+					} else {
+						System.out.println(">> Username Cannot be null!!");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled");

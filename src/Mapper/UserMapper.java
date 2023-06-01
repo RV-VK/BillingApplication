@@ -18,10 +18,8 @@ public interface UserMapper {
 	 * @return User Object - created
 	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 */
-	@Select("INSERT INTO USERS(USERNAME,USERTYPE,PASSWORD,FIRSTNAME,LASTNAME,PHONENUMBER) VALUES (#{userName},#{userType},#{passWord},#{firstName},#{lastName},#{phoneNumber}) RETURNING *")
+	@Select("INSERT INTO users(username ,usertype, password , firstname, lastname, phonenumber) VALUES (#{userName},#{userType},#{passWord},#{firstName},#{lastName},#{phoneNumber}) RETURNING *")
 	User create(User user) throws Exception;
-
-
 
 
 	/**
@@ -30,10 +28,8 @@ public interface UserMapper {
 	 * @return count - Integer
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
-	@Select("SELECT COUNT(*) FROM USERS WHERE  ${attribute} = COALESCE(#{searchText},${attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
-
-
+	@Select("SELECT COUNT(*) FROM users WHERE  ${attribute} = COALESCE(#{searchText},${attribute})")
+	Integer count(@Param("attribute") String attribute, @Param("searchText") Object searchText) throws ApplicationErrorException;
 
 
 	/**
@@ -43,10 +39,8 @@ public interface UserMapper {
 	 * @return List - Users
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
-	@Select("SELECT * FROM USERS WHERE ( USERNAME ILIKE '" + "%${searchText}%" + "' OR USERTYPE ILIKE '" + "%${searchText}%" + "' OR PASSWORD ILIKE '" + "%${searchText}%" + "' OR FIRSTNAME ILIKE '" + "%${searchText}%" + "' OR LASTNAME ILIKE '" + "%${searchText}%" + "' OR CAST(ID AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(PHONENUMBER AS TEXT) ILIKE '" + "%${searchText}%" + "')")
+	@Select("SELECT * FROM users WHERE ( username ILIKE '" + "%${searchText}%" + "' OR usertype ILIKE '" + "%${searchText}%" + "' OR password ILIKE '" + "%${searchText}%" + "' OR firstname ILIKE '" + "%${searchText}%" + "' OR lastname ILIKE '" + "%${searchText}%" + "' OR CAST(id AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(phonenumber AS TEXT) ILIKE '" + "%${searchText}%" + "')")
 	List<User> searchList(String searchText) throws ApplicationErrorException;
-
-
 
 
 	/**
@@ -59,10 +53,8 @@ public interface UserMapper {
 	 * @return List - Users
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
-	@Select("SELECT *  FROM USERS WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
+	@Select("SELECT *  FROM users WHERE ${attribute} = COALESCE(#{searchText},${attribute}) ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
 	List<User> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
-
-
 
 
 	/**
@@ -72,10 +64,8 @@ public interface UserMapper {
 	 * @return User - Resulted User Entity.
 	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 */
-	@Select("UPDATE USERS SET USERNAME= COALESCE(#{userName},USERNAME),USERTYPE= COALESCE(#{userType},USERTYPE),PASSWORD= COALESCE(#{passWord},PASSWORD),FIRSTNAME= COALESCE(#{firstName},FIRSTNAME),LASTNAME= COALESCE(#{lastName},LASTNAME),PHONENUMBER=COALESCE(NULLIF(#{phoneNumber},0),PHONENUMBER) WHERE ID=#{id} RETURNING *")
+	@Select("UPDATE users SET username = COALESCE(#{userName}, username),  usertype = COALESCE(#{userType},usertype), password = COALESCE(#{passWord}, password), firstname = COALESCE(#{firstName}, firstname), lastname = COALESCE(#{lastName}, lastname), phonenumber = COALESCE(NULLIF(#{phoneNumber},0), phonenumber) WHERE id=#{id} RETURNING *")
 	User edit(User user) throws Exception;
-
-
 
 
 	/**
@@ -85,10 +75,8 @@ public interface UserMapper {
 	 * @return resultCode - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Delete("DELETE FROM USERS WHERE USERNAME=#{parameter}")
+	@Delete("DELETE FROM users WHERE username=#{parameter}")
 	Integer delete(String parameter) throws ApplicationErrorException;
-
-
 
 
 	/**
@@ -99,6 +87,6 @@ public interface UserMapper {
 	 * @return String - Usertype or null
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT PASSWORD,USERTYPE FROM USERS WHERE USERNAME=#{username}")
+	@Select("SELECT password,usertype FROM users WHERE username=#{username}")
 	User login(@Param("username") String userName, String passWord) throws SQLException, ApplicationErrorException;
 }

@@ -20,7 +20,7 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
-		return productDAO.count(attribute, searchText);
+			return productDAO.count(attribute, searchText);
 	}
 
 	public List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
@@ -42,7 +42,10 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	public Integer delete(String parameter) throws ApplicationErrorException {
-		return productDAO.delete(parameter);
+		if(parameter != null)
+			return productDAO.delete(parameter);
+		else
+			return -1;
 	}
 
 	/**
@@ -51,6 +54,8 @@ public class ProductServiceImplementation implements ProductService {
 	 * @param product Product to be Validated
 	 */
 	private void validate(Product product) throws InvalidTemplateException {
+		if(product == null)
+			throw new NullPointerException(">> Product cannot be Null!!");
 		if(product.getCode() != null && ! product.getCode().matches(CODE_REGEX))
 			throw new InvalidTemplateException(">> Invalid Product Code!!");
 		if(product.getName() != null && ! product.getName().matches(NAME_REGEX))

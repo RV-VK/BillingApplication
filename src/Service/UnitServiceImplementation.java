@@ -33,7 +33,10 @@ public class UnitServiceImplementation implements UnitService {
 
 	@Override
 	public Integer delete(String code) throws Exception {
-		return unitDAO.delete(code);
+		if(code != null)
+			return unitDAO.delete(code);
+		else
+			return -1;
 	}
 
 
@@ -43,6 +46,8 @@ public class UnitServiceImplementation implements UnitService {
 	 * @param unit Unit to be validated
 	 */
 	private void validate(Unit unit) throws InvalidTemplateException {
+		if(unit == null)
+			throw new NullPointerException(">> Unit Cannot be Null!!");
 		if(unit.getName() != null && ! unit.getName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid Unit Name!!");
 		if(unit.getCode() != null && ! unit.getCode().matches(CODE_REGEX))

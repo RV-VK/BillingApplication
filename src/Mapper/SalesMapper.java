@@ -19,10 +19,8 @@ public interface SalesMapper {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	@Select("INSERT INTO SALES(DATE,GRANDTOTAL) VALUES(CAST(#{date} AS DATE),#{grandTotal}) RETURNING *")
+	@Select("INSERT INTO sales(date, grandtotal) VALUES(CAST(#{date} AS date),#{grandTotal}) RETURNING *")
 	Sales create(Sales sales) throws ApplicationErrorException, SQLException;
-
-
 
 
 	/**
@@ -33,11 +31,8 @@ public interface SalesMapper {
 	 * @return count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT COUNT(ID) FROM SALES WHERE ${attribute} = COALESCE(#{searchText},${attribute})")
-	Integer count(@Param("attribute") String attribute,@Param("searchText") Object searchText) throws ApplicationErrorException;
-
-
-
+	@Select("SELECT COUNT(ID) FROM sales WHERE ${attribute} = COALESCE(#{searchText},${attribute})")
+	Integer count(@Param("attribute") String attribute, @Param("searchText") Object searchText) throws ApplicationErrorException;
 
 
 	/**
@@ -50,11 +45,8 @@ public interface SalesMapper {
 	 * @return List - Sales.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM SALES WHERE ${attribute} = COALESCE(#{searchText} ,${attribute}) ORDER BY ID LIMIT #{pageLength}  OFFSET #{offset}")
+	@Select("SELECT * FROM sales WHERE ${attribute} = COALESCE(#{searchText} ,${attribute}) ORDER BY ID LIMIT #{pageLength}  OFFSET #{offset}")
 	List<Sales> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException;
-
-
-
 
 
 	/**
@@ -64,9 +56,8 @@ public interface SalesMapper {
 	 * @return List - Sales.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM SALES WHERE CAST(ID AS TEXT) ILIKE '%${searchText}%' OR CAST(DATE AS TEXT) ILIKE '%${searchText}%'")
+	@Select("SELECT * FROM sales WHERE CAST(id AS TEXT) ILIKE '%${searchText}%' OR CAST(date AS TEXT) ILIKE '%${searchText}%'")
 	List<Sales> searchList(String searchText) throws ApplicationErrorException;
-
 
 
 	/**
@@ -76,6 +67,6 @@ public interface SalesMapper {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Delete("DELETE FROM SALES WHERE ID=#{id}")
+	@Delete("DELETE FROM sales WHERE id=#{id}")
 	Integer delete(int id) throws ApplicationErrorException;
 }

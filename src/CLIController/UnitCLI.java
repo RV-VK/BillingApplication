@@ -205,10 +205,12 @@ public class UnitCLI {
 					try {
 						if(unitService.delete(arguments.get(2)) == 1) {
 							System.out.println(">> Unit deleted Successfully!!!");
-						} else if(unitService.delete(arguments.get(2)) == - 1) {
+						} else if(unitService.delete(arguments.get(2)) == 0) {
 							System.out.println(">> Unit deletion failed!!!");
 							System.out.println(">> Please check the unitcode you have entered!!!");
 							FeedBackPrinter.printHelpMessage("unit", "delete");
+						} else {
+							System.out.println(">> Unitcode cannot be null");
 						}
 					} catch(Exception e) {
 						System.out.println(e.getMessage());

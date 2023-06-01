@@ -18,7 +18,7 @@ public interface ProductMapper {
 	 * @return Product - Created Product
 	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 */
-	@Select("INSERT into product(CODE,NAME,UNITCODE,TYPE,PRICE,STOCK) VALUES (#{code},#{name},#{unitcode},#{type},#{price},#{stock}) RETURNING *")
+	@Select("INSERT INTO product(code, name, unitcode, type, price, stock) VALUES (#{code},#{name},#{unitcode},#{type},#{price},#{stock}) RETURNING *")
 	Product create(Product product) throws Exception;
 
 
@@ -48,7 +48,7 @@ public interface ProductMapper {
 	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
 	 *                                       non-existing page is prompted.
 	 */
-	@Select("Select * from product where ${attribute} = coalesce(#{searchText},${attribute}) AND isdeleted=false order by id limit #{pageLength} offset #{offset}")
+	@Select("SELECT * FROM product WHERE ${attribute} = coalesce(#{searchText},${attribute}) AND isdeleted=false ORDER BY ID LIMIT #{pageLength} OFFSET #{offset}")
 	List<Product> list(@Param("attribute") String attribute, @Param("searchText") Object searchText, @Param("pageLength") int pageLength, @Param("offset") int offset) throws ApplicationErrorException, PageCountOutOfBoundsException;
 
 
@@ -60,7 +60,7 @@ public interface ProductMapper {
 	 * @return List - Products
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM PRODUCT WHERE ( NAME ILIKE '" + "%${searchText}%" + "' OR CODE ILIKE '" + "%${searchText}%" + "' OR UNITCODE ILIKE '" + "%${searchText}%" + "' OR TYPE ILIKE '" + "%${searchText}%" + "' OR CAST(ID AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(STOCK AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(PRICE AS TEXT) ILIKE '" + "%${searchText}%" + "' )" + " AND ISDELETED=FALSE")
+	@Select("SELECT * FROM product WHERE ( name ILIKE '" + "%${searchText}%" + "' OR code ILIKE '" + "%${searchText}%" + "' OR unitcode ILIKE '" + "%${searchText}%" + "' OR type ILIKE '" + "%${searchText}%" + "' OR CAST(id AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(stock AS TEXT) ILIKE '" + "%${searchText}%" + "' OR CAST(price AS TEXT) ILIKE '" + "%${searchText}%" + "' )" + " AND isdeleted = false")
 	List<Product> searchList(String searchText) throws ApplicationErrorException;
 
 
@@ -73,7 +73,7 @@ public interface ProductMapper {
 	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 *
 	 */
-	@Select("UPDATE PRODUCT SET CODE= COALESCE(#{code},CODE),NAME= COALESCE(#{name},NAME),UNITCODE= COALESCE(#{unitcode},UNITCODE),TYPE= COALESCE(#{type},TYPE),PRICE= COALESCE(NULLIF(#{price},0),PRICE),STOCK= COALESCE(#{stock},STOCK) WHERE ID=#{id} RETURNING *")
+	@Select("UPDATE product SET code = COALESCE(#{code}, code), name= COALESCE(#{name}, name), unitcode= COALESCE(#{unitcode}, unitcode), type = COALESCE(#{type}, type, price = COALESCE(NULLIF(#{price},0),price), stock = COALESCE(#{stock},stock) WHERE id=#{id} RETURNING *")
 	Product edit(Product product) throws Exception;
 
 
@@ -86,7 +86,7 @@ public interface ProductMapper {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 
-	@Update("UPDATE PRODUCT SET ISDELETED='TRUE' WHERE (CAST(ID AS TEXT) ILIKE '${parameter}' OR CODE='${parameter}') AND STOCK=0")
+	@Update("UPDATE product SET isdeleted='true' WHERE (CAST(id AS TEXT) ILIKE '${parameter}' OR code='${parameter}') AND stock = 0")
 	Integer delete(String parameter) throws ApplicationErrorException;
 
 
@@ -98,7 +98,7 @@ public interface ProductMapper {
 	 * @return Product
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT * FROM PRODUCT WHERE CODE=#{code} AND ISDELETED=FALSE")
+	@Select("SELECT * FROM product WHERE code = #{code} AND isdeleted = false")
 
 	Product findByCode(String code) throws ApplicationErrorException;
 

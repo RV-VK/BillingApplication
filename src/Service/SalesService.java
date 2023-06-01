@@ -18,7 +18,7 @@ public interface SalesService {
 	 * @throws SQLException               Exception thrown based on SQL syntax.
 	 * @throws UnDividableEntityException Exception thrown when a Non-dividable unit in a Sales transaction is asked for a decimal quantity.
 	 */
-	Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException;
+	Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Sales entity and serves the Count function.

@@ -2,6 +2,7 @@ package Service;
 
 import DAO.*;
 import Entity.Product;
+import Entity.Purchase;
 import Entity.Sales;
 import Entity.SalesItem;
 
@@ -16,11 +17,12 @@ public class SalesServiceImplementation implements SalesService {
 
 
 	@Override
-	public Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException {
+	public Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException, InvalidTemplateException {
 		boolean isDividable;
 		double grandtotal = 0.0;
 		ProductDAO getProductByCode = new ProductDAO();
 		UnitDAO getUnitByCode = new UnitDAO();
+		validate(sales);
 		for(SalesItem salesItem: sales.getSalesItemList()) {
 			try {
 				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());
@@ -70,9 +72,18 @@ public class SalesServiceImplementation implements SalesService {
 		return salesList;
 	}
 
-
 	@Override
 	public Integer delete(String id) throws ApplicationErrorException {
-		return salesDAO.delete(Integer.parseInt(id));
+		if(id != null)
+			return salesDAO.delete(Integer.parseInt(id));
+		else
+			return -1;
+	}
+
+	private void validate(Sales sales) throws InvalidTemplateException {
+		if(sales == null)
+			throw new NullPointerException(">> Sales cannot be Null");
+		if(sales.getDate() != null && ! sales.getDate().matches(dateRegex))
+			throw new InvalidTemplateException(">> Date Format is Invalid!! Must be YYYY-MM-DD!!");
 	}
 }

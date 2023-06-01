@@ -271,10 +271,12 @@ public class SalesCLI {
 					int resultCode = salesService.delete(arguments.get(2));
 					if(resultCode == 1) {
 						System.out.println(">> Sales Entry Deleted Successfully!!!");
-					} else if(resultCode == - 1) {
+					} else if(resultCode == 0) {
 						System.out.println(">> Sales Entry Deletion Failed!!");
 						System.out.println(">> Please check the id you have entered!!!");
 						System.out.println(">> Try \"sales delete help\" for proper syntax");
+					} else {
+						System.out.println(">> Id cannot be null!!");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled!!!");
