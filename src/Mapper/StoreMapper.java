@@ -45,7 +45,7 @@ public interface StoreMapper {
 	 * @return statusCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Delete("TRUNCATE STORE ,PRODUCT, USERS, UNIT, PURCHASE, SALES, PURCHASEITEMS, SALESITEMS")
+	@Delete("TRUNCATE store ,product, users, unit, purchase, sales, purchaseitems, salesitems")
 	Integer delete(String userName, String password) throws ApplicationErrorException;
 
 
@@ -57,6 +57,6 @@ public interface StoreMapper {
 	 * @return status - Boolean
 	 * @throws SQLException Exception thrown based on SQLState.
 	 */
-	@Select("SELECT COUNT(ID) FROM STORE")
+	@Select("SELECT COUNT(ID) FROM store")
 	Boolean checkIfStoreExists() throws SQLException, ApplicationErrorException;
 }

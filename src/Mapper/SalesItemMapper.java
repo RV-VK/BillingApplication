@@ -15,7 +15,7 @@ public interface SalesItemMapper {
 	 * @return SalesItem - Created Sales Item.
 	 */
 	@Results( {@Result(property = "product.code", column = "productcode"), @Result(property = "quantity", column = "quantity"), @Result(property = "unitSalesPrice", column = "salesprice")})
-	@Select("INSERT INTO salesItems (id, productCode, quantity, salesPrice) VALUES (#{id},#{salesItem.product.code},#{salesItem.quantity},#{salesItem.product.price}) RETURNING *")
+	@Select("INSERT INTO salesItems (id, productcode, quantity, salesprice) VALUES (#{id},#{salesItem.product.code},#{salesItem.quantity},#{salesItem.product.price}) RETURNING *")
 	SalesItem create(@Param("salesItem") SalesItem salesItem, @Param("id") int invoice);
 
 
@@ -26,7 +26,7 @@ public interface SalesItemMapper {
 	 * @return List of SalesItems.
 	 */
 	@Results( {@Result(property = "product.name", column = "name"), @Result(property = "product.code", column = "productcode"), @Result(property = "quantity", column = "quantity"), @Result(property = "unitSalesPrice", column = "salesprice")})
-	@Select("SELECT P.name, S.productCode, S.quantity, S.salesPrice FROM salesItems S INNER JOIN product P ON P.code = S.productCode WHERE S.id=#{id}")
+	@Select("SELECT P.name, S.productcode, S.quantity, S.salesprice FROM salesItems S INNER JOIN product P ON P.code = S.productcode WHERE S.id=#{id}")
 	List<SalesItem> list(@Param("id") int id);
 
 

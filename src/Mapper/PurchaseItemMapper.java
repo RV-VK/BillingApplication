@@ -19,7 +19,7 @@ public interface PurchaseItemMapper {
 			@Result(property = "quantity", column = "quantity"),
 			@Result(property = "unitPurchasePrice", column = "costprice")
 	})
-	@Select("INSERT INTO purchaseItems (invoice, productCode, quantity, costPrice) VALUES(#{invoice},#{purchaseItem.product.code, jdbcType=VARCHAR },#{purchaseItem.quantity},#{purchaseItem.unitPurchasePrice}) RETURNING productCode, quantity, costPrice")
+	@Select("INSERT INTO purchaseItems (invoice, productcode, quantity, costprice) VALUES(#{invoice},#{purchaseItem.product.code, jdbcType=VARCHAR },#{purchaseItem.quantity},#{purchaseItem.unitPurchasePrice}) RETURNING productcode, quantity, costprice")
 	PurchaseItem create(@Param("purchaseItem") PurchaseItem purchaseItem, @Param("invoice") int invoice);
 
 
@@ -35,7 +35,7 @@ public interface PurchaseItemMapper {
 			@Result(property = "quantity", column = "quantity"),
 			@Result(property = "unitPurchasePrice", column = "costprice")
 	})
-	@Select("SELECT P.name,PU.productCode,PU.quantity,PU.costPrice FROM purchaseItems PU INNER JOIN product P ON P.code = PU.productCode WHERE PU.invoice=#{invoice}")
+	@Select("SELECT P.name,PU.productcode,PU.quantity,PU.costprice FROM purchaseitems PU INNER JOIN product P ON P.code = PU.productcode WHERE PU.invoice=#{invoice}")
 	List<PurchaseItem> list(@Param("invoice") int invoice);
 
 

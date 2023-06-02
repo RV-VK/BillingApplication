@@ -108,7 +108,6 @@ public class ProductDAO {
 	 * @throws ApplicationErrorException Exception thrown due to persistence problems
 	 */
 	public List<Product> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
-
 		try {
 			Integer count;
 			List<Product> productList;
