@@ -17,6 +17,9 @@ import java.util.List;
 public class PurchaseDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	private final ProductDAO productDAO = new ProductDAO();
+	private SqlSession sqlSession;
+	private PurchaseMapper purchaseMapper;
+	private PurchaseItemMapper purchaseItemMapper;
 	private final List<PurchaseItem> purchaseItemList = new ArrayList<>();
 
 	/**
@@ -28,9 +31,9 @@ public class PurchaseDAO {
 	 */
 	public Purchase create(Purchase purchase) throws Exception {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
-			PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			purchaseItemList.clear();
 			Purchase createdPurchase = purchaseMapper.create(purchase);
 			for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
@@ -73,8 +76,8 @@ public class PurchaseDAO {
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			Integer count;
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
 			if(attribute.equals("date"))
 				count = purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
 			else count = purchaseMapper.count(attribute, searchText);
@@ -99,9 +102,9 @@ public class PurchaseDAO {
 	public List<Purchase> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		List<Purchase> listedPurchase;
 		Date dateParameter = null;
-		SqlSession sqlSession = sqlSessionFactory.openSession();
-		PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
-		PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
+		sqlSession = sqlSessionFactory.openSession();
+		purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+		purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Integer numericParameter = Integer.parseInt(String.valueOf(searchText));
@@ -153,9 +156,9 @@ public class PurchaseDAO {
 	 */
 	public List<Purchase> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
-			PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			List<Purchase> listedPurchase = purchaseMapper.searchList(searchText);
 			List<PurchaseItem> listedPurchaseItems;
 			for(Purchase purchase: listedPurchase) {
@@ -178,9 +181,9 @@ public class PurchaseDAO {
 	 */
 	public Integer delete(int invoice) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
-			PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);
 			int purchaseDeleted = purchaseMapper.delete(invoice);
 			sqlSession.close();

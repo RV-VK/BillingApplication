@@ -1,6 +1,7 @@
 package DAO;
 
 import Entity.User;
+import Mapper.ProductMapper;
 import Mapper.UserMapper;
 import SQLSession.MyBatisSession;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -12,7 +13,8 @@ import java.util.List;
 
 public class UserDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-
+	private SqlSession sqlSession;
+	private UserMapper userMapper;
 
 	/**
 	 * This method Creates a User Entry in the User table
@@ -23,8 +25,8 @@ public class UserDAO {
 	 */
 	public User create(User user) throws Exception {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			User createdUser = userMapper.create(user);
 			sqlSession.close();
 			return createdUser;
@@ -58,8 +60,8 @@ public class UserDAO {
 	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			Integer count = userMapper.count(attribute, searchText);
 			sqlSession.close();
 			return count;
@@ -77,8 +79,8 @@ public class UserDAO {
 	 */
 	public List<User> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			List<User> userList = userMapper.searchList(searchText);
 			sqlSession.close();
 			return userList;
@@ -102,8 +104,8 @@ public class UserDAO {
 	public List<User> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		try {
 			List<User> userList;
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
 				Integer count = userMapper.count(attribute, numericParameter);
@@ -148,8 +150,8 @@ public class UserDAO {
 	 */
 	public User edit(User user) throws Exception {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			User editedUser = userMapper.edit(user);
 			sqlSession.close();
 			return editedUser;
@@ -168,8 +170,8 @@ public class UserDAO {
 	 */
 	public Integer delete(String username) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			Integer rowsAffected = userMapper.delete(username);
 			sqlSession.close();
 			return rowsAffected;
@@ -189,8 +191,8 @@ public class UserDAO {
 	 */
 	public User login(String userName, String passWord) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
 			User user = userMapper.login(userName, passWord);
 			sqlSession.close();
 			if(user != null && user.getPassWord().equals(passWord)) return user;

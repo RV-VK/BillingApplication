@@ -13,6 +13,8 @@ import java.sql.SQLException;
 public class StoreDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	private final UserDAO userDAO = new UserDAO();
+	private SqlSession sqlSession;
+	private StoreMapper storeMapper;
 
 	/**
 	 * This method creates an Entry in the Store table.
@@ -24,8 +26,8 @@ public class StoreDAO {
 	 */
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreMapper.class);
 			Store createdStore = storeMapper.create(store);
 			sqlSession.close();
 			return createdStore;
@@ -47,8 +49,8 @@ public class StoreDAO {
 	 */
 	public Store edit(Store store) throws SQLException, ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreMapper.class);
 			Store editedStore = storeMapper.edit(store);
 			sqlSession.close();
 			return editedStore;
@@ -65,8 +67,8 @@ public class StoreDAO {
 	 */
 	public Boolean checkIfStoreExists() throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreMapper.class);
 			Boolean status = storeMapper.checkIfStoreExists();
 			sqlSession.close();
 			return status;
@@ -86,8 +88,8 @@ public class StoreDAO {
 	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
 		try {
 			Integer rowsAffected;
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreMapper.class);
 			User user = userDAO.login(userName, adminPassword);
 			if(user == null) rowsAffected = - 1;
 			else rowsAffected = storeMapper.delete(userName, adminPassword);

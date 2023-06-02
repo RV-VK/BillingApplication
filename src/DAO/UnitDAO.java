@@ -13,6 +13,8 @@ import java.util.List;
 public class UnitDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 
+	private SqlSession sqlSession;
+	private UnitMapper unitMapper;
 	/**
 	 * This method creates an Entry in the Unit table.
 	 *
@@ -22,8 +24,8 @@ public class UnitDAO {
 	 */
 	public Unit create(Unit unit) throws Exception {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			unitMapper = sqlSession.getMapper(UnitMapper.class);
 			Unit createdUnit = unitMapper.create(unit);
 			sqlSession.close();
 			return createdUnit;
@@ -56,8 +58,8 @@ public class UnitDAO {
 	 */
 	public List<Unit> list() throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			unitMapper = sqlSession.getMapper(UnitMapper.class);
 			List<Unit> unitList = unitMapper.list();
 			sqlSession.close();
 			return unitList;
@@ -76,8 +78,8 @@ public class UnitDAO {
 	 */
 	public Unit edit(Unit unit) throws Exception {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			unitMapper = sqlSession.getMapper(UnitMapper.class);
 			Unit editedUnit = unitMapper.edit(unit);
 			sqlSession.close();
 			return editedUnit;
@@ -96,8 +98,8 @@ public class UnitDAO {
 	 */
 	public Integer delete(String code) throws Exception {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			unitMapper = sqlSession.getMapper(UnitMapper.class);
 			Integer rowsAffected = unitMapper.delete(code);
 			sqlSession.close();
 			return rowsAffected;
@@ -116,8 +118,8 @@ public class UnitDAO {
 	 */
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
-			SqlSession sqlSession = sqlSessionFactory.openSession();
-			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			sqlSession = sqlSessionFactory.openSession();
+			unitMapper = sqlSession.getMapper(UnitMapper.class);
 			Unit unit = unitMapper.findByCode(code);
 			sqlSession.close();
 			return unit;
