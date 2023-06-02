@@ -17,9 +17,6 @@ import java.util.List;
 public class PurchaseDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	private final ProductDAO productDAO = new ProductDAO();
-	private final SqlSession sqlSession = sqlSessionFactory.openSession();
-	private final PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
-	private final PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 	private final List<PurchaseItem> purchaseItemList = new ArrayList<>();
 
 	/**
@@ -31,6 +28,9 @@ public class PurchaseDAO {
 	 */
 	public Purchase create(Purchase purchase) throws Exception {
 		try {
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			purchaseItemList.clear();
 			Purchase createdPurchase = purchaseMapper.create(purchase);
 			for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {
@@ -41,6 +41,7 @@ public class PurchaseDAO {
 				productDAO.edit(purchaseItem.getProduct());
 			}
 			createdPurchase.setPurchaseItemList(purchaseItemList);
+			sqlSession.close();
 			return createdPurchase;
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
@@ -71,9 +72,14 @@ public class PurchaseDAO {
 	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
+			Integer count;
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
 			if(attribute.equals("date"))
-				return purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
-			else return purchaseMapper.count(attribute, searchText);
+				count = purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
+			else count = purchaseMapper.count(attribute, searchText);
+			sqlSession.close();
+			return count;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -93,6 +99,9 @@ public class PurchaseDAO {
 	public List<Purchase> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		List<Purchase> listedPurchase;
 		Date dateParameter = null;
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+		PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Integer numericParameter = Integer.parseInt(String.valueOf(searchText));
@@ -110,6 +119,7 @@ public class PurchaseDAO {
 				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());
 				purchase.setPurchaseItemList(listedPurchaseItems);
 			}
+			sqlSession.close();
 			return listedPurchase;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -143,12 +153,16 @@ public class PurchaseDAO {
 	 */
 	public List<Purchase> searchList(String searchText) throws ApplicationErrorException {
 		try {
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			List<Purchase> listedPurchase = purchaseMapper.searchList(searchText);
 			List<PurchaseItem> listedPurchaseItems;
 			for(Purchase purchase: listedPurchase) {
 				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());
 				purchase.setPurchaseItemList(listedPurchaseItems);
 			}
+			sqlSession.close();
 			return listedPurchase;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -164,8 +178,12 @@ public class PurchaseDAO {
 	 */
 	public Integer delete(int invoice) throws ApplicationErrorException {
 		try {
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			PurchaseMapper purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+			PurchaseItemMapper purchaseItemMapper = sqlSession.getMapper(PurchaseItemMapper.class);
 			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);
 			int purchaseDeleted = purchaseMapper.delete(invoice);
+			sqlSession.close();
 			if(purchaseItemDeleted > 0 && purchaseDeleted > 0) return 1;
 			else return - 1;
 		} catch(Exception e) {

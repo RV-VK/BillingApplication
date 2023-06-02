@@ -16,9 +16,6 @@ import java.util.List;
 public class SalesDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	private final ProductDAO productDAO = new ProductDAO();
-	private final SqlSession sqlSession = sqlSessionFactory.openSession();
-	private final SalesMapper salesMapper = sqlSession.getMapper(SalesMapper.class);
-	private final SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 	private final List<SalesItem> salesItemList = new ArrayList<>();
 
 	/**
@@ -31,6 +28,9 @@ public class SalesDAO {
 	 */
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException {
 		try {
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			SalesMapper salesMapper = sqlSession.getMapper(SalesMapper.class);
+			SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			salesItemList.clear();
 			Sales createdSales = salesMapper.create(sales);
 			for(SalesItem salesItem: sales.getSalesItemList()) {
@@ -43,6 +43,7 @@ public class SalesDAO {
 				productDAO.edit(salesItem.getProduct());
 			}
 			createdSales.setSalesItemList(salesItemList);
+			sqlSession.close();
 			return createdSales;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -59,8 +60,13 @@ public class SalesDAO {
 	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
-			if(attribute.equals("date")) return salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
-			else return salesMapper.count(attribute, searchText);
+			Integer count;
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			SalesMapper salesMapper = sqlSession.getMapper(SalesMapper.class);
+			if(attribute.equals("date")) count = salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
+			else count = salesMapper.count(attribute, searchText);
+			sqlSession.close();
+			return count;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -81,6 +87,9 @@ public class SalesDAO {
 		List<Sales> listedSales;
 		Date dateParameter = null;
 		Integer count, numericParameter;
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		SalesMapper salesMapper = sqlSession.getMapper(SalesMapper.class);
+		SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				numericParameter = Integer.parseInt(String.valueOf(searchText));
@@ -98,6 +107,7 @@ public class SalesDAO {
 				listedSalesItems = salesItemMapper.list(sales.getId());
 				sales.setSalesItemList(listedSalesItems);
 			}
+			sqlSession.close();
 			return listedSales;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -132,12 +142,16 @@ public class SalesDAO {
 	 */
 	public List<Sales> searchList(String searchText) throws ApplicationErrorException {
 		try {
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			SalesMapper salesMapper = sqlSession.getMapper(SalesMapper.class);
+			SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			List<Sales> listedSales = salesMapper.searchList(searchText);
 			List<SalesItem> listedSalesItems;
 			for(Sales sales: listedSales) {
 				listedSalesItems = salesItemMapper.list(sales.getId());
 				sales.setSalesItemList(listedSalesItems);
 			}
+			sqlSession.close();
 			return listedSales;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -153,8 +167,12 @@ public class SalesDAO {
 	 */
 	public Integer delete(int id) throws ApplicationErrorException {
 		try {
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			SalesMapper salesMapper = sqlSession.getMapper(SalesMapper.class);
+			SalesItemMapper salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			Integer salesItemDeleted = salesItemMapper.delete(id);
 			Integer salesDeleted = salesMapper.delete(id);
+			sqlSession.close();
 			if(salesItemDeleted > 0 && salesDeleted > 0) return 1;
 			else return - 1;
 		} catch(Exception e) {

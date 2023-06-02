@@ -12,8 +12,6 @@ import java.sql.SQLException;
 
 public class StoreDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private final SqlSession sqlSession = sqlSessionFactory.openSession();
-	private final StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
 	private final UserDAO userDAO = new UserDAO();
 
 	/**
@@ -26,12 +24,15 @@ public class StoreDAO {
 	 */
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
-			return storeMapper.create(store);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			Store createdStore = storeMapper.create(store);
+			sqlSession.close();
+			return createdStore;
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			SQLException sqlException = (SQLException)cause;
-			if(sqlException.getSQLState().equals("23514"))
-				return null;
+			if(sqlException.getSQLState().equals("23514")) return null;
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
@@ -46,7 +47,11 @@ public class StoreDAO {
 	 */
 	public Store edit(Store store) throws SQLException, ApplicationErrorException {
 		try {
-			return storeMapper.edit(store);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			Store editedStore = storeMapper.edit(store);
+			sqlSession.close();
+			return editedStore;
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
@@ -60,7 +65,11 @@ public class StoreDAO {
 	 */
 	public Boolean checkIfStoreExists() throws ApplicationErrorException {
 		try {
-			return storeMapper.checkIfStoreExists();
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+			Boolean status = storeMapper.checkIfStoreExists();
+			sqlSession.close();
+			return status;
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}
@@ -76,11 +85,14 @@ public class StoreDAO {
 	 */
 	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
 		try {
+			Integer rowsAffected;
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
 			User user = userDAO.login(userName, adminPassword);
-			if(user == null)
-				return - 1;
-			else
-				return storeMapper.delete(userName, adminPassword);
+			if(user == null) rowsAffected = - 1;
+			else rowsAffected = storeMapper.delete(userName, adminPassword);
+			sqlSession.close();
+			return rowsAffected;
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 		}

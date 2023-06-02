@@ -12,8 +12,6 @@ import java.util.List;
 
 public class UnitDAO {
 	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private final SqlSession sqlSession = sqlSessionFactory.openSession();
-	private final UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
 
 	/**
 	 * This method creates an Entry in the Unit table.
@@ -24,7 +22,11 @@ public class UnitDAO {
 	 */
 	public Unit create(Unit unit) throws Exception {
 		try {
-			return unitMapper.create(unit);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			Unit createdUnit = unitMapper.create(unit);
+			sqlSession.close();
+			return createdUnit;
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -54,7 +56,11 @@ public class UnitDAO {
 	 */
 	public List<Unit> list() throws ApplicationErrorException {
 		try {
-			return unitMapper.list();
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			List<Unit> unitList = unitMapper.list();
+			sqlSession.close();
+			return unitList;
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -70,7 +76,11 @@ public class UnitDAO {
 	 */
 	public Unit edit(Unit unit) throws Exception {
 		try {
-			return unitMapper.edit(unit);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			Unit editedUnit = unitMapper.edit(unit);
+			sqlSession.close();
+			return editedUnit;
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -86,7 +96,11 @@ public class UnitDAO {
 	 */
 	public Integer delete(String code) throws Exception {
 		try {
-			return unitMapper.delete(code);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			Integer rowsAffected = unitMapper.delete(code);
+			sqlSession.close();
+			return rowsAffected;
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -102,7 +116,11 @@ public class UnitDAO {
 	 */
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
-			return unitMapper.findByCode(code);
+			SqlSession sqlSession = sqlSessionFactory.openSession();
+			UnitMapper unitMapper = sqlSession.getMapper(UnitMapper.class);
+			Unit unit = unitMapper.findByCode(code);
+			sqlSession.close();
+			return unit;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
