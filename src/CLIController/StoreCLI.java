@@ -9,13 +9,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class StoreCLI {
+	private final StoreService storeService = new StoreServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
 	private String name;
 	private long phoneNumber;
 	private String GSTNumber;
 	private String address;
-	private final StoreService storeService = new StoreServiceImplementation();
-	private final Scanner scanner = new Scanner(System.in);
-
 
 	/**
 	 * This method handles the presentation layer of the Create function
@@ -166,7 +165,7 @@ public class StoreCLI {
 	 * @param arguments Command arguments.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void delete(List<String> arguments) throws ApplicationErrorException {
+	public void delete(List<String> arguments, String userName) throws ApplicationErrorException {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
 			FeedBackPrinter.printStoreHelp("delete");
 		} else if(arguments.size() == 2) {
@@ -175,9 +174,10 @@ public class StoreCLI {
 			if(prompt.equals("y")) {
 				System.out.print(">> Enter admin password to delete the store: ");
 				String password = scanner.nextLine();
-				int resultCode = storeService.delete(password);
+				int resultCode = storeService.delete(userName, password);
 				if(resultCode == 1) {
 					System.out.println(">> Store deleted Successfully !!! GOOD BYE !");
+					System.exit(0);
 				} else if(resultCode == - 1) {
 					System.out.println(">> Unable to delete Store!");
 					System.out.println(">> Invalid Admin Password");

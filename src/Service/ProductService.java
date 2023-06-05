@@ -10,7 +10,7 @@ import java.util.List;
 public interface ProductService {
 
 	/**
-	 * This method invokes the ProductDAO object and serves the Product creation.
+	 * This method invokes the ProductMapper object and serves the Product creation.
 	 *
 	 * @param product Input product
 	 * @return Product
@@ -19,19 +19,19 @@ public interface ProductService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	Product create(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException;
+	Product create(Product product) throws Exception;
 
 	/**
-	 * This method invokes the ProductDAO object and serves the Count function.
+	 * This method invokes the ProductMapper object and serves the Count function.
 	 *
 	 * @return count - Integer
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer count() throws ApplicationErrorException;
+	Integer count(String attribute, String searchText) throws ApplicationErrorException;
 
 
 	/**
-	 * This method invokes the ProductDAO object and serves the List function.
+	 * This method invokes the ProductMapper object and serves the List function.
 	 *
 	 * @param listattributes Key Value Pairs(Map) of List function attributes.
 	 * @return List - Products
@@ -52,10 +52,10 @@ public interface ProductService {
 	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product
 	 *                                    table.
 	 */
-	Product edit(Product product) throws SQLException, ApplicationErrorException, UniqueConstraintException, UnitCodeViolationException, InvalidTemplateException;
+	Product edit(Product product) throws Exception;
 
 	/**
-	 * This method invokes the ProductDAO object and serves the delete function
+	 * This method invokes the ProductMapper object and serves the delete function
 	 *
 	 * @param parameter Input parameter for delete function.(Code/Id)
 	 * @return resultCode - Integer

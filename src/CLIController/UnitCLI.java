@@ -1,6 +1,7 @@
 package CLIController;
 
 import DAO.ApplicationErrorException;
+import DAO.UnitCodeViolationException;
 import Entity.Unit;
 import Service.UnitService;
 import Service.UnitServiceImplementation;
@@ -9,13 +10,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UnitCLI {
+	private final UnitService unitService = new UnitServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
 	private int id;
 	private String name;
 	private String unitcode;
 	private String description;
 	private boolean isDividable;
-	private final UnitService unitService = new UnitServiceImplementation();
-	private final Scanner scanner = new Scanner(System.in);
 
 	/**
 	 * This method handles the presentation layer of the Create function.
@@ -117,7 +118,7 @@ public class UnitCLI {
 		} else if(arguments.size() > 12) {
 			System.out.println(">> Too many Arguments for command \"unit edit\"");
 			FeedBackPrinter.printHelpMessage("unit", "edit");
-		} else if(arguments.size() < 6) {
+		} else if(arguments.size() < 12) {
 			System.out.println(">> Insufficient arguments for command \"unit edit\"");
 			System.out.println(">> Try \"unit edit help\" for proper syntax");
 		} else if(! arguments.get(2).contains("id")) {
@@ -192,7 +193,7 @@ public class UnitCLI {
 	 * @param arguments Command arguments.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void delete(List<String> arguments) throws ApplicationErrorException {
+	public void delete(List<String> arguments) throws ApplicationErrorException, UnitCodeViolationException {
 		String codeRegex = "^[a-zA-Z]{1,4}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
@@ -201,12 +202,18 @@ public class UnitCLI {
 				System.out.print(">> Are you Sure you want to delete the Unit y/n :");
 				String prompt = scanner.nextLine();
 				if(prompt.equals("y")) {
-					if(unitService.delete(arguments.get(2)) == 1) {
-						System.out.println(">> Unit deleted Successfully!!!");
-					} else if(unitService.delete(arguments.get(2)) == - 1) {
-						System.out.println(">> Unit deletion failed!!!");
-						System.out.println(">> Please check the unitcode you have entered!!!");
-						FeedBackPrinter.printHelpMessage("unit", "delete");
+					try {
+						if(unitService.delete(arguments.get(2)) == 1) {
+							System.out.println(">> Unit deleted Successfully!!!");
+						} else if(unitService.delete(arguments.get(2)) == 0) {
+							System.out.println(">> Unit deletion failed!!!");
+							System.out.println(">> Please check the unitcode you have entered!!!");
+							FeedBackPrinter.printHelpMessage("unit", "delete");
+						} else {
+							System.out.println(">> Unitcode cannot be null");
+						}
+					} catch(Exception e) {
+						System.out.println(e.getMessage());
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled");

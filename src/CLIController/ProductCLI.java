@@ -35,7 +35,7 @@ public class ProductCLI {
 	 *
 	 * @param arguments - List of Command arguments.
 	 */
-	public void Create(List<String> arguments) {
+	public void create(List<String> arguments) {
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
 			FeedBackPrinter.printProductHelp("create");
 			return;
@@ -136,7 +136,7 @@ public class ProductCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(productAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
+					setMap(listAttributesMap, "20", "1", attribute, searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("product", productAttributes);
@@ -152,7 +152,7 @@ public class ProductCLI {
 				if(productAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -173,7 +173,7 @@ public class ProductCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("product");
@@ -200,7 +200,10 @@ public class ProductCLI {
 		try {
 			resultList = productService.list(listAttributesMap);
 			if(resultList.size() == 0) {
-				System.out.println(">> Given SearchText does not exist!!!");
+				if(listAttributesMap.get("Searchtext") != null) {
+					System.out.println(">> Given SearchText does not exist!!!");
+				}
+				return;
 			}
 			for(Product resultProduct: resultList) {
 				System.out.println(">> id: " + resultProduct.getId() + ", code: " + resultProduct.getCode() + ", name: " + resultProduct.getName() + ", type: " + resultProduct.getType() + ", unitcode: " + resultProduct.getunitcode() + ", stock: " + resultProduct.getAvailableQuantity() + ", price: " + resultProduct.getPrice());
@@ -220,7 +223,7 @@ public class ProductCLI {
 			System.out.println(">> Invalid Command!! Try \"help\"");
 			return;
 		}
-		int productCount = productService.count();
+		int productCount = productService.count("id", null);
 		System.out.println(">> ProductCount " + productCount);
 	}
 
@@ -231,7 +234,7 @@ public class ProductCLI {
 	 * @param command   Command String.
 	 */
 	public void edit(List<String> arguments, String command) {
-		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
+		final String editCommandRegex = "^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$";
 		if(arguments.size() == 3 && arguments.get(2).equals("help")) {
 			FeedBackPrinter.printProductHelp("edit");
 		} else if(arguments.size() == 2) {
@@ -245,6 +248,8 @@ public class ProductCLI {
 			editHelper(productAttributes);
 		} else if(arguments.size() < 14) {
 			System.out.println(">>Insufficient Arguments for command \"product edit\"");
+		} else if(arguments.size() > 14) {
+			System.out.println(">>Too many Arguments for command \"product edit\"");
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");
 			System.out.println(">> For every Edit operation the first argument must be product's ID");
@@ -367,11 +372,13 @@ public class ProductCLI {
 		String prompt = scanner.nextLine();
 		if(prompt.equals("y")) {
 			if(productService.delete(parameter) == 1) {
-				System.out.println("Product Deletion Successfully!!!");
-			} else if(productService.delete(parameter) == - 1) {
+				System.out.println("Product Deleted Successfully!!!");
+			} else if(productService.delete(parameter) == 0) {
 				System.out.println(">> Product Deletion Failed!!!");
 				System.out.println(">> Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
 				System.out.println(">> Try \"product delete help\" for proper syntax");
+			} else {
+				System.out.println(">> Delete Parameter cant be null!!");
 			}
 		} else if(prompt.equals("n")) {
 			System.out.println(">> Delete operation cancelled");

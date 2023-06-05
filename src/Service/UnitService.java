@@ -2,6 +2,7 @@ package Service;
 
 import DAO.ApplicationErrorException;
 import DAO.UniqueConstraintException;
+import DAO.UnitCodeViolationException;
 import Entity.Unit;
 
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public interface UnitService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	Unit create(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
+	Unit create(Unit unit) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the Unit entity and serves the List function.
@@ -38,7 +39,7 @@ public interface UnitService {
 	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL
 	 *                                   table.
 	 */
-	Unit edit(Unit unit) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException;
+	Unit edit(Unit unit) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the Unit entity and serves the Delete function.
@@ -47,5 +48,5 @@ public interface UnitService {
 	 * @return resultCode - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer delete(String code) throws ApplicationErrorException;
+	Integer delete(String code) throws Exception;
 }

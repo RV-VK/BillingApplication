@@ -3,33 +3,33 @@ package Service;
 import DAO.*;
 import Entity.User;
 
-import java.sql.SQLException;
 import java.util.*;
 
 public class UserServiceImplementation implements UserService {
 
-	private final UserDAO userDAO = new UserDAOImplementation();
-	private final String NAME_REGEX = "^[a-zA-Z\\s]{1,30}$";
+	private final UserDAO userDAO = new UserDAO();
+	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
+	private final String LAST_NAME_REGEX = "^[a-zA-Z\\s]{0,30}$";
 	private final String PASSWORD_REGEX = "^[a-zA-Z0-9]{8,30}$";
 	private final List<String> userTypeList = Arrays.asList("Sales", "Purchase", "Admin");
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";
 
 	@Override
-	public User create(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public User create(User user) throws Exception {
 		validate(user);
 		return userDAO.create(user);
 	}
 
 	@Override
-	public Integer count() throws ApplicationErrorException {
-		return userDAO.count();
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
+			return userDAO.count(attribute, searchText);
 	}
 
 	@Override
 	public List<User> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List<User> userList;
 		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 && listattributes.get("Searchtext") != null) {
-			userList = userDAO.list(listattributes.get("Searchtext"));
+			userList = userDAO.searchList(listattributes.get("Searchtext"));
 		} else {
 			int pageLength = Integer.parseInt(listattributes.get("Pagelength"));
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
@@ -40,14 +40,17 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public User edit(User user) throws SQLException, ApplicationErrorException, UniqueConstraintException, InvalidTemplateException {
+	public User edit(User user) throws Exception {
 		validate(user);
 		return userDAO.edit(user);
 	}
 
 	@Override
 	public Integer delete(String username) throws ApplicationErrorException {
-		return userDAO.delete(username);
+		if(username != null)
+			return userDAO.delete(username);
+		else
+			return - 1;
 	}
 
 	/**
@@ -56,11 +59,13 @@ public class UserServiceImplementation implements UserService {
 	 * @param user user to be validated.
 	 */
 	private void validate(User user) throws InvalidTemplateException {
+		if(user == null)
+			throw new NullPointerException(">> User Cannot be Null!!");
 		if(user.getUserName() != null && ! user.getUserName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid UserName!!");
 		if(user.getFirstName() != null && ! user.getFirstName().matches(NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid FirstName!!");
-		if(user.getLastName() != null && ! user.getLastName().matches(NAME_REGEX))
+		if(user.getLastName() != null && ! user.getLastName().matches(LAST_NAME_REGEX))
 			throw new InvalidTemplateException(">> Invalid LastName!!");
 		if(user.getPassWord() != null && ! user.getPassWord().matches(PASSWORD_REGEX))
 			throw new InvalidTemplateException(">> Invalid Password!!");

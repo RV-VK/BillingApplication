@@ -2,7 +2,9 @@ package CLIController;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
+import DAO.UnitCodeViolationException;
 import Entity.User;
+import Service.InvalidTemplateException;
 import Service.LoginService;
 import Service.LoginServiceImplementation;
 
@@ -17,12 +19,16 @@ public class LoginCLI {
 	private static String firstName;
 	private static String lastName;
 	private static Long phoneNumber;
+	private AdminMain adminMain = new AdminMain();
+	private PurchaseMain purchaseMain = new PurchaseMain();
+	private SalesMain salesMain = new SalesMain();
 
 	/**
 	 * Login View Main
 	 **/
-	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException {
-		if(loginService.checkIfInitialSetup()) {
+	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, InvalidTemplateException {
+		LoginCLI loginCLI = new LoginCLI();
+		if(! loginService.checkIfInitialSetup()) {
 
 			System.out.println("""
 					\t\t\t\t\t\t*********************************************************
@@ -76,11 +82,11 @@ public class LoginCLI {
 				if(createdUser != null) {
 					System.out.println(">> Admin Created Successfully!!");
 					System.out.println(">> You need to Login to Continue to the Billing Software Setup");
-					Login();
+					loginCLI.Login();
 				}
 			} while(true);
 		} else {
-			Login();
+			loginCLI.Login();
 		}
 	}
 
@@ -90,29 +96,29 @@ public class LoginCLI {
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	private static void Login() throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException, InvalidTemplateException {
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");
 			userName = scanner.nextLine();
 			System.out.print(">> Enter the Password: ");
 			passWord = scanner.nextLine();
-			String userType;
+			User user;
 			try {
-				userType = loginService.login(userName, passWord);
+				user = loginService.login(userName, passWord);
 			} catch(Exception e) {
 				System.out.println(e.getMessage());
 				return;
 			}
-			if(userType != null) {
+			if(user != null) {
 				System.out.print("\n\n\n\t\t\t\t\t____________WELCOME " + userName + " TO THE BILLING SOFTWARE_____________________");
 				//Split User control Here
-				if(userType.equalsIgnoreCase("Admin")) {
-					AdminMain.AdminView();
-				} else if(userType.equalsIgnoreCase("Sales")) {
-					SalesMain.SalesView();
-				} else if(userType.equalsIgnoreCase("Purchase")) {
-					PurchaseMain.PurchaseView();
+				if(user.getUserType().equalsIgnoreCase("Admin")) {
+					adminMain.AdminView(userName);
+				} else if(user.getUserType().equalsIgnoreCase("Sales")) {
+					salesMain.SalesView();
+				} else if(user.getUserType().equalsIgnoreCase("Purchase")) {
+					purchaseMain.PurchaseView();
 				}
 			} else {
 				System.out.println(">> Login credentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.");

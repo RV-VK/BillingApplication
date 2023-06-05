@@ -4,14 +4,19 @@ import DAO.ApplicationErrorException;
 import Entity.Product;
 import Entity.Sales;
 import Entity.SalesItem;
+import Service.InvalidTemplateException;
 import Service.SalesService;
 import Service.SalesServiceImplementation;
 
 import java.util.*;
 
 public class SalesCLI {
-	private String salesDate;
 	private final List<SalesItem> salesItemList = new ArrayList<>();
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
+	private final List<String> saleAttributes = Arrays.asList("id", "date");
+	private final SalesService salesService = new SalesServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
+	private String salesDate;
 	private double grandTotal;
 	private String code;
 	private float quantity;
@@ -20,10 +25,6 @@ public class SalesCLI {
 	private String attribute;
 	private String searchText;
 	private Sales createdSale;
-	private final HashMap<String, String> listAttributesMap = new HashMap<>();
-	private final List<String> saleAttributes = Arrays.asList("id", "date");
-	private final SalesService salesService = new SalesServiceImplementation();
-	private final Scanner scanner = new Scanner(System.in);
 	private List<Sales> salesList;
 
 
@@ -32,7 +33,7 @@ public class SalesCLI {
 	 *
 	 * @param command Command String.
 	 */
-	public void Create(String command) {
+	public void create(String command) {
 		String productcodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		String[] commandEntities = command.split(",\\s*(?=\\[)");
 		if(commandEntities.length < 1) {
@@ -41,6 +42,7 @@ public class SalesCLI {
 		} else {
 			String[] commandArguments = commandEntities[0].split("\\s+");
 			salesDate = commandArguments[1].trim().replace(",", "");
+			salesItemList.clear();
 			for(int i = 1 ; i < commandEntities.length ; i++) {
 				String item = commandEntities[i].replaceAll("[\\[\\]]", "");
 				String[] itemVariables = item.split(",");
@@ -75,11 +77,7 @@ public class SalesCLI {
 				System.out.println(e.getMessage());
 				return;
 			}
-			if(createdSale == null) {
-				System.out.println(">> Out of Stock Product Entered Please check the entered products!!");
-			} else if(createdSale.getDate() != null) {
-				printSalesBill();
-			}
+			printSalesBill();
 		}
 	}
 
@@ -89,7 +87,8 @@ public class SalesCLI {
 	 * @param arguments Command arguments.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void count(List<String> arguments) throws ApplicationErrorException {
+	public void count(List<String> arguments) throws ApplicationErrorException, InvalidTemplateException {
+		int salesCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
 				FeedBackPrinter.printSalesHelp("count");
@@ -100,17 +99,22 @@ public class SalesCLI {
 			return;
 		}
 		if(arguments.size() == 2) {
-			int salesCount = salesService.count(null);
+			salesCount = salesService.count("id", null);
 			System.out.println(">> SalesCount :" + salesCount);
 			return;
 		}
 		if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
-				int salesCount = salesService.count(parameter);
+				try {
+					salesCount = salesService.count("date", parameter);
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					return;
+				}
 				if(salesCount > 0) System.out.println(">> SalesCount " + salesCount);
 				else {
-					System.out.println(">> Given Date or Category not found!!!");
+					System.out.println(">> Given Date not found!!!");
 					System.out.println(">> Please Try with an existing searchtext");
 				}
 			} else {
@@ -164,7 +168,7 @@ public class SalesCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(saleAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
+					setMap(listAttributesMap, "20", "1", attribute, searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("sales", saleAttributes);
@@ -180,7 +184,7 @@ public class SalesCLI {
 				if(saleAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -201,7 +205,7 @@ public class SalesCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("sales");
@@ -226,8 +230,8 @@ public class SalesCLI {
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
 			salesList = salesService.list(listAttributesMap);
-			if(salesList == null) {
-				if(! listAttributesMap.get("Searchtext").equals("id")) {
+			if(salesList.size() == 0) {
+				if(listAttributesMap.get("Searchtext") != null) {
 					System.out.println(">> Given SearchText does not exist!!!");
 				}
 				return;
@@ -267,10 +271,12 @@ public class SalesCLI {
 					int resultCode = salesService.delete(arguments.get(2));
 					if(resultCode == 1) {
 						System.out.println(">> Sales Entry Deleted Successfully!!!");
-					} else if(resultCode == - 1) {
+					} else if(resultCode == 0) {
 						System.out.println(">> Sales Entry Deletion Failed!!");
 						System.out.println(">> Please check the id you have entered!!!");
 						System.out.println(">> Try \"sales delete help\" for proper syntax");
+					} else {
+						System.out.println(">> Id cannot be null!!");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled!!!");
@@ -309,7 +315,7 @@ public class SalesCLI {
 		System.out.println("SNO\t\tPRODUCT NAME\t\t\tQTY\t\tPRICE\t\tTOTAL");
 		System.out.println("----------------------------------------------------------------------------------");
 		for(int i = 0 ; i < createdSale.getSalesItemList().size() ; i++) {
-			System.out.printf("%d\t\t%-20s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
+			System.out.printf("%d\t\t%-15s\t\t\t%.1f\t\t%.2f\t\t%.2f%n", i + 1, createdSale.getSalesItemList().get(i).getProduct().getName(), createdSale.getSalesItemList().get(i).getQuantity(), createdSale.getSalesItemList().get(i).getUnitSalesPrice(), (createdSale.getSalesItemList().get(i).getQuantity() * createdSale.getSalesItemList().get(i).getUnitSalesPrice()));
 		}
 		System.out.println("----------------------------------------------------------------------------------");
 		System.out.printf("GRAND TOTAL\t\t\t\t\t\t\t\t\t\t\t%.2f%n", createdSale.getGrandTotal());

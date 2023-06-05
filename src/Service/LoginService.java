@@ -13,7 +13,7 @@ public interface LoginService {
 	 * @return status - Boolean.
 	 * @throws SQLException Exception thrown based on SQL syntax.
 	 */
-	Boolean checkIfInitialSetup() throws SQLException;
+	Boolean checkIfInitialSetup() throws SQLException, ApplicationErrorException;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the create user function.
@@ -25,7 +25,7 @@ public interface LoginService {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	User createUser(User user) throws UniqueConstraintException, SQLException, ApplicationErrorException, InvalidTemplateException;
+	User createUser(User user) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the User entity and serves the Login function.
@@ -36,5 +36,5 @@ public interface LoginService {
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	String login(String userName, String passWord) throws SQLException, ApplicationErrorException;
+	User login(String userName, String passWord) throws SQLException, ApplicationErrorException;
 }

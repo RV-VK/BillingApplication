@@ -2,8 +2,11 @@ package Service;
 
 import DAO.ApplicationErrorException;
 import DAO.PageCountOutOfBoundsException;
+import DAO.UniqueConstraintException;
+import DAO.UnitCodeViolationException;
 import Entity.Purchase;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +21,7 @@ public interface PurchaseService {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 * @throws SQLException              Exception thrown based on SQL syntax.
 	 */
-	Purchase create(Purchase purchase) throws ApplicationErrorException, SQLException, UnDividableEntityException;
+	Purchase create(Purchase purchase) throws Exception;
 
 	/**
 	 * This method invokes the DAO of the Purchase entity and serves the Count function.
@@ -27,7 +30,7 @@ public interface PurchaseService {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer count(String parameter) throws ApplicationErrorException;
+	Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException;
 
 
 	/**
@@ -37,7 +40,7 @@ public interface PurchaseService {
 	 * @return List - Purchase.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	List<Purchase> list(HashMap<String, String> listattributes) throws PageCountOutOfBoundsException, ApplicationErrorException;
+	List<Purchase> list(HashMap<String, String> listattributes) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Purchase entity and serves the Delete function.

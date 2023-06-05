@@ -99,7 +99,7 @@ public class UserCLI {
 			System.out.println(">> Invalid Command!! Try \"help\"");
 			return;
 		}
-		int userCount = userService.count();
+		int userCount = userService.count("id", null);
 		System.out.println(">> User Count " + userCount);
 	}
 
@@ -145,7 +145,7 @@ public class UserCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(userAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
+					setMap(listAttributesMap, "20", "1", attribute, searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("user", userAttributes);
@@ -161,7 +161,7 @@ public class UserCLI {
 				if(userAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -182,7 +182,7 @@ public class UserCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("user");
@@ -208,8 +208,10 @@ public class UserCLI {
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
 			userList = userService.list(listAttributesMap);
-			if(userList == null) {
-				System.out.println(">>Given SearchText does not exist!!!");
+			if(userList.size() == 0) {
+				if(listAttributesMap.get("Searchtext") != null) {
+					System.out.println(">> Given SearchText does not exist!!!");
+				}
 				return;
 			}
 			for(User user: userList) {
@@ -326,12 +328,15 @@ public class UserCLI {
 				System.out.println(">> Are you sure want to delete the User y/n ? : ");
 				String prompt = scanner.nextLine();
 				if(prompt.equals("y")) {
-					if(userService.delete(arguments.get(2)) == 1) {
+					int statusCode = userService.delete(arguments.get(2));
+					if(statusCode == 1) {
 						System.out.println("User Deleted Successfull!!!");
-					} else if(userService.delete(arguments.get(2)) == - 1) {
+					} else if(statusCode == 0) {
 						System.out.println(">> User Deletion Failed!!!");
 						System.out.println(">> Please check the username you have entered!!!");
 						FeedBackPrinter.printHelpMessage("user", "delete");
+					} else {
+						System.out.println(">> Username Cannot be null!!");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled");

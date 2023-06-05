@@ -5,12 +5,17 @@ import DAO.PageCountOutOfBoundsException;
 import Entity.Product;
 import Entity.Purchase;
 import Entity.PurchaseItem;
+import Service.InvalidTemplateException;
 import Service.PurchaseService;
 import Service.PurchaseServiceImplementation;
 
 import java.util.*;
 
 public class PurchaseCLI {
+	private final List<String> purchaseAttributes = Arrays.asList("id", "date", "invoice");
+	private final PurchaseService purchaseService = new PurchaseServiceImplementation();
+	private final Scanner scanner = new Scanner(System.in);
+	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 	private String purchaseDate;
 	private int invoice;
 	private double grandTotal;
@@ -23,19 +28,14 @@ public class PurchaseCLI {
 	private String attribute;
 	private String searchText;
 	private Purchase createdPurchase;
-	private final List<String> purchaseAttributes = Arrays.asList("id", "date", "invoice");
-	private final PurchaseService purchaseService = new PurchaseServiceImplementation();
 	private List<Purchase> purchaseList;
-	private final Scanner scanner = new Scanner(System.in);
-	private final HashMap<String, String> listAttributesMap = new HashMap<>();
-
 
 	/**
 	 * This method handles the presentation Layer of the Create function.
 	 *
 	 * @param command Command String.
 	 */
-	public void Create(String command) {
+	public void create(String command) {
 		String productCodeRegex = "^[a-zA-Z0-9]{2,6}$";
 		String[] commandEntities = command.split(",\\s*(?=\\[)");
 		if(commandEntities.length < 1) {
@@ -51,6 +51,7 @@ public class PurchaseCLI {
 				System.out.println(">> Try \"purchase help\" for proper syntax!!");
 				return;
 			}
+			purchaseItemList.clear();
 			for(int i = 1 ; i < commandEntities.length ; i++) {
 				String item = commandEntities[i].replaceAll("[\\[\\]]", "");
 				String[] itemVariables = item.split(",");
@@ -97,7 +98,7 @@ public class PurchaseCLI {
 	 * @param arguments Command arguments
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void Count(List<String> arguments) throws ApplicationErrorException {
+	public void count(List<String> arguments) throws ApplicationErrorException, InvalidTemplateException {
 		int purchaseCount;
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
@@ -109,17 +110,22 @@ public class PurchaseCLI {
 			return;
 		}
 		if(arguments.size() == 2) {
-			purchaseCount = purchaseService.count(null);
+			purchaseCount = purchaseService.count("id", null);
 			System.out.println(">> PurchaseCount " + purchaseCount);
 			return;
 		}
 		if(arguments.size() == 4) {
 			if(arguments.get(2).equals("-d")) {
 				String parameter = arguments.get(3);
-				purchaseCount = purchaseService.count(parameter);
+				try {
+					purchaseCount = purchaseService.count("date", parameter);
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					return;
+				}
 				if(purchaseCount > 0) System.out.println(">> PurchaseCount " + purchaseCount);
 				else {
-					System.out.println(">> Given Date or Category not found!!!");
+					System.out.println(">> Given Date not found!!!");
 					System.out.println(">>Please Try with an existing searchtext");
 				}
 			} else {
@@ -139,7 +145,7 @@ public class PurchaseCLI {
 	 * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in Purchase table.
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
-	public void List(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
+	public void list(List<String> arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
 		setMap(listAttributesMap, null, null, null, null);
 		if(arguments.size() == 3) if(arguments.get(2).equals("help")) {
 			FeedBackPrinter.printPurchaseHelp("list");
@@ -172,7 +178,7 @@ public class PurchaseCLI {
 				attribute = attribute.replace(":", "");
 				searchText = arguments.get(4);
 				if(purchaseAttributes.contains(attribute)) {
-					setMap(listAttributesMap, "20", "1", attribute, "'" + searchText + "'");
+					setMap(listAttributesMap, "20", "1", attribute, searchText);
 					listHelper(listAttributesMap);
 				} else {
 					FeedBackPrinter.printNonSearchableAttribute("purchase", purchaseAttributes);
@@ -188,7 +194,7 @@ public class PurchaseCLI {
 				if(purchaseAttributes.contains(attribute)) {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), "1", attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						System.out.println(">> Invalid Command Extension format !!!");
@@ -209,7 +215,7 @@ public class PurchaseCLI {
 					if(arguments.get(5).equals("-p")) {
 						if((pageLength = validateNumber(arguments.get(6), "PageLength")) < 0) return;
 						if((pageNumber = validateNumber(arguments.get(7), "PageNumber")) < 0) return;
-						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, "'" + searchText + "'");
+						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);
 						listHelper(listAttributesMap);
 					} else {
 						FeedBackPrinter.printInvalidExtension("purchase");
@@ -234,8 +240,8 @@ public class PurchaseCLI {
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
 			purchaseList = purchaseService.list(listAttributesMap);
-			if(purchaseList == null) {
-				if(! listAttributesMap.get("Searchtext").equals("id")) {
+			if(purchaseList.size() == 0) {
+				if(listAttributesMap.get("Searchtext") != null) {
 					System.out.println(">>Given SearchText does not exist!!!");
 				}
 				return;
@@ -261,7 +267,7 @@ public class PurchaseCLI {
 	 * @param arguments Command arguments.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	public void Delete(List<String> arguments) throws ApplicationErrorException {
+	public void delete(List<String> arguments) throws ApplicationErrorException {
 		PurchaseService purchaseDeleteService = new PurchaseServiceImplementation();
 		String numberRegex = "^[0-9]{1,10}$";
 		if(arguments.size() == 3) {
@@ -274,10 +280,12 @@ public class PurchaseCLI {
 					int resultCode = purchaseDeleteService.delete(arguments.get(2));
 					if(resultCode == 1) {
 						System.out.println(">> Purchase Deleted Successfully!!");
-					} else if(resultCode == - 1) {
+					} else if(resultCode == 0) {
 						System.out.println(">> Purchase Deletion Failed!!!");
 						System.out.println(">> Please check the invoice you have entered!!!");
 						System.out.println(">> Try \"purchase delete help\" for proper syntax");
+					} else {
+						System.out.println(">> Invoice cannot be Null!!");
 					}
 				} else if(prompt.equals("n")) {
 					System.out.println(">> Delete operation cancelled!!!");
@@ -309,8 +317,7 @@ public class PurchaseCLI {
 		listAttributesMap.put("Searchtext", SearchText);
 	}
 
-	private void printPurchaseBill()
-	{
+	private void printPurchaseBill() {
 		System.out.println("**********************************************************************************");
 		System.out.println("\t\tPURCHASE BILL " + createdPurchase.getId() + "\t\tINVOICE NO " + createdPurchase.getInvoice());
 		System.out.println("**********************************************************************************");

@@ -21,7 +21,7 @@ New
 	> Re-enter the password:
 
 	>> Admin created successfully !
-	>> You need to login to continute to Billing software setup
+	>> You need to login to continue to Billing software setup
 
 2
 	> Login
@@ -33,7 +33,7 @@ New
 
 
 	Failure Scenario
-	>>  Login creadentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.
+	>>  Login credentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.
 
 	Scope:
 		No forgot password feature
@@ -135,7 +135,7 @@ Failure Scenario
 
 > store edit help
 
->> Edit store uing the following template	
+>> Edit store using the following template
 
 name, phone number, address, gst number
  
@@ -157,12 +157,12 @@ Success Scenario
 Failure Scenario
 
 >> Unable to edit store !
->> Invaid phone number !
+>> Invalid phone number !
 
 
 6 
 
-> store deleteproduct create hp11, hamam soap, pcs, soap, 25, 0
+> store delete
 > Are you sure want to delete the store. This will delete all you product/purchase/sales data  y/n ? : y
 > Enter admin password to delete the store:
 
@@ -384,7 +384,7 @@ id: <id - 6>, name: <name-edited>, code: <code>,  description: <description>, is
 												or
 												
 > user edit :enter
-> id: <id - 6>, name: <name-edited>, code: <usernamcodee>,  description: <description>, isdividable: <isdividable>
+> id: <id - 6>, name: <name-edited>, code: <code-edited>,  description: <description>, isdividable: <isdividable>
 
 													or
 > id: <id - 6>, name: <name-edited>, code: <code-edited>	
@@ -479,8 +479,8 @@ Failure Scenario
 Success Scenario:
 
 	>> page 2 (6 - 7)
-	>> id: <id - 6>,  productname: <productname>, type: <type>, unitcode: <unitcode>, quantity: <quantity>, costprice: <costprice>, sellingprice: <sellingprice>
-	>> id: <id - 7>,  productname: <productname>, type: <type>, unitcode: <unitcode>, quantity: <quantity>, costprice: <costprice>, sellingprice: <sellingprice>
+	>> id: <id - 6>,  productname: <productname>, type: <type>, unitcode: <unitcode>, quantity: <quantity>, price: <costprice>
+	>> id: <id - 7>,  productname: <productname>, type: <type>, unitcode: <unitcode>, quantity: <quantity>, price: <costprice>
 
 
 Failure Scenario:

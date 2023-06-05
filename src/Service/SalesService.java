@@ -18,7 +18,7 @@ public interface SalesService {
 	 * @throws SQLException               Exception thrown based on SQL syntax.
 	 * @throws UnDividableEntityException Exception thrown when a Non-dividable unit in a Sales transaction is asked for a decimal quantity.
 	 */
-	Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException;
+	Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Sales entity and serves the Count function.
@@ -27,7 +27,7 @@ public interface SalesService {
 	 * @return Count - Integer.
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	Integer count(String parameter) throws ApplicationErrorException;
+	Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException;
 
 	/**
 	 * This method invokes the DAO of the Sales entity and serves the List function.
@@ -37,7 +37,7 @@ public interface SalesService {
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
 	 */
-	List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException;
+	List<Sales> list(HashMap<String, String> listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException;
 
 
 	/**
