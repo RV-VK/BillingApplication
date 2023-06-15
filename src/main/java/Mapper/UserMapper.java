@@ -79,6 +79,8 @@ public interface UserMapper {
 	Integer delete(String parameter) throws ApplicationErrorException;
 
 
+	@Select("SELECT * FROM users WHERE id=#{id}")
+	User findById(int id) throws ApplicationErrorException;
 	/**
 	 * This Interface method maps the Login Authentication query with Username and Password attributes.
 	 *
@@ -87,6 +89,6 @@ public interface UserMapper {
 	 * @return String - Usertype or null
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
-	@Select("SELECT password,usertype FROM users WHERE username=#{username}")
+	@Select("SELECT * FROM users WHERE username=#{username}")
 	User login(@Param("username") String userName, String passWord) throws SQLException, ApplicationErrorException;
 }

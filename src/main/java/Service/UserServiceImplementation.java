@@ -65,18 +65,18 @@ public class UserServiceImplementation implements UserService {
 	 */
 	private void validate(User user) throws InvalidTemplateException {
 		if(user == null)
-			throw new NullPointerException(">> User Cannot be Null!!");
+			throw new NullPointerException("User Cannot be Null!!");
 		if(user.getUserName() != null && ! user.getUserName().matches(NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid UserName!!");
+			throw new InvalidTemplateException("Invalid UserName!!");
 		if(user.getFirstName() != null && ! user.getFirstName().matches(NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid FirstName!!");
+			throw new InvalidTemplateException("Invalid FirstName!!");
 		if(user.getLastName() != null && ! user.getLastName().matches(LAST_NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid LastName!!");
+			throw new InvalidTemplateException("Invalid LastName!!");
 		if(user.getPassWord() != null && ! user.getPassWord().matches(PASSWORD_REGEX))
-			throw new InvalidTemplateException(">> Invalid Password!!");
+			throw new InvalidTemplateException("Invalid Password!!");
 		if(user.getPhoneNumber() != 0 && ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
-			throw new InvalidTemplateException(">> Invalid Phone-number!!");
+			throw new InvalidTemplateException("Invalid Phone-number!!");
 		if(user.getUserType() != null && ! userTypeList.contains(user.getUserType()))
-			throw new InvalidTemplateException(">> Invalid Usertype!!");
+			throw new InvalidTemplateException("Invalid Usertype!!");
 	}
 }

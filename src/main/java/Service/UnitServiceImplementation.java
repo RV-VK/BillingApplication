@@ -48,10 +48,10 @@ public class UnitServiceImplementation implements UnitService {
 	 */
 	private void validate(Unit unit) throws InvalidTemplateException {
 		if(unit == null)
-			throw new NullPointerException(">> Unit Cannot be Null!!");
+			throw new NullPointerException("Unit Cannot be Null!!");
 		if(unit.getName() != null && ! unit.getName().matches(NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid Unit Name!!");
+			throw new InvalidTemplateException("Invalid Unit Name!!");
 		if(unit.getCode() != null && ! unit.getCode().matches(CODE_REGEX))
-			throw new InvalidTemplateException(">> Invalid UnitCode!!");
+			throw new InvalidTemplateException("Invalid UnitCode!!");
 	}
 }

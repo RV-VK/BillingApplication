@@ -27,14 +27,14 @@ public class SalesServiceImplementation implements SalesService {
 				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());
 				if(product != null) salesItem.setProduct(product);
 				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity())
-					throw new ApplicationErrorException(">> Product '" + salesItem.getProduct().getCode() + "' is out of Stock");
+					throw new ApplicationErrorException("Product '" + salesItem.getProduct().getCode() + "' is out of Stock");
 				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
 				grandtotal += salesItem.getProduct().getPrice() * salesItem.getQuantity();
 			} catch(NullPointerException e) {
-				throw new ApplicationErrorException(">> Product code '" + salesItem.getProduct().getCode() + "' does not exist!");
+				throw new ApplicationErrorException("Product code '" + salesItem.getProduct().getCode() + "' does not exist!");
 			}
 			if((! isDividable && salesItem.getQuantity() % 1 != 0)) {
-				throw new UnDividableEntityException(">> Product code '" + salesItem.getProduct().getCode() + "' is not a dividable product");
+				throw new UnDividableEntityException("Product code '" + salesItem.getProduct().getCode() + "' is not a dividable product");
 			}
 		}
 		sales.setGrandTotal(grandtotal);
@@ -46,7 +46,7 @@ public class SalesServiceImplementation implements SalesService {
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException {
 		if(searchText != null) {
 			if(! searchText.matches(dateRegex)) {
-				throw new InvalidTemplateException(">> Invalid Date format!! Must be in YYYY-MM-DD format!");
+				throw new InvalidTemplateException("Invalid Date format!! Must be in YYYY-MM-DD format!");
 			}
 		}
 		return salesDAO.count(attribute, searchText);
@@ -64,7 +64,7 @@ public class SalesServiceImplementation implements SalesService {
 			int offset = (pageLength * pageNumber) - pageLength;
 			if(listAttributes.get("Attribute").equals("date")) {
 				if(! (listAttributes.get("Searchtext").replace("'", "").matches(dateRegex)))
-					throw new InvalidTemplateException(">> Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
+					throw new InvalidTemplateException("Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
 			}
 			salesList = salesDAO.list(listAttributes.get("Attribute"), listAttributes.get("Searchtext"), pageLength, offset);
 		}
@@ -81,8 +81,8 @@ public class SalesServiceImplementation implements SalesService {
 
 	private void validate(Sales sales) throws InvalidTemplateException {
 		if(sales == null)
-			throw new NullPointerException(">> Sales cannot be Null");
+			throw new NullPointerException("Sales cannot be Null");
 		if(sales.getDate() != null && ! sales.getDate().matches(dateRegex))
-			throw new InvalidTemplateException(">> Date Format is Invalid!! Must be YYYY-MM-DD!!");
+			throw new InvalidTemplateException("Date Format is Invalid!! Must be YYYY-MM-DD!!");
 	}
 }

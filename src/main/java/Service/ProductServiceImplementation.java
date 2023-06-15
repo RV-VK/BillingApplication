@@ -57,14 +57,14 @@ public class ProductServiceImplementation implements ProductService {
 	 */
 	private void validate(Product product) throws InvalidTemplateException {
 		if(product == null)
-			throw new NullPointerException(">> Product cannot be Null!!");
+			throw new NullPointerException("Product cannot be Null!!");
 		if(product.getCode() != null && ! product.getCode().matches(CODE_REGEX))
-			throw new InvalidTemplateException(">> Invalid Product Code!!");
+			throw new InvalidTemplateException("Invalid Product Code!!");
 		if(product.getName() != null && ! product.getName().matches(NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid Product Name!");
+			throw new InvalidTemplateException("Invalid Product Name!");
 		if(product.getunitcode() != null && ! product.getunitcode().matches(UNIT_CODE_REGEX))
-			throw new InvalidTemplateException(">> Invalid Unit Code!!");
+			throw new InvalidTemplateException("Invalid Unit Code!!");
 		if(product.getType() != null && ! product.getType().matches(NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid Product Type!!");
+			throw new InvalidTemplateException("Invalid Product Type!!");
 	}
 }

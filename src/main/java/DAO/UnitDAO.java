@@ -44,9 +44,9 @@ public class UnitDAO {
 	 */
 	private Exception handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException, UnitCodeViolationException {
 		if(e.getSQLState().equals("23505"))
-			throw new UniqueConstraintException(">> Unit Code must be unique!!! the Unit code you have entered Already exists");
+			throw new UniqueConstraintException("Unit Code must be unique!!! the Unit code you have entered Already exists");
 		else if(e.getSQLState().equals("23503"))
-			throw new UnitCodeViolationException(">> Unit code in use!! Cannot edit or delete!!");
+			throw new UnitCodeViolationException("Unit code in use!! Cannot edit or delete!!");
 		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 	}
 

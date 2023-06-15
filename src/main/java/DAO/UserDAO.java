@@ -44,7 +44,7 @@ public class UserDAO {
 	 */
 	private Exception handleException(SQLException exception) throws UniqueConstraintException, ApplicationErrorException {
 		if(exception.getSQLState().equals("23505")) {
-			throw new UniqueConstraintException(">> UserName must be unique!! The username you have entered already exists!!");
+			throw new UniqueConstraintException("UserName must be unique!! The username you have entered already exists!!");
 		}
 		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
 	}
@@ -59,9 +59,15 @@ public class UserDAO {
 	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
+			Integer count;
 			sqlSession = sqlSessionFactory.openSession();
 			userMapper = sqlSession.getMapper(UserMapper.class);
-			Integer count = userMapper.count(attribute, searchText);
+			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Double numericParameter = Double.parseDouble((String)searchText);
+				count = userMapper.count(attribute, numericParameter);
+			} else {
+				count = userMapper.count(attribute, searchText);
+			}
 			sqlSession.close();
 			return count;
 		} catch(Exception e) {
@@ -136,7 +142,7 @@ public class UserDAO {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
+			throw new PageCountOutOfBoundsException("Requested Page doesnt Exist!!\nExisting Pagecount with given pagination " + pageCount);
 		}
 	}
 
@@ -177,6 +183,19 @@ public class UserDAO {
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
+	}
+
+
+	public User findById(int id) throws ApplicationErrorException {
+		try {
+			sqlSession = sqlSessionFactory.openSession();
+			userMapper = sqlSession.getMapper(UserMapper.class);
+			User foundUser = userMapper.findById(id);
+			sqlSession.close();
+			return foundUser;
+		}catch(Exception e) {
+			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
 

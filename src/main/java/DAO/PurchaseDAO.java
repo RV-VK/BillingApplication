@@ -61,7 +61,7 @@ public class PurchaseDAO {
 	 */
 	private Exception handleException(SQLException sqlException) throws UniqueConstraintException, ApplicationErrorException {
 		if(sqlException.getSQLState().equals("23505"))
-			throw new UniqueConstraintException(">> Invoice Id already Exists!!");
+			throw new UniqueConstraintException("Invoice Id already Exists!!");
 		throw new ApplicationErrorException(sqlException.getMessage());
 	}
 
@@ -143,7 +143,7 @@ public class PurchaseDAO {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
+			throw new PageCountOutOfBoundsException("Requested Page doesnt Exist!!\nExisting Pagecount with given pagination " + pageCount);
 		}
 	}
 

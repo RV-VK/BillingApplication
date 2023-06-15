@@ -8,7 +8,7 @@ import Service.InvalidTemplateException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class PurchaseMain {
+public class 	PurchaseMain {
 	private List<String> commandEntityList = Arrays.asList("product", "user", "store", "unit", "sales");
 	private LoginCLI loginCLI;
 

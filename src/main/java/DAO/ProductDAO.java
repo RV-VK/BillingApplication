@@ -45,12 +45,12 @@ public class ProductDAO {
 	 */
 	private Exception handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, ApplicationErrorException {
 		if(e.getSQLState().equals("23503")) {
-			throw new UnitCodeViolationException(">> The unit Code you have entered  does not Exists!!");
+			throw new UnitCodeViolationException("The unit Code you have entered  does not Exists!");
 		} else if(e.getSQLState().equals("23505")) {
 			if(e.getMessage().contains("product_name"))
-				throw new UniqueConstraintException(">> Name must be unique!!!\n>> The Name you have entered already exists!!!");
+				throw new UniqueConstraintException("Name must be unique!\nThe Name you have entered already exists");
 			else
-				throw new UniqueConstraintException(">> Code must be unique!!!\n>> The code you have entered already exists!!!");
+				throw new UniqueConstraintException("Code must be unique! \nThe code you have entered already exists");
 		} else {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -66,9 +66,15 @@ public class ProductDAO {
 	 */
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
+			Integer count;
 			sqlSession = sqlSessionFactory.openSession();
 			productMapper = sqlSession.getMapper(ProductMapper.class);
-			Integer count = productMapper.count(attribute, searchText);
+			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
+				Double numericParameter = Double.parseDouble((String)searchText);
+				count = productMapper.count(attribute, numericParameter);
+			} else {
+				count = productMapper.count(attribute, searchText);
+			}
 			sqlSession.close();
 			return count;
 		} catch(Exception e) {
@@ -144,7 +150,7 @@ public class ProductDAO {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException(">> Requested Page doesnt Exist!!\n>> Existing Pagecount with given pagination " + pageCount);
+			throw new PageCountOutOfBoundsException("Requested Page doesnt Exist!!\nExisting Pagecount with given pagination " + pageCount);
 		}
 	}
 
@@ -202,6 +208,7 @@ public class ProductDAO {
 			sqlSession.close();
 			return foundProduct;
 		} catch(Exception e) {
+			System.out.println(e.getMessage());
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}

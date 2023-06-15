@@ -73,7 +73,7 @@ public interface ProductMapper {
 	 * @throws Exception This Exception is generalized and throws based on several conditions.
 	 *
 	 */
-	@Select("UPDATE product SET code = COALESCE(#{code}, code), name= COALESCE(#{name}, name), unitcode= COALESCE(#{unitcode}, unitcode), type = COALESCE(#{type}, type, price = COALESCE(NULLIF(#{price},0),price), stock = COALESCE(#{stock},stock) WHERE id=#{id} RETURNING *")
+	@Select("UPDATE product SET code = COALESCE(#{code}, code), name= COALESCE(#{name}, name), unitcode= COALESCE(#{unitcode}, unitcode), type = COALESCE(#{type}, type), price = COALESCE(NULLIF(#{price},0),price), stock = COALESCE(#{stock},stock) WHERE id=#{id} RETURNING *")
 	Product edit(Product product) throws Exception;
 
 

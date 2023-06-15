@@ -30,7 +30,7 @@ public class StoreServiceImplementation implements StoreService {
 		if(userName != null && adminPassword != null)
 			return storeDAO.delete(userName, adminPassword);
 		else
-			throw new NullPointerException(">> Username Or Password Cannot be Null!!");
+			throw new NullPointerException("Username Or Password Cannot be Null!!");
 	}
 
 	/**
@@ -40,12 +40,12 @@ public class StoreServiceImplementation implements StoreService {
 	 */
 	private void validate(Store store) throws InvalidTemplateException {
 		if(store == null)
-			throw new NullPointerException(">> Store cannot be Null!!");
+			throw new NullPointerException("Store cannot be Null!!");
 		if(store.getName() != null && ! store.getName().matches(NAME_REGEX))
-			throw new InvalidTemplateException(">> Invalid Store Name!!");
+			throw new InvalidTemplateException("Invalid Store Name!!");
 		if(store.getPhoneNumber() != 0 && ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
-			throw new InvalidTemplateException(">> Invalid Phone-number!!");
+			throw new InvalidTemplateException("Invalid Phone-number!!");
 		if(store.getGstCode() != null && ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))
-			throw new InvalidTemplateException(">> Invalid GstCode!!");
+			throw new InvalidTemplateException("Invalid GstCode!!");
 	}
 }

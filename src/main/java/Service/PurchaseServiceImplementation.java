@@ -30,10 +30,10 @@ public class PurchaseServiceImplementation implements PurchaseService {
 				if(product != null) purchaseItem.setProduct(product);
 				isDividable = unitDAO.findByCode(product.getunitcode()).getIsDividable();
 			} catch(NullPointerException e) {
-				throw new ApplicationErrorException(">> Product code '" + purchaseItem.getProduct().getCode() + "' does not exists!");
+				throw new ApplicationErrorException("Product code '" + purchaseItem.getProduct().getCode() + "' does not exists!");
 			}
 			if(! isDividable && purchaseItem.getQuantity() % 1 != 0) {
-				throw new UnDividableEntityException(">> Product code '" + purchaseItem.getProduct().getCode() + "' is not of dividable unit!");
+				throw new UnDividableEntityException("Product code '" + purchaseItem.getProduct().getCode() + "' is not of dividable unit!");
 			}
 		}
 		return purchaseDAO.create(purchase);
@@ -44,7 +44,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException {
 		if(searchText != null) {
 			if(!searchText.matches(dateRegex))
-				throw new InvalidTemplateException(">> Invalid Date format!! Must be in YYYY-MM-DD format!");
+				throw new InvalidTemplateException("Invalid Date format!! Must be in YYYY-MM-DD format!");
 		}
 		return purchaseDAO.count(attribute, searchText);
 	}
@@ -61,7 +61,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 			int offset = (pageLength * pageNumber) - pageLength;
 			if(listattributes.get("Attribute").equals("date"))
 				if(! (listattributes.get("Searchtext").replace("'", "").matches(dateRegex)))
-					throw new InvalidTemplateException(">> Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
+					throw new InvalidTemplateException("Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
 			purchaseList = purchaseDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
 		}
 		return purchaseList;
@@ -78,8 +78,8 @@ public class PurchaseServiceImplementation implements PurchaseService {
 
 	private void validate(Purchase purchase) throws InvalidTemplateException {
 		if(purchase == null)
-			throw new NullPointerException(">> Purchase cannot be Null");
+			throw new NullPointerException("Purchase cannot be Null");
 		if(purchase.getDate() != null && ! purchase.getDate().matches(dateRegex))
-			throw new InvalidTemplateException(">> Date Format is Invalid!! Must be YYYY-MM-DD!!");
+			throw new InvalidTemplateException("Date Format is Invalid!! Must be YYYY-MM-DD!!");
 	}
 }
