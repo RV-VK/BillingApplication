@@ -59,6 +59,19 @@ public class StoreDAO {
 		}
 	}
 
+	public Store view() throws ApplicationErrorException {
+		try{
+			sqlSession = sqlSessionFactory.openSession();
+			storeMapper = sqlSession.getMapper(StoreMapper.class);
+			Store store = storeMapper.view();
+			sqlSession.close();
+			return store;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		}
+	}
+
 	/**
 	 * This is a helper method that verifies whether a store Entry exists in the Store table to differentiate initial setup and Login.
 	 *

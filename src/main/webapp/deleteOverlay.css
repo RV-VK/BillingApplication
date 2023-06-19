@@ -10,7 +10,29 @@ width: 100%;
 height: 100%;
 background-color: rgba(0, 0, 0, 0.4);
 }
+.modal2 {
+text-align: center;
+display: none;
+position: fixed;
+z-index: 1;
+padding-top: 100px;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.4);
+}
 .modalContent {
+font-size: 20px;
+font-weight: bold;
+background-color: #D3D3D3;
+margin-top: 150px;
+margin-left: 300px;
+padding: 20px;
+border: 1px solid #888;
+width: 50%;
+}
+.modalContent2 {
 font-size: 20px;
 font-weight: bold;
 background-color: #D3D3D3;
@@ -36,11 +58,24 @@ border-radius: 4px;
 font-size: 18px;
 padding: 10px;
 }
+.modalContent2 button {
+border: none;
+border-radius: 6px;
+font-size: 18px;
+padding: 10px;
+}
 .del {
 background-color: #485582;
 transition-duration: 0.2s;
 }
 .del:hover {
+background-color: #303136
+}
+.delete {
+background-color: #485582;
+transition-duration: 0.2s;
+}
+.delete:hover {
 background-color: #303136
 }
 .cancel:hover {

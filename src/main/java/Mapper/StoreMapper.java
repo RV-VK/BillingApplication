@@ -3,6 +3,7 @@ package Mapper;
 import DAO.ApplicationErrorException;
 import Entity.Store;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Select;
 
 import java.sql.SQLException;
@@ -49,7 +50,9 @@ public interface StoreMapper {
 	Integer delete(String userName, String password) throws ApplicationErrorException;
 
 
-
+	@Result(property = "gstCode", column = "gstnumber")
+	@Select("SELECT * FROM STORE")
+	Store view() throws ApplicationErrorException;
 
 	/**
 	 * This Interface method Executes the select query for Store table

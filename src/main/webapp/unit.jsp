@@ -10,7 +10,7 @@
 <div class="header">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
 <form action="logout" method="POST">
-<input type="image" class="logout" src="Images/logout.png" alt="submit"/>
+<input type="image" class="logout" title="logout" src="Images/logout.png" alt="submit"/>
 </form>
 </div>
 <style>
@@ -88,7 +88,7 @@ caption {
 position: relative;
 height: 30px;
 width: 30px;
-top: -55px;
+top: -50px;
 right: -650px;
 }
 #head{
