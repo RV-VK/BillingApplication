@@ -1,5 +1,7 @@
 package Entity;
 
+import java.util.Objects;
+
 public class Product {
 	private Integer id;
 	private String code;
@@ -98,6 +100,18 @@ public class Product {
 		this.price = price;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		Product product = (Product)o;
+		return id.equals(product.id) && code.equals(product.code) && name.equals(product.name) && unitcode.equals(product.unitcode) && type.equals(product.type) && stock.equals(product.stock) && price.equals(product.price);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, code, name, unitcode, type, stock, price);
+	}
 
 	@Override
 	public String toString() {

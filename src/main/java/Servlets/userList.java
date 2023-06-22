@@ -20,7 +20,6 @@ import java.util.List;
 @WebServlet("/userList")
 public class userList extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		int page = 1;
 		int recordsPerPage = 5;
 		int noOfRecords = 0;
@@ -58,10 +57,10 @@ public class userList extends HttpServlet {
 		else {
 			if(attribute == null) {
 				listAttributes.put("Attribute", "id");
-			} else {
-				listAttributes.put("Attribute", attribute);
-			}
-			listAttributes.put("Searchtext", searchText);
+				} else {
+					listAttributes.put("Attribute", attribute);
+				}
+				listAttributes.put("Searchtext", searchText);
 			try {
 				noOfRecords = userDAO.count(listAttributes.get("Attribute"), searchText);
 				listAttributes.put("Pagelength", String.valueOf(noOfRecords));

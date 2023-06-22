@@ -60,7 +60,7 @@ public class PurchaseServiceImplementation implements PurchaseService {
 			int pageNumber = Integer.parseInt(listattributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
 			if(listattributes.get("Attribute").equals("date"))
-				if(! (listattributes.get("Searchtext").replace("'", "").matches(dateRegex)))
+				if( listattributes.get("Searchtext")!=null && ! (listattributes.get("Searchtext").replace("'", "").matches(dateRegex)))
 					throw new InvalidTemplateException("Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
 			purchaseList = purchaseDAO.list(listattributes.get("Attribute"), listattributes.get("Searchtext"), pageLength, offset);
 		}

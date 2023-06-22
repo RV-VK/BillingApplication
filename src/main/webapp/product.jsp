@@ -192,7 +192,7 @@ request.setAttribute("attributes",productAttributes);
 <p id="message">${Success}</p>
 </c:if>
 <p id="title">PRODUCTS</p>
-<a href="productForm.jsp?page=${noOfPages}"><button id="add">Add Product</button></a>
+<button id="add" onclick="add()">Add Product</button></a>
 <form style="display: inline;" action="productList" method="get">
 <select name="attribute" id="attribute">
 <option value="Search Attribute" disabled selected>Search Attribute</option>
@@ -262,6 +262,9 @@ request.setAttribute("attributes",productAttributes);
    function deleteModal() {
     console.log(id);
     window.location.href = "deleteProduct?id="+id;
+   }
+   function add() {
+   window.location.href = "productForm.jsp?page=${noOfPages}";
    }
    window.onclick = function(event) {
       if (event.target == modal) {

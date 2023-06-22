@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" isELIgnored="false"%>
+<%@ page import="DAO.StoreDAO,Entity.Store">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
@@ -6,12 +7,18 @@
 <head>
 <title>DashBoard</title>
 <%
-      response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
+response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
 
       if(session.getAttribute("username")==null)
       {
         response.sendRedirect("index.jsp");
       }
+      StoreDAO storeDAO = new StoreDAO();
+      Store store = storeDAO.view();
+      if(store == null){
+      response.redirect(storeForm.jsp);
+      }
+
 %>
 <div class="header">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
@@ -216,7 +223,7 @@ left: 55px;
 <p id="purchaseText">Purchase</p>
 </div>
 <div class="sales">
-<a href="salesList"><input type="image" id="sales" src="Images/sales.png" alt="submit"/></a>
+<a href="listSales"><input type="image" id="sales" src="Images/sales.png" alt="submit"/></a>
 <p id="salesText">Sales</p>
 </div>
 </body>

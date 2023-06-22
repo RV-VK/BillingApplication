@@ -164,7 +164,7 @@ request.setAttribute("unitAttributes",unitAttributes);
 <p id="message">${Success}</p>
 </c:if>
 <p id="title">UNITS</p>
-<a href="unitForm.jsp?page=${noOfPages}"><button id="add">Add Unit</button></a>
+<button id="add" onclick="add()">Add Unit</button></a>
 <table class="mainTable" border="1">
 <tr class="mainRow"><th>ID</th><th>NAME</th><th>CODE</th><th>DESCRIPTION</th><th>ISDIVIDABLE</th><th>ACTIONS</th></tr>
 <c:forEach items="${unitList}" var="unit">
@@ -222,6 +222,9 @@ var modal = document.querySelector(".modal");
    function deleteModal() {
     console.log(code);
     window.location.href = "deleteUnit?code="+code;
+   }
+   function add() {
+   window.location.href = "unitForm.jsp?page=${noOfPages}";
    }
    window.onclick = function(event) {
       if (event.target == modal) {

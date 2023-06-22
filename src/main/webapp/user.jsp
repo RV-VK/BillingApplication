@@ -193,7 +193,7 @@ request.setAttribute("attributes",userAttributes);
 <p id="message">${Success}</p>
 </c:if>
 <p id="title">USERS</p>
-<a href="userForm.jsp?page=${noOfPages}"><button id="add">Add User</button></a>
+<button id="add" onclick="add()">Add User</button></a>
 <form style="display: inline;" action="userList" method="get">
 <select name="attribute" id="attribute">
 <option value="Search Attribute" disabled selected>Search Attribute</option>
@@ -262,6 +262,9 @@ var modal = document.querySelector(".modal");
    function deleteModal() {
     console.log(username);
     window.location.href = "deleteUser?username="+username;
+   }
+   function add() {
+   window.location.href = "userForm.jsp?page=${noOfPages}";
    }
    window.onclick = function(event) {
       if (event.target == modal) {

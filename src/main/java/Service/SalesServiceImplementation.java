@@ -63,7 +63,7 @@ public class SalesServiceImplementation implements SalesService {
 			int pageNumber = Integer.parseInt(listAttributes.get("Pagenumber"));
 			int offset = (pageLength * pageNumber) - pageLength;
 			if(listAttributes.get("Attribute").equals("date")) {
-				if(! (listAttributes.get("Searchtext").replace("'", "").matches(dateRegex)))
+				if( listAttributes.get("Searchtext")!=null && ! (listAttributes.get("Searchtext").replace("'", "").matches(dateRegex)))
 					throw new InvalidTemplateException("Invalid Format for Attribute date!! Must be in format YYYY-MM-DD");
 			}
 			salesList = salesDAO.list(listAttributes.get("Attribute"), listAttributes.get("Searchtext"), pageLength, offset);
