@@ -6,9 +6,20 @@
 <html>
 <head>
 <link rel="stylesheet" href="deleteOverlay.css">
+<link rel="stylesheet" href="navbar.css">
 <title>Users Tab</title>
 <div class="header">
+<div id="container">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
+<div class="dropdown-content">
+<a href="adminDashboard.jsp">DashBoard</a>
+<a href="store.jsp">Store</a>
+<a href="productList">Product</a>
+<a href="unitList">Unit</a>
+<a href="purchaseList">Purchase</a>
+<a href="listSales">Sales</a>
+</div>
+</div>
 <form action="logout" method="POST">
 <input type="image" class="logout" title="logout" src="Images/logout.png" alt="submit"/>
 </form>
@@ -117,14 +128,15 @@ caption {
 position: relative;
 height: 30px;
 width: 30px;
-top: -50px;
+top: -65px;
 right: -650px;
 }
 #head{
 font-family: 'Courier New', monospace;
 color: white;
 font-size: 150%;
-margin-top: 10px;
+margin-top: 0px;
+padding: 12px 16px;
 margin-right: 1200px;
 }
 ul {

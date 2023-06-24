@@ -81,6 +81,5 @@ public class productList extends HttpServlet {
 		request.setAttribute("Searchtext", searchText);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("product.jsp");
 		requestDispatcher.forward(request, response);
-
 	}
 }

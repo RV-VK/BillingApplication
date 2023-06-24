@@ -94,6 +94,7 @@ tr:nth-child(even):hover {
     background: #cd5b45;
 }
 #title{
+
 font-family: 'Courier New', monospace;
 color: black;
 font-size: 150%;
@@ -107,39 +108,56 @@ font-size: 110%;
 }
 #storeName{
 position: absolute;
-left: 370px;
+left: 5px;
 }
 #date{
 position: absolute;
-left: 820px;
+left: 570px;
 }
 #storeBox{
 position: absolute;
-left: 520px;
+top: 67px;
+left: 150px;
 width: 200px;
+height: 30px;
 border : 1px solid black;
 color: black;
 }
 #dateBox{
 position: absolute;
-top: 73px;
-height: 20px;
+top: 67px;
+height: 30px;
+width: 200px;
 border : 1px solid black;
-left: 900px;
+left: 640px;
+}
+#invoice{
+position: absolute;
+left: 925px;
+}
+#invoiceBox{
+position: absolute;
+left: 1025px;
+top: 67px;
+height: 30px;
+padding: 1px 10px;
+width: 185px;
+border : 1px solid black;
+
 }
 #searchBarLabel{
 position: absolute;
-left: 50px;
+left: 35px;
 top: 136px;
 }
 #quantityLabel {
 position: absolute;
-left: 510px;
+left: 530px;
 top: 7px;
 }
 #searchBar{
 position: absolute;
-left: 270px;
+left: 150px;
 padding: 0px 3px;
 height: 30px;
 width: 200px;
@@ -147,7 +165,20 @@ border : 1px solid black;
 }
 #quantity{
 position: absolute;
-left: 630px;
+left: 640px;
+padding: 0px 3px;
+height: 30px;
+width: 200px;
+border: 1px solid black;
+}
+#price{
+position: absolute;
+left: 925px;
+top: 7px;
+}
+#priceBox{
+position: absolute;
+left: 1025px;
 padding: 0px 3px;
 height: 30px;
 width: 200px;
@@ -156,10 +187,12 @@ border: 1px solid black;
 #add{
 position: absolute;
 background-color: #485582;
-left: 900px;
-width: 100px;
+left:1250px;
+font-family: 'Courier New', monospace;
+width: 30px;
+font-size: 150%;
 height: 30px;
-border-radius: 10px;
+border-radius: 30px;
 transition-duration: 0.4s;
 color: white;
 }
@@ -172,8 +205,8 @@ position: relative;
 font-family: 'Courier New', monospace;
 color: red;
 font-size: 100%;
-top: -20px;
-left: 1050px;
+top: 100px;
+left: 45%;
 }
 .total{
 position: absolute;
@@ -259,7 +292,6 @@ listAttributes.put("Searchtext",null);
 listAttributes.put("Pagelength",String.valueOf(Integer.MAX_VALUE));
 listAttributes.put("Pagenumber","1");
 List<Product> productList = productService.list(listAttributes);
-productList = productList.stream().filter(product-> product.getAvailableQuantity()>0).collect(Collectors.toList());
 List<String> productKeyList = new ArrayList<>();
 for(Product product: productList){
 String name = product.getName();
@@ -271,52 +303,81 @@ session.setAttribute("selectedList",request.getAttribute("selectedList"));
 request.setAttribute("productList",productKeyList);
 %>
 <body bgcolor="#303136">
+<form autocomplete="off" action="addToPurchase" method="post">
 <div class="contentHolder">
-<p id="title">Sales Billing</p>
-<label id="storeName" for="storeName">Store Name :</label>&nbsp&nbsp
+<p id="title">Purchase Billing</p>
+<label id="storeName" for="storeName">Store Name:</label>&nbsp&nbsp
 <input type="text" name="storeName" id="storeBox"  value="${store.getName()}" disabled>
-<label id="date" for="currentDate"> Date : </label>&nbsp&nbsp
-<input type="date" name="currentDate" id="dateBox" oninput="assignDate()"><br><br><br>
-<label id="searchBarLabel" for="searchBar"> Product Name/Code : </label>
+<label id="date" for="currentDate"> Date: </label>&nbsp&nbsp
+<input type="date" name="currentDate" id="dateBox" oninput="assignDate()" required>
+<label id="invoice" for="invoice"> Invoice: </label>&nbsp&nbsp
+<input type="text" name="invoice" id="invoiceBox" oninput="assignInvoice()" value="${invoice}" placeholder="invoice number" oninput="setCustomValidity('')" pattern="^[0-9]$" required><br><br><br>
+<label id="searchBarLabel" for="searchBar"> Product: </label>
 <div class="autocomplete" style="width: 200px;">
-<form autocomplete="off" action="addToSale" method="post">
-<input type="text" name="searchBar" id="searchBar" placeholder="Id/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
+<input type="text" name="searchBar" id="searchBar" placeholder="Code/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
 <label id="quantityLabel" for="quantity"> Quantity: </label>
 <input type="text" name="quantity" id="quantity" placeholder="quantity" pattern="^(\d*\.)?\d+$" oninvalid=this.setCustomValidity('Invalid format for Quantity') required>
-<input type="submit" id="add" value="Add">
+<label id="price" for="price"> Price: </label>
+<input type="text" name="price" id="priceBox" placeholder="price" pattern="^(\d*\.)?\d+$" oninvalid=this.setCustomValidity('Invalid format for Quantity') required>
+<input type="submit" id="add" value="+">
 </form>
-<p id="error">${Error}</p>
 </div>
 </div>
 <div class="tableholder">
 <table class="mainTable" border="1">
 <tr><th>S.NO</th><th>PRODUCT CODE</th><th>PRODUCT NAME</th><th>PRICE</th><th>QUANTITY</th><th>AMOUNT</th><th>REMOVE</th></tr>
 <c:set var="count" value="0" scope="page" />
-<c:forEach items="${selectedList}" var="salesItem">
+<c:forEach items="${selectedList}" var="purchaseItem">
 <c:set var="count" value="${count + 1}" scope="page"/>
-<tr><td>${count}</td><td>${salesItem.getProduct().getCode()}</td><td>${salesItem.getProduct().getName()}</td><td>${salesItem.getProduct().getPrice()}</td><td>${salesItem.getQuantity()}</td><td>${salesItem.getProduct().getPrice() * salesItem.getQuantity()}</td><td><form action="addToSale" method="post"><input type="hidden" value="${salesItem.getProduct().getCode()}" name="deleteCode"><input type="image" id="img" src="Images/delete.png" alt="delete"></form></td></tr>
+<tr><td>${count}</td><td>${purchaseItem.getProduct().getCode()}</td><td>${purchaseItem.getProduct().getName()}
+</td><td>${purchaseItem.getUnitPurchasePrice()}</td><td>${purchaseItem.getQuantity()}</td>
+<td>${purchaseItem.getUnitPurchasePrice() * purchaseItem.getQuantity()}</td><td><form action="addToPurchase" method="post"><input type="hidden" value="${purchaseItem.getProduct().getCode()}" name="deleteCode"><input type="image" id="img" src="Images/delete.png" alt="delete"></form></td></tr>
 </c:forEach>
 </table>
+<p id="error">${Error}</p>
 </div>
 <div class="total">
 <p id="grandTotal"> Grand Total : </p>
 <p id="grandTotalValue">${grandTotal}</p>
 </div>
-<form action="createSales" method="post">
-<input type="hidden" id="dateParam" name="dateValue" value="">
+<form action="createPurchase" method="post" onsubmit="validate(event)">
+<input type="hidden" id="dateParam" name="dateValue" value="" required>
+<input type="hidden" id="invoiceParam" name="invoiceValue" value="" required>
 <c:if test="${selectedList.size() > 0}">
-<input type="submit" class="generateBill" value="Generate Bill">
+<button type="submit" class="generateBill">Generate Bill</button>
 </c:if>
 </form>
 </body>
 <script>
+document.getElementById('invoiceBox').validity.valid
 document.getElementById("dateBox").valueAsDate = new Date();
 var date = document.getElementById("dateParam");
+var invoice = document.getElementById("invoiceParam");
 var currentDate =document.getElementById("dateBox");
+var invoiceBox = document.getElementById("invoiceBox");
 date.value = currentDate.value;
 function assignDate() {
 date.value = currentDate.value;
 console.log(date.value);
+}
+function assignInvoice() {
+invoice.value = invoiceBox.value;
+console.log(invoice.value);
+}
+function validate(event) {
+event.preventDefault();
+if(invoiceBox.value === '') {
+invoiceBox.setCustomValidity('Please fill in the Invoice');
+invoiceBox.reportValidity();
+return false;
+}
+var numberRegex = /^\d+$/;
+if(!numberRegex.test(invoiceBox.value)) {
+invoiceBox.setCustomValidity('Please enter only numeric Values');
+invoiceBox.reportValidity();
+return false;
+}
+event.target.submit();
 }
 function autocomplete(inp, arr) {
   var currentFocus;

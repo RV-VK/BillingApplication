@@ -6,9 +6,21 @@
 <html>
 <head>
 <link rel="stylesheet" href="deleteOverlay.css">
+<link rel="stylesheet" href="navbar.css">
+<link rel="stylesheet" href="detailsOverlay.css">
 <title>Sales Tab</title>
 <div class="header">
+<div id="container">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
+<div class="dropdown-content">
+<a href="adminDashboard.jsp">DashBoard</a>
+<a href="store.jsp">Store</a>
+<a href="userList">Users</a>
+<a href="productList">Product</a>
+<a href="unitList">Units</a>
+<a href="purchaseList">Purchase</a>
+</div>
+</div>
 <form action="logout" method="POST">
 <input type="image" class="logout" title="logout" src="Images/logout.png" alt="submit"/>
 </form>
@@ -117,14 +129,15 @@ caption {
 position: relative;
 height: 30px;
 width: 30px;
-top: -50px;
+top: -65px;
 right: -650px;
 }
 #head{
 font-family: 'Courier New', monospace;
 color: white;
 font-size: 150%;
-margin-top: 10px;
+margin-top: 0px;
+padding: 12px 16px;
 margin-right: 1200px;
 }
 ul {
@@ -205,10 +218,26 @@ request.setAttribute("attributes",salesAttributes);
 <input type="image" id="search" src="Images/search.png" alt="submit">
 </form>
 <table class="mainTable" border="1">
-<tr class="mainRow"><th>INVOICE_ID</th><th>DATE</th><th>GRANDTOTAL</th><th>ACTIONS</th>
+<tr class="mainRow"><th>INVOICE_ID</th><th>DATE</th><th>GRANDTOTAL</th><th>DETAILS</th><th>ACTIONS</th></tr>
 <c:forEach items="${salesList}" var="sales">
-<tr><td>${sales.getId()}</td><td>${sales.getDate()}</td><td>${sales.getGrandTotal()}</td><td>
-<input type="image" id="img" class="openModal" src="Images/delete.png" alt="delete" onclick="myFunction('${sales.getId()}')"></td></tr>
+<tr><td>${sales.getId()}</td><td>${sales.getDate()}</td><td>${sales.getGrandTotal()}</td>
+<td>
+<div class="detail" id="${sales.getId()}">
+<div class="detailContent">
+<span class="close" onclick="closeModal()">x</span>
+<table class="detailTable" border="1">
+<tr class="detailRow"><th>INVOICE_ID</th><th>PRODUCT CODE</th><th>PRODUCT NAME</th><th>QUANTITY</th><th>SALESPRICE</th><tr>
+<c:forEach items="${sales.getSalesItemList()}" var="salesItem">
+<% System.out.println("${sales.getID()}"); %>
+<tr><td>${sales.getId()}</td><td>${salesItem.getProduct().getCode()}</td><td>${salesItem.getProduct().getName()}</td>
+<td>${salesItem.getQuantity()}</td><td>${salesItem.getUnitSalesPrice()}</td></tr>
+</c:forEach>
+</table>
+</div>
+</div>
+<input type="image" id="img" class="openDetails" src="Images/details.png" alt="details" onclick="openPopUp('${sales.getId()}')" data-toggle="detail" data-target="#${sales.getId()}">
+</td>
+<td><input type="image" id="img" class="openModal" src="Images/delete.png" alt="delete" onclick="myFunction('${sales.getId()}')"></td></tr>
 </c:forEach>
 </table>
 <c:if test="${noOfPages eq 0}">
@@ -243,19 +272,32 @@ request.setAttribute("attributes",salesAttributes);
 </body>
 <script>
 var modal = document.querySelector(".modal");
-   var span = document.querySelector(".close");
-   var btn = document.querySelector(".openModal")
-   var id;
+var detail = document.querySelector(".detail");
+var span = document.querySelector(".close");
+var btn = document.querySelector(".openModal");
+var id;
+var divId;
+var div;
    function myFunction(parameter) {
       modal.style.display = "block";
       id = parameter;
+  }
+  function openPopUp(parameter) {
+  divId = parameter;
+  div = document.getElementById(parameter);
+  div.style.display="block";
+  console.log(divId);
   }
    span.addEventListener("click", () => {
       hideModal();
    });
    function hideModal() {
       modal.style.display = "none";
+      div.style.display = "none";
    }
+   function closeModal() {
+       hideModal();
+     }
    function deleteModal() {
     console.log(id);
     window.location.href = "deleteSales?id="+id;
@@ -264,7 +306,8 @@ var modal = document.querySelector(".modal");
    window.location.href = "sales.jsp";
    }
    window.onclick = function(event) {
-      if (event.target == modal) {
+        console.log(div);
+      if (event.target == modal || event.target == div ){
          hideModal();
       }
    };

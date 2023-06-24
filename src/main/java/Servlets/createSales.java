@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +32,7 @@ public class createSales extends HttpServlet {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-		PrintWriter out = response.getWriter();
-		out.println("Successfull");
 		session.removeAttribute("selectedList");
+		response.sendRedirect("purchaseList?Success="+"Sales Added Successfully!");
 	}
 }

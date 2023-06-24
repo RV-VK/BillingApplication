@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" isELIgnored="false"%>
-<%@ page import="DAO.StoreDAO,Entity.Store">
+<%@ page import="DAO.StoreDAO,Entity.Store" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
       StoreDAO storeDAO = new StoreDAO();
       Store store = storeDAO.view();
       if(store == null){
-      response.redirect(storeForm.jsp);
+      response.sendRedirect("storeForm.jsp");
       }
 
 %>

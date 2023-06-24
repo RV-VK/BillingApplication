@@ -1,5 +1,7 @@
 package Entity;
 
+import java.util.Objects;
+
 public class PurchaseItem {
 	private Product product;
 	private Float quantity;
@@ -47,6 +49,19 @@ public class PurchaseItem {
 
 	public void setUnitPurchasePrice(Double unitPurchasePrice) {
 		this.unitPurchasePrice = unitPurchasePrice;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		PurchaseItem that = (PurchaseItem)o;
+		return product.equals(that.product) && quantity.equals(that.quantity) && unitPurchasePrice.equals(that.unitPurchasePrice);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(product, quantity, unitPurchasePrice);
 	}
 
 	@Override
