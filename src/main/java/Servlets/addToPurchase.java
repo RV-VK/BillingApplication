@@ -24,8 +24,8 @@ public class addToPurchase extends HttpServlet {
 		double grandTotal;
 		float quantity = 0;
 		double price = 0;
-		int invoice = 0;
-		String date = null;
+		int invoice;
+		String date;
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("purchase.jsp");
 		HttpSession session = request.getSession();
 		if(session.getAttribute("selectedList") != null)
@@ -33,10 +33,14 @@ public class addToPurchase extends HttpServlet {
 		String parameter = request.getParameter("searchBar");
 		if(request.getParameter("quantity") != null) quantity = Float.parseFloat(request.getParameter("quantity"));
 		if(request.getParameter("price") != null) price = Double.parseDouble(request.getParameter("price"));
-		if(request.getParameter("invoice") != null)
+		if(request.getParameter("invoice") != null) {
 			invoice = Integer.parseInt(request.getParameter("invoice"));
-		if(request.getParameter("currentDate") != null)
+			session.setAttribute("invoice", invoice);
+		}
+		if(request.getParameter("currentDate") != null) {
 			date = request.getParameter("currentDate");
+			session.setAttribute("date", date);
+		}
 		Product product;
 		if(parameter != null) {
 			HashMap<String, String> listAttributes = new HashMap<>();
@@ -56,8 +60,9 @@ public class addToPurchase extends HttpServlet {
 				product = productList.stream().filter(product1 -> parameter.equals(product1.getCode())).findAny().orElse(null);
 			}
 			try {
+				assert product != null;
 				if(! validate(product, quantity)) {
-					request.setAttribute("Error", product.getName() + " is not a Dividable Entity");
+					request.setAttribute("Error", product.getName() + " is not a Dividable Entity !");
 				} else {
 					selectedList.add(new PurchaseItem(product, quantity, price));
 				}
@@ -72,8 +77,8 @@ public class addToPurchase extends HttpServlet {
 		grandTotal = selectedList.stream().mapToDouble(purchaseItem -> purchaseItem.getUnitPurchasePrice() * purchaseItem.getQuantity()).sum();
 		request.setAttribute("selectedList", selectedList);
 		request.setAttribute("grandTotal", grandTotal);
-		request.setAttribute("invoice", invoice);
-		request.setAttribute("date", date);
+		request.setAttribute("invoice", session.getAttribute("invoice"));
+		request.setAttribute("date", session.getAttribute("date"));
 		requestDispatcher.forward(request, response);
 	}
 

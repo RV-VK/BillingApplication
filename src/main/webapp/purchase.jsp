@@ -190,7 +190,6 @@ background-color: #485582;
 left:1250px;
 font-family: 'Courier New', monospace;
 width: 30px;
-font-size: 150%;
 height: 30px;
 border-radius: 30px;
 transition-duration: 0.4s;
@@ -205,8 +204,8 @@ position: relative;
 font-family: 'Courier New', monospace;
 color: red;
 font-size: 100%;
-top: 100px;
-left: 45%;
+margin-top: 500px;
+margin-left: 40%;
 }
 .total{
 position: absolute;
@@ -309,9 +308,9 @@ request.setAttribute("productList",productKeyList);
 <label id="storeName" for="storeName">Store Name:</label>&nbsp&nbsp
 <input type="text" name="storeName" id="storeBox"  value="${store.getName()}" disabled>
 <label id="date" for="currentDate"> Date: </label>&nbsp&nbsp
-<input type="date" name="currentDate" id="dateBox" oninput="assignDate()" required>
+<input type="date" name="currentDate" id="dateBox" value="${date}" oninput="assignDate()" required>
 <label id="invoice" for="invoice"> Invoice: </label>&nbsp&nbsp
-<input type="text" name="invoice" id="invoiceBox" oninput="assignInvoice()" value="${invoice}" placeholder="invoice number" oninput="setCustomValidity('')" pattern="^[0-9]$" required><br><br><br>
+<input type="text" name="invoice" id="invoiceBox" value="${invoice}" placeholder="invoice number" oninput="setCustomValidity('')" required><br><br><br>
 <label id="searchBarLabel" for="searchBar"> Product: </label>
 <div class="autocomplete" style="width: 200px;">
 <input type="text" name="searchBar" id="searchBar" placeholder="Code/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
@@ -334,12 +333,12 @@ request.setAttribute("productList",productKeyList);
 <td>${purchaseItem.getUnitPurchasePrice() * purchaseItem.getQuantity()}</td><td><form action="addToPurchase" method="post"><input type="hidden" value="${purchaseItem.getProduct().getCode()}" name="deleteCode"><input type="image" id="img" src="Images/delete.png" alt="delete"></form></td></tr>
 </c:forEach>
 </table>
-<p id="error">${Error}</p>
 </div>
 <div class="total">
 <p id="grandTotal"> Grand Total : </p>
 <p id="grandTotalValue">${grandTotal}</p>
 </div>
+<p id="error">${Error}</p>
 <form action="createPurchase" method="post" onsubmit="validate(event)">
 <input type="hidden" id="dateParam" name="dateValue" value="" required>
 <input type="hidden" id="invoiceParam" name="invoiceValue" value="" required>
@@ -350,21 +349,13 @@ request.setAttribute("productList",productKeyList);
 </body>
 <script>
 document.getElementById('invoiceBox').validity.valid
-document.getElementById("dateBox").valueAsDate = new Date();
 var date = document.getElementById("dateParam");
 var invoice = document.getElementById("invoiceParam");
 var currentDate =document.getElementById("dateBox");
 var invoiceBox = document.getElementById("invoiceBox");
 date.value = currentDate.value;
-function assignDate() {
-date.value = currentDate.value;
-console.log(date.value);
-}
-function assignInvoice() {
-invoice.value = invoiceBox.value;
-console.log(invoice.value);
-}
 function validate(event) {
+invoice.value = invoiceBox.value;
 event.preventDefault();
 if(invoiceBox.value === '') {
 invoiceBox.setCustomValidity('Please fill in the Invoice');

@@ -12,6 +12,7 @@
 }
 #container{
 width: 150px;
+transition-duration: 0.6s;
 }
 .dropdown-content a {
   float: none;

@@ -33,6 +33,6 @@ public class createSales extends HttpServlet {
 			System.out.println(e.getMessage());
 		}
 		session.removeAttribute("selectedList");
-		response.sendRedirect("purchaseList?Success="+"Sales Added Successfully!");
+		response.sendRedirect("salesList?Success="+"Sales Added Successfully!");
 	}
 }

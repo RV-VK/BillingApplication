@@ -24,6 +24,7 @@ public class addToSale extends HttpServlet {
 		Set<SalesItem> selectedList = new HashSet<>();
 		double grandTotal;
 		float quantity = 0;
+		String date;
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("sales.jsp");
 		HttpSession session = request.getSession();
 		if(session.getAttribute("selectedList") != null)
@@ -31,6 +32,10 @@ public class addToSale extends HttpServlet {
 		String parameter = request.getParameter("searchBar");
 		if(request.getParameter("quantity") != null)
 			quantity = Float.parseFloat(request.getParameter("quantity"));
+		if(request.getParameter("currentDate") != null) {
+			date = request.getParameter("currentDate");
+			session.setAttribute("date", date);
+		}
 		Product product;
 		if(parameter != null) {
 			HashMap<String, String> listAttributes = new HashMap<>();
@@ -73,6 +78,7 @@ public class addToSale extends HttpServlet {
 				.sum();
 		request.setAttribute("selectedList", selectedList);
 		request.setAttribute("grandTotal", grandTotal);
+		request.setAttribute("date", session.getAttribute("date"));
 		requestDispatcher.forward(request, response);
 	}
 

@@ -68,9 +68,9 @@ position: absolute;
 height: 250px;
 width: 100%;
 background: white;
-border-top : 1px outset black;
+border-top : 0px outset black;
 border-bottom : 2px outset black;
-top: 215px;
+top: 220px;
 left: 0px;
 overflow-y: scroll;
 overflow-x: hidden;
@@ -115,15 +115,19 @@ left: 820px;
 }
 #storeBox{
 position: absolute;
+top: 67px;
 left: 520px;
 width: 200px;
+border : 1px solid black;
+height: 30px;
 border : 1px solid black;
 color: black;
 }
 #dateBox{
 position: absolute;
-top: 73px;
-height: 20px;
+top: 67px;
+width: 200px;
+height: 30px;
 border : 1px solid black;
 left: 900px;
 }
@@ -156,10 +160,12 @@ border: 1px solid black;
 #add{
 position: absolute;
 background-color: #485582;
-left: 900px;
-width: 100px;
+font-family: 'Courier New', monospace;
+left: 860px;
+width: 30px;
+font-size: 150%;
 height: 30px;
-border-radius: 10px;
+border-radius: 30px;
 transition-duration: 0.4s;
 color: white;
 }
@@ -168,12 +174,12 @@ color: white;
 background-color: #303136;
 }
 #error{
-position: relative;
+position: absolute;
 font-family: 'Courier New', monospace;
 color: red;
 font-size: 100%;
-top: -20px;
-left: 1050px;
+top: 170px;
+left: 950px;
 }
 .total{
 position: absolute;
@@ -273,19 +279,18 @@ request.setAttribute("productList",productKeyList);
 <body bgcolor="#303136">
 <div class="contentHolder">
 <p id="title">Sales Billing</p>
+<form autocomplete="off" action="addToSale" method="post">
 <label id="storeName" for="storeName">Store Name :</label>&nbsp&nbsp
 <input type="text" name="storeName" id="storeBox"  value="${store.getName()}" disabled>
 <label id="date" for="currentDate"> Date : </label>&nbsp&nbsp
-<input type="date" name="currentDate" id="dateBox" oninput="assignDate()"><br><br><br>
+<input type="date" name="currentDate" id="dateBox" value="${date}"><br><br><br>
 <label id="searchBarLabel" for="searchBar"> Product Name/Code : </label>
 <div class="autocomplete" style="width: 200px;">
-<form autocomplete="off" action="addToSale" method="post">
 <input type="text" name="searchBar" id="searchBar" placeholder="Id/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
 <label id="quantityLabel" for="quantity"> Quantity: </label>
 <input type="text" name="quantity" id="quantity" placeholder="quantity" pattern="^(\d*\.)?\d+$" oninvalid=this.setCustomValidity('Invalid format for Quantity') required>
-<input type="submit" id="add" value="Add">
+<input type="submit" id="add" title="add" value="+">
 </form>
-<p id="error">${Error}</p>
 </div>
 </div>
 <div class="tableholder">
@@ -302,6 +307,7 @@ request.setAttribute("productList",productKeyList);
 <p id="grandTotal"> Grand Total : </p>
 <p id="grandTotalValue">${grandTotal}</p>
 </div>
+<p id="error">${Error}</p>
 <form action="createSales" method="post">
 <input type="hidden" id="dateParam" name="dateValue" value="">
 <c:if test="${selectedList.size() > 0}">
@@ -310,14 +316,9 @@ request.setAttribute("productList",productKeyList);
 </form>
 </body>
 <script>
-document.getElementById("dateBox").valueAsDate = new Date();
 var date = document.getElementById("dateParam");
 var currentDate =document.getElementById("dateBox");
 date.value = currentDate.value;
-function assignDate() {
-date.value = currentDate.value;
-console.log(date.value);
-}
 function autocomplete(inp, arr) {
   var currentFocus;
   inp.addEventListener("input", function(e) {
