@@ -21,18 +21,18 @@ public class createSales extends HttpServlet {
 		SalesService salesService = new SalesServiceImplementation();
 		double grandTotal;
 		HttpSession session = request.getSession();
-		String date =  request.getParameter("dateValue");
+		String date = request.getParameter("dateValue");
 		Set<SalesItem> salesItemSet;
 		salesItemSet = (Set<SalesItem>)session.getAttribute("selectedList");
 		List<SalesItem> salesItemList = new ArrayList<>(salesItemSet);
 		grandTotal = salesItemList.stream().mapToDouble(salesItem -> salesItem.getProduct().getPrice() * salesItem.getQuantity()).sum();
 		Sales sales = new Sales(date, salesItemList, grandTotal);
-		try{
+		try {
 			salesService.create(sales);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 		session.removeAttribute("selectedList");
-		response.sendRedirect("salesList?Success="+"Sales Added Successfully!");
+		response.sendRedirect("listSales?Success=" + "Sales Added Successfully!");
 	}
 }

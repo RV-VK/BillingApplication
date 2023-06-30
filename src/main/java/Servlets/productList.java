@@ -24,6 +24,7 @@ public class productList extends HttpServlet {
 		int noOfRecords = 0;
 		String searchText;
 		String attribute;
+		String userType = (String)request.getSession().getAttribute("userType");
 		HashMap<String, String> listAttributes = new HashMap<>();
 		ProductService productService = new ProductServiceImplementation();
 		ProductDAO productDAO = new ProductDAO();
@@ -79,7 +80,13 @@ public class productList extends HttpServlet {
 		request.setAttribute("currentPage", page);
 		request.setAttribute("Attribute", listAttributes.get("Attribute"));
 		request.setAttribute("Searchtext", searchText);
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("product.jsp");
-		requestDispatcher.forward(request, response);
+		if(userType.equalsIgnoreCase("Admin")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("product.jsp");
+			requestDispatcher.forward(request, response);
+		}
+		else if(userType.equalsIgnoreCase("Sales") || userType.equalsIgnoreCase("Purchase")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("productReadOnly.jsp");
+			requestDispatcher.forward(request, response);
+		}
 	}
 }

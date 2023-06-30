@@ -30,6 +30,7 @@ public class createProduct extends HttpServlet {
 		{
 			System.out.println(e.getMessage());
 			request.setAttribute("Error",e.getMessage());
+			request.setAttribute("product",product);
 			errorRequestDispatcher.forward(request,response);
 		}
 		response.sendRedirect("productList?Success="+"Product Created Successfully!!&page="+request.getParameter("page"));

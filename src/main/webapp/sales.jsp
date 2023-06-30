@@ -51,7 +51,7 @@ width: 100%;
 height: 170px;
 top: 50px;
 left: 0;
-background-color:  #F9DED7;
+background-color:  #FAF5F1;
 border: 0px outset white;
 }
 .mainTable{
@@ -185,7 +185,7 @@ left: 950px;
 position: absolute;
 width: 300px;
 height: 50px;
-top: 467px;
+top: 470px;
 left: 1053px;
 padding: 0 4px;
 background-color: white;
@@ -283,7 +283,7 @@ request.setAttribute("productList",productKeyList);
 <label id="storeName" for="storeName">Store Name :</label>&nbsp&nbsp
 <input type="text" name="storeName" id="storeBox"  value="${store.getName()}" disabled>
 <label id="date" for="currentDate"> Date : </label>&nbsp&nbsp
-<input type="date" name="currentDate" id="dateBox" value="${date}"><br><br><br>
+<input type="date" name="currentDate" id="dateBox" value="${date}" required ><br><br><br>
 <label id="searchBarLabel" for="searchBar"> Product Name/Code : </label>
 <div class="autocomplete" style="width: 200px;">
 <input type="text" name="searchBar" id="searchBar" placeholder="Id/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
@@ -350,7 +350,7 @@ function autocomplete(inp, arr) {
       if (e.keyCode == 40) {
         currentFocus++;
         addActive(x);
-      } else if (e.keyCode == 38) { //up
+      } else if (e.keyCode == 38) {
         currentFocus--;
         addActive(x);
       } else if (e.keyCode == 13) {

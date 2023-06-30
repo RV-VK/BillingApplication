@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
@@ -20,26 +19,36 @@ public class Login extends HttpServlet {
 		LoginService loginService = new LoginServiceImplementation();
 		String userName = request.getParameter("username");
 		String passWord = request.getParameter("password");
-		PrintWriter out = response.getWriter();
 		User user = new User();
-		try{
-			user = loginService.login(userName,passWord);
-		} catch(Exception e)
-		{
+		try {
+			user = loginService.login(userName, passWord);
+		} catch(Exception e) {
 			System.out.println("reached");
-			request.setAttribute("Error","Error");
+			request.setAttribute("Error", "Error");
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
-			requestDispatcher.forward(request,response);
+			requestDispatcher.forward(request, response);
 		}
-		if(user != null &&user.getUserType().equalsIgnoreCase("Admin")) {
-			HttpSession session = request.getSession();
-			session.setAttribute("username",user.getUserName());
+		HttpSession session = request.getSession();
+		if(user != null && user.getUserType().equalsIgnoreCase("Admin")) {
+			session.setAttribute("username", user.getUserName());
+			session.setAttribute("userType", "Admin");
+			session.setAttribute("userId", user.getId());
 			response.sendRedirect("adminDashboard.jsp");
-		}
-		else {
-			request.setAttribute("Error","Error");
+		} else if(user != null && user.getUserType().equals("Sales")) {
+			session.setAttribute("userType", "Sales");
+			session.setAttribute("username", user.getUserName());
+			session.setAttribute("userId", user.getId());
+			response.sendRedirect("salesUserDashBoard.jsp");
+		} else if(user != null && user.getUserType().equals("Purchase")) {
+			session.setAttribute("userType", "Purchase");
+			session.setAttribute("username", user.getUserName());
+			session.setAttribute("userId", user.getId());
+			response.sendRedirect("purchaseUserDashBoard.jsp");
+		} else {
+			request.setAttribute("Error", "Error");
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
-			requestDispatcher.forward(request,response);
+			requestDispatcher.forward(request, response);
 		}
 	}
 }
+

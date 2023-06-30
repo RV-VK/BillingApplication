@@ -1,5 +1,5 @@
 #container:hover{
-  background-color: green;
+  background-color: #303136;
 }
 .dropdown-content {
   display: none;
@@ -12,7 +12,6 @@
 }
 #container{
 width: 150px;
-transition-duration: 0.6s;
 }
 .dropdown-content a {
   float: none;

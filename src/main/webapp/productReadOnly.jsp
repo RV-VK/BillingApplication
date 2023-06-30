@@ -4,21 +4,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
-<head><title>Products Tab</title>
-<link rel="stylesheet" href="deleteOverlay.css">
-<link rel="stylesheet" href="navbar.css">
+<head><title>Product List</title>
 <div class="header">
-<div id="container">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
-<div class="dropdown-content">
-<a href="adminDashboard.jsp">DashBoard</a>
-<a href="store.jsp">Store</a>
-<a href="userList">User</a>
-<a href="unitList">Unit</a>
-<a href="purchaseList">Purchase</a>
-<a href="listSales">Sales</a>
-</div>
-</div>
 <form action="logout" method="POST">
 <input type="image" class="logout" title="logout" src="Images/logout.png" alt="submit"/>
 </form>
@@ -42,21 +30,9 @@ font-size: 120%;
 font-family: 'Courier New', monospace;
 color: white;
 }
-#add{
-margin-top: 50px;
-margin-left: 130px;
-background-color: #485582;
-color: white;
-transition-duration: 0.4s;
-border-radius: 5px;
-padding: 10px 24px;
-width: 150px;
-height: 40px;
-font-family: 'Courier New', monospace;
-}
 #attribute{
 margin-top: 50px;
-margin-left: 100px;
+margin-left: 130px;
 appearance: auto;
 outline: 0;
 background: Antique-white;
@@ -80,21 +56,9 @@ border: 2px solid black;
 position: absolute;
 display: inline;
 margin-top: 50px;
-margin-left:250px;
+margin-left:505px;
 height: 35px;
 width: 35px;
-}
-#add:hover{
-background-color: #303136 ;
-color: white;
-}
-#message
-{
-position: absolute;
-margin-left: 540px;
-margin-top: 40px;
-font-family: 'Courier New', monospace;
-color: green;
 }
 .mainTable{
 border-collapse: collapse;
@@ -187,24 +151,11 @@ response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
       {
         response.sendRedirect("index.jsp");
       }
-request.setAttribute("Success",request.getParameter("Success"));
 List<String> productAttributes = Arrays.asList("id","code","name","unitcode","type","stock","price");
 request.setAttribute("attributes",productAttributes);
 %>
 <body bgcolor="#303136">
-<div class="modal">
-<div class="modalContent">
-<span class="close">×</span>
-<p>Are you sure you want to delete the product entry</p>
-<button class="del" onclick="deleteModal()">Delete</button>
-<button class="cancel" onclick="hideModal()">Cancel</button>
-</div>
-</div>
-<c:if test="${Success != null}">
-<p id="message">${Success}</p>
-</c:if>
 <p id="title">PRODUCTS</p>
-<button id="add" onclick="add()">Add Product</button></a>
 <form style="display: inline;" action="productList" method="get">
 <select name="attribute" id="attribute">
 <option value="Search Attribute" disabled selected>Search Attribute</option>
@@ -216,17 +167,12 @@ request.setAttribute("attributes",productAttributes);
 <input type="image" id="search" src="Images/search.png" alt="submit">
 </form>
 <table class="mainTable" border="1">
-<tr class="mainRow"><th>ID</th><th>CODE</th><th>NAME</th><th>UNITCODE</th><th>TYPE</th><th>STOCK</th><th>PRICE</th><th>ACTIONS</th>
+<tr class="mainRow"><th>ID</th><th>CODE</th><th>NAME</th><th>UNITCODE</th><th>TYPE</th><th>STOCK</th><th>PRICE</th>
 <c:forEach items="${productList}" var="product">
 <tr><td>${product.getId()}</td><td>${product.getCode()}</td><td>${product.getName()}</td>
 <td>${product.getunitcode()}</td><td>${product.getType()}</td><td>${product.getAvailableQuantity()}</td>
 <td>${product.getPrice()}</td>
-<td><a href="productForm.jsp?editCode=${product.getCode()}&page=${currentPage}"><img id="img" src="Images/edit.png"></a>&nbsp&nbsp
-<c:if test="${product.getAvailableQuantity() eq 0}"><input type="image" id="img" class="openModal" src="Images/delete.png" alt="delete"  onclick="myFunction('${product.getId()}')">
-</c:if>
-<c:if test="${product.getAvailableQuantity() > 0}"><input type="image" style="filter: invert(25%);" id="img" class="openModal" src="Images/delete.png" alt="delete"  onclick="myFunction('${product.getId()}')" disabled>
-</c:if>
-</td></tr>
+</tr>
 </c:forEach>
 </table>
 <c:if test="${noOfPages eq 0}">
@@ -260,31 +206,5 @@ request.setAttribute("attributes",productAttributes);
 </c:if>
 </body>
 <script>
- var modal = document.querySelector(".modal");
-   var span = document.querySelector(".close");
-   var btn = document.querySelector(".openModal")
-   var id;
-   function myFunction(parameter) {
-      modal.style.display = "block";
-      id = parameter;
-  }
-   span.addEventListener("click", () => {
-      hideModal();
-   });
-   function hideModal() {
-      modal.style.display = "none";
-   }
-   function deleteModal() {
-    console.log(id);
-    window.location.href = "deleteProduct?id="+id;
-   }
-   function add() {
-   window.location.href = "productForm.jsp?page=${noOfPages}";
-   }
-   window.onclick = function(event) {
-      if (event.target == modal) {
-         hideModal();
-      }
-   };
 </script>
 </html>

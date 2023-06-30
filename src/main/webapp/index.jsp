@@ -33,6 +33,13 @@ text-align: center;
 height: 50px;
 width: 100%;
 }
+#error{
+position: absolute;
+top: 10%;
+left: 32%;
+color: red;
+font-family: 'Courier New', monospace;
+}
 #head{
 font-family: 'Courier New', monospace;
 color: white;
@@ -44,7 +51,7 @@ margin-top: -20px;
 <body bgcolor="#303136">
 <% String errorMessage = String.valueOf(request.getAttribute("Error"));%>
 <% if(errorMessage.equals("Error")) { %>
-<% out.println("<p style='color: red'>Invalid Credentials! </p>"); %>
+<p id="error"> Invalid Credentials! Please try with Valid Credentials</p>
 <% } %>
 <% if(errorMessage.equals("Success")) { %>
 <% out.println("<p style = 'color: green'> Admin Created Successfully</p>");%>

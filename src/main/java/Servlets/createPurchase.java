@@ -19,7 +19,6 @@ import java.util.Set;
 
 @WebServlet("/createPurchase")
 public class createPurchase extends HttpServlet {
-	private HttpServletRequest request;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PurchaseService purchaseService = new PurchaseServiceImplementation();
@@ -40,7 +39,9 @@ public class createPurchase extends HttpServlet {
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 			request.setAttribute("Error",e.getMessage());
+			request.setAttribute("selectedList",session.getAttribute("selectedList"));
 			requestDispatcher.forward(request, response);
+			return;
 		}
 		session.removeAttribute("selectedList");
 		response.sendRedirect("purchaseList?Success="+"Purchase Added Successfully!");

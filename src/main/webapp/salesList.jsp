@@ -12,6 +12,7 @@
 <div class="header">
 <div id="container">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
+<c:if test="${userType eq 'Admin'}">
 <div class="dropdown-content">
 <a href="adminDashboard.jsp">DashBoard</a>
 <a href="store.jsp">Store</a>
@@ -20,6 +21,7 @@
 <a href="unitList">Units</a>
 <a href="purchaseList">Purchase</a>
 </div>
+</c:if>
 </div>
 <form action="logout" method="POST">
 <input type="image" class="logout" title="logout" src="Images/logout.png" alt="submit"/>
@@ -89,7 +91,6 @@ margin-left:250px;
 height: 35px;
 width: 35px;
 }
-
 #message
 {
 position: absolute;
@@ -228,7 +229,6 @@ request.setAttribute("attributes",salesAttributes);
 <table class="detailTable" border="1">
 <tr class="detailRow"><th>INVOICE_ID</th><th>PRODUCT CODE</th><th>PRODUCT NAME</th><th>QUANTITY</th><th>SALESPRICE</th><tr>
 <c:forEach items="${sales.getSalesItemList()}" var="salesItem">
-<% System.out.println("${sales.getID()}"); %>
 <tr><td>${sales.getId()}</td><td>${salesItem.getProduct().getCode()}</td><td>${salesItem.getProduct().getName()}</td>
 <td>${salesItem.getQuantity()}</td><td>${salesItem.getUnitSalesPrice()}</td></tr>
 </c:forEach>

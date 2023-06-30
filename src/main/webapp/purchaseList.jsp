@@ -12,6 +12,7 @@
 <div class="header">
 <div id="container">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
+<c:if test="${userType eq 'Admin'}">
 <div class="dropdown-content">
 <a href="adminDashboard.jsp">DashBoard</a>
 <a href="store.jsp">Store</a>
@@ -20,6 +21,7 @@
 <a href="unitList">Units</a>
 <a href="listSales">Sales</a>
 </div>
+</c:if>
 </div>
 <form action="logout" method="POST">
 <input type="image" class="logout" title="logout" src="Images/logout.png" alt="submit"/>

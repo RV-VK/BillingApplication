@@ -29,8 +29,10 @@ public class createUser extends HttpServlet {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			request.setAttribute("Error",e.getMessage());
+			request.setAttribute("user",user);
 			errorRequestDispatcher.forward(request,response);
 		}
 		response.sendRedirect("userList?Success="+"User Created Successfully!!&page="+request.getParameter("page"));
+
 	}
 }

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet("/listSales")
 public class salesList extends HttpServlet {
@@ -47,11 +48,7 @@ public class salesList extends HttpServlet {
 			}
 			noOfRecords = salesList.size();
 		} else {
-			if(attribute == null) {
-				listAttributes.put("Attribute", "id");
-			} else {
-				listAttributes.put("Attribute", attribute);
-			}
+			listAttributes.put("Attribute", Objects.requireNonNullElse(attribute, "id"));
 			listAttributes.put("Searchtext", searchText);
 			try {
 				listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));

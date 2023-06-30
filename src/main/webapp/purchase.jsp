@@ -51,7 +51,7 @@ width: 100%;
 height: 170px;
 top: 50px;
 left: 0;
-background-color:  #F9DED7;
+background-color:  #FAF5F1;
 border: 0px outset white;
 }
 .mainTable{
@@ -192,6 +192,7 @@ font-family: 'Courier New', monospace;
 width: 30px;
 height: 30px;
 border-radius: 30px;
+font-size: 150%;
 transition-duration: 0.4s;
 color: white;
 }
@@ -315,9 +316,9 @@ request.setAttribute("productList",productKeyList);
 <div class="autocomplete" style="width: 200px;">
 <input type="text" name="searchBar" id="searchBar" placeholder="Code/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
 <label id="quantityLabel" for="quantity"> Quantity: </label>
-<input type="text" name="quantity" id="quantity" placeholder="quantity" pattern="^(\d*\.)?\d+$" oninvalid=this.setCustomValidity('Invalid format for Quantity') required>
+<input type="text" name="quantity" id="quantity" placeholder="quantity" pattern="^(\d*\.)?\d+$" oninvalid="this.setCustomValidity('Invalid format for Quantity')" oninput="setCustomValidity('')"  required>
 <label id="price" for="price"> Price: </label>
-<input type="text" name="price" id="priceBox" placeholder="price" pattern="^(\d*\.)?\d+$" oninvalid=this.setCustomValidity('Invalid format for Quantity') required>
+<input type="text" name="price" id="priceBox" placeholder="price" pattern="^(\d*\.)?\d+$" oninvalid="this.setCustomValidity('Invalid format for Price')" oninput="setCustomValidity('')" required>
 <input type="submit" id="add" value="+">
 </form>
 </div>
@@ -339,7 +340,7 @@ request.setAttribute("productList",productKeyList);
 <p id="grandTotalValue">${grandTotal}</p>
 </div>
 <p id="error">${Error}</p>
-<form action="createPurchase" method="post" onsubmit="validate(event)">
+<form action="createPurchase" method="post"     onsubmit="validate(event)">
 <input type="hidden" id="dateParam" name="dateValue" value="" required>
 <input type="hidden" id="invoiceParam" name="invoiceValue" value="" required>
 <c:if test="${selectedList.size() > 0}">

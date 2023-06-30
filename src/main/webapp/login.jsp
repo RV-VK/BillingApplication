@@ -3,14 +3,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+<link rel="stylesheet" href="css/style.css" />
 <style>
-#loginBadge{
-position: relative;
-width: 100px;
-padding 10px;
-bottom: 170px;
-left: 102px;
-}
+    #loginBadge{
+    position: relative;
+    width: 100px;
+    padding 10px;
+    bottom: 170px;
+    left: 102px;
+    }
 .login{
 margin: auto;
 border-radius: 25px;
@@ -54,6 +56,12 @@ input[type=submit]:hover{
 background-color: #303136 ;
 color: white;
 }
+form i {
+    position: absolute;
+    left: 190px;
+    top: 115px;
+    cursor: pointer;
+}
 .loginForm{
 position: relative;
 left: -50px;
@@ -70,9 +78,23 @@ top: 30px;
               <br><br>
               <img class="badges" src="Images/passwordbadge.png">
               <input type="password" id="password" name="password" placeholder="password" oninvalid="this.setCustomValidity('Invalid format for password')" oninput="setCustomValidity('')"      pattern="^[a-zA-Z0-9]{8,30}$" required>
+              <i class="bi bi-eye-slash" id="togglePassword"></i>
               <br><br><br><br>
               <input type="submit" value="Login">
 </form>
 </div>
 </body>
+<script>
+const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#password");
+
+        togglePassword.addEventListener("click", function () {
+            // toggle the type attribute
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+
+            // toggle the icon
+            this.classList.toggle("bi-eye");
+        });
+</script>
 </html>

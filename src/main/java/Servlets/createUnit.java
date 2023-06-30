@@ -27,6 +27,7 @@ public class createUnit extends HttpServlet {
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 			request.setAttribute("Error",e.getMessage());
+			request.setAttribute("unit",unit);
 			errorRequestDispatcher.forward(request, response);
 		}
 		response.sendRedirect("unitList?Success="+"Unit created Successfully!!&page="+request.getParameter("page"));

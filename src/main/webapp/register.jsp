@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+<div class="header">
+<img src="Images/cart.png" id="cart">
+<img src="Images/bill.png" id="bill">
+<p id="head" style="font-size: 50%'">SmartPOS</p>
+</div>
 <style>
+#cart{
+position: relative;
+height: 30px;
+width: 30px;
+top: 10px;
+left: -630px;
+}
+#bill{
+position: relative;
+height: 30px;
+width: 30px;
+top: 10px;
+right: -630px;
+}
+.header{
+position: absolute;
+top: 0;
+left: 0;
+background-color: #485582;
+text-align: center;
+height: 50px;
+width: 100%;
+}
 label{
 position: relative;
 font-family: 'Courier New', monospace;
@@ -9,6 +37,12 @@ color: #303136;
 left: 20px;
 top: 20px;
 font-size: 90%;
+}
+#head{
+font-family: 'Courier New', monospace;
+color: white;
+font-size: 150%;
+margin-top: -20px;
 }
 .registerForm{
 position: relative;
@@ -64,7 +98,7 @@ font-size: 130%;
 }
 </style>
 </head>
-<body>
+<body bgcolor="#303136">
  <div class="register">
          <p id="title"> Register Admin</p>
          <form  method="post" action="createAdmin">
