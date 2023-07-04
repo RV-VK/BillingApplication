@@ -36,14 +36,14 @@ public class createPurchase extends HttpServlet {
 		Purchase purchase = new Purchase(date, invoice, purchaseItemList, grandTotal);
 		try {
 			purchaseService.create(purchase);
-		} catch(Exception e){
+		} catch(Exception e) {
 			System.out.println(e.getMessage());
-			request.setAttribute("Error",e.getMessage());
-			request.setAttribute("selectedList",session.getAttribute("selectedList"));
+			request.setAttribute("Error", e.getMessage());
+			request.setAttribute("selectedList", session.getAttribute("selectedList"));
 			requestDispatcher.forward(request, response);
 			return;
 		}
 		session.removeAttribute("selectedList");
-		response.sendRedirect("purchaseList?Success="+"Purchase Added Successfully!");
+		response.sendRedirect("purchaseList?Success=" + "Purchase Added Successfully!");
 	}
 }

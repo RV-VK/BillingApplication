@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Login</title>
+<title>User Authentication</title>
 <div class="header">
 <img src="Images/cart.png" id="cart">
 <img src="Images/bill.png" id="bill">

@@ -23,7 +23,6 @@ public class Login extends HttpServlet {
 		try {
 			user = loginService.login(userName, passWord);
 		} catch(Exception e) {
-			System.out.println("reached");
 			request.setAttribute("Error", "Error");
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
 			requestDispatcher.forward(request, response);

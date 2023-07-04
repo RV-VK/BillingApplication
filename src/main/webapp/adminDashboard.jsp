@@ -8,6 +8,8 @@
 <title>DashBoard</title>
 <%
 response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
+response.setHeader("Pragma","no-cache");
+response.setHeader("Expires","0");
 
       if(session.getAttribute("username")==null)
       {
@@ -18,7 +20,6 @@ response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
       if(store == null){
       response.sendRedirect("storeForm.jsp");
       }
-
 %>
 <div class="header">
 <p id="head" style="font-size: 50%'">SmartPOS</p>

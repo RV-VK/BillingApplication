@@ -4,7 +4,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="deleteOverlay.css">
-<title>STORE PAGE</title>
+<title>Store Page</title>
 <style>
 .header{
 position: absolute;
@@ -15,11 +15,12 @@ width: 100%;
 height: 50px;
 }
 #head{
+position: absolute;
 font-family: 'Courier New', monospace;
 color: white;
 font-size: 150%;
-margin-top: -20px;
-margin-left: 610px;
+top: -10px;
+left: 20px;
 }
 #cart{
 position: relative;
@@ -172,6 +173,39 @@ width: 450px;
 background-color: #D3D3D3;
 margin-top: 5%;
 }
+#container:hover{
+  background-color: #303136;
+}
+#container{
+top: 0px;
+left: 44%;
+position: absolute;
+width: 150px;
+height: 50px;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 150px;
+  top: 50px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+#container:hover .dropdown-content{
+  display: block;
+}
 </style>
 </head>
 <body bgcolor="303136">
@@ -190,7 +224,17 @@ response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
 <div class="header">
 <img src="Images/cart.png" id="cart">
 <img src="Images/bill.png" id="bill">
+<div id="container">
 <p id="head" style="font-size: 50%'">SmartPOS</p>
+<div class="dropdown-content">
+<a href="adminDashboard.jsp">DashBoard</a>
+<a href="userList">Users</a>
+<a href="productList">Product</a>
+<a href="unitList">Unit</a>
+<a href="purchaseList">Purchase</a>
+<a href="listSales">Sales</a>
+</div>
+</div>
 </div>
 </body>
 <div class="modal">

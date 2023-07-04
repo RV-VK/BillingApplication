@@ -227,6 +227,8 @@ request.setAttribute("attributes",purchaseAttributes);
 <div class="detail" id="${purchase.getInvoice()}">
 <div class="detailContent">
 <span class="close" onclick="closeModal()">x</span>
+<p style="margin-left: 80px;"> PURCHASE DETAILS</p>
+<div class="wrapper">
 <table class="detailTable" border="1">
 <tr class="detailRow"><th>INVOICE_ID</th><th>PRODUCT CODE</th><th>PRODUCT NAME</th><th>QUANTITY</th><th>COSTPRICE</th><tr>
 <c:forEach items="${purchase.getPurchaseItemList()}" var="purchaseItem">
@@ -234,6 +236,7 @@ request.setAttribute("attributes",purchaseAttributes);
 <td>${purchaseItem.getQuantity()}</td><td>${purchaseItem.getUnitPurchasePrice()}</td></tr>
 </c:forEach>
 </table>
+</div>
 </div>
 </div>
 <input type="image" id="img" class="openDetails" src="Images/details.png" alt="details" onclick="openPopUp('${purchase.getInvoice()}')" >

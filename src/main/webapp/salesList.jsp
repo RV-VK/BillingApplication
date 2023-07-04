@@ -226,6 +226,8 @@ request.setAttribute("attributes",salesAttributes);
 <div class="detail" id="${sales.getId()}">
 <div class="detailContent">
 <span class="close" onclick="closeModal()">x</span>
+<p style="margin-left: 80px;"> SALES DETAILS</p>
+<div class="wrapper">
 <table class="detailTable" border="1">
 <tr class="detailRow"><th>INVOICE_ID</th><th>PRODUCT CODE</th><th>PRODUCT NAME</th><th>QUANTITY</th><th>SALESPRICE</th><tr>
 <c:forEach items="${sales.getSalesItemList()}" var="salesItem">
@@ -233,6 +235,7 @@ request.setAttribute("attributes",salesAttributes);
 <td>${salesItem.getQuantity()}</td><td>${salesItem.getUnitSalesPrice()}</td></tr>
 </c:forEach>
 </table>
+</div>
 </div>
 </div>
 <input type="image" id="img" class="openDetails" src="Images/details.png" alt="details" onclick="openPopUp('${sales.getId()}')" data-toggle="detail" data-target="#${sales.getId()}">

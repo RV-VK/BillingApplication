@@ -53,8 +53,7 @@ public class productList extends HttpServlet {
 				System.out.println(e.getMessage());
 			}
 			noOfRecords = productList.size();
-		}
-		else {
+		} else {
 			if(attribute == null) {
 				listAttributes.put("Attribute", "id");
 			} else {
@@ -80,12 +79,14 @@ public class productList extends HttpServlet {
 		request.setAttribute("currentPage", page);
 		request.setAttribute("Attribute", listAttributes.get("Attribute"));
 		request.setAttribute("Searchtext", searchText);
-		if(userType.equalsIgnoreCase("Admin")) {
+		if(userType != null && userType.equalsIgnoreCase("Admin")) {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("product.jsp");
 			requestDispatcher.forward(request, response);
-		}
-		else if(userType.equalsIgnoreCase("Sales") || userType.equalsIgnoreCase("Purchase")) {
+		} else if(userType != null && (userType.equalsIgnoreCase("Sales") || userType.equalsIgnoreCase("Purchase"))) {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("productReadOnly.jsp");
+			requestDispatcher.forward(request, response);
+		} else {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("product.jsp");
 			requestDispatcher.forward(request, response);
 		}
 	}

@@ -13,8 +13,9 @@ public class Logout extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		session.removeAttribute("username");
+		session.removeAttribute("userType");
+		session.removeAttribute("userId");
 		session.invalidate();
 		response.sendRedirect("index.jsp");
-
 	}
 }

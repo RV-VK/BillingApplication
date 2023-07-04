@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="detailsOverlay.css">
 <title>Billing Menu</title>
 <%
       response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"  );
@@ -250,6 +251,17 @@ background-color: #303136;
 height: 30px;
 width: 30px;
 }
+.det{
+position: absolute;
+background-image: url('Images/details.png');
+background-size: cover;
+height: 30px;
+width: 30px;
+cursor: pointer;
+border: none;
+left: 1250px;
+top: 67px;
+}
 .autocomplete {
   position: absolute;
   display: inline-block;
@@ -260,7 +272,7 @@ width: 30px;
   position: absolute;
   z-index: 2;
   top: 30px;
-  left: 270px;
+  left: 150px;
   height: 30px;
   width: 205px;
   right: 0px;
@@ -299,9 +311,26 @@ String code = product.getCode();
 productKeyList.add(name);
 productKeyList.add(code);
 }
+request.setAttribute("products",productList);
 session.setAttribute("selectedList",request.getAttribute("selectedList"));
 request.setAttribute("productList",productKeyList);
 %>
+<div class="detail">
+<div class="detailContent">
+<span class="close" onclick="closeModal()">x</span>
+<p style="margin-left: 50px;"> PRODUCTS </p>
+<div class="wrapper">
+<table class="detailTable">
+<tr class="mainRow"><th>ID</th><th>CODE</th><th>NAME</th><th>UNITCODE</th><th>TYPE</th><th>STOCK</th><th>PRICE</th></tr>
+<c:forEach items="${products}" var="product">
+<tr><td>${product.getId()}</td><td>${product.getCode()}</td><td>${product.getName()}</td>
+<td>${product.getunitcode()}</td><td>${product.getType()}</td><td>${product.getAvailableQuantity()}</td>
+<td>${product.getPrice()}</td></tr>
+</c:forEach>
+</table>
+</div>
+</div>
+</div>
 <body bgcolor="#303136">
 <form autocomplete="off" action="addToPurchase" method="post">
 <div class="contentHolder">
@@ -312,6 +341,7 @@ request.setAttribute("productList",productKeyList);
 <input type="date" name="currentDate" id="dateBox" value="${date}" oninput="assignDate()" required>
 <label id="invoice" for="invoice"> Invoice: </label>&nbsp&nbsp
 <input type="text" name="invoice" id="invoiceBox" value="${invoice}" placeholder="invoice number" oninput="setCustomValidity('')" required><br><br><br>
+<img class="det" onclick="openDetails()" title="ViewProducts" src="Images/details.png">
 <label id="searchBarLabel" for="searchBar"> Product: </label>
 <div class="autocomplete" style="width: 200px;">
 <input type="text" name="searchBar" id="searchBar" placeholder="Code/Name" pattern="^[a-zA-Z0-9\s]{3,30}$" oninvalid="this.setCustomValidity('Invalid format for Product Code/Name')" oninput="setCustomValidity('')" required>
@@ -441,5 +471,26 @@ var products = [];
 products[<%= i %>] = "<%= productKeyList.get(i) %>";
 <% } %>
 autocomplete(document.getElementById("searchBar"), products);
+
+var modal = document.querySelector(".detail");
+var span = document.querySelector(".close");
+
+function openDetails(){
+modal.style.display = "block";
+}
+span.addEventListener("click", () => {
+hideModal();
+});
+function hideModal() {
+modal.style.display = "none";
+}
+function closeModal() {
+hideModal();
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+     hideModal();
+  }
+};
 </script>
 </html>
