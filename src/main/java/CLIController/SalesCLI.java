@@ -6,7 +6,6 @@ import Entity.Sales;
 import Entity.SalesItem;
 import Service.InvalidTemplateException;
 import Service.SalesService;
-import Service.SalesServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,20 +16,12 @@ public class SalesCLI {
 	private final List<SalesItem> salesItemList = new ArrayList<>();
 	private final HashMap<String, String> listAttributesMap = new HashMap<>();
 	private final List<String> saleAttributes = Arrays.asList("id", "date");
-	@Autowired
-	private  SalesService salesService;
 	private final Scanner scanner = new Scanner(System.in);
-	private String salesDate;
+	@Autowired
+	private SalesService salesService;
 	private double grandTotal;
-	private String code;
-	private float quantity;
-	private int pageLength;
-	private int pageNumber;
-	private String attribute;
-	private String searchText;
 	@Autowired
 	private Sales createdSale;
-	private List<Sales> salesList;
 
 
 	/**
@@ -46,7 +37,7 @@ public class SalesCLI {
 			System.out.println(">> Try \"sales help\" for proper Syntax!!!");
 		} else {
 			String[] commandArguments = commandEntities[0].split("\\s+");
-			salesDate = commandArguments[1].trim().replace(",", "");
+			String salesDate = commandArguments[1].trim().replace(",", "");
 			salesItemList.clear();
 			for(int i = 1 ; i < commandEntities.length ; i++) {
 				String item = commandEntities[i].replaceAll("[\\[\\]]", "");
@@ -60,11 +51,12 @@ public class SalesCLI {
 					System.out.println(">> Try \"sales help\" for proper syntax");
 					return;
 				}
-				code = itemVariables[0].trim();
+				String code = itemVariables[0].trim();
 				if(! code.matches(productcodeRegex)) {
 					System.out.println(">> Invalid format for product code in product :" + i);
 					System.out.println(">> Try \"sales help\" for proper syntax!!");
 				}
+				float quantity;
 				try {
 					quantity = Float.parseFloat(itemVariables[1].trim());
 				} catch(Exception e) {
@@ -146,11 +138,14 @@ public class SalesCLI {
 				return;
 			}
 		}
+		int pageLength;
+		int pageNumber;
+		String attribute;
+		String searchText;
 		if(arguments.size() == 2) {
 			setMap(listAttributesMap, "20", "1", "id", null);
 			listHelper(listAttributesMap);
 		} else if(arguments.size() == 4) {
-			pageLength = 0;
 			if(arguments.get(2).equals("-p")) {
 				if((pageLength = validateNumber(arguments.get(3), "PageLength")) < 0) return;
 				setMap(listAttributesMap, String.valueOf(pageLength), "1", "id", null);
@@ -234,7 +229,7 @@ public class SalesCLI {
 	 */
 	private void listHelper(HashMap<String, String> listAttributesMap) {
 		try {
-			salesList = salesService.list(listAttributesMap);
+			List<Sales> salesList = salesService.list(listAttributesMap);
 			if(salesList.size() == 0) {
 				if(listAttributesMap.get("Searchtext") != null) {
 					System.out.println(">> Given SearchText does not exist!!!");
