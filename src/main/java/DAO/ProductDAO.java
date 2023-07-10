@@ -2,10 +2,8 @@ package DAO;
 
 import Entity.Product;
 import Mapper.ProductMapper;
-import SQLSession.MyBatisSession;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -13,8 +11,7 @@ import java.util.List;
 
 @Component
 public class ProductDAO {
-	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private SqlSession sqlSession;
+	@Autowired
 	private ProductMapper productMapper;
 
 	/**
@@ -26,11 +23,7 @@ public class ProductDAO {
 	 */
 	public Product create(Product product) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
-			Product createdProduct = productMapper.create(product);
-			sqlSession.close();
-			return createdProduct;
+			return productMapper.create(product);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -69,15 +62,12 @@ public class ProductDAO {
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			Integer count;
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
 				count = productMapper.count(attribute, numericParameter);
 			} else {
 				count = productMapper.count(attribute, searchText);
 			}
-			sqlSession.close();
 			return count;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -94,11 +84,7 @@ public class ProductDAO {
 	 */
 	public List<Product> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
-			List<Product> productList = productMapper.searchList(searchText);
-			sqlSession.close();
-			return productList;
+			return productMapper.searchList(searchText);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -119,8 +105,6 @@ public class ProductDAO {
 		try {
 			Integer count;
 			List<Product> productList;
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
 				count = productMapper.count(attribute, numericParameter);
@@ -131,7 +115,6 @@ public class ProductDAO {
 				checkPagination(count, offset, pageLength);
 				productList = productMapper.list(attribute, searchText, pageLength, offset);
 			}
-			sqlSession.close();
 			return productList;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -165,11 +148,7 @@ public class ProductDAO {
 	 */
 	public Product edit(Product product) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
-			Product editedProduct = productMapper.edit(product);
-			sqlSession.close();
-			return editedProduct;
+			return productMapper.edit(product);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -185,11 +164,7 @@ public class ProductDAO {
 	 */
 	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
-			Integer rowsAffected = productMapper.delete(parameter);
-			sqlSession.close();
-			return rowsAffected;
+			return productMapper.delete(parameter);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
@@ -204,11 +179,7 @@ public class ProductDAO {
 	 */
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			productMapper = sqlSession.getMapper(ProductMapper.class);
-			Product foundProduct = productMapper.findByCode(code);
-			sqlSession.close();
-			return foundProduct;
+			return productMapper.findByCode(code);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			throw new ApplicationErrorException(e.getMessage());

@@ -6,6 +6,8 @@ import DAO.UnitCodeViolationException;
 import Service.InvalidTemplateException;
 import Service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -27,8 +29,7 @@ public class AdminMain {
 	private PurchaseCLI purchaseCLI;
 	@Autowired
 	private SalesCLI salesCLI;
-	@Autowired
-	private LoginCLI loginCLI;
+
 
 	public AdminMain() {
 	}
@@ -176,7 +177,10 @@ public class AdminMain {
 					}
 					case "help" -> FeedBackPrinter.mainHelp();
 					case "exit" -> System.exit(0);
-					case "logout" -> loginCLI.Login();
+					case "logout" -> {
+						ApplicationContext context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
+						LoginCLI loginCLI = context.getBean(LoginCLI.class);
+						loginCLI.Login();}
 					default -> System.out.println("Invalid Command! Not Found!");
 				}
 			}

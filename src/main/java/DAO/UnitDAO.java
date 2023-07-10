@@ -2,10 +2,8 @@ package DAO;
 
 import Entity.Unit;
 import Mapper.UnitMapper;
-import SQLSession.MyBatisSession;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -13,8 +11,7 @@ import java.util.List;
 
 @Component
 public class UnitDAO {
-	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private SqlSession sqlSession;
+	@Autowired
 	private UnitMapper unitMapper;
 	/**
 	 * This method creates an Entry in the Unit table.
@@ -25,11 +22,7 @@ public class UnitDAO {
 	 */
 	public Unit create(Unit unit) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitMapper.class);
-			Unit createdUnit = unitMapper.create(unit);
-			sqlSession.close();
-			return createdUnit;
+			return unitMapper.create(unit);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -59,11 +52,7 @@ public class UnitDAO {
 	 */
 	public List<Unit> list() throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitMapper.class);
-			List<Unit> unitList = unitMapper.list();
-			sqlSession.close();
-			return unitList;
+			return unitMapper.list();
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -79,11 +68,7 @@ public class UnitDAO {
 	 */
 	public Unit edit(Unit unit) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitMapper.class);
-			Unit editedUnit = unitMapper.edit(unit);
-			sqlSession.close();
-			return editedUnit;
+			return unitMapper.edit(unit);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -99,11 +84,7 @@ public class UnitDAO {
 	 */
 	public Integer delete(String code) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitMapper.class);
-			Integer rowsAffected = unitMapper.delete(code);
-			sqlSession.close();
-			return rowsAffected;
+			return unitMapper.delete(code);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -119,11 +100,7 @@ public class UnitDAO {
 	 */
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			unitMapper = sqlSession.getMapper(UnitMapper.class);
-			Unit unit = unitMapper.findByCode(code);
-			sqlSession.close();
-			return unit;
+			return unitMapper.findByCode(code);
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}

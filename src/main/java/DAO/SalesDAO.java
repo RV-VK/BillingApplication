@@ -4,9 +4,6 @@ import Entity.Sales;
 import Entity.SalesItem;
 import Mapper.SalesItemMapper;
 import Mapper.SalesMapper;
-import SQLSession.MyBatisSession;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +14,13 @@ import java.util.List;
 
 @Component
 public class SalesDAO {
-	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
 	@Autowired
 	private ProductDAO productDAO;
 	private final List<SalesItem> salesItemList = new ArrayList<>();
-	private SqlSession sqlSession;
+	@Autowired
 	private SalesMapper salesMapper;
+
+	@Autowired
 	private SalesItemMapper salesItemMapper;
 
 	/**
@@ -35,9 +33,6 @@ public class SalesDAO {
 	 */
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesMapper.class);
-			salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			salesItemList.clear();
 			Sales createdSales = salesMapper.create(sales);
 			for(SalesItem salesItem: sales.getSalesItemList()) {
@@ -50,7 +45,6 @@ public class SalesDAO {
 				productDAO.edit(salesItem.getProduct());
 			}
 			createdSales.setSalesItemList(salesItemList);
-			sqlSession.close();
 			return createdSales;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -68,11 +62,8 @@ public class SalesDAO {
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			Integer count;
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesMapper.class);
 			if(attribute.equals("date")) count = salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));
 			else count = salesMapper.count(attribute, searchText);
-			sqlSession.close();
 			return count;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -94,9 +85,6 @@ public class SalesDAO {
 		List<Sales> listedSales;
 		Date dateParameter = null;
 		Integer count, numericParameter;
-		sqlSession = sqlSessionFactory.openSession();
-		salesMapper = sqlSession.getMapper(SalesMapper.class);
-		salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 		try {
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				numericParameter = Integer.parseInt(String.valueOf(searchText));
@@ -114,7 +102,6 @@ public class SalesDAO {
 				listedSalesItems = salesItemMapper.list(sales.getId());
 				sales.setSalesItemList(listedSalesItems);
 			}
-			sqlSession.close();
 			return listedSales;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -149,16 +136,12 @@ public class SalesDAO {
 	 */
 	public List<Sales> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesMapper.class);
-			salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			List<Sales> listedSales = salesMapper.searchList(searchText);
 			List<SalesItem> listedSalesItems;
 			for(Sales sales: listedSales) {
 				listedSalesItems = salesItemMapper.list(sales.getId());
 				sales.setSalesItemList(listedSalesItems);
 			}
-			sqlSession.close();
 			return listedSales;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -174,12 +157,8 @@ public class SalesDAO {
 	 */
 	public Integer delete(int id) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			salesMapper = sqlSession.getMapper(SalesMapper.class);
-			salesItemMapper = sqlSession.getMapper(SalesItemMapper.class);
 			Integer salesItemDeleted = salesItemMapper.delete(id);
 			Integer salesDeleted = salesMapper.delete(id);
-			sqlSession.close();
 			if(salesItemDeleted > 0 && salesDeleted > 0) return 1;
 			else return - 1;
 		} catch(Exception e) {

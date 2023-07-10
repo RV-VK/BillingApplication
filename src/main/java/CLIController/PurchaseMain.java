@@ -5,6 +5,8 @@ import DAO.PageCountOutOfBoundsException;
 import DAO.UnitCodeViolationException;
 import Service.InvalidTemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -17,8 +19,7 @@ public class PurchaseMain {
 	PurchaseCLI purchaseCLI = new PurchaseCLI();
 	@Autowired
 	ProductCLI productCLI = new ProductCLI();
-	@Autowired
-	private LoginCLI loginCLI;
+
 
 	private static List<String> splitCommand(String command) {
 		String[] parts;
@@ -104,7 +105,11 @@ public class PurchaseMain {
 							\t\t\tdelete - invoice""");
 				}
 				case "exit" -> System.exit(0);
-				case "logout" -> loginCLI.Login();
+				case "logout" -> {
+					ApplicationContext context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
+					LoginCLI loginCLI = context.getBean(LoginCLI.class);
+					loginCLI.Login();
+				}
 				default -> {
 					if(commandEntityList.contains(commandString)) {
 						System.out.println("Non-Permitted Action!! These actions are only Permitted for Admin user");

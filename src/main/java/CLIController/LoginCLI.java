@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+@SpringBootApplication
 @Component
 public class LoginCLI {
 	private static final Scanner scanner = new Scanner(System.in);
@@ -37,6 +38,7 @@ public class LoginCLI {
 	 * Login View Main
 	 **/
 	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, InvalidTemplateException {
+		SpringApplication.run(LoginCLI.class, args);
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
 		LoginCLI loginCLI = applicationContext.getBean(LoginCLI.class);
 		LoginService loginService = applicationContext.getBean(LoginService.class);

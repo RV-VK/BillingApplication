@@ -5,6 +5,8 @@ import DAO.PageCountOutOfBoundsException;
 import DAO.UnitCodeViolationException;
 import Service.InvalidTemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -17,8 +19,7 @@ public class SalesMain {
 	ProductCLI productCLI = new ProductCLI();
 	@Autowired
 	SalesCLI salesCLI = new SalesCLI();
-	@Autowired
-	private LoginCLI loginCLI;
+
 
 	private static List<String> splitCommand(String command) {
 		String[] parts;
@@ -103,6 +104,8 @@ public class SalesMain {
 					System.exit(0);
 					break;
 				case "logout":
+					ApplicationContext context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
+					LoginCLI loginCLI = context.getBean(LoginCLI.class);
 					loginCLI.Login();
 					break;
 				default:

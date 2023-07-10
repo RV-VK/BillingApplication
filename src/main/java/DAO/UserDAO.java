@@ -2,10 +2,8 @@ package DAO;
 
 import Entity.User;
 import Mapper.UserMapper;
-import SQLSession.MyBatisSession;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -13,8 +11,7 @@ import java.util.List;
 
 @Component
 public class UserDAO {
-	private final SqlSessionFactory sqlSessionFactory = MyBatisSession.getSqlSessionFactory();
-	private SqlSession sqlSession;
+	@Autowired
 	private UserMapper userMapper;
 
 	/**
@@ -26,11 +23,7 @@ public class UserDAO {
 	 */
 	public User create(User user) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
-			User createdUser = userMapper.create(user);
-			sqlSession.close();
-			return createdUser;
+			return userMapper.create(user);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -62,15 +55,12 @@ public class UserDAO {
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			Integer count;
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
 				count = userMapper.count(attribute, numericParameter);
 			} else {
 				count = userMapper.count(attribute, searchText);
 			}
-			sqlSession.close();
 			return count;
 		} catch(Exception e) {
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -86,11 +76,7 @@ public class UserDAO {
 	 */
 	public List<User> searchList(String searchText) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
-			List<User> userList = userMapper.searchList(searchText);
-			sqlSession.close();
-			return userList;
+			return userMapper.searchList(searchText);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -111,8 +97,6 @@ public class UserDAO {
 	public List<User> list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		try {
 			List<User> userList;
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
 			if(searchText != null && String.valueOf(searchText).matches("^\\d+(\\.\\d+)?$")) {
 				Double numericParameter = Double.parseDouble((String)searchText);
 				Integer count = userMapper.count(attribute, numericParameter);
@@ -123,7 +107,6 @@ public class UserDAO {
 				checkPagination(count, offset, pageLength);
 				userList = userMapper.list(attribute, searchText, pageLength, offset);
 			}
-			sqlSession.close();
 			return userList;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
@@ -157,11 +140,7 @@ public class UserDAO {
 	 */
 	public User edit(User user) throws Exception {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
-			User editedUser = userMapper.edit(user);
-			sqlSession.close();
-			return editedUser;
+			return userMapper.edit(user);
 		} catch(PersistenceException e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
@@ -177,11 +156,7 @@ public class UserDAO {
 	 */
 	public Integer delete(String username) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
-			Integer rowsAffected = userMapper.delete(username);
-			sqlSession.close();
-			return rowsAffected;
+			return userMapper.delete(username);
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
@@ -191,12 +166,8 @@ public class UserDAO {
 
 	public User findById(int id) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
-			User foundUser = userMapper.findById(id);
-			sqlSession.close();
-			return foundUser;
-		}catch(Exception e) {
+			return userMapper.findById(id);
+		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
@@ -211,10 +182,7 @@ public class UserDAO {
 	 */
 	public User login(String userName, String passWord) throws ApplicationErrorException {
 		try {
-			sqlSession = sqlSessionFactory.openSession();
-			userMapper = sqlSession.getMapper(UserMapper.class);
 			User user = userMapper.login(userName, passWord);
-			sqlSession.close();
 			if(user != null && user.getPassWord().equals(passWord)) return user;
 			else return null;
 		} catch(SQLException e) {
