@@ -18,7 +18,7 @@ dependencies {
     implementation 'org.mybatis:mybatis:3.5.13'
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     implementation 'org.springframework:spring-context:6.0.10'
-
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
 }
 
 test {

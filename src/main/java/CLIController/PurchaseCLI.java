@@ -31,7 +31,7 @@ public class PurchaseCLI {
 	private int pageNumber;
 	private String attribute;
 	private String searchText;
-	@Autowired
+
 	private Purchase createdPurchase;
 
 	/**

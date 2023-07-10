@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-@Component
+@Service
 public class SalesServiceImplementation implements SalesService {
 	@Autowired
 	private final SalesDAO salesDAO = new SalesDAO();

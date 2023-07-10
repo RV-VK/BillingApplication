@@ -5,11 +5,12 @@ import DAO.UnitDAO;
 import Entity.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
-@Component
+@Service
 public class UnitServiceImplementation implements UnitService {
 	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
 	private final String CODE_REGEX = "^[a-zA-Z]{1,4}$";

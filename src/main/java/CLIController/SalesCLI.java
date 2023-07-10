@@ -20,7 +20,7 @@ public class SalesCLI {
 	@Autowired
 	private SalesService salesService;
 	private double grandTotal;
-	@Autowired
+
 	private Sales createdSale;
 
 

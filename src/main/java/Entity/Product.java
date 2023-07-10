@@ -1,10 +1,7 @@
 package Entity;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Objects;
 
-@Component
 public class Product {
 	private Integer id;
 	private String code;

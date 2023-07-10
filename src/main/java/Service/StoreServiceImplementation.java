@@ -5,11 +5,12 @@ import DAO.StoreDAO;
 import Entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 
 
-@Component
+@Service
 public class StoreServiceImplementation implements StoreService {
 	private final String NAME_REGEX = "^[a-zA-Z0-9\\s]{3,30}$";
 	private final String PHONE_NUMBER_REGEX = "^[6789]\\d{9}$";

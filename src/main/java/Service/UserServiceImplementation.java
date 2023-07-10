@@ -6,6 +6,7 @@ import DAO.UserDAO;
 import Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-@Component
+@Service
 public class UserServiceImplementation implements UserService {
 
 	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";

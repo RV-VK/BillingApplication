@@ -1,13 +1,8 @@
 package Entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.Objects;
 
-@Component
 public class 	SalesItem {
-	@Autowired
 	private Product product;
 	private Float quantity;
 	private Double unitSalesPrice;

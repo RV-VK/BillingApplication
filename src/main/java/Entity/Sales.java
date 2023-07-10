@@ -1,10 +1,7 @@
 package Entity;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
-@Component
 public class Sales {
 	private Integer id;
 	private String date;

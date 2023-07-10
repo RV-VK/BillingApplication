@@ -32,6 +32,27 @@ public class AdminMain {
 
 	public AdminMain() {
 	}
+
+	private static List<String> splitCommand(String command) {
+		String[] parts;
+		String[] commandlet;
+		if(command.contains(",")) {
+			parts = command.split("[,:]");
+			commandlet = parts[0].split("\\s+");
+		} else {
+			parts = command.split(",");
+			commandlet = command.split("\\s+");
+		}
+		ArrayList<String> commandList = new ArrayList<>();
+		if(parts.length == 1) {
+			Collections.addAll(commandList, commandlet);
+		} else {
+			Collections.addAll(commandList, commandlet);
+			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
+		}
+		return commandList;
+	}
+
 	/**
 	 * The Admin View Control.
 	 *
@@ -49,8 +70,7 @@ public class AdminMain {
 			String operationString = "";
 			if(commandList.size() > 1) operationString = commandList.get(1);
 			if(! loginService.checkIfInitialSetup()) {
-				if(commandString.equals("store") && operationString.equals("create"))
-					 storeCLI.create(commandList);
+				if(commandString.equals("store") && operationString.equals("create")) storeCLI.create(commandList);
 				else {
 					System.out.println(">> Please Create a Store to Proceed!! You need to Register your store before Proceeding to further Billing CLI functions!!");
 					FeedBackPrinter.printStoreHelp("create");
@@ -162,25 +182,6 @@ public class AdminMain {
 			}
 		} while(true);
 
-	}
-	private static List<String> splitCommand(String command) {
-		String[] parts;
-		String[] commandlet;
-		if(command.contains(",")) {
-			parts = command.split("[,:]");
-			commandlet = parts[0].split("\\s+");
-		} else {
-			parts = command.split(",");
-			commandlet = command.split("\\s+");
-		}
-		ArrayList<String> commandList = new ArrayList<>();
-		if(parts.length == 1) {
-			Collections.addAll(commandList, commandlet);
-		} else {
-			Collections.addAll(commandList, commandlet);
-			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));
-		}
-		return commandList;
 	}
 
 }

@@ -1,8 +1,5 @@
 package Entity;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Unit {
 	private Integer id;
 	private String name;

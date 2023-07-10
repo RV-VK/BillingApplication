@@ -273,10 +273,9 @@ public class ProductCLI {
 	 * @param editAttributes Attributes of product to be edited.
 	 */
 	private void editHelper(List<String> editAttributes) {
-		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
 		if(editAttributes.size() < 12)
 			System.out.println(">> Insufficient arguments for edit!!\n Try \"product edit help\" for proper syntax!");
-		Product product = applicationContext.getBean(Product.class);
+		Product product = new Product();
 		try {
 			id = Integer.parseInt(editAttributes.get(1).trim());
 		} catch(Exception e) {
