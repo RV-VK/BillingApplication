@@ -15,17 +15,17 @@
                 <property name="url" value="jdbc:postgresql://localhost:5432/POSDatabase"/>
                 <property name="username" value="postgres"/>
                 <property name="password" value="manikantan1205"/>
-                <property name="defaultAutoCommit" value="true" />
+                <property name="defaultAutoCommit" value="true"/>
             </dataSource>
         </environment>
     </environments>
     <mappers>
-        <mapper class="Mapper.ProductMapper" />
-        <mapper class="Mapper.UserMapper" />
-        <mapper class="Mapper.UnitMapper" />
-        <mapper class="Mapper.StoreMapper" />
+        <mapper class="Mapper.ProductMapper"/>
+        <mapper class="Mapper.UserMapper"/>
+        <mapper class="Mapper.UnitMapper"/>
+        <mapper class="Mapper.StoreMapper"/>
         <mapper class="Mapper.PurchaseMapper"/>
-        <mapper class="Mapper.SalesMapper" />
+        <mapper class="Mapper.SalesMapper"/>
         <mapper class="Mapper.PurchaseItemMapper"/>
         <mapper class="Mapper.SalesItemMapper"/>
     </mappers>

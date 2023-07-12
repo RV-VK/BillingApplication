@@ -6,6 +6,7 @@ import org.example.DAO.UnitCodeViolationException;
 import org.example.Entity.User;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.LoginService;
+import org.example.Service.LoginServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,7 +37,7 @@ public class LoginCLI {
 		SpringApplication.run(LoginCLI.class, args);
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
 		LoginCLI loginCLI = applicationContext.getBean(LoginCLI.class);
-		LoginService loginService = applicationContext.getBean(LoginService.class);
+		LoginService loginService = applicationContext.getBean(LoginServiceImplementation.class);
 		if(! loginService.checkIfInitialSetup()) {
 
 			System.out.println("""
@@ -106,7 +107,7 @@ public class LoginCLI {
 	 */
 	public void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException, InvalidTemplateException {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
-		LoginService loginService = applicationContext.getBean(LoginService.class);
+		LoginService loginService = applicationContext.getBean(LoginServiceImplementation.class);
 		System.out.println("Please Login To continue to the Billing Software!!\n");
 		do {
 			System.out.print(">> Enter UserName: ");

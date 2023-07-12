@@ -50,7 +50,6 @@ class ProductServiceImplementationTest {
 			put("Searchtext", null);
 		}}));
 	}
-
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);

@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginServiceImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.Service</a> &gt; <span class="el_source">LoginServiceImplementation.java</span></div><h1>LoginServiceImplementation.java</h1><pre class="source lang-java linenums">package org.example.Service;
 
-import org.example.CLIController.AppDependencyConfig;
 import org.example.DAO.ApplicationErrorException;
 import org.example.DAO.StoreDAO;
 import org.example.DAO.UserDAO;
 import org.example.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
-<span class="nc" id="L14">public class LoginServiceImplementation implements LoginService {</span>
+<span class="fc" id="L11">public class LoginServiceImplementation implements LoginService {</span>
 	@Autowired
 	private UserDAO userDAO;
-	private ApplicationContext context;
+	@Autowired
+	private StoreDAO storeDAO;
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public Boolean checkIfInitialSetup() throws ApplicationErrorException {
-<span class="nc" id="L21">		context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
-<span class="nc" id="L22">		StoreDAO storeDAO = context.getBean(StoreDAO.class);</span>
-<span class="nc" id="L23">		return storeDAO.checkIfStoreExists();</span>
+<span class="fc" id="L21">		return storeDAO.checkIfStoreExists();</span>
 	}
 
 	@Override
 	public User createUser(User user) throws Exception {
-<span class="nc" id="L28">		context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
-<span class="nc" id="L29">		UserService userService = context.getBean(UserService.class);</span>
-<span class="nc" id="L30">		return userService.create(user);</span>
+<span class="fc" id="L26">		return userService.create(user);</span>
 	}
 
 
 	@Override
 	public User login(String userName, String passWord) throws ApplicationErrorException {
-<span class="nc" id="L36">		return userDAO.login(userName, passWord);</span>
+<span class="fc" id="L32">		return userDAO.login(userName, passWord);</span>
 	}
 
 

@@ -6,15 +6,13 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = "CLIController,Service,Entity,DAO,Mapper")
-@MapperScan("Mapper")
+@ComponentScan(basePackages = "org.example.CLIController,org.example.DAO,org.example.Entity,org.example.Mapper,org.example.Service")
+@MapperScan("org.example.Mapper")
 public class AppDependencyConfig {
 	@Bean
 	public DataSource dataSource() {
@@ -30,8 +28,6 @@ public class AppDependencyConfig {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource());
-		Resource myBatisConfig = new ClassPathResource("mybatis-config.xml");
-		factoryBean.setConfigLocation(myBatisConfig);
 		return factoryBean.getObject();
 	}
 }

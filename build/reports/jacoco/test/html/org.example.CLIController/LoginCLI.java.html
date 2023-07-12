@@ -6,6 +6,7 @@ import org.example.DAO.UnitCodeViolationException;
 import org.example.Entity.User;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.LoginService;
+import org.example.Service.LoginServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,8 +19,8 @@ import java.util.Scanner;
 
 @SpringBootApplication
 @Component
-<span class="nc" id="L21">public class LoginCLI {</span>
-<span class="nc" id="L22">	private static final Scanner scanner = new Scanner(System.in);</span>
+<span class="nc" id="L22">public class LoginCLI {</span>
+<span class="nc" id="L23">	private static final Scanner scanner = new Scanner(System.in);</span>
 	private static String userName;
 	private static String passWord;
 	@Autowired
@@ -33,20 +34,20 @@ import java.util.Scanner;
 	 * Login View Main
 	 **/
 	public static void main(String[] args) throws SQLException, ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, InvalidTemplateException {
-<span class="nc" id="L36">		SpringApplication.run(LoginCLI.class, args);</span>
-<span class="nc" id="L37">		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
-<span class="nc" id="L38">		LoginCLI loginCLI = applicationContext.getBean(LoginCLI.class);</span>
-<span class="nc" id="L39">		LoginService loginService = applicationContext.getBean(LoginService.class);</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">		if(! loginService.checkIfInitialSetup()) {</span>
+<span class="nc" id="L37">		SpringApplication.run(LoginCLI.class, args);</span>
+<span class="nc" id="L38">		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
+<span class="nc" id="L39">		LoginCLI loginCLI = applicationContext.getBean(LoginCLI.class);</span>
+<span class="nc" id="L40">		LoginService loginService = applicationContext.getBean(LoginServiceImplementation.class);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if(! loginService.checkIfInitialSetup()) {</span>
 
-<span class="nc" id="L42">			System.out.println(&quot;&quot;&quot;</span>
+<span class="nc" id="L43">			System.out.println(&quot;&quot;&quot;</span>
 					\t\t\t\t\t\t*********************************************************
 					\t\t\t\t\t\t*********************   WELCOME   ***********************
 					\t\t\t\t\t\t*********************************************************
 					&quot;&quot;&quot;);
-<span class="nc" id="L47">			System.out.println(&quot;&gt; Welcome to the Billing software setup. You have to create admin user to continue with the setup.\n\n&quot;);</span>
+<span class="nc" id="L48">			System.out.println(&quot;&gt; Welcome to the Billing software setup. You have to create admin user to continue with the setup.\n\n&quot;);</span>
 			do {
-<span class="nc" id="L49">				System.out.println(&quot;&quot;&quot;</span>
+<span class="nc" id="L50">				System.out.println(&quot;&quot;&quot;</span>
 						&gt;&gt; create user using following template
 						&gt;&gt;  usertype, username,  password, first name, last name, phone number
 						\tusertype - text, purchase/sales, mandatory
@@ -56,47 +57,47 @@ import java.util.Scanner;
 						\tlastname  - text, optional
 						\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\t\t\t\t
 						&quot;&quot;&quot;);
-<span class="nc" id="L59">				System.out.println(&quot;\n&quot;);</span>
-<span class="nc" id="L60">				System.out.print(&quot;&gt;&gt; Enter the Admin Username: &quot;);</span>
-<span class="nc" id="L61">				userName = scanner.nextLine();</span>
+<span class="nc" id="L60">				System.out.println(&quot;\n&quot;);</span>
+<span class="nc" id="L61">				System.out.print(&quot;&gt;&gt; Enter the Admin Username: &quot;);</span>
+<span class="nc" id="L62">				userName = scanner.nextLine();</span>
 				do {
-<span class="nc" id="L63">					System.out.print(&quot;&gt;&gt; Enter the password: &quot;);</span>
-<span class="nc" id="L64">					passWord = scanner.nextLine();</span>
-<span class="nc" id="L65">					System.out.print(&quot;&gt;&gt; Renter the password: &quot;);</span>
-<span class="nc" id="L66">					System.out.println(&quot;Passwords do not Match!-- Re-enter&quot;);</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">				} while(! scanner.nextLine().equals(passWord));</span>
-<span class="nc" id="L68">				System.out.print(&quot;&gt;&gt; Enter Your Firstname: &quot;);</span>
-<span class="nc" id="L69">				String firstName = scanner.nextLine();</span>
-<span class="nc" id="L70">				System.out.print(&quot;&gt;&gt; Enter Your LastName: &quot;);</span>
-<span class="nc" id="L71">				String lastName = scanner.nextLine();</span>
-<span class="nc" id="L72">				System.out.print(&quot;&gt;&gt; Enter your phone-number: &quot;);</span>
+<span class="nc" id="L64">					System.out.print(&quot;&gt;&gt; Enter the password: &quot;);</span>
+<span class="nc" id="L65">					passWord = scanner.nextLine();</span>
+<span class="nc" id="L66">					System.out.print(&quot;&gt;&gt; Renter the password: &quot;);</span>
+<span class="nc" id="L67">					System.out.println(&quot;Passwords do not Match!-- Re-enter&quot;);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">				} while(! scanner.nextLine().equals(passWord));</span>
+<span class="nc" id="L69">				System.out.print(&quot;&gt;&gt; Enter Your Firstname: &quot;);</span>
+<span class="nc" id="L70">				String firstName = scanner.nextLine();</span>
+<span class="nc" id="L71">				System.out.print(&quot;&gt;&gt; Enter Your LastName: &quot;);</span>
+<span class="nc" id="L72">				String lastName = scanner.nextLine();</span>
+<span class="nc" id="L73">				System.out.print(&quot;&gt;&gt; Enter your phone-number: &quot;);</span>
 				long phoneNumber;
 				while(true) {
 					try {
-<span class="nc" id="L76">						phoneNumber = Long.parseLong(scanner.nextLine());</span>
-<span class="nc" id="L77">						break;</span>
-<span class="nc" id="L78">					} catch(Exception e) {</span>
-<span class="nc" id="L79">						System.out.println(&quot;Phone number must be numeric! -- Re-enter&quot;);</span>
-<span class="nc" id="L80">					}</span>
+<span class="nc" id="L77">						phoneNumber = Long.parseLong(scanner.nextLine());</span>
+<span class="nc" id="L78">						break;</span>
+<span class="nc" id="L79">					} catch(Exception e) {</span>
+<span class="nc" id="L80">						System.out.println(&quot;Phone number must be numeric! -- Re-enter&quot;);</span>
+<span class="nc" id="L81">					}</span>
 				}
-<span class="nc" id="L82">				User user = new User(&quot;Admin&quot;, userName, passWord, firstName, lastName, phoneNumber);</span>
+<span class="nc" id="L83">				User user = new User(&quot;Admin&quot;, userName, passWord, firstName, lastName, phoneNumber);</span>
 				User createdUser;
 				try {
-<span class="nc" id="L85">					createdUser = loginService.createUser(user);</span>
-<span class="nc" id="L86">				} catch(Exception e) {</span>
-<span class="nc" id="L87">					System.out.println(e.getMessage());</span>
-<span class="nc" id="L88">					continue;</span>
-<span class="nc" id="L89">				}</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">				if(createdUser != null) {</span>
-<span class="nc" id="L91">					System.out.println(&quot;&gt;&gt; Admin Created Successfully!!&quot;);</span>
-<span class="nc" id="L92">					System.out.println(&quot;&gt;&gt; You need to Login to Continue to the Billing Software Setup&quot;);</span>
-<span class="nc" id="L93">					loginCLI.Login();</span>
+<span class="nc" id="L86">					createdUser = loginService.createUser(user);</span>
+<span class="nc" id="L87">				} catch(Exception e) {</span>
+<span class="nc" id="L88">					System.out.println(e.getMessage());</span>
+<span class="nc" id="L89">					continue;</span>
+<span class="nc" id="L90">				}</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">				if(createdUser != null) {</span>
+<span class="nc" id="L92">					System.out.println(&quot;&gt;&gt; Admin Created Successfully!!&quot;);</span>
+<span class="nc" id="L93">					System.out.println(&quot;&gt;&gt; You need to Login to Continue to the Billing Software Setup&quot;);</span>
+<span class="nc" id="L94">					loginCLI.Login();</span>
 				}
-<span class="nc" id="L95">			} while(true);</span>
+<span class="nc" id="L96">			} while(true);</span>
 		} else {
-<span class="nc" id="L97">			loginCLI.Login();</span>
+<span class="nc" id="L98">			loginCLI.Login();</span>
 		}
-<span class="nc" id="L99">	}</span>
+<span class="nc" id="L100">	}</span>
 
 	/**
 	 * The Presentation Layer of the Login function.
@@ -105,35 +106,35 @@ import java.util.Scanner;
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void Login() throws PageCountOutOfBoundsException, ApplicationErrorException, UnitCodeViolationException, SQLException, InvalidTemplateException {
-<span class="nc" id="L108">		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
-<span class="nc" id="L109">		LoginService loginService = applicationContext.getBean(LoginService.class);</span>
-<span class="nc" id="L110">		System.out.println(&quot;Please Login To continue to the Billing Software!!\n&quot;);</span>
+<span class="nc" id="L109">		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
+<span class="nc" id="L110">		LoginService loginService = applicationContext.getBean(LoginServiceImplementation.class);</span>
+<span class="nc" id="L111">		System.out.println(&quot;Please Login To continue to the Billing Software!!\n&quot;);</span>
 		do {
-<span class="nc" id="L112">			System.out.print(&quot;&gt;&gt; Enter UserName: &quot;);</span>
-<span class="nc" id="L113">			userName = scanner.nextLine();</span>
-<span class="nc" id="L114">			System.out.print(&quot;&gt;&gt; Enter the Password: &quot;);</span>
-<span class="nc" id="L115">			passWord = scanner.nextLine();</span>
+<span class="nc" id="L113">			System.out.print(&quot;&gt;&gt; Enter UserName: &quot;);</span>
+<span class="nc" id="L114">			userName = scanner.nextLine();</span>
+<span class="nc" id="L115">			System.out.print(&quot;&gt;&gt; Enter the Password: &quot;);</span>
+<span class="nc" id="L116">			passWord = scanner.nextLine();</span>
 			User user;
 			try {
-<span class="nc" id="L118">				user = loginService.login(userName, passWord);</span>
-<span class="nc" id="L119">			} catch(Exception e) {</span>
-<span class="nc" id="L120">				System.out.println(e.getMessage());</span>
-<span class="nc" id="L121">				return;</span>
-<span class="nc" id="L122">			}</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">			if(user != null) {</span>
-<span class="nc" id="L124">				System.out.print(&quot;\n\n\n\t\t\t\t\t____________WELCOME &quot; + userName + &quot; TO THE BILLING SOFTWARE_____________________&quot;);</span>
+<span class="nc" id="L119">				user = loginService.login(userName, passWord);</span>
+<span class="nc" id="L120">			} catch(Exception e) {</span>
+<span class="nc" id="L121">				System.out.println(e.getMessage());</span>
+<span class="nc" id="L122">				return;</span>
+<span class="nc" id="L123">			}</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			if(user != null) {</span>
+<span class="nc" id="L125">				System.out.print(&quot;\n\n\n\t\t\t\t\t____________WELCOME &quot; + userName + &quot; TO THE BILLING SOFTWARE_____________________&quot;);</span>
 				//Split User control Here
-<span class="nc bnc" id="L126" title="All 2 branches missed.">				if(user.getUserType().equalsIgnoreCase(&quot;Admin&quot;)) {</span>
-<span class="nc" id="L127">					adminMain.AdminView(userName);</span>
-<span class="nc bnc" id="L128" title="All 2 branches missed.">				} else if(user.getUserType().equalsIgnoreCase(&quot;Sales&quot;)) {</span>
-<span class="nc" id="L129">					salesMain.SalesView();</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">				} else if(user.getUserType().equalsIgnoreCase(&quot;Purchase&quot;)) {</span>
-<span class="nc" id="L131">					purchaseMain.PurchaseView();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">				if(user.getUserType().equalsIgnoreCase(&quot;Admin&quot;)) {</span>
+<span class="nc" id="L128">					adminMain.AdminView(userName);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">				} else if(user.getUserType().equalsIgnoreCase(&quot;Sales&quot;)) {</span>
+<span class="nc" id="L130">					salesMain.SalesView();</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				} else if(user.getUserType().equalsIgnoreCase(&quot;Purchase&quot;)) {</span>
+<span class="nc" id="L132">					purchaseMain.PurchaseView();</span>
 				}
 			} else {
-<span class="nc" id="L134">				System.out.println(&quot;&gt;&gt; Login credentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.&quot;);</span>
+<span class="nc" id="L135">				System.out.println(&quot;&gt;&gt; Login credentials invalid ! You should try with a valid user name and password. If you have any issues contact software administrator.&quot;);</span>
 			}
-<span class="nc" id="L136">		} while(true);</span>
+<span class="nc" id="L137">		} while(true);</span>
 	}
 
 }
