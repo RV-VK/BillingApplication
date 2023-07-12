@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.Service.UserServiceImplementationTest" tests="22" skipped="0" failures="0" errors="0" timestamp="2023-07-12T09:54:20" hostname="apnxdesk006-Veriton-M200-H61" time="0.189">
+<testsuite name="org.example.Service.UserServiceImplementationTest" tests="22" skipped="0" failures="0" errors="0" timestamp="2023-07-12T13:06:28" hostname="apnxdesk006-Veriton-M200-H61" time="0.1">
   <properties/>
-  <testcase name="deleteShouldCallAndReturnStatusCode()" classname="org.example.Service.UserServiceImplementationTest" time="0.007"/>
-  <testcase name="[1] User{id=null, userType='Some', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.007"/>
-  <testcase name="[2] User{id=null, userType='Thomas', userName='Thom12as', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.006"/>
-  <testcase name="[3] User{id=null, userType='Thomas', userName='Thomas', passWord='T@21', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.006"/>
-  <testcase name="[4] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thom243as', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.012"/>
+  <testcase name="deleteShouldCallAndReturnStatusCode()" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[1] User{id=null, userType='Some', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[2] User{id=null, userType='Thomas', userName='Thom12as', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[3] User{id=null, userType='Thomas', userName='Thomas', passWord='T@21', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[4] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thom243as', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
   <testcase name="[5] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Sh31elby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
-  <testcase name="[6] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=231}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
-  <testcase name="listWithSearchTextAloneCallsAndReturnsList()" classname="org.example.Service.UserServiceImplementationTest" time="0.004"/>
-  <testcase name="[1] {Pagenumber=1, Searchtext=Sales, Attribute=usertype, Pagelength=10}" classname="org.example.Service.UserServiceImplementationTest" time="0.006"/>
-  <testcase name="[2] {Pagenumber=1, Searchtext=null, Attribute=id, Pagelength=10}" classname="org.example.Service.UserServiceImplementationTest" time="0.007"/>
+  <testcase name="[6] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=231}" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
+  <testcase name="listWithSearchTextAloneCallsAndReturnsList()" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
+  <testcase name="[1] {Pagenumber=1, Searchtext=Sales, Attribute=usertype, Pagelength=10}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[2] {Pagenumber=1, Searchtext=null, Attribute=id, Pagelength=10}" classname="org.example.Service.UserServiceImplementationTest" time="0.009"/>
   <testcase name="[1] User{id=null, userType='Some', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.005"/>
-  <testcase name="[2] User{id=null, userType='Thomas', userName='Thom12as', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.004"/>
+  <testcase name="[2] User{id=null, userType='Thomas', userName='Thom12as', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
   <testcase name="[3] User{id=null, userType='Thomas', userName='Thomas', passWord='T@21', firstName='Thomas', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.004"/>
-  <testcase name="[4] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thom243as', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.005"/>
-  <testcase name="[5] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Sh31elby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.007"/>
-  <testcase name="[6] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=231}" classname="org.example.Service.UserServiceImplementationTest" time="0.004"/>
-  <testcase name="editShouldCallAndReturnUser()" classname="org.example.Service.UserServiceImplementationTest" time="0.007"/>
-  <testcase name="countShouldCallAndReturn()" classname="org.example.Service.UserServiceImplementationTest" time="0.005"/>
-  <testcase name="createShouldCallAndReturnUser()" classname="org.example.Service.UserServiceImplementationTest" time="0.008"/>
-  <testcase name="editProductNullValidation()" classname="org.example.Service.UserServiceImplementationTest" time="0.01"/>
-  <testcase name="createUserNullValidation()" classname="org.example.Service.UserServiceImplementationTest" time="0.006"/>
-  <testcase name="deleteUserNullValidation()" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[4] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thom243as', lastName='Shelby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
+  <testcase name="[5] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Sh31elby', phoneNumber=8954709985}" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="[6] User{id=null, userType='Thomas', userName='Thomas', passWord='Thomas2121', firstName='Thomas', lastName='Shelby', phoneNumber=231}" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
+  <testcase name="editShouldCallAndReturnUser()" classname="org.example.Service.UserServiceImplementationTest" time="0.005"/>
+  <testcase name="countShouldCallAndReturn()" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="createShouldCallAndReturnUser()" classname="org.example.Service.UserServiceImplementationTest" time="0.004"/>
+  <testcase name="editProductNullValidation()" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
+  <testcase name="createUserNullValidation()" classname="org.example.Service.UserServiceImplementationTest" time="0.003"/>
+  <testcase name="deleteUserNullValidation()" classname="org.example.Service.UserServiceImplementationTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

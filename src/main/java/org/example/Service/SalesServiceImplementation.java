@@ -1,13 +1,10 @@
 package org.example.Service;
 
-import org.example.CLIController.AppDependencyConfig;
 import org.example.DAO.*;
 import org.example.Entity.Product;
 import org.example.Entity.Sales;
 import org.example.Entity.SalesItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -18,18 +15,18 @@ import java.util.List;
 
 @Service
 public class SalesServiceImplementation implements SalesService {
-	@Autowired
-	private final SalesDAO salesDAO = new SalesDAO();
 	private final String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
-
+	@Autowired
+	private SalesDAO salesDAO;
+	@Autowired
+	private ProductDAO getProductByCode;
+	@Autowired
+	private UnitDAO getUnitByCode;
 
 	@Override
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException, InvalidTemplateException {
 		boolean isDividable;
 		double grandtotal = 0.0;
-		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
-		ProductDAO getProductByCode = applicationContext.getBean(ProductDAO.class);
-		UnitDAO getUnitByCode = applicationContext.getBean(UnitDAO.class);
 		validate(sales);
 		for(SalesItem salesItem: sales.getSalesItemList()) {
 			try {

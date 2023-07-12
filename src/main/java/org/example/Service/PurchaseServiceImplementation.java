@@ -1,6 +1,5 @@
 package org.example.Service;
 
-import org.example.CLIController.AppDependencyConfig;
 import org.example.DAO.ApplicationErrorException;
 import org.example.DAO.ProductDAO;
 import org.example.DAO.PurchaseDAO;
@@ -9,8 +8,6 @@ import org.example.Entity.Product;
 import org.example.Entity.Purchase;
 import org.example.Entity.PurchaseItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -23,12 +20,13 @@ public class PurchaseServiceImplementation implements PurchaseService {
 	private final String dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 	@Autowired
 	private PurchaseDAO purchaseDAO;
+	@Autowired
+	private ProductDAO productDAO;
+	@Autowired
+	private UnitDAO unitDAO;
 
 	@Override
 	public Purchase create(Purchase purchase) throws Exception {
-		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);
-		ProductDAO productDAO = applicationContext.getBean(ProductDAO.class);
-		UnitDAO unitDAO = applicationContext.getBean(UnitDAO.class);
 		boolean isDividable;
 		validate(purchase);
 		for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {

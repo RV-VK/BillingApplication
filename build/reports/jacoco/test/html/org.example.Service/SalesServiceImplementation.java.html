@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SalesServiceImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.Service</a> &gt; <span class="el_source">SalesServiceImplementation.java</span></div><h1>SalesServiceImplementation.java</h1><pre class="source lang-java linenums">package org.example.Service;
 
-import org.example.CLIController.AppDependencyConfig;
 import org.example.DAO.*;
 import org.example.Entity.Product;
 import org.example.Entity.Sales;
 import org.example.Entity.SalesItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -17,82 +14,82 @@ import java.util.List;
 
 
 @Service
-<span class="nc" id="L20">public class SalesServiceImplementation implements SalesService {</span>
-<span class="nc" id="L21">	@Autowired</span>
-	private final SalesDAO salesDAO = new SalesDAO();
-<span class="nc" id="L23">	private final String dateRegex = &quot;([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))&quot;;</span>
-
+<span class="fc" id="L17">public class SalesServiceImplementation implements SalesService {</span>
+<span class="fc" id="L18">	private final String dateRegex = &quot;([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))&quot;;</span>
+	@Autowired
+	private SalesDAO salesDAO;
+	@Autowired
+	private ProductDAO getProductByCode;
+	@Autowired
+	private UnitDAO getUnitByCode;
 
 	@Override
 	public Sales create(Sales sales) throws ApplicationErrorException, SQLException, UnDividableEntityException, InvalidTemplateException {
 		boolean isDividable;
-<span class="nc" id="L29">		double grandtotal = 0.0;</span>
-<span class="nc" id="L30">		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
-<span class="nc" id="L31">		ProductDAO getProductByCode = applicationContext.getBean(ProductDAO.class);</span>
-<span class="nc" id="L32">		UnitDAO getUnitByCode = applicationContext.getBean(UnitDAO.class);</span>
-<span class="nc" id="L33">		validate(sales);</span>
-<span class="nc bnc" id="L34" title="All 2 branches missed.">		for(SalesItem salesItem: sales.getSalesItemList()) {</span>
+<span class="fc" id="L29">		double grandtotal = 0.0;</span>
+<span class="fc" id="L30">		validate(sales);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		for(SalesItem salesItem: sales.getSalesItemList()) {</span>
 			try {
-<span class="nc" id="L36">				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">				if(product != null) salesItem.setProduct(product);</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">				if(salesItem.getProduct().getAvailableQuantity() &lt; salesItem.getQuantity())</span>
-<span class="nc" id="L39">					throw new ApplicationErrorException(&quot;Product '&quot; + salesItem.getProduct().getCode() + &quot;' is out of Stock&quot;);</span>
-<span class="nc" id="L40">				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();</span>
-<span class="nc" id="L41">				grandtotal += salesItem.getProduct().getPrice() * salesItem.getQuantity();</span>
-<span class="nc" id="L42">			} catch(NullPointerException e) {</span>
-<span class="nc" id="L43">				throw new ApplicationErrorException(&quot;Product code '&quot; + salesItem.getProduct().getCode() + &quot;' does not exist!&quot;);</span>
-<span class="nc" id="L44">			}</span>
-<span class="nc bnc" id="L45" title="All 4 branches missed.">			if((! isDividable &amp;&amp; salesItem.getQuantity() % 1 != 0)) {</span>
-<span class="nc" id="L46">				throw new UnDividableEntityException(&quot;Product code '&quot; + salesItem.getProduct().getCode() + &quot;' is not a dividable product&quot;);</span>
+<span class="fc" id="L33">				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">				if(product != null) salesItem.setProduct(product);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">				if(salesItem.getProduct().getAvailableQuantity() &lt; salesItem.getQuantity())</span>
+<span class="fc" id="L36">					throw new ApplicationErrorException(&quot;Product '&quot; + salesItem.getProduct().getCode() + &quot;' is out of Stock&quot;);</span>
+<span class="fc" id="L37">				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();</span>
+<span class="fc" id="L38">				grandtotal += salesItem.getProduct().getPrice() * salesItem.getQuantity();</span>
+<span class="fc" id="L39">			} catch(NullPointerException e) {</span>
+<span class="fc" id="L40">				throw new ApplicationErrorException(&quot;Product code '&quot; + salesItem.getProduct().getCode() + &quot;' does not exist!&quot;);</span>
+<span class="fc" id="L41">			}</span>
+<span class="fc bfc" id="L42" title="All 4 branches covered.">			if((! isDividable &amp;&amp; salesItem.getQuantity() % 1 != 0)) {</span>
+<span class="fc" id="L43">				throw new UnDividableEntityException(&quot;Product code '&quot; + salesItem.getProduct().getCode() + &quot;' is not a dividable product&quot;);</span>
 			}
-<span class="nc" id="L48">		}</span>
-<span class="nc" id="L49">		sales.setGrandTotal(grandtotal);</span>
-<span class="nc" id="L50">		return salesDAO.create(sales);</span>
+<span class="fc" id="L45">		}</span>
+<span class="fc" id="L46">		sales.setGrandTotal(grandtotal);</span>
+<span class="fc" id="L47">		return salesDAO.create(sales);</span>
 	}
 
 
 	@Override
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException {
-<span class="nc bnc" id="L56" title="All 2 branches missed.">		if(searchText != null) {</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">			if(! searchText.matches(dateRegex)) {</span>
-<span class="nc" id="L58">				throw new InvalidTemplateException(&quot;Invalid Date format!! Must be in YYYY-MM-DD format!&quot;);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		if(searchText != null) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if(! searchText.matches(dateRegex)) {</span>
+<span class="fc" id="L55">				throw new InvalidTemplateException(&quot;Invalid Date format!! Must be in YYYY-MM-DD format!&quot;);</span>
 			}
 		}
-<span class="nc" id="L61">		return salesDAO.count(attribute, searchText);</span>
+<span class="fc" id="L58">		return salesDAO.count(attribute, searchText);</span>
 	}
 
 
 	@Override
 	public List&lt;Sales&gt; list(HashMap&lt;String, String&gt; listAttributes) throws ApplicationErrorException, PageCountOutOfBoundsException, InvalidTemplateException {
 		List&lt;Sales&gt; salesList;
-<span class="nc bnc" id="L68" title="All 4 branches missed.">		if(Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1 &amp;&amp; listAttributes.get(&quot;Searchtext&quot;) != null) {</span>
-<span class="nc" id="L69">			salesList = salesDAO.searchList(listAttributes.get(&quot;Searchtext&quot;));</span>
+<span class="pc bpc" id="L65" title="1 of 4 branches missed.">		if(Collections.frequency(listAttributes.values(), null) == listAttributes.size() - 1 &amp;&amp; listAttributes.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="fc" id="L66">			salesList = salesDAO.searchList(listAttributes.get(&quot;Searchtext&quot;));</span>
 		} else {
-<span class="nc" id="L71">			int pageLength = Integer.parseInt(listAttributes.get(&quot;Pagelength&quot;));</span>
-<span class="nc" id="L72">			int pageNumber = Integer.parseInt(listAttributes.get(&quot;Pagenumber&quot;));</span>
-<span class="nc" id="L73">			int offset = (pageLength * pageNumber) - pageLength;</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">			if(listAttributes.get(&quot;Attribute&quot;).equals(&quot;date&quot;)) {</span>
-<span class="nc bnc" id="L75" title="All 4 branches missed.">				if(listAttributes.get(&quot;Searchtext&quot;) != null &amp;&amp; ! (listAttributes.get(&quot;Searchtext&quot;).replace(&quot;'&quot;, &quot;&quot;).matches(dateRegex)))</span>
-<span class="nc" id="L76">					throw new InvalidTemplateException(&quot;Invalid Format for Attribute date!! Must be in format YYYY-MM-DD&quot;);</span>
+<span class="fc" id="L68">			int pageLength = Integer.parseInt(listAttributes.get(&quot;Pagelength&quot;));</span>
+<span class="fc" id="L69">			int pageNumber = Integer.parseInt(listAttributes.get(&quot;Pagenumber&quot;));</span>
+<span class="fc" id="L70">			int offset = (pageLength * pageNumber) - pageLength;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">			if(listAttributes.get(&quot;Attribute&quot;).equals(&quot;date&quot;)) {</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">				if(listAttributes.get(&quot;Searchtext&quot;) != null &amp;&amp; ! (listAttributes.get(&quot;Searchtext&quot;).replace(&quot;'&quot;, &quot;&quot;).matches(dateRegex)))</span>
+<span class="fc" id="L73">					throw new InvalidTemplateException(&quot;Invalid Format for Attribute date!! Must be in format YYYY-MM-DD&quot;);</span>
 			}
-<span class="nc" id="L78">			salesList = salesDAO.list(listAttributes.get(&quot;Attribute&quot;), listAttributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
+<span class="fc" id="L75">			salesList = salesDAO.list(listAttributes.get(&quot;Attribute&quot;), listAttributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
 		}
-<span class="nc" id="L80">		return salesList;</span>
+<span class="fc" id="L77">		return salesList;</span>
 	}
 
 	@Override
 	public Integer delete(String id) throws ApplicationErrorException {
-<span class="nc bnc" id="L85" title="All 2 branches missed.">		if(id != null)</span>
-<span class="nc" id="L86">			return salesDAO.delete(Integer.parseInt(id));</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">		if(id != null)</span>
+<span class="fc" id="L83">			return salesDAO.delete(Integer.parseInt(id));</span>
 		else
-<span class="nc" id="L88">			return - 1;</span>
+<span class="fc" id="L85">			return - 1;</span>
 	}
 
 	private void validate(Sales sales) throws InvalidTemplateException {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">		if(sales == null)</span>
-<span class="nc" id="L93">			throw new NullPointerException(&quot;Sales cannot be Null&quot;);</span>
-<span class="nc bnc" id="L94" title="All 4 branches missed.">		if(sales.getDate() != null &amp;&amp; ! sales.getDate().matches(dateRegex))</span>
-<span class="nc" id="L95">			throw new InvalidTemplateException(&quot;Date Format is Invalid!! Must be YYYY-MM-DD!!&quot;);</span>
-<span class="nc" id="L96">	}</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		if(sales == null)</span>
+<span class="fc" id="L90">			throw new NullPointerException(&quot;Sales cannot be Null&quot;);</span>
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">		if(sales.getDate() != null &amp;&amp; ! sales.getDate().matches(dateRegex))</span>
+<span class="fc" id="L92">			throw new InvalidTemplateException(&quot;Date Format is Invalid!! Must be YYYY-MM-DD!!&quot;);</span>
+<span class="fc" id="L93">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

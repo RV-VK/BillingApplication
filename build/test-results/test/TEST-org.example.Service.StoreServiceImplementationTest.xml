@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.Service.StoreServiceImplementationTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2023-07-12T09:54:19" hostname="apnxdesk006-Veriton-M200-H61" time="0.088">
+<testsuite name="org.example.Service.StoreServiceImplementationTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2023-07-12T13:06:28" hostname="apnxdesk006-Veriton-M200-H61" time="0.053">
   <properties/>
-  <testcase name="deleteShouldCallAndReturnStatusCode()" classname="org.example.Service.StoreServiceImplementationTest" time="0.004"/>
-  <testcase name="[1] Store{name='A', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.004"/>
+  <testcase name="deleteShouldCallAndReturnStatusCode()" classname="org.example.Service.StoreServiceImplementationTest" time="0.003"/>
+  <testcase name="[1] Store{name='A', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
+  <testcase name="[2] Store{name='ABC Stores', phoneNumber=8599589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
+  <testcase name="[3] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='123890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.003"/>
+  <testcase name="createStoreNullValidation()" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
+  <testcase name="[1] Store{name='A', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
   <testcase name="[2] Store{name='ABC Stores', phoneNumber=8599589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
   <testcase name="[3] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='123890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
-  <testcase name="createStoreNullValidation()" classname="org.example.Service.StoreServiceImplementationTest" time="0.003"/>
-  <testcase name="[1] Store{name='A', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.004"/>
-  <testcase name="[2] Store{name='ABC Stores', phoneNumber=8599589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.004"/>
-  <testcase name="[3] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='123890ABCDE'}" classname="org.example.Service.StoreServiceImplementationTest" time="0.004"/>
-  <testcase name="editShouldCallAndReturnStore()" classname="org.example.Service.StoreServiceImplementationTest" time="0.008"/>
-  <testcase name="editProductNullValidation()" classname="org.example.Service.StoreServiceImplementationTest" time="0.006"/>
-  <testcase name="createShouldCallAndReturnStore()" classname="org.example.Service.StoreServiceImplementationTest" time="0.006"/>
-  <testcase name="deleteUserNullValidation()" classname="org.example.Service.StoreServiceImplementationTest" time="0.004"/>
+  <testcase name="editShouldCallAndReturnStore()" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
+  <testcase name="editProductNullValidation()" classname="org.example.Service.StoreServiceImplementationTest" time="0.002"/>
+  <testcase name="createShouldCallAndReturnStore()" classname="org.example.Service.StoreServiceImplementationTest" time="0.005"/>
+  <testcase name="deleteUserNullValidation()" classname="org.example.Service.StoreServiceImplementationTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

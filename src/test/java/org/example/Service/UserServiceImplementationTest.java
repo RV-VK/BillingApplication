@@ -116,7 +116,6 @@ class UserServiceImplementationTest {
 		verify(userDAO, times(1)).list(anyString(), any(), anyInt(), anyInt());
 	}
 
-
 	@Test
 	void editShouldCallAndReturnUser() throws Exception {
 		User user = new User("Admin", "Thomas", "Thomas2122", "Thomas", "Shelby", 8954709985L);
