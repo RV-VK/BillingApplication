@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">ProductDAO.java</span></div><h1>ProductDAO.java</h1><pre class="source lang-java linenums">package DAO;
+
+import Entity.Product;
+import Mapper.ProductMapper;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.sql.SQLException;
+import java.util.List;
+
+@Component
+<span class="fc" id="L13">public class ProductDAO {</span>
+	@Autowired
+	private ProductMapper productMapper;
+
+	/**
+	 * This method creates an entry in the Product table
+	 *
+	 * @param product Input product
+	 * @return Product - Created product.
+	 * @throws Exception Throws Variable Exceptions namely SQLException, UnitCodeViolationException,  UniqueConstraintException.
+	 */
+	public Product create(Product product) throws Exception {
+		try {
+<span class="nc" id="L26">			return productMapper.create(product);</span>
+<span class="nc" id="L27">		} catch(PersistenceException e) {</span>
+<span class="nc" id="L28">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L29">			throw handleException((SQLException)cause);</span>
+		}
+	}
+
+	/**
+	 * Private method to handle SQL Exception and convert it to user readable messages.
+	 *
+	 * @param e Exception Object
+	 * @throws UnitCodeViolationException Custom Exception to convey Foreign Key Violation in Product table.
+	 * @throws UniqueConstraintException  Custom Exception to convey Unique constraint Violation in SQL table
+	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
+	 */
+	private Exception handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, ApplicationErrorException {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		if(e.getSQLState().equals(&quot;23503&quot;)) {</span>
+<span class="nc" id="L43">			throw new UnitCodeViolationException(&quot;The unit Code you have entered  does not Exists!&quot;);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		} else if(e.getSQLState().equals(&quot;23505&quot;)) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">			if(e.getMessage().contains(&quot;product_name&quot;))</span>
+<span class="nc" id="L46">				throw new UniqueConstraintException(&quot;Name must be unique!\nThe Name you have entered already exists&quot;);</span>
+			else
+<span class="nc" id="L48">				throw new UniqueConstraintException(&quot;Code must be unique! \nThe code you have entered already exists&quot;);</span>
+		} else {
+<span class="nc" id="L50">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This Method returns the number of entries in the Product table.
+	 *
+	 * @param attribute  Column to be counted.
+	 * @param searchText Field to be counted.
+	 * @return count
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems
+	 */
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
+		try {
+			Integer count;
+<span class="nc bnc" id="L65" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L66">				Double numericParameter = Double.parseDouble((String)searchText);</span>
+<span class="nc" id="L67">				count = productMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L68">			} else {</span>
+<span class="nc" id="L69">				count = productMapper.count(attribute, searchText);</span>
+			}
+<span class="nc" id="L71">			return count;</span>
+<span class="nc" id="L72">		} catch(Exception e) {</span>
+<span class="nc" id="L73">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+
+	}
+
+	/**
+	 * This method Lists the products in the product table based on the given search-text.
+	 *
+	 * @param searchText The search-text that must be found.
+	 * @return List of Products
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public List&lt;Product&gt; searchList(String searchText) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L87">			return productMapper.searchList(searchText);</span>
+<span class="nc" id="L88">		} catch(Exception e) {</span>
+<span class="nc" id="L89">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This method lists the products in the product table based on the given searchable attribute and
+	 * its corresponding search-text formatted in a pageable manner.
+	 *
+	 * @param attribute  The attribute to be looked upon
+	 * @param searchText The search-text to be found.
+	 * @param pageLength The number of entries that must be listed.
+	 * @param offset     The Page number that has to be listed.
+	 * @return List of Products
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems
+	 */
+	public List&lt;Product&gt; list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
+		try {
+			Integer count;
+			List&lt;Product&gt; productList;
+<span class="nc bnc" id="L108" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L109">				Double numericParameter = Double.parseDouble((String)searchText);</span>
+<span class="nc" id="L110">				count = productMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L111">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L112">				productList = productMapper.list(attribute, numericParameter, pageLength, offset);</span>
+<span class="nc" id="L113">			} else {</span>
+<span class="nc" id="L114">				count = productMapper.count(attribute, searchText);</span>
+<span class="nc" id="L115">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L116">				productList = productMapper.list(attribute, searchText, pageLength, offset);</span>
+			}
+<span class="nc" id="L118">			return productList;</span>
+<span class="nc" id="L119">		} catch(Exception e) {</span>
+<span class="nc" id="L120">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * Private method to check whether the given Pagenumber is Valid or Not exists.
+	 *
+	 * @param count      Total Count of entries.
+	 * @param offset     Index from which the Entries are requested.
+	 * @param pageLength Length for Each page.
+	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
+	 *                                       non-existing page is prompted.
+	 */
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
+<span class="nc bnc" id="L134" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
+			int pageCount;
+<span class="nc bnc" id="L136" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
+<span class="nc" id="L137">			else pageCount = (count / pageLength) + 1;</span>
+<span class="nc" id="L138">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
+		}
+<span class="nc" id="L140">	}</span>
+
+	/**
+	 * This method updates the attributes of the product entry in the Product table
+	 *
+	 * @param product The Updated Product entry
+	 * @return Product - Result Product
+	 * @throws Exception Throws Variable Exceptions namely SQLException, UnitCodeViolationException, UniqueConstraintException.
+	 */
+	public Product edit(Product product) throws Exception {
+		try {
+<span class="nc" id="L151">			return productMapper.edit(product);</span>
+<span class="nc" id="L152">		} catch(PersistenceException e) {</span>
+<span class="nc" id="L153">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L154">			throw handleException((SQLException)cause);</span>
+		}
+	}
+
+	/**
+	 * This method deletes an entry in the Product table based on the given parameter.
+	 *
+	 * @param parameter Input parameter based on which the row is selected to delete.v
+	 * @return Integer - resultCode
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public Integer delete(String parameter) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L167">			return productMapper.delete(parameter);</span>
+<span class="nc" id="L168">		} catch(Exception e) {</span>
+<span class="nc" id="L169">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This method finds the Product by its product code attribute.
+	 *
+	 * @param code Input product code.
+	 * @return Product
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public Product findByCode(String code) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L182">			return productMapper.findByCode(code);</span>
+<span class="nc" id="L183">		} catch(Exception e) {</span>
+<span class="nc" id="L184">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L185">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StoreServiceImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.Service</a> &gt; <span class="el_source">StoreServiceImplementation.java</span></div><h1>StoreServiceImplementation.java</h1><pre class="source lang-java linenums">package org.example.Service;
+
+import org.example.DAO.ApplicationErrorException;
+import org.example.DAO.StoreDAO;
+import org.example.Entity.Store;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+
+
+@Service
+<span class="nc" id="L13">public class StoreServiceImplementation implements StoreService {</span>
+<span class="nc" id="L14">	private final String NAME_REGEX = &quot;^[a-zA-Z0-9\\s]{3,30}$&quot;;</span>
+<span class="nc" id="L15">	private final String PHONE_NUMBER_REGEX = &quot;^[6789]\\d{9}$&quot;;</span>
+<span class="nc" id="L16">	private final String GST_NUMBER_REGEX = &quot;^[a-zA-Z0-9]{15}$&quot;;</span>
+	@Autowired
+	private StoreDAO storeDAO;
+
+	@Override
+	public Store create(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L22">		validate(store);</span>
+<span class="nc" id="L23">		return storeDAO.create(store);</span>
+	}
+
+	@Override
+	public Store edit(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L28">		validate(store);</span>
+<span class="nc" id="L29">		return storeDAO.edit(store);</span>
+	}
+
+
+	@Override
+	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
+<span class="nc bnc" id="L35" title="All 4 branches missed.">		if(userName != null &amp;&amp; adminPassword != null)</span>
+<span class="nc" id="L36">			return storeDAO.delete(userName, adminPassword);</span>
+		else
+<span class="nc" id="L38">			throw new NullPointerException(&quot;Username Or Password Cannot be Null!!&quot;);</span>
+	}
+
+	/**
+	 * This method validates the Store attributes.
+	 *
+	 * @param store Store to be validated
+	 */
+	private void validate(Store store) throws InvalidTemplateException {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		if(store == null)</span>
+<span class="nc" id="L48">			throw new NullPointerException(&quot;Store cannot be Null!!&quot;);</span>
+<span class="nc bnc" id="L49" title="All 4 branches missed.">		if(store.getName() != null &amp;&amp; ! store.getName().matches(NAME_REGEX))</span>
+<span class="nc" id="L50">			throw new InvalidTemplateException(&quot;Invalid Store Name!!&quot;);</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">		if(store.getPhoneNumber() != 0 &amp;&amp; ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
+<span class="nc" id="L52">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
+<span class="nc bnc" id="L53" title="All 4 branches missed.">		if(store.getGstCode() != null &amp;&amp; ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))</span>
+<span class="nc" id="L54">			throw new InvalidTemplateException(&quot;Invalid GstCode!!&quot;);</span>
+<span class="nc" id="L55">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

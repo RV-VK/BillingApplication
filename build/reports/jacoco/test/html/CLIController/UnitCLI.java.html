@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnitCLI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">CLIController</a> &gt; <span class="el_source">UnitCLI.java</span></div><h1>UnitCLI.java</h1><pre class="source lang-java linenums">package CLIController;
+
+import DAO.ApplicationErrorException;
+import DAO.UnitCodeViolationException;
+import Entity.Unit;
+import Service.UnitService;
+import Service.UnitServiceImplementation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Scanner;
+
+@Component
+<span class="fc" id="L15">public class UnitCLI {</span>
+<span class="fc" id="L16">	private final Scanner scanner = new Scanner(System.in);</span>
+	@Autowired
+	private UnitService unitService;
+	private int id;
+	private String name;
+	private String unitcode;
+	private String description;
+	private boolean isDividable;
+
+	/**
+	 * This method handles the presentation layer of the Create function.
+	 *
+	 * @param arguments Command arguments.
+	 */
+	public void create(List&lt;String&gt; arguments) {
+<span class="nc bnc" id="L31" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L32">			FeedBackPrinter.printUnitHelp(&quot;create&quot;);</span>
+<span class="nc" id="L33">			return;</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L35">			System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L36">			String parameters = scanner.nextLine();</span>
+<span class="nc" id="L37">			List&lt;String&gt; unitAttributes = List.of(parameters.split(&quot;,&quot;));</span>
+<span class="nc" id="L38">			createHelper(unitAttributes);</span>
+<span class="nc" id="L39">			return;</span>
+		}
+<span class="nc" id="L41">		createHelper(arguments.subList(2, arguments.size()));</span>
+<span class="nc" id="L42">	}</span>
+
+	/**
+	 * This method serves the Create function.
+	 *
+	 * @param unitAttributes Attributes of Unit entity.
+	 */
+	private void createHelper(List&lt;String&gt; unitAttributes) {
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if(unitAttributes.size() &lt; 4) {</span>
+<span class="nc" id="L51">			System.out.println(&quot;&gt;&gt; Insufficient arguments for command \&quot;unit create\&quot;&quot;);</span>
+<span class="nc" id="L52">			FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;create&quot;);</span>
+<span class="nc" id="L53">			return;</span>
+		}
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if(unitAttributes.size() &gt; 4) {</span>
+<span class="nc" id="L56">			System.out.println(&quot;&gt;&gt; Too many arguments for command \&quot;unit create\&quot;&quot;);</span>
+<span class="nc" id="L57">			FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;create&quot;);</span>
+<span class="nc" id="L58">			return;</span>
+		}
+<span class="nc" id="L60">		name = unitAttributes.get(0).trim();</span>
+<span class="nc" id="L61">		unitcode = unitAttributes.get(1).trim();</span>
+<span class="nc" id="L62">		description = unitAttributes.get(2).trim();</span>
+<span class="nc bnc" id="L63" title="All 4 branches missed.">		if(unitAttributes.get(3).trim().equals(&quot;true&quot;) || unitAttributes.get(3).trim().equals(&quot;false&quot;))</span>
+<span class="nc" id="L64">			isDividable = Boolean.parseBoolean(unitAttributes.get(3).trim());</span>
+		else {
+<span class="nc" id="L66">			System.out.println(&quot;&gt;&gt; Invalid Entry for Isdividable!! Must be either true or false!!&quot;);</span>
+<span class="nc" id="L67">			return;</span>
+		}
+<span class="nc" id="L69">		Unit unit = new Unit(name, unitcode, description, isDividable);</span>
+		Unit createdUnit;
+		try {
+<span class="nc" id="L72">			createdUnit = unitService.create(unit);</span>
+<span class="nc" id="L73">		} catch(Exception e) {</span>
+<span class="nc" id="L74">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L75">			return;</span>
+<span class="nc" id="L76">		}</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		if(createdUnit != null) {</span>
+<span class="nc" id="L78">			System.out.println(&quot;Unit creation Successful!!&quot;);</span>
+<span class="nc" id="L79">			System.out.println(createdUnit);</span>
+		}
+<span class="nc" id="L81">	}</span>
+
+	/**
+	 * This method handles the presentation Layer of the List function.
+	 *
+	 * @param arguments Command arguments.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public void list(List&lt;String&gt; arguments) throws ApplicationErrorException {
+		List&lt;Unit&gt; unitList;
+<span class="nc bnc" id="L91" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L92">			FeedBackPrinter.printUnitHelp(&quot;list&quot;);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L94">			unitList = unitService.list();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">			for(Unit unit: unitList) {</span>
+<span class="nc" id="L96">				System.out.println(&quot;&gt;&gt; id: &quot; + unit.getId() + &quot;, name: &quot; + unit.getName() + &quot;, code: &quot; + unit.getCode() + &quot;, description: &quot; + unit.getDescription() + &quot;, isdividable: &quot; + unit.getIsDividable());</span>
+<span class="nc" id="L97">			}</span>
+		} else {
+<span class="nc" id="L99">			FeedBackPrinter.printInvalidFormat(&quot;unit&quot;);</span>
+		}
+<span class="nc" id="L101">	}</span>
+
+	/**
+	 * Thsi method handles the presentation layer of the Edit function.
+	 *
+	 * @param arguments Command Arguments.
+	 * @param command   Command String.
+	 */
+	public void edit(List&lt;String&gt; arguments, String command) {
+<span class="nc" id="L110">		final String editCommandRegex = &quot;^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$&quot;;</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L112">			FeedBackPrinter.printUnitHelp(&quot;edit&quot;);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L114">			System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L115">			String parameters = scanner.nextLine();</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">			if(! parameters.matches(editCommandRegex)) {</span>
+<span class="nc" id="L117">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;unit edit help for proper syntax!&quot;);</span>
+<span class="nc" id="L118">				return;</span>
+			}
+<span class="nc" id="L120">			List&lt;String&gt; unitAttributes = List.of(parameters.split(&quot;[,:]&quot;));</span>
+<span class="nc" id="L121">			editHelper(unitAttributes);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		} else if(arguments.size() &gt; 12) {</span>
+<span class="nc" id="L123">			System.out.println(&quot;&gt;&gt; Too many Arguments for command \&quot;unit edit\&quot;&quot;);</span>
+<span class="nc" id="L124">			FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;edit&quot;);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		} else if(arguments.size() &lt; 12) {</span>
+<span class="nc" id="L126">			System.out.println(&quot;&gt;&gt; Insufficient arguments for command \&quot;unit edit\&quot;&quot;);</span>
+<span class="nc" id="L127">			System.out.println(&quot;&gt;&gt; Try \&quot;unit edit help\&quot; for proper syntax&quot;);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		} else if(! arguments.get(2).contains(&quot;id&quot;)) {</span>
+<span class="nc" id="L129">			System.out.println(&quot;&gt;&gt; Id is a Mandatory argument for every Edit operation&quot;);</span>
+<span class="nc" id="L130">			System.out.println(&quot;&gt;&gt; For every Edit operation the first argument must be unit's ID&quot;);</span>
+<span class="nc" id="L131">			FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;edit&quot;);</span>
+		} else {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">			if(! command.substring(10).matches(editCommandRegex)) {</span>
+<span class="nc" id="L134">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;user edit help for proper syntax!&quot;);</span>
+<span class="nc" id="L135">				return;</span>
+			}
+<span class="nc" id="L137">			editHelper(arguments.subList(2, arguments.size()));</span>
+		}
+<span class="nc" id="L139">	}</span>
+
+	/**
+	 * This method serves the edit function
+	 *
+	 * @param editAttributes Attributes of the Unit to be edited.
+	 */
+	private void editHelper(List&lt;String&gt; editAttributes) {
+<span class="nc" id="L147">		Unit unit = new Unit();</span>
+<span class="nc" id="L148">		id = 0;</span>
+		try {
+<span class="nc" id="L150">			id = Integer.parseInt(editAttributes.get(1).trim());</span>
+<span class="nc" id="L151">		} catch(Exception e) {</span>
+<span class="nc" id="L152">			System.out.println(&quot;&gt;&gt; Id must be a number&quot;);</span>
+<span class="nc" id="L153">			FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;edit&quot;);</span>
+<span class="nc" id="L154">			return;</span>
+<span class="nc" id="L155">		}</span>
+<span class="nc" id="L156">		unit.setId(id);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">		for(int index = 2 ; index &lt; editAttributes.size() ; index = index + 2) {</span>
+<span class="nc bnc" id="L158" title="All 5 branches missed.">			switch(editAttributes.get(index).trim()) {</span>
+<span class="nc" id="L159">				case &quot;name&quot; -&gt; unit.setName(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L160">				case &quot;code&quot; -&gt; unit.setCode(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L161">				case &quot;description&quot; -&gt; unit.setDescription(editAttributes.get(index + 1).trim());</span>
+				case &quot;isdividable&quot; -&gt; {
+<span class="nc bnc" id="L163" title="All 4 branches missed.">					if(editAttributes.get(index + 1).trim().equals(&quot;true&quot;) || editAttributes.get(index + 1).trim().equals(&quot;false&quot;)) {</span>
+<span class="nc" id="L164">						isDividable = Boolean.parseBoolean(editAttributes.get(index + 1).trim());</span>
+					} else {
+<span class="nc" id="L166">						System.out.println(&quot;&gt;&gt;Invalid Entry for Unitcode!! Must be either true or false &quot;);</span>
+<span class="nc" id="L167">						return;</span>
+					}
+<span class="nc" id="L169">					unit.setIsDividable(isDividable);</span>
+<span class="nc" id="L170">				}</span>
+				default -&gt; {
+<span class="nc" id="L172">					System.out.println(&quot;&gt;&gt; Invalid attribute given!!!: &quot; + editAttributes.get(index));</span>
+<span class="nc" id="L173">					FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;edit&quot;);</span>
+<span class="nc" id="L174">					return;</span>
+				}
+			}
+		}
+		Unit editedUnit;
+		try {
+<span class="nc" id="L180">			editedUnit = unitService.edit(unit);</span>
+<span class="nc" id="L181">		} catch(Exception e) {</span>
+<span class="nc" id="L182">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L183">			return;</span>
+<span class="nc" id="L184">		}</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">		if(editedUnit != null) {</span>
+<span class="nc" id="L186">			System.out.println(&quot;&gt;&gt; Unit Edited Successfully!!!&quot;);</span>
+<span class="nc" id="L187">			System.out.println(editedUnit);</span>
+		} else {
+<span class="nc" id="L189">			System.out.println(&quot;&gt;&gt; Unit Edit failed!!!&quot;);</span>
+<span class="nc" id="L190">			System.out.println(&quot;&gt;&gt; Please check the Id you have entered!!!&quot;);</span>
+		}
+<span class="nc" id="L192">	}</span>
+
+	/**
+	 * This method handles the presentation layer of the delete function.
+	 *
+	 * @param arguments Command arguments.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public void delete(List&lt;String&gt; arguments) throws ApplicationErrorException, UnitCodeViolationException {
+<span class="nc" id="L201">		String codeRegex = &quot;^[a-zA-Z]{1,4}$&quot;;</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L204">				FeedBackPrinter.printUnitHelp(&quot;delete&quot;);</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">			} else if(arguments.get(2).matches(codeRegex)) {</span>
+<span class="nc" id="L206">				System.out.print(&quot;&gt;&gt; Are you Sure you want to delete the Unit y/n :&quot;);</span>
+<span class="nc" id="L207">				String prompt = scanner.nextLine();</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">				if(prompt.equals(&quot;y&quot;)) {</span>
+					try {
+<span class="nc bnc" id="L210" title="All 2 branches missed.">						if(unitService.delete(arguments.get(2)) == 1) {</span>
+<span class="nc" id="L211">							System.out.println(&quot;&gt;&gt; Unit deleted Successfully!!!&quot;);</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">						} else if(unitService.delete(arguments.get(2)) == 0) {</span>
+<span class="nc" id="L213">							System.out.println(&quot;&gt;&gt; Unit deletion failed!!!&quot;);</span>
+<span class="nc" id="L214">							System.out.println(&quot;&gt;&gt; Please check the unitcode you have entered!!!&quot;);</span>
+<span class="nc" id="L215">							FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;delete&quot;);</span>
+						} else {
+<span class="nc" id="L217">							System.out.println(&quot;&gt;&gt; Unitcode cannot be null&quot;);</span>
+						}
+<span class="nc" id="L219">					} catch(Exception e) {</span>
+<span class="nc" id="L220">						System.out.println(e.getMessage());</span>
+<span class="nc" id="L221">					}</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">				} else if(prompt.equals(&quot;n&quot;)) {</span>
+<span class="nc" id="L223">					System.out.println(&quot;&gt;&gt; Delete operation cancelled&quot;);</span>
+				} else {
+<span class="nc" id="L225">					System.out.println(&quot;Invalid delete prompt!!! Please select between y/n&quot;);</span>
+				}
+<span class="nc" id="L227">			} else {</span>
+<span class="nc" id="L228">				System.out.println(&quot;&gt;&gt; Invalid format for unitCode!!!&quot;);</span>
+<span class="nc" id="L229">				FeedBackPrinter.printHelpMessage(&quot;unit&quot;, &quot;delete&quot;);</span>
+			}
+		}
+<span class="nc" id="L232">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

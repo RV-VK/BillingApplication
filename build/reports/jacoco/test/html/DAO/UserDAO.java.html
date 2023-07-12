@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">UserDAO.java</span></div><h1>UserDAO.java</h1><pre class="source lang-java linenums">package DAO;
+
+import Entity.User;
+import Mapper.UserMapper;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.sql.SQLException;
+import java.util.List;
+
+@Component
+<span class="fc" id="L13">public class UserDAO {</span>
+	@Autowired
+	private UserMapper userMapper;
+
+	/**
+	 * This method Creates a User Entry in the User table
+	 *
+	 * @param user Input Object
+	 * @return User Object - created
+	 * @throws Exception Throws Variable Exceptions namely SQLException, UnitCodeViolationException, UniqueConstraintException.
+	 */
+	public User create(User user) throws Exception {
+		try {
+<span class="nc" id="L26">			return userMapper.create(user);</span>
+<span class="nc" id="L27">		} catch(PersistenceException e) {</span>
+<span class="nc" id="L28">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L29">			throw handleException((SQLException)cause);</span>
+		}
+	}
+
+	/**
+	 * Private method to convert SQL Exception to user readable messages.
+	 *
+	 * @param exception Exception Object.
+	 * @throws UniqueConstraintException Custom Exception to convey Unique constraint Violation in SQL table.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	private Exception handleException(SQLException exception) throws UniqueConstraintException, ApplicationErrorException {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if(exception.getSQLState().equals(&quot;23505&quot;)) {</span>
+<span class="nc" id="L42">			throw new UniqueConstraintException(&quot;UserName must be unique!! The username you have entered already exists!!&quot;);</span>
+		}
+<span class="nc" id="L44">		throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+	}
+
+	/**
+	 * This method counts the number od entries in the user table.
+	 *
+	 * @param attribute  Column to be counted.
+	 * @param searchText Field to be counted.
+	 * @return count
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems
+	 */
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
+		try {
+			Integer count;
+<span class="nc bnc" id="L58" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L59">				Double numericParameter = Double.parseDouble((String)searchText);</span>
+<span class="nc" id="L60">				count = userMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L61">			} else {</span>
+<span class="nc" id="L62">				count = userMapper.count(attribute, searchText);</span>
+			}
+<span class="nc" id="L64">			return count;</span>
+<span class="nc" id="L65">		} catch(Exception e) {</span>
+<span class="nc" id="L66">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+		}
+	}
+
+	/**
+	 * This method Lists the records in the user table based on a given Search-text.
+	 *
+	 * @param searchText The search-text that must be found.
+	 * @return List of Users
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems.
+	 */
+	public List&lt;User&gt; searchList(String searchText) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L79">			return userMapper.searchList(searchText);</span>
+<span class="nc" id="L80">		} catch(Exception e) {</span>
+<span class="nc" id="L81">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L82">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+		}
+	}
+
+	/**
+	 * This method lists the users in the user table based on the given searchable attribute
+	 * and its corresponding search-text formatted in a pageable manner.
+	 *
+	 * @param attribute  The attribute to be looked upon
+	 * @param searchText The search-text to be found.
+	 * @param pageLength The number of entries that must be listed.
+	 * @param offset     The Page number that has to be listed.
+	 * @return List of Users
+	 * @throws ApplicationErrorException Exception thrown due to persistence problems
+	 */
+	public List&lt;User&gt; list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
+		try {
+			List&lt;User&gt; userList;
+<span class="nc bnc" id="L100" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L101">				Double numericParameter = Double.parseDouble((String)searchText);</span>
+<span class="nc" id="L102">				Integer count = userMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L103">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L104">				userList = userMapper.list(attribute, numericParameter, pageLength, offset);</span>
+<span class="nc" id="L105">			} else {</span>
+<span class="nc" id="L106">				Integer count = userMapper.count(attribute, searchText);</span>
+<span class="nc" id="L107">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L108">				userList = userMapper.list(attribute, searchText, pageLength, offset);</span>
+			}
+<span class="nc" id="L110">			return userList;</span>
+<span class="nc" id="L111">		} catch(Exception e) {</span>
+<span class="nc" id="L112">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * Private method to check whether the given Pagenumber is Valid or Not exists.
+	 *
+	 * @param count      Total Count of entries.
+	 * @param offset     Index from which the Entries are requested.
+	 * @param pageLength Length for Each page.
+	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
+	 *                                       non-existing page is prompted.
+	 */
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
+<span class="nc bnc" id="L126" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
+			int pageCount;
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
+<span class="nc" id="L129">			else pageCount = (count / pageLength) + 1;</span>
+<span class="nc" id="L130">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
+		}
+<span class="nc" id="L132">	}</span>
+
+	/**
+	 * This method updates the attributes of the User entry in the user table.
+	 *
+	 * @param user The updated User Entry.
+	 * @return User - Resulted User Entity.
+	 * @throws Exception Throws Variable Exceptions namely SQLException, UnitCodeViolationException, UniqueConstraintException.
+	 */
+	public User edit(User user) throws Exception {
+		try {
+<span class="nc" id="L143">			return userMapper.edit(user);</span>
+<span class="nc" id="L144">		} catch(PersistenceException e) {</span>
+<span class="nc" id="L145">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L146">			throw handleException((SQLException)cause);</span>
+		}
+	}
+
+	/**
+	 * This method deleted an entry in the User table based on the given parameter.
+	 *
+	 * @param username Username to be deleted.
+	 * @return Integer - resultCode
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public Integer delete(String username) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L159">			return userMapper.delete(username);</span>
+<span class="nc" id="L160">		} catch(Exception e) {</span>
+<span class="nc" id="L161">			e.printStackTrace();</span>
+<span class="nc" id="L162">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+		}
+	}
+
+
+	public User findById(int id) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L169">			return userMapper.findById(id);</span>
+<span class="nc" id="L170">		} catch(Exception e) {</span>
+<span class="nc" id="L171">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This method verifies whether the input username and password matches in the user table to enable login for the users.
+	 *
+	 * @param userName Unique entry username of the user
+	 * @param passWord Password string of the user
+	 * @return String - Usertype or null
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public User login(String userName, String passWord) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L185">			User user = userMapper.login(userName, passWord);</span>
+<span class="nc bnc" id="L186" title="All 4 branches missed.">			if(user != null &amp;&amp; user.getPassWord().equals(passWord)) return user;</span>
+<span class="nc" id="L187">			else return null;</span>
+<span class="nc" id="L188">		} catch(SQLException e) {</span>
+<span class="nc" id="L189">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

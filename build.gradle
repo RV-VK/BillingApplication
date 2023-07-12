@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 group 'org.example'
@@ -11,11 +12,13 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'org.postgresql:postgresql:42.6.0'
     implementation 'org.mybatis:mybatis:3.5.13'
     implementation 'org.springframework:spring-context:6.0.10'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.1'
+
 }
 
 test {

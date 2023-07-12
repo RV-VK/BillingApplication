@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sales.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">Entity</a> &gt; <span class="el_source">Sales.java</span></div><h1>Sales.java</h1><pre class="source lang-java linenums">package Entity;
+
+import java.util.List;
+
+public class Sales {
+	private Integer id;
+	private String date;
+	private List&lt;SalesItem&gt; salesItemList;
+	private Double grandTotal;
+
+<span class="nc" id="L11">	public Sales() {</span>
+<span class="nc" id="L12">	}</span>
+
+<span class="nc" id="L14">	public Sales(int id, String date, List&lt;SalesItem&gt; salesItemList, double grandTotal) {</span>
+<span class="nc" id="L15">		this.id = id;</span>
+<span class="nc" id="L16">		this.date = date;</span>
+<span class="nc" id="L17">		this.salesItemList = salesItemList;</span>
+<span class="nc" id="L18">		this.grandTotal = grandTotal;</span>
+<span class="nc" id="L19">	}</span>
+
+<span class="nc" id="L21">	public Sales(String date, List&lt;SalesItem&gt; salesItemList, double grandTotal) {</span>
+<span class="nc" id="L22">		this.date = date;</span>
+<span class="nc" id="L23">		this.salesItemList = salesItemList;</span>
+<span class="nc" id="L24">		this.grandTotal = grandTotal;</span>
+<span class="nc" id="L25">	}</span>
+
+	public Integer getId() {
+<span class="nc" id="L28">		return id;</span>
+	}
+
+	public void setId(Integer id) {
+<span class="nc" id="L32">		this.id = id;</span>
+<span class="nc" id="L33">	}</span>
+
+	public String getDate() {
+<span class="nc" id="L36">		return date;</span>
+	}
+
+	public void setDate(String date) {
+<span class="nc" id="L40">		this.date = date;</span>
+<span class="nc" id="L41">	}</span>
+
+	public List&lt;SalesItem&gt; getSalesItemList() {
+<span class="nc" id="L44">		return salesItemList;</span>
+	}
+
+	public void setSalesItemList(List&lt;SalesItem&gt; salesItemList) {
+<span class="nc" id="L48">		this.salesItemList = salesItemList;</span>
+<span class="nc" id="L49">	}</span>
+
+	public Double getGrandTotal() {
+<span class="nc" id="L52">		return grandTotal;</span>
+	}
+
+	public void setGrandTotal(Double grandTotal) {
+<span class="nc" id="L56">		this.grandTotal = grandTotal;</span>
+<span class="nc" id="L57">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L61">		return &quot;Sales{&quot; + &quot;id=&quot; + id + &quot;, date='&quot; + date + '\'' + &quot;, salesItemList=&quot; + salesItemList + &quot;, grandTotal=&quot; + grandTotal + '}';</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

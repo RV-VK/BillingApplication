@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminMain.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">CLIController</a> &gt; <span class="el_source">AdminMain.java</span></div><h1>AdminMain.java</h1><pre class="source lang-java linenums">package CLIController;
+
+import DAO.ApplicationErrorException;
+import DAO.PageCountOutOfBoundsException;
+import DAO.UnitCodeViolationException;
+import Service.InvalidTemplateException;
+import Service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+import java.sql.SQLException;
+import java.util.*;
+
+@Component
+public class AdminMain {
+	@Autowired
+	private LoginService loginService;
+	@Autowired
+	private ProductCLI productCLI;
+	@Autowired
+	private UserCLI userCLI;
+	@Autowired
+	private StoreCLI storeCLI;
+	@Autowired
+	private UnitCLI unitCLI;
+	@Autowired
+	private PurchaseCLI purchaseCLI;
+	@Autowired
+	private SalesCLI salesCLI;
+
+
+<span class="fc" id="L34">	public AdminMain() {</span>
+<span class="fc" id="L35">	}</span>
+
+	private static List&lt;String&gt; splitCommand(String command) {
+		String[] parts;
+		String[] commandlet;
+<span class="nc bnc" id="L40" title="All 2 branches missed.">		if(command.contains(&quot;,&quot;)) {</span>
+<span class="nc" id="L41">			parts = command.split(&quot;[,:]&quot;);</span>
+<span class="nc" id="L42">			commandlet = parts[0].split(&quot;\\s+&quot;);</span>
+		} else {
+<span class="nc" id="L44">			parts = command.split(&quot;,&quot;);</span>
+<span class="nc" id="L45">			commandlet = command.split(&quot;\\s+&quot;);</span>
+		}
+<span class="nc" id="L47">		ArrayList&lt;String&gt; commandList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">		if(parts.length == 1) {</span>
+<span class="nc" id="L49">			Collections.addAll(commandList, commandlet);</span>
+		} else {
+<span class="nc" id="L51">			Collections.addAll(commandList, commandlet);</span>
+<span class="nc" id="L52">			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));</span>
+		}
+<span class="nc" id="L54">		return commandList;</span>
+	}
+
+	/**
+	 * The Admin View Control.
+	 *
+	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
+	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+	 */
+	public void AdminView(String userName) throws ApplicationErrorException, PageCountOutOfBoundsException, UnitCodeViolationException, SQLException, InvalidTemplateException {
+<span class="nc" id="L64">		Scanner scanner = new Scanner(System.in);</span>
+<span class="nc" id="L65">		System.out.println(&quot;\n\n&gt;&gt; Try \&quot;help\&quot; to know better!\n&quot;);</span>
+		do {
+<span class="nc" id="L67">			System.out.print(&quot;\n&gt; &quot;);</span>
+<span class="nc" id="L68">			String command = scanner.nextLine();</span>
+<span class="nc" id="L69">			List&lt;String&gt; commandList = splitCommand(command);</span>
+<span class="nc" id="L70">			String commandString = commandList.get(0);</span>
+<span class="nc" id="L71">			String operationString = &quot;&quot;;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">			if(commandList.size() &gt; 1) operationString = commandList.get(1);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">			if(! loginService.checkIfInitialSetup()) {</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">				if(commandString.equals(&quot;store&quot;) &amp;&amp; operationString.equals(&quot;create&quot;)) storeCLI.create(commandList);</span>
+				else {
+<span class="nc" id="L76">					System.out.println(&quot;&gt;&gt; Please Create a Store to Proceed!! You need to Register your store before Proceeding to further Billing CLI functions!!&quot;);</span>
+<span class="nc" id="L77">					FeedBackPrinter.printStoreHelp(&quot;create&quot;);</span>
+				}
+			} else {
+<span class="nc bnc" id="L80" title="All 10 branches missed.">				switch(commandString) {</span>
+					case &quot;product&quot; -&gt; {
+<span class="nc bnc" id="L82" title="All 6 branches missed.">						switch(operationString) {</span>
+<span class="nc" id="L83">							case &quot;create&quot; -&gt; productCLI.create(commandList);</span>
+<span class="nc" id="L84">							case &quot;count&quot; -&gt; productCLI.count(commandList);</span>
+<span class="nc" id="L85">							case &quot;list&quot; -&gt; productCLI.list(commandList);</span>
+<span class="nc" id="L86">							case &quot;edit&quot; -&gt; productCLI.edit(commandList, command);</span>
+<span class="nc" id="L87">							case &quot;delete&quot; -&gt; productCLI.delete(commandList);</span>
+							default -&gt; {
+<span class="nc" id="L89">								System.out.println(&quot;Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L90">								System.out.println(&quot;Try \&quot;help\&quot; for proper syntax&quot;);</span>
+							}
+						}
+<span class="nc" id="L93">					}</span>
+					case &quot;user&quot; -&gt; {
+<span class="nc bnc" id="L95" title="All 6 branches missed.">						switch(operationString) {</span>
+<span class="nc" id="L96">							case &quot;create&quot; -&gt; userCLI.create(commandList);</span>
+<span class="nc" id="L97">							case &quot;count&quot; -&gt; userCLI.count(commandList);</span>
+<span class="nc" id="L98">							case &quot;list&quot; -&gt; userCLI.list(commandList);</span>
+<span class="nc" id="L99">							case &quot;edit&quot; -&gt; userCLI.edit(commandList, command);</span>
+<span class="nc" id="L100">							case &quot;delete&quot; -&gt; userCLI.delete(commandList);</span>
+							default -&gt; {
+<span class="nc" id="L102">								System.out.println(&quot;&gt;&gt; Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L103">								System.out.println(&quot;&gt;&gt; Try \&quot;help\&quot; for proper syntax&quot;);</span>
+							}
+						}
+<span class="nc" id="L106">					}</span>
+					case &quot;store&quot; -&gt; {
+<span class="nc bnc" id="L108" title="All 4 branches missed.">						switch(operationString) {</span>
+<span class="nc" id="L109">							case &quot;create&quot; -&gt; storeCLI.create(commandList);</span>
+<span class="nc" id="L110">							case &quot;edit&quot; -&gt; storeCLI.edit(commandList, command);</span>
+<span class="nc" id="L111">							case &quot;delete&quot; -&gt; storeCLI.delete(commandList, userName);</span>
+							default -&gt; {
+<span class="nc" id="L113">								System.out.println(&quot;&gt;&gt; Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L114">								System.out.println(&quot;&gt;&gt; Try \&quot;help\&quot; for proper syntax&quot;);</span>
+							}
+						}
+<span class="nc" id="L117">					}</span>
+					case &quot;unit&quot; -&gt; {
+<span class="nc bnc" id="L119" title="All 5 branches missed.">						switch(operationString) {</span>
+<span class="nc" id="L120">							case &quot;create&quot; -&gt; unitCLI.create(commandList);</span>
+<span class="nc" id="L121">							case &quot;list&quot; -&gt; unitCLI.list(commandList);</span>
+<span class="nc" id="L122">							case &quot;edit&quot; -&gt; unitCLI.edit(commandList, command);</span>
+<span class="nc" id="L123">							case &quot;delete&quot; -&gt; unitCLI.delete(commandList);</span>
+							default -&gt; {
+<span class="nc" id="L125">								System.out.println(&quot;Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L126">								System.out.println(&quot;Try \&quot;help\&quot; for proper syntax&quot;);</span>
+							}
+						}
+<span class="nc" id="L129">					}</span>
+					case &quot;purchase&quot; -&gt; {
+<span class="nc bnc" id="L131" title="All 5 branches missed.">						switch(operationString) {</span>
+<span class="nc" id="L132">							case &quot;count&quot; -&gt; purchaseCLI.count(commandList);</span>
+<span class="nc" id="L133">							case &quot;list&quot; -&gt; purchaseCLI.list(commandList);</span>
+<span class="nc" id="L134">							case &quot;delete&quot; -&gt; purchaseCLI.delete(commandList);</span>
+<span class="nc" id="L135">							case &quot;help&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+									&gt;&gt; purchase products using following command
+									purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+
+									\t  date - format( YYYY-MM-DD ), mandatory
+									\t\tinvoice - numbers, mandatory
+									\t\t
+									\t\tThe following purchase items should be given as array of items
+									\t\tcode - text, min 2 - 6 char, mandatory
+									\t\tquantity - numbers, mandatory
+									\t\tcostprice - numbers, mandatory&quot;&quot;&quot;);
+							default -&gt; {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">								if(operationString.matches(&quot;([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))&quot;)) {</span>
+<span class="nc" id="L148">									purchaseCLI.create(command);</span>
+								} else {
+<span class="nc" id="L150">									System.out.println(&quot;Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L151">									System.out.println(&quot;Try either \&quot;help\&quot; for proper syntax or \&quot;purchase help\&quot; if you are trying to start a purchase!&quot;);</span>
+								}
+							}
+						}
+<span class="nc" id="L155">					}</span>
+					case &quot;sales&quot; -&gt; {
+<span class="nc bnc" id="L157" title="All 5 branches missed.">						switch(operationString) {</span>
+<span class="nc" id="L158">							case &quot;count&quot; -&gt; salesCLI.count(commandList);</span>
+<span class="nc" id="L159">							case &quot;list&quot; -&gt; salesCLI.list(commandList);</span>
+<span class="nc" id="L160">							case &quot;delete&quot; -&gt; salesCLI.delete(commandList);</span>
+<span class="nc" id="L161">							case &quot;help&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+									&gt;&gt; sell products using following command
+
+									sales date, [code1, quantity1], [code2, quantity2]....
+
+									\t\tcode - text, min 3 - 30 char, mandatory
+									\t\tquantity - numbers, mandatory&quot;&quot;&quot;);
+							default -&gt; {
+<span class="nc bnc" id="L169" title="All 2 branches missed.">								if(operationString.matches(&quot;([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))&quot;)) {</span>
+<span class="nc" id="L170">									salesCLI.create(command);</span>
+								} else {
+<span class="nc" id="L172">									System.out.println(&quot;Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L173">									System.out.println(&quot;Try either \&quot;help\&quot; for proper syntax or \&quot;sales help\&quot; if you are trying to start a purchase!&quot;);</span>
+								}
+							}
+						}
+<span class="nc" id="L177">					}</span>
+<span class="nc" id="L178">					case &quot;help&quot; -&gt; FeedBackPrinter.mainHelp();</span>
+<span class="nc" id="L179">					case &quot;exit&quot; -&gt; System.exit(0);</span>
+					case &quot;logout&quot; -&gt; {
+<span class="nc" id="L181">						ApplicationContext context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
+<span class="nc" id="L182">						LoginCLI loginCLI = context.getBean(LoginCLI.class);</span>
+<span class="nc" id="L183">						loginCLI.Login();}</span>
+<span class="nc" id="L184">					default -&gt; System.out.println(&quot;Invalid Command! Not Found!&quot;);</span>
+				}
+			}
+<span class="nc" id="L187">		} while(true);</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

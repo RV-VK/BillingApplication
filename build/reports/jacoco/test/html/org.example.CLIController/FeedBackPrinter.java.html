@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FeedBackPrinter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.CLIController</a> &gt; <span class="el_source">FeedBackPrinter.java</span></div><h1>FeedBackPrinter.java</h1><pre class="source lang-java linenums">package org.example.CLIController;
+
+import java.util.List;
+
+<span class="nc" id="L5">public class FeedBackPrinter {</span>
+	public static void printProductHelp(String operation) {
+<span class="nc bnc" id="L7" title="All 5 branches missed.">		switch(operation) {</span>
+<span class="nc" id="L8">			case &quot;create&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; create product using the following template
+					&gt;&gt; code, name, unit, type, price, stock
+					\t
+					\tcode - text, min - 2 - 6, mandatory
+					\tname - text, min 3 - 30 char, mandatory
+					\tunitcode - text, kg/l/piece/combo, mandatory
+					\ttype - text, between enumerated values, mandatory\s
+					\tprice - number, mandatory
+					\tstock - number, default 0
+					\t
+					&gt;\tproduct create code, productname, unitcode, type, price, stock
+					                         or
+					&gt; product create :enter
+					code, name, unitcode, type, price, stock
+					&quot;&quot;&quot;);
+<span class="nc" id="L24">			case &quot;list&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; List product with the following options
+					&gt;&gt; product list - will list all the products default to maximum upto 20 products
+					&gt;&gt; product list -p 10 - pageable list shows 10 products as default
+					&gt;&gt; product list -p 10 3 - pagable list shows 10 products in 3rd page, ie., product from 21 to 30
+					&gt;&gt; product list -s searchtext - search the product with the given search text in all the searchable attributes
+					&gt;&gt; product list -s &lt;attr&gt;: searchtext - search the product with the given search text in all the given attribute
+					&gt;&gt; product list -s &lt;attr&gt;: searchtext -p 10 6 - pagable list shows 10 products in 6th page with the given search text in the given attribute
+					&quot;&quot;&quot;);
+<span class="nc" id="L33">			case &quot;edit&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; Edit product using following template. Copy the product data from the list, edit the attribute values.\s
+					&gt;&gt; id: &lt;id - 6&gt;, name: &lt;name-edited&gt;, unitcode: &lt;unitcode&gt;,  type: &lt;type&gt;, price: &lt;price&gt;
+
+					&gt;&gt; You can also restrict the product data by editable attributes. Id attribute is mandatory for all the edit operation.
+					&gt;&gt; id: &lt;id - 6&gt;, name: &lt;name-edited&gt;, unitcode: &lt;unitcode-edited&gt;
+
+					&gt;&gt; You can not give empty or null values to the mandatory attributes.
+					&gt;&gt; id: &lt;id - 6&gt;, name: , unitcode: null
+					&gt;&gt;
+					\s
+					 \tid\t - number, mandatory\t
+					\tname - text, min 3 - 30 char, mandatory
+					\tunitcode - text, kg/l/piece/combo, mandatory
+					\ttype - text, between enumerated values, mandatory\s
+					\tcostprice - numeric, mandatory
+					\t
+					&gt;\tproduct edit id:&lt;id - 6&gt;, name: &lt;name-edited&gt;, unitcode: &lt;unitcode&gt;,  type: &lt;type&gt;, price: &lt;price&gt;
+					                         or
+					&gt; product edit :enter
+					&gt; id: &lt;id - 6&gt;, name: &lt;name-edited&gt;, unitcode: &lt;unitcode&gt;,  type: &lt;type&gt;, price: &lt;price&gt;&quot;&quot;&quot;);
+<span class="nc" id="L54">			case &quot;delete&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt; product delete help\s
+					&gt;&gt; delete product using the following template
+					\t
+					\t\tproductid - numeric, existing
+					&gt;&gt; product delete -c &lt;code&gt;
+					\t\s
+
+					&gt; product delete &lt;id&gt;&quot;&quot;&quot;);
+		}
+<span class="nc" id="L64">	}</span>
+
+	public static void printUserHelp(String operation) {
+<span class="nc bnc" id="L67" title="All 5 branches missed.">		switch(operation) {</span>
+<span class="nc" id="L68">			case &quot;create&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; create user using following template
+					&gt;&gt;  usertype, username,  password, first name, last name, phone number
+					\tusertype - text, purchase/sales, mandatory
+					\tusername - text, min 3 - 30 char, mandatory
+					\tpassword - text, alphanumeric, special char, min 8 char, mandatory
+					\tfirstname - text, mandatory with 3 to 30 chars
+					\tlastname  - text, optional
+					\tphone - number, mandatory, ten digits, digit start with 9/8/7/6\
+					\t&gt; user create userid, usertype, username,  password, first name, last name, phone number
+					\t								or
+					\t&gt; user create :enter
+					\tusertype, username,  password, first name, last name, phone number
+					&quot;&quot;&quot;);
+<span class="nc" id="L82">			case &quot;list&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; List user with the following options
+					&gt;&gt; user list - will list all the users default to maximum upto 20 users
+					&gt;&gt; user list -p 10 - pageable list shows 10 users as default
+					&gt;&gt; user list -p 10 3 - pagable list shows 10 users in 3rd page, ie., user from 21 to 30
+					&gt;&gt; user list -s searchtext - search the user with the given search text in all the searchable attributes
+					&gt;&gt; user list -s &lt;attr&gt;: searchtext - search the user with the given search text in all the given attribute
+					&gt;&gt; user list -s &lt;attr&gt;: searchtext -p 10 6 - pagable list shows 10 users in 6th page with the given search text in the given attribute
+					&quot;&quot;&quot;);
+			case &quot;edit&quot; -&gt;
+<span class="nc" id="L92">					System.out.printf(&quot;&gt;&gt; Edit user using following template. Copy the user data from the list, edit the attribute values. \n&gt;&gt; id: &lt;id - 6&gt;, usertype: &lt;usertype-edited&gt;, username: &lt;username&gt;,  password: &lt;password&gt;, first name: &lt;first name&gt;, last name: &lt;last name&gt;, phone number: &lt;phone number&gt;\n\n&gt;&gt; You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.\n&gt;&gt; id: &lt;id - 6&gt;, usertype: &lt;usertype-edited&gt;, username: &lt;username-edited&gt;\n\n&gt;&gt; You can not give empty or null values to the mandatory attributes.\n&gt;&gt; id: &lt;id - 6&gt;, usertype: , username: null\n\t\n\tid\t\t\t - number, mandatory\t\n\tusertype - text, purchase/sales, mandatory\n\t username - text, min 3 - 30 char, mandatory\n\tpassword - text, alphanumeric, special char, min 8 char, mandatory\n\tfirstname - text, mandatory with 3 to 30 chars\n\tlastname  - text, optional\n\tphone - number, mandatory, ten digits, digit start with 9/8/7/6%n&quot;);</span>
+<span class="nc" id="L93">			case &quot;delete&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; delete user using the following template
+					\t username
+					\t\s
+					\t  username - text, min 3 - 30 char, mandatory,existing
+					\t &gt; user delete &lt;username&gt;
+
+					&quot;&quot;&quot;);
+		}
+<span class="nc" id="L102">	}</span>
+
+	public static void printStoreHelp(String operation) {
+<span class="nc bnc" id="L105" title="All 4 branches missed.">		switch(operation) {</span>
+<span class="nc" id="L106">			case &quot;create&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; Create store using the following template,
+					     name, phone number, address, gst number
+					\s
+					\tname  - text, mandatory with 3 to 30 chars\t
+					\tphone - number, mandatory, ten digits, digit start with 9/8/7/6
+					\taddress - text, mandatory
+					\tgst number - text, 15 digit, mandatory
+					\t&gt; store create name, phone number, address, gst number
+					\t					or
+					\t&gt; store create :enter
+					\t&gt; name, phone number, address, gst number    \s
+					&quot;&quot;&quot;);
+
+<span class="nc" id="L120">			case &quot;edit&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; Edit store using the following template\t
+
+					name, phone number, address, gst number
+					\s
+					\tname  - text, mandatory with 3 to 30 chars\t
+					\tphone - number, mandatory, ten digits, digit start with 9/8/7/6
+					\taddress - text, mandatory
+					\tgst number - text, 15 digit, mandatory
+												
+					\t&gt; store edit name: &lt;name&gt;, phonenumber: &lt;phonenumber&gt;, address: &lt;address&gt;, gst number: &lt;gstnumber&gt;
+					\t   					or
+					\t&gt; store edit :enter
+					\t&gt; name: &lt;name&gt;, phonenumber: &lt;phonenumber&gt;, address: &lt;address&gt;, gstnumber: &lt;gstnumber&gt;
+					   
+												
+												
+					&quot;&quot;&quot;);
+<span class="nc" id="L138">			case &quot;delete&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; delete store using the following template
+					\tstore delete\s
+					&quot;&quot;&quot;);
+		}
+<span class="nc" id="L143">	}</span>
+
+	public static void printUnitHelp(String operation) {
+<span class="nc bnc" id="L146" title="All 5 branches missed.">		switch(operation) {</span>
+<span class="nc" id="L147">			case &quot;create&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; Create unit using the following template,
+					     name, code, description, isdividable
+					    \s
+					     name - text, mandatory with 3 to 30 chars\t
+					     code - text, maximum 4 char, mandatory
+					     description - text
+					     isdividable - boolean, mandatory
+					     &gt; unit create name, code, description, isdividable
+					     							or
+					     	unit create :enter
+					     	name, code, description, isdividable
+					   \s&quot;&quot;&quot;);
+			case &quot;list&quot; -&gt;
+<span class="nc" id="L161">					System.out.println(&quot;&gt;&gt; List unit with the following options\n&quot; + &quot;&gt;&gt; unit list - will list all the units&quot;);</span>
+<span class="nc" id="L162">			case &quot;edit&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; Edit unit using the following template
+					id: &lt;id - 6&gt;, name: &lt;name-edited&gt;, code: &lt;code&gt;,  description: &lt;description&gt;, isdividable: &lt;isdividable&gt;
+
+					&gt;&gt; You can also restrict the user data by editable attributes. Id attribute is mandatory for all the edit operation.
+					&gt;&gt; id: &lt;id - 6&gt;, name: &lt;name&gt;, code: &lt;code&gt;
+
+					&gt;&gt; You can not give empty or null values to the mandatory attributes.
+					&gt;&gt; id: &lt;id - 6&gt;, name: , code: null
+
+					\t\t name - text, mandatory with 3 to 30 chars\t
+					     code - text, maximum 4 char, mandatory
+					     description - text
+					     isdividable - boolean, mandatory&quot;&quot;&quot;);
+<span class="nc" id="L176">			case &quot;delete&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; delete unit using the following template
+					\t \tcode
+					\t\s
+					\t  code - text, min 3 - 30 char, mandatory,existing
+					\t  &gt; unit delete &lt;code&gt;
+					&quot;&quot;&quot;);
+		}
+
+<span class="nc" id="L185">	}</span>
+
+	public static void printPurchaseHelp(String operation) {
+<span class="nc bnc" id="L188" title="All 4 branches missed.">		switch(operation) {</span>
+<span class="nc" id="L189">			case &quot;count&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					Count Purchase using the following Template
+					&gt; purchase count -d &lt;date&gt;
+
+					&gt;&gt; count : &lt;number&gt;
+
+					&gt; purchase count
+
+					&gt;&gt; count : &lt;number&gt;
+
+					&gt; purchase count -c &lt;category&gt;
+
+					&gt;&gt; count : &lt;number&gt;
+					&quot;&quot;&quot;);
+<span class="nc" id="L203">			case &quot;list&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; List purchase with the following options
+					&gt;&gt; purchase list - will list all the purchases default to maximum upto 20 purchases
+					&gt;&gt; purchase list -p 10 - pageable list shows 10 purchases as default
+					&gt;&gt; purchase list -p 10 3 - pageable list shows 10 purchases in 3rd page, ie., purchase from 21 to 30
+
+					&gt;&gt; Use only the following attributes: id, date, invoice
+					&gt;&gt; purchase list -s &lt;attr&gt;: searchtext - search the purchase with the given search text in all the given attribute
+					&gt;&gt; purchase list -s &lt;attr&gt;: searchtext -p 10 6 - pageable list shows 10 purchases in 6th page with the given search text in the given attribute
+
+					&gt; purchase list -s &lt;date&gt; : &lt;23-03-2023&gt; -p 5 2\s
+					&gt; purchase list -s &lt;invoice&gt; : &lt;785263&gt;&quot;&quot;&quot;);
+<span class="nc" id="L215">			case &quot;delete&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; Delete purchase using following command\s
+
+					&gt;&gt; purchase delete &lt;invoice&gt;
+					\t\tinvoice - numeric, mandatory
+					\t\t&quot;&quot;&quot;);
+		}
+
+<span class="nc" id="L223">	}</span>
+
+	public static void printSalesHelp(String operation) {
+<span class="nc bnc" id="L226" title="All 4 branches missed.">		switch(operation) {</span>
+<span class="nc" id="L227">			case &quot;count&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					Count Sales using the Following Template
+					 sales count -d &lt;date&gt;
+
+					&gt;&gt; count : &lt;number&gt;
+
+					&gt; sales count
+
+					&gt;&gt; count : &lt;number&gt;
+
+					&gt; sales count -c &lt;category&gt;
+
+					&gt;&gt; count : &lt;number&gt;
+					&quot;&quot;&quot;);
+<span class="nc" id="L241">			case &quot;list&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					 &gt;&gt; List sales with the following options
+					&gt;&gt; sales list - will list all the sales default to maximum upto 20 sales
+					&gt;&gt; sales list -p 10 - pageable list shows 10 sales as default
+					&gt;&gt; sales list -p 10 3 - pagable list shows 10 sales in 3rd page, ie., sale from 21 to 30
+
+					&gt;&gt; Use only the following attributes: id, date
+					&gt;&gt; sales list -s &lt;attr&gt;: searchtext - search the sale with the given search text in all the given attribute
+					&gt;&gt; sales list -s &lt;attr&gt;: searchtext -p 10 6 - pagable list shows 10 sales in 6th page with the given search text in the given attribute
+
+					&gt; sales list -s &lt;date&gt; : &lt;23/03/2023&gt; -p 5 2\s
+					&gt; sales list -s &lt;id&gt; : &lt;10&gt;
+					&quot;&quot;&quot;);
+<span class="nc" id="L254">			case &quot;delete&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+					&gt;&gt; &gt;&gt; Delete sales using following command\s
+
+					&gt;&gt; sales delete &lt;id&gt;
+					\t\tid - numeric, mandatory&quot;&quot;&quot;);
+		}
+<span class="nc" id="L260">	}</span>
+
+	public static void printInvalidExtension(String Entity) {
+<span class="nc" id="L263">		System.out.println(&quot;&gt;&gt; Invalid Extension given&quot;);</span>
+<span class="nc" id="L264">		System.out.println(&quot;&gt;&gt; Try \&quot;&quot; + Entity + &quot; list help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L265">	}</span>
+
+	public static void printNonSearchableAttribute(String Entity, List&lt;String&gt; attributes) {
+<span class="nc" id="L268">		System.out.println(&quot;&gt;&gt; Given attribute is not a searchable attribute!!&quot;);</span>
+<span class="nc" id="L269">		System.out.println(&quot;&gt;&gt; Searchable Attributes are :&quot; + attributes);</span>
+<span class="nc" id="L270">		System.out.println(&quot;&gt;&gt; Try \&quot;&quot; + Entity + &quot; list help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L271">	}</span>
+
+	public static void printInvalidFormat(String Entity) {
+<span class="nc" id="L274">		System.out.println(&quot;Invalid command format!!!&quot;);</span>
+<span class="nc" id="L275">		System.out.println(&quot;&gt;&gt; Try \&quot;&quot; + Entity + &quot; list help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L276">	}</span>
+
+	public static void printHelpMessage(String Entity, String operation) {
+<span class="nc" id="L279">		System.out.println(&quot;Try \&quot;&quot; + Entity + &quot; &quot; + operation + &quot; help for proper syntax&quot;);</span>
+<span class="nc" id="L280">	}</span>
+
+	public static void mainHelp() {
+<span class="nc" id="L283">		System.out.println(&quot;&quot;&quot;</span>
+				__________________________________________________________________________________
+				store
+				        create  - name, phone number, address, gst number
+				        edit - name, phone number, address, gst number
+				        delete - y/n with admin password
+				_________________________________________________________________________________
+				___________________________________________________________________________________
+				user
+				        create - usertype, username,  password, first name, last name, phone number
+				        count
+				        list
+				        edit - usertype, username,  password, first name, last name, phone number
+				        delete - y/n with username
+				____________________________________________________________________________________
+								
+				____________________________________________________________________________________
+				product
+				           create - productname,unit,type,costprice
+				        count
+				        list
+				        edit - productname,unit,type,costprice
+				        delete - y/n with productname or productid
+				_____________________________________________________________________________________
+								
+				_____________________________________________________________________________________
+				unit
+				        create - name, code, description, isdividable
+				        list -
+				        edit - name, code, description, isdividable
+				        delete - code
+				_____________________________________________________________________________________
+								
+				_____________________________________________________________________________________________________
+				purchase\s
+				        create - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+				        count
+				        list
+				        delete - invoice
+				_____________________________________________________________________________________________________
+								
+				______________________________________________________________________________________________________
+				sales
+				        create - date, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+				        count
+				        list
+				        delete - id
+				______________________________________________________________________________________________________
+				        &quot;&quot;&quot;);
+<span class="nc" id="L332">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

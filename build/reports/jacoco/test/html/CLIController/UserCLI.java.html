@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserCLI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">CLIController</a> &gt; <span class="el_source">UserCLI.java</span></div><h1>UserCLI.java</h1><pre class="source lang-java linenums">package CLIController;
+
+import DAO.ApplicationErrorException;
+import DAO.PageCountOutOfBoundsException;
+import Entity.User;
+import Service.UserService;
+import Service.UserServiceImplementation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
+@Component
+<span class="fc" id="L17">public class UserCLI {</span>
+<span class="fc" id="L18">	private final Scanner scanner = new Scanner(System.in);</span>
+<span class="fc" id="L19">	private final HashMap&lt;String, String&gt; listAttributesMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L20">	private final List&lt;String&gt; userAttributes = Arrays.asList(&quot;id&quot;, &quot;usertype&quot;, &quot;username&quot;, &quot;password&quot;, &quot;firstname&quot;, &quot;lastname&quot;, &quot;phonenumber&quot;);</span>
+	@Autowired
+	private UserService userService;
+	private int id;
+	private String userType;
+	private String userName;
+	private String passWord;
+	private String firstName;
+	private String lastName;
+	private long phoneNumber;
+	private int pageLength;
+	private int pageNumber;
+	private String attribute;
+	private String searchText;
+
+	/**
+	 * This method handles the presentation layer of the Create function.
+	 *
+	 * @param arguments - List of command arguments.
+	 */
+	public void create(List&lt;String&gt; arguments) {
+<span class="nc" id="L41">		Scanner scanner = new Scanner(System.in);</span>
+<span class="nc bnc" id="L42" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L43">			FeedBackPrinter.printUserHelp(&quot;create&quot;);</span>
+<span class="nc" id="L44">			return;</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L46">			System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L47">			String parameters = scanner.nextLine();</span>
+<span class="nc" id="L48">			List&lt;String&gt; userAttributes = List.of(parameters.split(&quot;,&quot;));</span>
+<span class="nc" id="L49">			createHelper(userAttributes);</span>
+<span class="nc" id="L50">			return;</span>
+		}
+<span class="nc" id="L52">		createHelper(arguments.subList(2, arguments.size()));</span>
+<span class="nc" id="L53">	}</span>
+
+	/**
+	 * This method serves the create function.
+	 *
+	 * @param userAttributes Attributes of User for Creation.
+	 */
+	private void createHelper(List&lt;String&gt; userAttributes) {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		if(userAttributes.size() &lt; 6) {</span>
+<span class="nc" id="L62">			System.out.println(&quot;Insufficient arguments for command \&quot;user create\&quot;&quot;);</span>
+<span class="nc" id="L63">			FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;create&quot;);</span>
+<span class="nc" id="L64">			return;</span>
+		}
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		if(userAttributes.size() &gt; 6) {</span>
+<span class="nc" id="L67">			System.out.println(&quot;Too many arguments for command \&quot;user create\&quot;&quot;);</span>
+<span class="nc" id="L68">			FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;create&quot;);</span>
+<span class="nc" id="L69">			return;</span>
+		}
+<span class="nc" id="L71">		userType = userAttributes.get(0).trim();</span>
+<span class="nc" id="L72">		userName = userAttributes.get(1).trim();</span>
+<span class="nc" id="L73">		passWord = userAttributes.get(2).trim();</span>
+<span class="nc" id="L74">		firstName = userAttributes.get(3).trim();</span>
+<span class="nc" id="L75">		lastName = userAttributes.get(4).trim();</span>
+<span class="nc" id="L76">		phoneNumber = 0;</span>
+		try {
+<span class="nc" id="L78">			phoneNumber = Long.parseLong(userAttributes.get(5).trim());</span>
+<span class="nc" id="L79">		} catch(Exception e) {</span>
+<span class="nc" id="L80">			System.out.println(&quot;&gt;&gt; Invalid format for 6th argument \&quot;phonenumber\&quot;&quot;);</span>
+<span class="nc" id="L81">			FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;create&quot;);</span>
+<span class="nc" id="L82">		}</span>
+<span class="nc" id="L83">		User user = new User(userType, userName, passWord, firstName, lastName, phoneNumber);</span>
+		User createdUser;
+		try {
+<span class="nc" id="L86">			createdUser = userService.create(user);</span>
+<span class="nc" id="L87">		} catch(Exception e) {</span>
+<span class="nc" id="L88">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L89">			return;</span>
+<span class="nc" id="L90">		}</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		if(createdUser != null) {</span>
+<span class="nc" id="L92">			System.out.println(&quot;&gt;&gt; User Creation Successfull!!&quot;);</span>
+<span class="nc" id="L93">			System.out.println(createdUser);</span>
+		}
+<span class="nc" id="L95">	}</span>
+
+	/**
+	 * This method handles the Presentation layer of the Count function.
+	 *
+	 * @param arguments List of command arguments.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public void count(List&lt;String&gt; arguments) throws ApplicationErrorException {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		if(arguments.size() &gt; 2) {</span>
+<span class="nc" id="L105">			System.out.println(&quot;&gt;&gt; Invalid Command!! Try \&quot;help\&quot;&quot;);</span>
+<span class="nc" id="L106">			return;</span>
+		}
+<span class="nc" id="L108">		int userCount = userService.count(&quot;id&quot;, null);</span>
+<span class="nc" id="L109">		System.out.println(&quot;&gt;&gt; User Count &quot; + userCount);</span>
+<span class="nc" id="L110">	}</span>
+
+
+	/**
+	 * This method handles the Presentation layer of the List function.
+	 *
+	 * @param arguments List of Command arguments.
+	 * @throws PageCountOutOfBoundsException Exception thrown when the input page count exceeds the records in User table.
+	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
+	 */
+	public void list(List&lt;String&gt; arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L121">		setMap(listAttributesMap, null, null, null, null);</span>
+<span class="nc bnc" id="L122" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L123">			FeedBackPrinter.printUserHelp(&quot;list&quot;);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L125">			setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, &quot;id&quot;, null);</span>
+<span class="nc" id="L126">			listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		} else if(arguments.size() == 4) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) {</span>
+<span class="nc" id="L130">					return;</span>
+				}
+<span class="nc" id="L132">				setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, &quot;id&quot;, null);</span>
+<span class="nc" id="L133">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L135">				searchText = arguments.get(3).trim();</span>
+<span class="nc" id="L136">				setMap(listAttributesMap, null, null, null, searchText);</span>
+<span class="nc" id="L137">				listHelper(listAttributesMap);</span>
+			} else {
+<span class="nc" id="L139">				FeedBackPrinter.printInvalidExtension(&quot;user&quot;);</span>
+			}
+<span class="nc bnc" id="L141" title="All 2 branches missed.">		} else if(arguments.size() == 5) {</span>
+<span class="nc" id="L142">			pageLength = 0;</span>
+<span class="nc" id="L143">			pageNumber = 0;</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">				if((pageNumber = validateNumber(arguments.get(4), &quot;PageNumber&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L147">				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), &quot;id&quot;, null);</span>
+<span class="nc" id="L148">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L150">				attribute = arguments.get(3);</span>
+<span class="nc" id="L151">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L152">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">				if(userAttributes.contains(attribute)) {</span>
+<span class="nc" id="L154">					setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, attribute, searchText);</span>
+<span class="nc" id="L155">					listHelper(listAttributesMap);</span>
+				} else {
+<span class="nc" id="L157">					FeedBackPrinter.printNonSearchableAttribute(&quot;user&quot;, userAttributes);</span>
+				}
+			} else {
+<span class="nc" id="L160">				FeedBackPrinter.printInvalidExtension(&quot;user&quot;);</span>
+			}
+<span class="nc bnc" id="L162" title="All 2 branches missed.">		} else if(arguments.size() == 7) {</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L164">				attribute = arguments.get(3);</span>
+<span class="nc" id="L165">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L166">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">				if(userAttributes.contains(attribute)) {</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L170">						setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, attribute, searchText);</span>
+<span class="nc" id="L171">						listHelper(listAttributesMap);</span>
+					} else {
+<span class="nc" id="L173">						System.out.println(&quot;&gt;&gt; Invalid Command Extension format !!!&quot;);</span>
+<span class="nc" id="L174">						FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;list&quot;);</span>
+					}
+				} else {
+<span class="nc" id="L177">					FeedBackPrinter.printNonSearchableAttribute(&quot;user&quot;, userAttributes);</span>
+				}
+			} else {
+<span class="nc" id="L180">				FeedBackPrinter.printInvalidExtension(&quot;user&quot;);</span>
+			}
+<span class="nc bnc" id="L182" title="All 2 branches missed.">		} else if(arguments.size() == 8) {</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L184">				attribute = arguments.get(3);</span>
+<span class="nc" id="L185">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L186">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">				if(userAttributes.contains(attribute)) {</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">						if((pageNumber = validateNumber(arguments.get(7), &quot;PageNumber&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L191">						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);</span>
+<span class="nc" id="L192">						listHelper(listAttributesMap);</span>
+					} else {
+<span class="nc" id="L194">						FeedBackPrinter.printInvalidExtension(&quot;user&quot;);</span>
+					}
+				} else {
+<span class="nc" id="L197">					FeedBackPrinter.printNonSearchableAttribute(&quot;user&quot;, userAttributes);</span>
+				}
+			} else {
+<span class="nc" id="L200">				FeedBackPrinter.printInvalidExtension(&quot;user&quot;);</span>
+			}
+<span class="nc bnc" id="L202" title="All 2 branches missed.">		} else if(arguments.size() == 3) {</span>
+<span class="nc" id="L203">			FeedBackPrinter.printInvalidFormat(&quot;user&quot;);</span>
+		} else {
+<span class="nc" id="L205">			FeedBackPrinter.printInvalidFormat(&quot;user&quot;);</span>
+		}
+<span class="nc" id="L207">	}</span>
+
+	/**
+	 * This method serves the List function.
+	 *
+	 * @param listAttributesMap - Attribute list of the List function
+	 */
+	private void listHelper(HashMap&lt;String, String&gt; listAttributesMap) {
+		try {
+<span class="nc" id="L216">			List&lt;User&gt; userList = userService.list(listAttributesMap);</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">			if(userList.size() == 0) {</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">				if(listAttributesMap.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L219">					System.out.println(&quot;&gt;&gt; Given SearchText does not exist!!!&quot;);</span>
+				}
+<span class="nc" id="L221">				return;</span>
+			}
+<span class="nc bnc" id="L223" title="All 2 branches missed.">			for(User user: userList) {</span>
+<span class="nc" id="L224">				System.out.println(&quot;&gt;&gt; id: &quot; + user.getId() + &quot;, usertype: &quot; + user.getUserType() + &quot;, username: &quot; + user.getUserName() + &quot;, password: &quot; + user.getPassWord() + &quot;, firstname: &quot; + user.getFirstName() + &quot;, lastname: &quot; + user.getLastName() + &quot;, phonenumber: &quot; + user.getPhoneNumber());</span>
+<span class="nc" id="L225">			}</span>
+<span class="nc" id="L226">		} catch(Exception e) {</span>
+<span class="nc" id="L227">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L228">		}</span>
+<span class="nc" id="L229">	}</span>
+
+
+	/**
+	 * This method handles the Presentation Layer of the Edit function.
+	 *
+	 * @param arguments List of Command arguments
+	 * @param command   Command String.
+	 */
+	public void edit(List&lt;String&gt; arguments, String command) {
+<span class="nc" id="L239">		final String editCommandRegex = &quot;^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$&quot;;</span>
+<span class="nc bnc" id="L240" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L241">			FeedBackPrinter.printUserHelp(&quot;edit&quot;);</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L243">			System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L244">			String parameters = scanner.nextLine();</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">			if(! parameters.matches(editCommandRegex)) {</span>
+<span class="nc" id="L246">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;user edit help for proper syntax!&quot;);</span>
+<span class="nc" id="L247">				return;</span>
+			}
+<span class="nc" id="L249">			List&lt;String&gt; userAttributes = List.of(parameters.split(&quot;[,:]&quot;));</span>
+<span class="nc" id="L250">			editHelper(userAttributes);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">		} else if(arguments.size() &gt; 16) {</span>
+<span class="nc" id="L252">			System.out.println(&quot;&gt;&gt; Too many Arguments for command \&quot;product edit\&quot;&quot;);</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">		} else if(arguments.size() &lt; 6) {</span>
+<span class="nc" id="L254">			System.out.println(&quot;&gt;&gt; Insufficient arguments for command \&quot;product edit\&quot;&quot;);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">		} else if(! arguments.get(2).contains(&quot;id&quot;)) {</span>
+<span class="nc" id="L256">			System.out.println(&quot;&gt;&gt; Id is a Mandatory argument for every Edit operation&quot;);</span>
+<span class="nc" id="L257">			System.out.println(&quot;&gt;&gt; For every Edit operation the first argument must be user's ID&quot;);</span>
+<span class="nc" id="L258">			FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;edit&quot;);</span>
+		} else {
+<span class="nc bnc" id="L260" title="All 2 branches missed.">			if(! command.substring(10).matches(editCommandRegex)) {</span>
+<span class="nc" id="L261">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;user edit help for proper syntax!&quot;);</span>
+<span class="nc" id="L262">				return;</span>
+			}
+<span class="nc" id="L264">			editHelper(arguments.subList(2, arguments.size()));</span>
+		}
+<span class="nc" id="L266">	}</span>
+
+	/**
+	 * This method serves the Edit function
+	 *
+	 * @param editAttributes Attributes of user to be edited.
+	 */
+	private void editHelper(List&lt;String&gt; editAttributes) {
+<span class="nc" id="L274">		User user = new User();</span>
+		try {
+<span class="nc" id="L276">			id = Integer.parseInt(editAttributes.get(1).trim());</span>
+<span class="nc" id="L277">		} catch(Exception e) {</span>
+<span class="nc" id="L278">			System.out.println(&quot;&gt;&gt; Id must be a Number!&quot;);</span>
+<span class="nc" id="L279">			FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;edit&quot;);</span>
+<span class="nc" id="L280">		}</span>
+<span class="nc" id="L281">		user.setId(id);</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">		for(int index = 2 ; index &lt; editAttributes.size() ; index = index + 2) {</span>
+<span class="nc bnc" id="L283" title="All 7 branches missed.">			switch(editAttributes.get(index).trim()) {</span>
+<span class="nc" id="L284">				case &quot;username&quot; -&gt; user.setUserName(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L285">				case &quot;usertype&quot; -&gt; user.setUserType(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L286">				case &quot;password&quot; -&gt; user.setPassWord(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L287">				case &quot;firstname&quot; -&gt; user.setFirstName(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L288">				case &quot;lastname&quot; -&gt; user.setLastName(editAttributes.get(index + 1).trim());</span>
+				case &quot;phonenumber&quot; -&gt; {
+					try {
+<span class="nc" id="L291">						phoneNumber = Long.parseLong(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L292">					} catch(NumberFormatException e) {</span>
+<span class="nc" id="L293">						System.out.println(&quot;&gt;&gt; Phonenumber must be numeric!!&quot;);</span>
+<span class="nc" id="L294">						System.out.println(&quot;&gt;&gt; Try \&quot;user edit help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L295">						return;</span>
+<span class="nc" id="L296">					}</span>
+<span class="nc" id="L297">					user.setPhoneNumber(phoneNumber);</span>
+<span class="nc" id="L298">				}</span>
+				default -&gt; {
+<span class="nc" id="L300">					System.out.println(&quot;&gt;&gt; Invalid attribute given!!! : &quot; + editAttributes.get(index));</span>
+<span class="nc" id="L301">					System.out.println(&quot;&gt;&gt; Try \&quot;user edit help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L302">					return;</span>
+				}
+			}
+		}
+		User editedUser;
+		try {
+<span class="nc" id="L308">			editedUser = userService.edit(user);</span>
+<span class="nc" id="L309">		} catch(Exception e) {</span>
+<span class="nc" id="L310">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L311">			return;</span>
+<span class="nc" id="L312">		}</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">		if(editedUser != null) {</span>
+<span class="nc" id="L314">			System.out.println(&quot;&gt;&gt; User Edited Successfully&quot;);</span>
+<span class="nc" id="L315">			System.out.println(editedUser);</span>
+		} else {
+<span class="nc" id="L317">			System.out.println(&quot;&gt;&gt; User edit failed!!!&quot;);</span>
+<span class="nc" id="L318">			System.out.println(&quot;&gt;&gt;Please check the Id you have entered!!!&quot;);</span>
+		}
+<span class="nc" id="L320">	}</span>
+
+	/**
+	 * This method handles the presentation layer of the Delete function.
+	 *
+	 * @param arguments List of Command arguments.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problem.
+	 */
+	public void delete(List&lt;String&gt; arguments) throws ApplicationErrorException {
+<span class="nc" id="L329">		String nameregex = &quot;^[a-zA-Z0-9]{3,30}$&quot;;</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L332">				FeedBackPrinter.printUserHelp(&quot;delete&quot;);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">			} else if(arguments.get(2).matches(nameregex)) {</span>
+<span class="nc" id="L334">				System.out.println(&quot;&gt;&gt; Are you sure want to delete the User y/n ? : &quot;);</span>
+<span class="nc" id="L335">				String prompt = scanner.nextLine();</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">				if(prompt.equals(&quot;y&quot;)) {</span>
+<span class="nc" id="L337">					int statusCode = userService.delete(arguments.get(2));</span>
+<span class="nc bnc" id="L338" title="All 2 branches missed.">					if(statusCode == 1) {</span>
+<span class="nc" id="L339">						System.out.println(&quot;User Deleted Successfull!!!&quot;);</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">					} else if(statusCode == 0) {</span>
+<span class="nc" id="L341">						System.out.println(&quot;&gt;&gt; User Deletion Failed!!!&quot;);</span>
+<span class="nc" id="L342">						System.out.println(&quot;&gt;&gt; Please check the username you have entered!!!&quot;);</span>
+<span class="nc" id="L343">						FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;delete&quot;);</span>
+					} else {
+<span class="nc" id="L345">						System.out.println(&quot;&gt;&gt; Username Cannot be null!!&quot;);</span>
+					}
+<span class="nc bnc" id="L347" title="All 2 branches missed.">				} else if(prompt.equals(&quot;n&quot;)) {</span>
+<span class="nc" id="L348">					System.out.println(&quot;&gt;&gt; Delete operation cancelled&quot;);</span>
+				} else {
+<span class="nc" id="L350">					System.out.println(&quot;&gt;&gt; Invalid delete prompt!!! Please select between y/n&quot;);</span>
+				}
+<span class="nc" id="L352">			} else {</span>
+<span class="nc" id="L353">				System.out.println(&quot;&gt;&gt; Invalid format for username!!!&quot;);</span>
+<span class="nc" id="L354">				FeedBackPrinter.printHelpMessage(&quot;user&quot;, &quot;delete&quot;);</span>
+			}
+		}
+<span class="nc" id="L357">	}</span>
+
+	private int validateNumber(String number, String name) {
+		int result;
+		try {
+<span class="nc" id="L362">			result = Integer.parseInt(number);</span>
+<span class="nc" id="L363">		} catch(Exception e) {</span>
+<span class="nc" id="L364">			System.out.println(&quot;Invalid &quot; + name + &quot;! Must be a number&quot;);</span>
+<span class="nc" id="L365">			return - 1;</span>
+<span class="nc" id="L366">		}</span>
+<span class="nc" id="L367">		return result;</span>
+	}
+
+	private void setMap(HashMap&lt;String, String&gt; listAttributesMap, String PageLength, String PageNumber, String Attribute, String SearchText) {
+<span class="nc" id="L371">		listAttributesMap.put(&quot;Pagelength&quot;, PageLength);</span>
+<span class="nc" id="L372">		listAttributesMap.put(&quot;Pagenumber&quot;, PageNumber);</span>
+<span class="nc" id="L373">		listAttributesMap.put(&quot;Attribute&quot;, Attribute);</span>
+<span class="nc" id="L374">		listAttributesMap.put(&quot;Searchtext&quot;, SearchText);</span>
+<span class="nc" id="L375">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

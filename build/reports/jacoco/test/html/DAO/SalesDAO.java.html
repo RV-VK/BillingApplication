@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SalesDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">DAO</a> &gt; <span class="el_source">SalesDAO.java</span></div><h1>SalesDAO.java</h1><pre class="source lang-java linenums">package DAO;
+
+import Entity.Sales;
+import Entity.SalesItem;
+import Mapper.SalesItemMapper;
+import Mapper.SalesMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+<span class="fc" id="L16">public class SalesDAO {</span>
+	@Autowired
+	private ProductDAO productDAO;
+<span class="fc" id="L19">	private final List&lt;SalesItem&gt; salesItemList = new ArrayList&lt;&gt;();</span>
+	@Autowired
+	private SalesMapper salesMapper;
+
+	@Autowired
+	private SalesItemMapper salesItemMapper;
+
+	/**
+	 * This method is a composite function that creates an entry in both Sales and Sales-items table.
+	 *
+	 * @param sales sales Input Sales.
+	 * @return sales - Created Sales.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 * @throws SQLException              Exception thrown based on SQL syntax.
+	 */
+	public Sales create(Sales sales) throws ApplicationErrorException, SQLException {
+		try {
+<span class="nc" id="L36">			salesItemList.clear();</span>
+<span class="nc" id="L37">			Sales createdSales = salesMapper.create(sales);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">			for(SalesItem salesItem: sales.getSalesItemList()) {</span>
+<span class="nc" id="L39">				SalesItem createdSalesItem = salesItemMapper.create(salesItem, createdSales.getId());</span>
+<span class="nc" id="L40">				createdSalesItem.setProduct(salesItem.getProduct());</span>
+<span class="nc" id="L41">				salesItemList.add(createdSalesItem);</span>
+<span class="nc" id="L42">				System.out.println(salesItem.getProduct().getAvailableQuantity() + &quot; &quot; + salesItem.getQuantity());</span>
+<span class="nc" id="L43">				salesItem.getProduct().setAvailableQuantity(salesItem.getProduct().getAvailableQuantity() - salesItem.getQuantity());</span>
+<span class="nc" id="L44">				System.out.println(salesItem.getProduct().getAvailableQuantity());</span>
+<span class="nc" id="L45">				productDAO.edit(salesItem.getProduct());</span>
+<span class="nc" id="L46">			}</span>
+<span class="nc" id="L47">			createdSales.setSalesItemList(salesItemList);</span>
+<span class="nc" id="L48">			return createdSales;</span>
+<span class="nc" id="L49">		} catch(Exception e) {</span>
+<span class="nc" id="L50">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This method counts the number of entries from the sales table based on Given attribute and searchText.
+	 *
+	 * @param attribute  Column to be counted.
+	 * @param searchText Field to be counted.
+	 * @return Integer - Count.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
+		try {
+			Integer count;
+<span class="nc bnc" id="L65" title="All 2 branches missed.">			if(attribute.equals(&quot;date&quot;)) count = salesMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));</span>
+<span class="nc" id="L66">			else count = salesMapper.count(attribute, searchText);</span>
+<span class="nc" id="L67">			return count;</span>
+<span class="nc" id="L68">		} catch(Exception e) {</span>
+<span class="nc" id="L69">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This method lists the Sales and SalesItem entries based on the given searchable attribute and
+	 * its corresponding search-text formatted in pageable manner.
+	 *
+	 * @param attribute  The attribute to be looked upon.
+	 * @param searchText The search-text to be found.
+	 * @param pageLength The number of entries that must be listed.
+	 * @param offset     The Page number to be listed.
+	 * @return List - Sales.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public List&lt;Sales&gt; list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
+		List&lt;Sales&gt; listedSales;
+<span class="nc" id="L86">		Date dateParameter = null;</span>
+		Integer count, numericParameter;
+		try {
+<span class="nc bnc" id="L89" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L90">				numericParameter = Integer.parseInt(String.valueOf(searchText));</span>
+<span class="nc" id="L91">				count = salesMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L92">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L93">				listedSales = salesMapper.list(attribute, numericParameter, pageLength, offset);</span>
+			} else {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));</span>
+<span class="nc" id="L96">				count = salesMapper.count(attribute, dateParameter);</span>
+<span class="nc" id="L97">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L98">				listedSales = salesMapper.list(attribute, dateParameter, pageLength, offset);</span>
+			}
+			List&lt;SalesItem&gt; listedSalesItems;
+<span class="nc bnc" id="L101" title="All 2 branches missed.">			for(Sales sales: listedSales) {</span>
+<span class="nc" id="L102">				listedSalesItems = salesItemMapper.list(sales.getId());</span>
+<span class="nc" id="L103">				sales.setSalesItemList(listedSalesItems);</span>
+<span class="nc" id="L104">			}</span>
+<span class="nc" id="L105">			return listedSales;</span>
+<span class="nc" id="L106">		} catch(Exception e) {</span>
+<span class="nc" id="L107">			e.printStackTrace();</span>
+<span class="nc" id="L108">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * Private method to check whether the given Pagenumber is Valid or Not exists.
+	 *
+	 * @param count      Total Count of entries.
+	 * @param offset     Index from which the Entries are requested.
+	 * @param pageLength Length for Each page.
+	 * @throws PageCountOutOfBoundsException Exception thrown in a pageable list function if a
+	 *                                       non-existing page is prompted.
+	 */
+	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
+<span class="nc bnc" id="L122" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
+			int pageCount;
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
+<span class="nc" id="L125">			else pageCount = (count / pageLength) + 1;</span>
+<span class="nc" id="L126">			throw new PageCountOutOfBoundsException(&quot;&gt;&gt; Requested Page doesnt Exist!!\n&gt;&gt; Existing Pagecount with given pagination &quot; + pageCount);</span>
+		}
+<span class="nc" id="L128">	}</span>
+
+	/**
+	 * This method lists the Entries from the Sales and SalesItem table based on the given search-text.
+	 *
+	 * @param searchText The search-text to be found.
+	 * @return List - Sales.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public List&lt;Sales&gt; searchList(String searchText) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L139">			List&lt;Sales&gt; listedSales = salesMapper.searchList(searchText);</span>
+			List&lt;SalesItem&gt; listedSalesItems;
+<span class="nc bnc" id="L141" title="All 2 branches missed.">			for(Sales sales: listedSales) {</span>
+<span class="nc" id="L142">				listedSalesItems = salesItemMapper.list(sales.getId());</span>
+<span class="nc" id="L143">				sales.setSalesItemList(listedSalesItems);</span>
+<span class="nc" id="L144">			}</span>
+<span class="nc" id="L145">			return listedSales;</span>
+<span class="nc" id="L146">		} catch(Exception e) {</span>
+<span class="nc" id="L147">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+
+	/**
+	 * This method deletes an entry in the Sales table and the corresponding entries in the Sales items table.
+	 *
+	 * @param id Input id to perform delete.
+	 * @return resultCode - Integer.
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	public Integer delete(int id) throws ApplicationErrorException {
+		try {
+<span class="nc" id="L160">			Integer salesItemDeleted = salesItemMapper.delete(id);</span>
+<span class="nc" id="L161">			Integer salesDeleted = salesMapper.delete(id);</span>
+<span class="nc bnc" id="L162" title="All 4 branches missed.">			if(salesItemDeleted &gt; 0 &amp;&amp; salesDeleted &gt; 0) return 1;</span>
+<span class="nc" id="L163">			else return - 1;</span>
+<span class="nc" id="L164">		} catch(Exception e) {</span>
+<span class="nc" id="L165">			throw new ApplicationErrorException(e.getMessage());</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

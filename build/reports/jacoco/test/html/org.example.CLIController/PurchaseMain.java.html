@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PurchaseMain.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.CLIController</a> &gt; <span class="el_source">PurchaseMain.java</span></div><h1>PurchaseMain.java</h1><pre class="source lang-java linenums">package org.example.CLIController;
+
+import org.example.DAO.ApplicationErrorException;
+import org.example.DAO.PageCountOutOfBoundsException;
+import org.example.DAO.UnitCodeViolationException;
+import org.example.Service.InvalidTemplateException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+import java.sql.SQLException;
+import java.util.*;
+
+@Component
+<span class="nc" id="L16">public class PurchaseMain {</span>
+<span class="nc" id="L17">	private final List&lt;String&gt; commandEntityList = Arrays.asList(&quot;product&quot;, &quot;user&quot;, &quot;store&quot;, &quot;unit&quot;, &quot;sales&quot;);</span>
+<span class="nc" id="L18">	@Autowired</span>
+	PurchaseCLI purchaseCLI = new PurchaseCLI();
+<span class="nc" id="L20">	@Autowired</span>
+	ProductCLI productCLI = new ProductCLI();
+
+
+	private static List&lt;String&gt; splitCommand(String command) {
+		String[] parts;
+		String[] commandlet;
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		if(command.contains(&quot;,&quot;)) {</span>
+<span class="nc" id="L28">			parts = command.split(&quot;[,:]&quot;);</span>
+<span class="nc" id="L29">			commandlet = parts[0].split(&quot;\\s+&quot;);</span>
+		} else {
+<span class="nc" id="L31">			parts = command.split(&quot;,&quot;);</span>
+<span class="nc" id="L32">			commandlet = command.split(&quot;\\s+&quot;);</span>
+		}
+<span class="nc" id="L34">		ArrayList&lt;String&gt; commandList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		if(parts.length == 1) {</span>
+<span class="nc" id="L36">			Collections.addAll(commandList, commandlet);</span>
+		} else {
+<span class="nc" id="L38">			Collections.addAll(commandList, commandlet);</span>
+<span class="nc" id="L39">			commandList.addAll(Arrays.asList(parts).subList(1, parts.length));</span>
+		}
+<span class="nc" id="L41">		return commandList;</span>
+	}
+
+	/**
+	 * Purchase user View Control.
+	 *
+	 * @throws PageCountOutOfBoundsException Custom Exception thrown when a non-existing page is given as input in Pageable List.
+	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
+	 */
+	public void PurchaseView() throws PageCountOutOfBoundsException, ApplicationErrorException, SQLException, UnitCodeViolationException, InvalidTemplateException {
+<span class="nc" id="L51">		Scanner scanner = new Scanner(System.in);</span>
+<span class="nc" id="L52">		System.out.println(&quot;\n\n\n&gt;&gt; Try \&quot;help\&quot; to know better!\n&quot;);</span>
+		do {
+<span class="nc" id="L54">			System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L55">			String command = scanner.nextLine();</span>
+<span class="nc" id="L56">			List&lt;String&gt; commandList = splitCommand(command);</span>
+<span class="nc" id="L57">			String commandString = commandList.get(0);</span>
+<span class="nc" id="L58">			String operationString = &quot;&quot;;</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">			if(commandList.size() &gt; 1) operationString = commandList.get(1);</span>
+<span class="nc bnc" id="L60" title="All 6 branches missed.">			switch(commandString) {</span>
+				case &quot;purchase&quot; -&gt; {
+<span class="nc bnc" id="L62" title="All 5 branches missed.">					switch(operationString) {</span>
+<span class="nc" id="L63">						case &quot;count&quot; -&gt; purchaseCLI.count(commandList);</span>
+<span class="nc" id="L64">						case &quot;list&quot; -&gt; purchaseCLI.list(commandList);</span>
+<span class="nc" id="L65">						case &quot;delete&quot; -&gt; purchaseCLI.delete(commandList);</span>
+<span class="nc" id="L66">						case &quot;help&quot; -&gt; System.out.println(&quot;&quot;&quot;</span>
+								&gt;&gt; purchase products using following command
+								purchase date, invoice, [code1, quantity1, costprice1], [code2, quantity2, costprice2]....
+
+								\t  date - format( YYYY-MM-DD ), mandatory
+								\t\tinvoice - numbers, mandatory
+								\t\t
+								\t\tThe following purchase items should be given as array of items
+								\t\tcode - text, min 2 - 6 char, mandatory
+								\t\tquantity - numbers, mandatory
+								\t\tcostprice - numbers, mandatory&quot;&quot;&quot;);
+						default -&gt; {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">							if(operationString.matches(&quot;([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))&quot;)) {</span>
+<span class="nc" id="L79">								purchaseCLI.create(command);</span>
+							} else {
+<span class="nc" id="L81">								System.out.println(&quot;Invalid operation for command &quot; + &quot;\&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L82">								System.out.println(&quot;Try either \&quot;help\&quot; for proper syntax or \&quot;purchase help\&quot; if you are trying to start a purchase!&quot;);</span>
+							}
+						}
+					}
+<span class="nc" id="L86">				}</span>
+				case &quot;product&quot; -&gt; {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">					if(operationString.equals(&quot;list&quot;)) {</span>
+<span class="nc" id="L89">						productCLI.list(commandList);</span>
+					} else {
+<span class="nc" id="L91">						System.out.println(&quot;Invalid operation for command \&quot;&quot; + commandString + &quot;\&quot;&quot;);</span>
+<span class="nc" id="L92">						System.out.println(&quot;Try \&quot;Help\&quot; for proper syntax&quot;);</span>
+					}
+<span class="nc" id="L94">				}</span>
+				case &quot;help&quot; -&gt; {
+<span class="nc" id="L96">					System.out.println(&quot;&quot;&quot;</span>
+							product
+							\t    list
+							&quot;&quot;&quot;);
+<span class="nc" id="L100">					System.out.println(&quot;&quot;&quot;</span>
+							purchase\s
+							\t\t\tcreate - date, invoice, [name1, quantity1, costprice1], [name2, quantity2, costprice2]....
+							\t\t\tcount
+							\t\t\tlist
+							\t\t\tdelete - invoice&quot;&quot;&quot;);
+<span class="nc" id="L106">				}</span>
+<span class="nc" id="L107">				case &quot;exit&quot; -&gt; System.exit(0);</span>
+				case &quot;logout&quot; -&gt; {
+<span class="nc" id="L109">					ApplicationContext context = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
+<span class="nc" id="L110">					LoginCLI loginCLI = context.getBean(LoginCLI.class);</span>
+<span class="nc" id="L111">					loginCLI.Login();</span>
+<span class="nc" id="L112">				}</span>
+				default -&gt; {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">					if(commandEntityList.contains(commandString)) {</span>
+<span class="nc" id="L115">						System.out.println(&quot;Non-Permitted Action!! These actions are only Permitted for Admin user&quot;);</span>
+<span class="nc" id="L116">					} else System.out.println(&quot;Invalid Command ! Not found!!&quot;);</span>
+				}
+			}
+<span class="nc" id="L119">		} while(true);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

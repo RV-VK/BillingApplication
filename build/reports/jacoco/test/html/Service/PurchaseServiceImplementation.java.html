@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PurchaseServiceImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">Service</a> &gt; <span class="el_source">PurchaseServiceImplementation.java</span></div><h1>PurchaseServiceImplementation.java</h1><pre class="source lang-java linenums">package Service;
+
+import CLIController.AppDependencyConfig;
+import DAO.ApplicationErrorException;
+import DAO.ProductDAO;
+import DAO.PurchaseDAO;
+import DAO.UnitDAO;
+import Entity.Product;
+import Entity.Purchase;
+import Entity.PurchaseItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+@Service
+<span class="fc" id="L22">public class PurchaseServiceImplementation implements PurchaseService {</span>
+
+<span class="fc" id="L24">	private final String dateRegex = &quot;([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))&quot;;</span>
+	@Autowired
+	private PurchaseDAO purchaseDAO;
+
+	@Override
+	public Purchase create(Purchase purchase) throws Exception {
+<span class="nc" id="L30">		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppDependencyConfig.class);</span>
+<span class="nc" id="L31">		ProductDAO productDAO = applicationContext.getBean(ProductDAO.class);</span>
+<span class="nc" id="L32">		UnitDAO unitDAO = applicationContext.getBean(UnitDAO.class);</span>
+		boolean isDividable;
+<span class="nc" id="L34">		validate(purchase);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {</span>
+			try {
+<span class="nc" id="L37">				Product product = productDAO.findByCode(purchaseItem.getProduct().getCode());</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">				if(product != null) purchaseItem.setProduct(product);</span>
+<span class="nc" id="L39">				isDividable = unitDAO.findByCode(product.getunitcode()).getIsDividable();</span>
+<span class="nc" id="L40">			} catch(NullPointerException e) {</span>
+<span class="nc" id="L41">				throw new ApplicationErrorException(&quot;Product code '&quot; + purchaseItem.getProduct().getCode() + &quot;' does not exists!&quot;);</span>
+<span class="nc" id="L42">			}</span>
+<span class="nc bnc" id="L43" title="All 4 branches missed.">			if(! isDividable &amp;&amp; purchaseItem.getQuantity() % 1 != 0) {</span>
+<span class="nc" id="L44">				throw new UnDividableEntityException(&quot;Product code '&quot; + purchaseItem.getProduct().getCode() + &quot;' is not of dividable unit!&quot;);</span>
+			}
+<span class="nc" id="L46">		}</span>
+<span class="nc" id="L47">		return purchaseDAO.create(purchase);</span>
+	}
+
+
+	@Override
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException, InvalidTemplateException {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		if(searchText != null) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">			if(! searchText.matches(dateRegex))</span>
+<span class="nc" id="L55">				throw new InvalidTemplateException(&quot;Invalid Date format!! Must be in YYYY-MM-DD format!&quot;);</span>
+		}
+<span class="nc" id="L57">		return purchaseDAO.count(attribute, searchText);</span>
+	}
+
+
+	@Override
+	public List&lt;Purchase&gt; list(HashMap&lt;String, String&gt; listattributes) throws ApplicationErrorException, InvalidTemplateException {
+		List&lt;Purchase&gt; purchaseList;
+<span class="nc bnc" id="L64" title="All 4 branches missed.">		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 &amp;&amp; listattributes.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L65">			purchaseList = purchaseDAO.searchList(listattributes.get(&quot;Searchtext&quot;));</span>
+		} else {
+<span class="nc" id="L67">			int pageLength = Integer.parseInt(listattributes.get(&quot;Pagelength&quot;));</span>
+<span class="nc" id="L68">			int pageNumber = Integer.parseInt(listattributes.get(&quot;Pagenumber&quot;));</span>
+<span class="nc" id="L69">			int offset = (pageLength * pageNumber) - pageLength;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">			if(listattributes.get(&quot;Attribute&quot;).equals(&quot;date&quot;))</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">				if(listattributes.get(&quot;Searchtext&quot;) != null &amp;&amp; ! (listattributes.get(&quot;Searchtext&quot;).replace(&quot;'&quot;, &quot;&quot;).matches(dateRegex)))</span>
+<span class="nc" id="L72">					throw new InvalidTemplateException(&quot;Invalid Format for Attribute date!! Must be in format YYYY-MM-DD&quot;);</span>
+<span class="nc" id="L73">			purchaseList = purchaseDAO.list(listattributes.get(&quot;Attribute&quot;), listattributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
+		}
+<span class="nc" id="L75">		return purchaseList;</span>
+	}
+
+
+	@Override
+	public Integer delete(String invoice) throws ApplicationErrorException {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if(invoice != null)</span>
+<span class="nc" id="L82">			return purchaseDAO.delete(Integer.parseInt(invoice));</span>
+		else
+<span class="nc" id="L84">			return - 1;</span>
+	}
+
+	private void validate(Purchase purchase) throws InvalidTemplateException {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		if(purchase == null)</span>
+<span class="nc" id="L89">			throw new NullPointerException(&quot;Purchase cannot be Null&quot;);</span>
+<span class="nc bnc" id="L90" title="All 4 branches missed.">		if(purchase.getDate() != null &amp;&amp; ! purchase.getDate().matches(dateRegex))</span>
+<span class="nc" id="L91">			throw new InvalidTemplateException(&quot;Date Format is Invalid!! Must be YYYY-MM-DD!!&quot;);</span>
+<span class="nc" id="L92">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

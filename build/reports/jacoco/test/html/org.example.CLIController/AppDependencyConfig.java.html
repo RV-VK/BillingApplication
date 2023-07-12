@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppDependencyConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.CLIController</a> &gt; <span class="el_source">AppDependencyConfig.java</span></div><h1>AppDependencyConfig.java</h1><pre class="source lang-java linenums">package org.example.CLIController;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import javax.sql.DataSource;
+
+@Configuration
+@ComponentScan(basePackages = &quot;CLIController,Service,Entity,DAO,Mapper&quot;)
+@MapperScan(&quot;Mapper&quot;)
+<span class="nc" id="L18">public class AppDependencyConfig {</span>
+	@Bean
+	public DataSource dataSource() {
+<span class="nc" id="L21">		DriverManagerDataSource dataSource = new DriverManagerDataSource();</span>
+<span class="nc" id="L22">		dataSource.setDriverClassName(&quot;org.postgresql.Driver&quot;);</span>
+<span class="nc" id="L23">		dataSource.setUrl(&quot;jdbc:postgresql://localhost:5432/POSDatabase&quot;);</span>
+<span class="nc" id="L24">		dataSource.setUsername(&quot;postgres&quot;);</span>
+<span class="nc" id="L25">		dataSource.setPassword(&quot;manikantan1205&quot;);</span>
+<span class="nc" id="L26">		return dataSource;</span>
+	}
+
+	@Bean
+	public SqlSessionFactory sqlSessionFactory() throws Exception {
+<span class="nc" id="L31">		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();</span>
+<span class="nc" id="L32">		factoryBean.setDataSource(dataSource());</span>
+<span class="nc" id="L33">		Resource myBatisConfig = new ClassPathResource(&quot;mybatis-config.xml&quot;);</span>
+<span class="nc" id="L34">		factoryBean.setConfigLocation(myBatisConfig);</span>
+<span class="nc" id="L35">		return factoryBean.getObject();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

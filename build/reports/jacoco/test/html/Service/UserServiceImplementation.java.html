@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">Service</a> &gt; <span class="el_source">UserServiceImplementation.java</span></div><h1>UserServiceImplementation.java</h1><pre class="source lang-java linenums">package Service;
+
+import DAO.ApplicationErrorException;
+import DAO.PageCountOutOfBoundsException;
+import DAO.UserDAO;
+import Entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+
+@Service
+<span class="fc" id="L18">public class UserServiceImplementation implements UserService {</span>
+
+<span class="fc" id="L20">	private final String NAME_REGEX = &quot;^[a-zA-Z\\s]{3,30}$&quot;;</span>
+<span class="fc" id="L21">	private final String LAST_NAME_REGEX = &quot;^[a-zA-Z\\s]{0,30}$&quot;;</span>
+<span class="fc" id="L22">	private final String PASSWORD_REGEX = &quot;^[a-zA-Z0-9]{8,30}$&quot;;</span>
+<span class="fc" id="L23">	private final List&lt;String&gt; userTypeList = Arrays.asList(&quot;Sales&quot;, &quot;Purchase&quot;, &quot;Admin&quot;);</span>
+<span class="fc" id="L24">	private final String PHONE_NUMBER_REGEX = &quot;^[6789]\\d{9}$&quot;;</span>
+	@Autowired
+	private UserDAO userDAO;
+
+	@Override
+	public User create(User user) throws Exception {
+<span class="nc" id="L30">		validate(user);</span>
+<span class="nc" id="L31">		return userDAO.create(user);</span>
+	}
+
+	@Override
+	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
+<span class="nc" id="L36">		return userDAO.count(attribute, searchText);</span>
+	}
+
+	@Override
+	public List&lt;User&gt; list(HashMap&lt;String, String&gt; listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
+		List&lt;User&gt; userList;
+<span class="nc bnc" id="L42" title="All 4 branches missed.">		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 &amp;&amp; listattributes.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L43">			userList = userDAO.searchList(listattributes.get(&quot;Searchtext&quot;));</span>
+		} else {
+<span class="nc" id="L45">			int pageLength = Integer.parseInt(listattributes.get(&quot;Pagelength&quot;));</span>
+<span class="nc" id="L46">			int pageNumber = Integer.parseInt(listattributes.get(&quot;Pagenumber&quot;));</span>
+<span class="nc" id="L47">			int offset = (pageLength * pageNumber) - pageLength;</span>
+<span class="nc" id="L48">			userList = userDAO.list(listattributes.get(&quot;Attribute&quot;), listattributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
+		}
+<span class="nc" id="L50">		return userList;</span>
+	}
+
+	@Override
+	public User edit(User user) throws Exception {
+<span class="nc" id="L55">		validate(user);</span>
+<span class="nc" id="L56">		return userDAO.edit(user);</span>
+	}
+
+	@Override
+	public Integer delete(String username) throws ApplicationErrorException {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		if(username != null)</span>
+<span class="nc" id="L62">			return userDAO.delete(username);</span>
+		else
+<span class="nc" id="L64">			return - 1;</span>
+	}
+
+	/**
+	 * This method validates the user attributes.
+	 *
+	 * @param user user to be validated.
+	 */
+	private void validate(User user) throws InvalidTemplateException {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		if(user == null)</span>
+<span class="nc" id="L74">			throw new NullPointerException(&quot;User Cannot be Null!!&quot;);</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">		if(user.getUserName() != null &amp;&amp; ! user.getUserName().matches(NAME_REGEX))</span>
+<span class="nc" id="L76">			throw new InvalidTemplateException(&quot;Invalid UserName!!&quot;);</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">		if(user.getFirstName() != null &amp;&amp; ! user.getFirstName().matches(NAME_REGEX))</span>
+<span class="nc" id="L78">			throw new InvalidTemplateException(&quot;Invalid FirstName!!&quot;);</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">		if(user.getLastName() != null &amp;&amp; ! user.getLastName().matches(LAST_NAME_REGEX))</span>
+<span class="nc" id="L80">			throw new InvalidTemplateException(&quot;Invalid LastName!!&quot;);</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">		if(user.getPassWord() != null &amp;&amp; ! user.getPassWord().matches(PASSWORD_REGEX))</span>
+<span class="nc" id="L82">			throw new InvalidTemplateException(&quot;Invalid Password!!&quot;);</span>
+<span class="nc bnc" id="L83" title="All 4 branches missed.">		if(user.getPhoneNumber() != 0 &amp;&amp; ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
+<span class="nc" id="L84">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
+<span class="nc bnc" id="L85" title="All 4 branches missed.">		if(user.getUserType() != null &amp;&amp; ! userTypeList.contains(user.getUserType()))</span>
+<span class="nc" id="L86">			throw new InvalidTemplateException(&quot;Invalid Usertype!!&quot;);</span>
+<span class="nc" id="L87">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
