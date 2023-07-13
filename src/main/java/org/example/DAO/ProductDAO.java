@@ -24,7 +24,7 @@ public class ProductDAO {
 	public Product create(Product product) throws Exception {
 		try {
 			return productMapper.create(product);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}
@@ -149,7 +149,7 @@ public class ProductDAO {
 	public Product edit(Product product) throws Exception {
 		try {
 			return productMapper.edit(product);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}

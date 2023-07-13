@@ -23,7 +23,7 @@ public class UnitDAO {
 	public Unit create(Unit unit) throws Exception {
 		try {
 			return unitMapper.create(unit);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}
@@ -69,7 +69,7 @@ public class UnitDAO {
 	public Unit edit(Unit unit) throws Exception {
 		try {
 			return unitMapper.edit(unit);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}
@@ -85,7 +85,7 @@ public class UnitDAO {
 	public Integer delete(String code) throws Exception {
 		try {
 			return unitMapper.delete(code);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}

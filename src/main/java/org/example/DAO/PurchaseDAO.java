@@ -43,7 +43,7 @@ public class PurchaseDAO {
 			}
 			createdPurchase.setPurchaseItemList(purchaseItemList);
 			return createdPurchase;
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}

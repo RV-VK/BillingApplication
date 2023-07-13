@@ -27,7 +27,7 @@ public class StoreDAO {
 	public Store create(Store store) throws ApplicationErrorException, SQLException {
 		try {
 			return storeMapper.create(store);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			SQLException sqlException = (SQLException)cause;
 			if(sqlException.getSQLState().equals("23514")) return null;

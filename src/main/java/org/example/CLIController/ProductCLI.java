@@ -76,7 +76,6 @@ public class ProductCLI {
 			try {
 				stock = Float.parseFloat(productAttributes.get(5).trim());
 			} catch(Exception e) {
-				System.out.println(stock);
 				System.out.println(">>Invalid format for 5th argument \"stock\"");
 				FeedBackPrinter.printHelpMessage("product", "create");
 				return;
@@ -247,9 +246,9 @@ public class ProductCLI {
 			}
 			List<String> productAttributes = List.of(parameters.split("[,:]"));
 			editHelper(productAttributes);
-		} else if(arguments.size() < 14) {
+		} else if(arguments.size() < 16) {
 			System.out.println(">>Insufficient Arguments for command \"product edit\"");
-		} else if(arguments.size() > 14) {
+		} else if(arguments.size() > 16) {
 			System.out.println(">>Too many Arguments for command \"product edit\"");
 		} else if(! arguments.get(2).contains("id")) {
 			System.out.println(">> Id is a Mandatory argument for every Edit operation");

@@ -24,7 +24,7 @@ public class UserDAO {
 	public User create(User user) throws Exception {
 		try {
 			return userMapper.create(user);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}
@@ -141,7 +141,7 @@ public class UserDAO {
 	public User edit(User user) throws Exception {
 		try {
 			return userMapper.edit(user);
-		} catch(PersistenceException e) {
+		} catch(Exception e) {
 			Throwable cause = e.getCause();
 			throw handleException((SQLException)cause);
 		}
