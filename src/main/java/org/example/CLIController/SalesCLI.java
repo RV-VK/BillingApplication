@@ -35,6 +35,7 @@ public class SalesCLI {
 		if(commandEntities.length < 1) {
 			System.out.println(">> Insufficient arguments to start a Sale!!!");
 			System.out.println(">> Try \"sales help\" for proper Syntax!!!");
+			return;
 		} else {
 			String[] commandArguments = commandEntities[0].split("\\s+");
 			String salesDate = commandArguments[1].trim().replace(",", "");
@@ -45,6 +46,7 @@ public class SalesCLI {
 				if(itemVariables.length < 2) {
 					System.out.println(">> Please provide sufficient details for product " + i);
 					System.out.println(">> Try \"sales help\" for proper syntax");
+					return;
 				}
 				if(itemVariables.length > 2) {
 					System.out.println(">> Improper format of product details given!!!");
@@ -55,6 +57,7 @@ public class SalesCLI {
 				if(! code.matches(productcodeRegex)) {
 					System.out.println(">> Invalid format for product code in product :" + i);
 					System.out.println(">> Try \"sales help\" for proper syntax!!");
+					return;
 				}
 				float quantity;
 				try {

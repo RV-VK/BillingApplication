@@ -73,6 +73,7 @@ public class PurchaseCLI {
 				if(! code.matches(productCodeRegex)) {
 					System.out.println("Invalid format for product code!!");
 					System.out.println("Try \"purchase help\" for proper syntax");
+					return;
 				}
 				try {
 					quantity = Float.parseFloat(itemVariables[1].trim());
@@ -272,7 +273,6 @@ public class PurchaseCLI {
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 	public void delete(List<String> arguments) throws ApplicationErrorException {
-		PurchaseService purchaseDeleteService = new PurchaseServiceImplementation();
 		String numberRegex = "^[0-9]{1,10}$";
 		if(arguments.size() == 3) {
 			if(arguments.get(2).equals("help")) {
@@ -281,7 +281,7 @@ public class PurchaseCLI {
 				System.out.println(">> Are you sure want to delete the Purchase Entry y/n ? : ");
 				String prompt = scanner.nextLine();
 				if(prompt.equals("y")) {
-					int resultCode = purchaseDeleteService.delete(arguments.get(2));
+					int resultCode = purchaseService.delete(arguments.get(2));
 					if(resultCode == 1) {
 						System.out.println(">> Purchase Deleted Successfully!!");
 					} else if(resultCode == 0) {

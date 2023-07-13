@@ -14,9 +14,9 @@ import java.util.List;
 
 @Component
 public class SalesDAO {
+	private final List<SalesItem> salesItemList = new ArrayList<>();
 	@Autowired
 	private ProductDAO productDAO;
-	private final List<SalesItem> salesItemList = new ArrayList<>();
 	@Autowired
 	private SalesMapper salesMapper;
 
@@ -104,7 +104,6 @@ public class SalesDAO {
 			}
 			return listedSales;
 		} catch(Exception e) {
-			e.printStackTrace();
 			throw new ApplicationErrorException(e.getMessage());
 		}
 	}
