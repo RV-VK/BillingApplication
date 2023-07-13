@@ -102,7 +102,7 @@ public class StoreCLI {
 		} else if(arguments.size() > 10) {
 			System.out.println(">> Too many Arguments for command \"store edit\"");
 			FeedBackPrinter.printHelpMessage("store", "edit");
-		} else if(arguments.size() < 4) {
+		} else if(arguments.size() < 10) {
 			System.out.println(">> Insufficient arguments for command \"store edit\"");
 			FeedBackPrinter.printHelpMessage("store", "edit");
 		} else {
