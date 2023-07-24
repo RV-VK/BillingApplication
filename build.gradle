@@ -18,7 +18,9 @@ dependencies {
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.1'
-
+    implementation 'org.springframework:spring-webmvc:6.0.11'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.1.2'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat:3.1.2'
 }
 
 test {

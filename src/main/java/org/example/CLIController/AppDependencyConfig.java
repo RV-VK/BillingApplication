@@ -11,7 +11,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = "org.example.CLIController,org.example.DAO,org.example.Entity,org.example.Mapper,org.example.Service")
+@ComponentScan(basePackages = "org.example.CLIController,org.example.DAO,org.example.Entity,org.example.Mapper,org.example.Service,org.example.RestController")
 @MapperScan("org.example.Mapper")
 public class AppDependencyConfig {
 	@Bean
