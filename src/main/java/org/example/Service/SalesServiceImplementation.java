@@ -32,7 +32,7 @@ public class SalesServiceImplementation implements SalesService {
 			try {
 				Product product = getProductByCode.findByCode(salesItem.getProduct().getCode());
 				if(product != null) salesItem.setProduct(product);
-				if(salesItem.getProduct().getAvailableQuantity() < salesItem.getQuantity())
+				if(salesItem.getProduct().getStock() < salesItem.getQuantity())
 					throw new ApplicationErrorException("Product '" + salesItem.getProduct().getCode() + "' is out of Stock");
 				isDividable = getUnitByCode.findByCode(product.getunitcode()).getIsDividable();
 				grandtotal += salesItem.getProduct().getPrice() * salesItem.getQuantity();

@@ -14,25 +14,25 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(int id, String code, String name, String unitcode, String type, float availableQuantity, double price) {
+	public Product(int id, String code, String name, String unitcode, String type, float stock, double price) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.unitcode = unitcode;
 		this.type = type;
-		this.stock = availableQuantity;
+		this.stock = stock;
 		this.price = price;
 	}
 
-
-	public Product(String code, String name, String unitcode, String type, float availableQuantity, double price) {
+	public Product(String code, String name, String unitcode, String type, float stock, double price) {
 		this.code = code;
 		this.name = name;
 		this.unitcode = unitcode;
 		this.type = type;
-		this.stock = availableQuantity;
+		this.stock = stock;
 		this.price = price;
 	}
+
 
 	public Product(String code) {
 		this.code = code;
@@ -84,12 +84,12 @@ public class Product {
 		this.type = type;
 	}
 
-	public float getAvailableQuantity() {
+	public float getStock() {
 		return stock;
 	}
 
-	public void setAvailableQuantity(float availableQuantity) {
-		this.stock = availableQuantity;
+	public void setStock(float stock) {
+		this.stock = stock;
 	}
 
 	public Double getPrice() {

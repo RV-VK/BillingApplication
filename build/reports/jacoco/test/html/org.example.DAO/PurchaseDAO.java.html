@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PurchaseDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.DAO</a> &gt; <span class="el_source">PurchaseDAO.java</span></div><h1>PurchaseDAO.java</h1><pre class="source lang-java linenums">package org.example.DAO;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.example.Entity.Purchase;
 import org.example.Entity.PurchaseItem;
 import org.example.Mapper.PurchaseItemMapper;
@@ -14,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-<span class="nc" id="L17">public class PurchaseDAO {</span>
+<span class="nc" id="L16">public class PurchaseDAO {</span>
 	@Autowired
 	private ProductDAO productDAO;
 	@Autowired
 	private PurchaseMapper purchaseMapper;
 	@Autowired
 	private PurchaseItemMapper purchaseItemMapper;
-<span class="nc" id="L24">	private final List&lt;PurchaseItem&gt; purchaseItemList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L23">	private final List&lt;PurchaseItem&gt; purchaseItemList = new ArrayList&lt;&gt;();</span>
 
 	/**
 	 * This method is a composite function that creates an entry in both Purchase and PurchaseItems table.
@@ -32,20 +31,20 @@ import java.util.List;
 	 */
 	public Purchase create(Purchase purchase) throws Exception {
 		try {
-<span class="nc" id="L35">			purchaseItemList.clear();</span>
-<span class="nc" id="L36">			Purchase createdPurchase = purchaseMapper.create(purchase);</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">			for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {</span>
-<span class="nc" id="L38">				PurchaseItem createPurchaseItem = purchaseItemMapper.create(purchaseItem, createdPurchase.getInvoice());</span>
-<span class="nc" id="L39">				createPurchaseItem.setProduct(purchaseItem.getProduct());</span>
-<span class="nc" id="L40">				purchaseItemList.add(createPurchaseItem);</span>
-<span class="nc" id="L41">				purchaseItem.getProduct().setAvailableQuantity(purchaseItem.getProduct().getAvailableQuantity() + purchaseItem.getQuantity());</span>
-<span class="nc" id="L42">				productDAO.edit(purchaseItem.getProduct());</span>
-<span class="nc" id="L43">			}</span>
-<span class="nc" id="L44">			createdPurchase.setPurchaseItemList(purchaseItemList);</span>
-<span class="nc" id="L45">			return createdPurchase;</span>
-<span class="nc" id="L46">		} catch(PersistenceException e) {</span>
-<span class="nc" id="L47">			Throwable cause = e.getCause();</span>
-<span class="nc" id="L48">			throw handleException((SQLException)cause);</span>
+<span class="nc" id="L34">			purchaseItemList.clear();</span>
+<span class="nc" id="L35">			Purchase createdPurchase = purchaseMapper.create(purchase);</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">			for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {</span>
+<span class="nc" id="L37">				PurchaseItem createPurchaseItem = purchaseItemMapper.create(purchaseItem, createdPurchase.getInvoice());</span>
+<span class="nc" id="L38">				createPurchaseItem.setProduct(purchaseItem.getProduct());</span>
+<span class="nc" id="L39">				purchaseItemList.add(createPurchaseItem);</span>
+<span class="nc" id="L40">				purchaseItem.getProduct().setStock(purchaseItem.getProduct().getStock() + purchaseItem.getQuantity());</span>
+<span class="nc" id="L41">				productDAO.edit(purchaseItem.getProduct());</span>
+<span class="nc" id="L42">			}</span>
+<span class="nc" id="L43">			createdPurchase.setPurchaseItemList(purchaseItemList);</span>
+<span class="nc" id="L44">			return createdPurchase;</span>
+<span class="nc" id="L45">		} catch(Exception e) {</span>
+<span class="nc" id="L46">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L47">			throw handleException((SQLException)cause);</span>
 		}
 	}
 
@@ -57,9 +56,9 @@ import java.util.List;
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 	private Exception handleException(SQLException sqlException) throws UniqueConstraintException, ApplicationErrorException {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">		if(sqlException.getSQLState().equals(&quot;23505&quot;))</span>
-<span class="nc" id="L61">			throw new UniqueConstraintException(&quot;Invoice Id already Exists!!&quot;);</span>
-<span class="nc" id="L62">		throw new ApplicationErrorException(sqlException.getMessage());</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		if(sqlException.getSQLState().equals(&quot;23505&quot;))</span>
+<span class="nc" id="L60">			throw new UniqueConstraintException(&quot;Invoice Id already Exists!!&quot;);</span>
+<span class="nc" id="L61">		throw new ApplicationErrorException(sqlException.getMessage());</span>
 	}
 
 	/**
@@ -73,12 +72,12 @@ import java.util.List;
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			Integer count;
-<span class="nc bnc" id="L76" title="All 2 branches missed.">			if(attribute.equals(&quot;date&quot;))</span>
-<span class="nc" id="L77">				count = purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));</span>
-<span class="nc" id="L78">			else count = purchaseMapper.count(attribute, searchText);</span>
-<span class="nc" id="L79">			return count;</span>
-<span class="nc" id="L80">		} catch(Exception e) {</span>
-<span class="nc" id="L81">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if(attribute.equals(&quot;date&quot;))</span>
+<span class="nc" id="L76">				count = purchaseMapper.count(attribute, Date.valueOf(String.valueOf(searchText)));</span>
+<span class="nc" id="L77">			else count = purchaseMapper.count(attribute, searchText);</span>
+<span class="nc" id="L78">			return count;</span>
+<span class="nc" id="L79">		} catch(Exception e) {</span>
+<span class="nc" id="L80">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -95,27 +94,27 @@ import java.util.List;
 	 */
 	public List&lt;Purchase&gt; list(String attribute, Object searchText, int pageLength, int offset) throws ApplicationErrorException {
 		List&lt;Purchase&gt; listedPurchase;
-<span class="nc" id="L98">		Date dateParameter = null;</span>
+<span class="nc" id="L97">		Date dateParameter = null;</span>
 		try {
-<span class="nc bnc" id="L100" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
-<span class="nc" id="L101">				Integer numericParameter = Integer.parseInt(String.valueOf(searchText));</span>
-<span class="nc" id="L102">				Integer count = purchaseMapper.count(attribute, numericParameter);</span>
-<span class="nc" id="L103">				checkPagination(count, offset, pageLength);</span>
-<span class="nc" id="L104">				listedPurchase = purchaseMapper.list(attribute, numericParameter, pageLength, offset);</span>
-<span class="nc" id="L105">			} else {</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));</span>
-<span class="nc" id="L107">				Integer count = purchaseMapper.count(attribute, dateParameter);</span>
-<span class="nc" id="L108">				checkPagination(count, offset, pageLength);</span>
-<span class="nc" id="L109">				listedPurchase = purchaseMapper.list(attribute, dateParameter, pageLength, offset);</span>
+<span class="nc bnc" id="L99" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L100">				Integer numericParameter = Integer.parseInt(String.valueOf(searchText));</span>
+<span class="nc" id="L101">				Integer count = purchaseMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L102">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L103">				listedPurchase = purchaseMapper.list(attribute, numericParameter, pageLength, offset);</span>
+<span class="nc" id="L104">			} else {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">				if(searchText != null) dateParameter = Date.valueOf(String.valueOf(searchText));</span>
+<span class="nc" id="L106">				Integer count = purchaseMapper.count(attribute, dateParameter);</span>
+<span class="nc" id="L107">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L108">				listedPurchase = purchaseMapper.list(attribute, dateParameter, pageLength, offset);</span>
 			}
 			List&lt;PurchaseItem&gt; listedPurchaseItems;
-<span class="nc bnc" id="L112" title="All 2 branches missed.">			for(Purchase purchase: listedPurchase) {</span>
-<span class="nc" id="L113">				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());</span>
-<span class="nc" id="L114">				purchase.setPurchaseItemList(listedPurchaseItems);</span>
-<span class="nc" id="L115">			}</span>
-<span class="nc" id="L116">			return listedPurchase;</span>
-<span class="nc" id="L117">		} catch(Exception e) {</span>
-<span class="nc" id="L118">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">			for(Purchase purchase: listedPurchase) {</span>
+<span class="nc" id="L112">				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());</span>
+<span class="nc" id="L113">				purchase.setPurchaseItemList(listedPurchaseItems);</span>
+<span class="nc" id="L114">			}</span>
+<span class="nc" id="L115">			return listedPurchase;</span>
+<span class="nc" id="L116">		} catch(Exception e) {</span>
+<span class="nc" id="L117">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -129,13 +128,13 @@ import java.util.List;
 	 *                                       non-existing page is prompted.
 	 */
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
-<span class="nc bnc" id="L132" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
+<span class="nc bnc" id="L131" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
 			int pageCount;
-<span class="nc bnc" id="L134" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
-<span class="nc" id="L135">			else pageCount = (count / pageLength) + 1;</span>
-<span class="nc" id="L136">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
+<span class="nc" id="L134">			else pageCount = (count / pageLength) + 1;</span>
+<span class="nc" id="L135">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
 		}
-<span class="nc" id="L138">	}</span>
+<span class="nc" id="L137">	}</span>
 
 	/**
 	 * This method lists the entries in the Purchase and PurchaseItems table based on the given search-text.
@@ -146,15 +145,15 @@ import java.util.List;
 	 */
 	public List&lt;Purchase&gt; searchList(String searchText) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L149">			List&lt;Purchase&gt; listedPurchase = purchaseMapper.searchList(searchText);</span>
+<span class="nc" id="L148">			List&lt;Purchase&gt; listedPurchase = purchaseMapper.searchList(searchText);</span>
 			List&lt;PurchaseItem&gt; listedPurchaseItems;
-<span class="nc bnc" id="L151" title="All 2 branches missed.">			for(Purchase purchase: listedPurchase) {</span>
-<span class="nc" id="L152">				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());</span>
-<span class="nc" id="L153">				purchase.setPurchaseItemList(listedPurchaseItems);</span>
-<span class="nc" id="L154">			}</span>
-<span class="nc" id="L155">			return listedPurchase;</span>
-<span class="nc" id="L156">		} catch(Exception e) {</span>
-<span class="nc" id="L157">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">			for(Purchase purchase: listedPurchase) {</span>
+<span class="nc" id="L151">				listedPurchaseItems = purchaseItemMapper.list(purchase.getInvoice());</span>
+<span class="nc" id="L152">				purchase.setPurchaseItemList(listedPurchaseItems);</span>
+<span class="nc" id="L153">			}</span>
+<span class="nc" id="L154">			return listedPurchase;</span>
+<span class="nc" id="L155">		} catch(Exception e) {</span>
+<span class="nc" id="L156">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -167,12 +166,12 @@ import java.util.List;
 	 */
 	public Integer delete(int invoice) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L170">			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);</span>
-<span class="nc" id="L171">			int purchaseDeleted = purchaseMapper.delete(invoice);</span>
-<span class="nc bnc" id="L172" title="All 4 branches missed.">			if(purchaseItemDeleted &gt; 0 &amp;&amp; purchaseDeleted &gt; 0) return 1;</span>
-<span class="nc" id="L173">			else return - 1;</span>
-<span class="nc" id="L174">		} catch(Exception e) {</span>
-<span class="nc" id="L175">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L169">			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);</span>
+<span class="nc" id="L170">			int purchaseDeleted = purchaseMapper.delete(invoice);</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">			if(purchaseItemDeleted &gt; 0 &amp;&amp; purchaseDeleted &gt; 0) return 1;</span>
+<span class="nc" id="L172">			else return - 1;</span>
+<span class="nc" id="L173">		} catch(Exception e) {</span>
+<span class="nc" id="L174">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 }

@@ -39,9 +39,9 @@ public class SalesDAO {
 				SalesItem createdSalesItem = salesItemMapper.create(salesItem, createdSales.getId());
 				createdSalesItem.setProduct(salesItem.getProduct());
 				salesItemList.add(createdSalesItem);
-				System.out.println(salesItem.getProduct().getAvailableQuantity() + " " + salesItem.getQuantity());
-				salesItem.getProduct().setAvailableQuantity(salesItem.getProduct().getAvailableQuantity() - salesItem.getQuantity());
-				System.out.println(salesItem.getProduct().getAvailableQuantity());
+				System.out.println(salesItem.getProduct().getStock() + " " + salesItem.getQuantity());
+				salesItem.getProduct().setStock(salesItem.getProduct().getStock() - salesItem.getQuantity());
+				System.out.println(salesItem.getProduct().getStock());
 				productDAO.edit(salesItem.getProduct());
 			}
 			createdSales.setSalesItemList(salesItemList);

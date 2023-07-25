@@ -24,7 +24,7 @@ import java.util.List;
 	public User create(User user) throws Exception {
 		try {
 <span class="nc" id="L26">			return userMapper.create(user);</span>
-<span class="nc" id="L27">		} catch(PersistenceException e) {</span>
+<span class="nc" id="L27">		} catch(Exception e) {</span>
 <span class="nc" id="L28">			Throwable cause = e.getCause();</span>
 <span class="nc" id="L29">			throw handleException((SQLException)cause);</span>
 		}
@@ -141,7 +141,7 @@ import java.util.List;
 	public User edit(User user) throws Exception {
 		try {
 <span class="nc" id="L143">			return userMapper.edit(user);</span>
-<span class="nc" id="L144">		} catch(PersistenceException e) {</span>
+<span class="nc" id="L144">		} catch(Exception e) {</span>
 <span class="nc" id="L145">			Throwable cause = e.getCause();</span>
 <span class="nc" id="L146">			throw handleException((SQLException)cause);</span>
 		}

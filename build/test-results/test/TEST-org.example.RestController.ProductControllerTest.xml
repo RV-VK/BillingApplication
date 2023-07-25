@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.ProductControllerTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2023-07-24T12:31:56" hostname="apnxdesk006-Veriton-M200-H61" time="3.092">
+  <properties/>
+  <testcase name="getProductsShouldCatchExceptionAndNoMoreInteractions()" classname="org.example.RestController.ProductControllerTest" time="2.932"/>
+  <testcase name="editProductShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.05"/>
+  <testcase name="deleteShouldCatchExceptionAndNoMoreInteractions()" classname="org.example.RestController.ProductControllerTest" time="0.008"/>
+  <testcase name="addProductShouldCallAndReturnTest()" classname="org.example.RestController.ProductControllerTest" time="0.006"/>
+  <testcase name="countProductShouldCatchExceptionAndNoInteractions()" classname="org.example.RestController.ProductControllerTest" time="0.007"/>
+  <testcase name="addProductShouldCatchExceptionAndNoInteractions()" classname="org.example.RestController.ProductControllerTest" time="0.008"/>
+  <testcase name="getProductsShouldCallAndReturnTest()" classname="org.example.RestController.ProductControllerTest" time="0.007"/>
+  <testcase name="countProductShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.007"/>
+  <testcase name="deleteProductShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.014"/>
+  <testcase name="editProductShouldCatchExceptionAndNoInteractions()" classname="org.example.RestController.ProductControllerTest" time="0.018"/>
+  <system-out><![CDATA[18:01:59.577 [Test worker] ERROR org.example.RestController.ProductController -- null
+18:01:59.714 [Test worker] ERROR org.example.RestController.ProductController -- null
+18:01:59.731 [Test worker] ERROR org.example.RestController.ProductController -- null
+18:01:59.741 [Test worker] ERROR org.example.RestController.ProductController -- null
+18:01:59.813 [Test worker] ERROR org.example.RestController.ProductController -- null
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

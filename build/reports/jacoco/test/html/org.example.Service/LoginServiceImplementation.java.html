@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-<span class="fc" id="L11">public class LoginServiceImplementation implements LoginService {</span>
+<span class="nc" id="L11">public class LoginServiceImplementation implements LoginService {</span>
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
@@ -18,18 +18,18 @@ import org.springframework.stereotype.Service;
 
 	@Override
 	public Boolean checkIfInitialSetup() throws ApplicationErrorException {
-<span class="fc" id="L21">		return storeDAO.checkIfStoreExists();</span>
+<span class="nc" id="L21">		return storeDAO.checkIfStoreExists();</span>
 	}
 
 	@Override
 	public User createUser(User user) throws Exception {
-<span class="fc" id="L26">		return userService.create(user);</span>
+<span class="nc" id="L26">		return userService.create(user);</span>
 	}
 
 
 	@Override
 	public User login(String userName, String passWord) throws ApplicationErrorException {
-<span class="fc" id="L32">		return userDAO.login(userName, passWord);</span>
+<span class="nc" id="L32">		return userDAO.login(userName, passWord);</span>
 	}
 
 

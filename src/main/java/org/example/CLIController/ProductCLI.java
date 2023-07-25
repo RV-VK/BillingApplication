@@ -206,7 +206,7 @@ public class ProductCLI {
 				return;
 			}
 			for(Product resultProduct: resultList) {
-				System.out.println(">> id: " + resultProduct.getId() + ", code: " + resultProduct.getCode() + ", name: " + resultProduct.getName() + ", type: " + resultProduct.getType() + ", unitcode: " + resultProduct.getunitcode() + ", stock: " + resultProduct.getAvailableQuantity() + ", price: " + resultProduct.getPrice());
+				System.out.println(">> id: " + resultProduct.getId() + ", code: " + resultProduct.getCode() + ", name: " + resultProduct.getName() + ", type: " + resultProduct.getType() + ", unitcode: " + resultProduct.getunitcode() + ", stock: " + resultProduct.getStock() + ", price: " + resultProduct.getPrice());
 			}
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -297,7 +297,7 @@ public class ProductCLI {
 						System.out.println("Stock must be numeric!!");
 						return;
 					}
-					product.setAvailableQuantity(stock);
+					product.setStock(stock);
 				}
 				case "price" -> {
 					try {

@@ -1,6 +1,5 @@
 package org.example.DAO;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.example.Entity.Purchase;
 import org.example.Entity.PurchaseItem;
 import org.example.Mapper.PurchaseItemMapper;
@@ -38,7 +37,7 @@ public class PurchaseDAO {
 				PurchaseItem createPurchaseItem = purchaseItemMapper.create(purchaseItem, createdPurchase.getInvoice());
 				createPurchaseItem.setProduct(purchaseItem.getProduct());
 				purchaseItemList.add(createPurchaseItem);
-				purchaseItem.getProduct().setAvailableQuantity(purchaseItem.getProduct().getAvailableQuantity() + purchaseItem.getQuantity());
+				purchaseItem.getProduct().setStock(purchaseItem.getProduct().getStock() + purchaseItem.getQuantity());
 				productDAO.edit(purchaseItem.getProduct());
 			}
 			createdPurchase.setPurchaseItemList(purchaseItemList);

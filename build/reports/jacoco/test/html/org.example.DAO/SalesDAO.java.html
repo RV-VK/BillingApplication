@@ -14,9 +14,9 @@ import java.util.List;
 
 @Component
 <span class="nc" id="L16">public class SalesDAO {</span>
+<span class="nc" id="L17">	private final List&lt;SalesItem&gt; salesItemList = new ArrayList&lt;&gt;();</span>
 	@Autowired
 	private ProductDAO productDAO;
-<span class="nc" id="L19">	private final List&lt;SalesItem&gt; salesItemList = new ArrayList&lt;&gt;();</span>
 	@Autowired
 	private SalesMapper salesMapper;
 
@@ -39,9 +39,9 @@ import java.util.List;
 <span class="nc" id="L39">				SalesItem createdSalesItem = salesItemMapper.create(salesItem, createdSales.getId());</span>
 <span class="nc" id="L40">				createdSalesItem.setProduct(salesItem.getProduct());</span>
 <span class="nc" id="L41">				salesItemList.add(createdSalesItem);</span>
-<span class="nc" id="L42">				System.out.println(salesItem.getProduct().getAvailableQuantity() + &quot; &quot; + salesItem.getQuantity());</span>
-<span class="nc" id="L43">				salesItem.getProduct().setAvailableQuantity(salesItem.getProduct().getAvailableQuantity() - salesItem.getQuantity());</span>
-<span class="nc" id="L44">				System.out.println(salesItem.getProduct().getAvailableQuantity());</span>
+<span class="nc" id="L42">				System.out.println(salesItem.getProduct().getStock() + &quot; &quot; + salesItem.getQuantity());</span>
+<span class="nc" id="L43">				salesItem.getProduct().setStock(salesItem.getProduct().getStock() - salesItem.getQuantity());</span>
+<span class="nc" id="L44">				System.out.println(salesItem.getProduct().getStock());</span>
 <span class="nc" id="L45">				productDAO.edit(salesItem.getProduct());</span>
 <span class="nc" id="L46">			}</span>
 <span class="nc" id="L47">			createdSales.setSalesItemList(salesItemList);</span>
@@ -104,8 +104,7 @@ import java.util.List;
 <span class="nc" id="L104">			}</span>
 <span class="nc" id="L105">			return listedSales;</span>
 <span class="nc" id="L106">		} catch(Exception e) {</span>
-<span class="nc" id="L107">			e.printStackTrace();</span>
-<span class="nc" id="L108">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L107">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -119,13 +118,13 @@ import java.util.List;
 	 *                                       non-existing page is prompted.
 	 */
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
-<span class="nc bnc" id="L122" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
+<span class="nc bnc" id="L121" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
 			int pageCount;
-<span class="nc bnc" id="L124" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
-<span class="nc" id="L125">			else pageCount = (count / pageLength) + 1;</span>
-<span class="nc" id="L126">			throw new PageCountOutOfBoundsException(&quot;&gt;&gt; Requested Page doesnt Exist!!\n&gt;&gt; Existing Pagecount with given pagination &quot; + pageCount);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
+<span class="nc" id="L124">			else pageCount = (count / pageLength) + 1;</span>
+<span class="nc" id="L125">			throw new PageCountOutOfBoundsException(&quot;&gt;&gt; Requested Page doesnt Exist!!\n&gt;&gt; Existing Pagecount with given pagination &quot; + pageCount);</span>
 		}
-<span class="nc" id="L128">	}</span>
+<span class="nc" id="L127">	}</span>
 
 	/**
 	 * This method lists the Entries from the Sales and SalesItem table based on the given search-text.
@@ -136,15 +135,15 @@ import java.util.List;
 	 */
 	public List&lt;Sales&gt; searchList(String searchText) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L139">			List&lt;Sales&gt; listedSales = salesMapper.searchList(searchText);</span>
+<span class="nc" id="L138">			List&lt;Sales&gt; listedSales = salesMapper.searchList(searchText);</span>
 			List&lt;SalesItem&gt; listedSalesItems;
-<span class="nc bnc" id="L141" title="All 2 branches missed.">			for(Sales sales: listedSales) {</span>
-<span class="nc" id="L142">				listedSalesItems = salesItemMapper.list(sales.getId());</span>
-<span class="nc" id="L143">				sales.setSalesItemList(listedSalesItems);</span>
-<span class="nc" id="L144">			}</span>
-<span class="nc" id="L145">			return listedSales;</span>
-<span class="nc" id="L146">		} catch(Exception e) {</span>
-<span class="nc" id="L147">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">			for(Sales sales: listedSales) {</span>
+<span class="nc" id="L141">				listedSalesItems = salesItemMapper.list(sales.getId());</span>
+<span class="nc" id="L142">				sales.setSalesItemList(listedSalesItems);</span>
+<span class="nc" id="L143">			}</span>
+<span class="nc" id="L144">			return listedSales;</span>
+<span class="nc" id="L145">		} catch(Exception e) {</span>
+<span class="nc" id="L146">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -157,12 +156,12 @@ import java.util.List;
 	 */
 	public Integer delete(int id) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L160">			Integer salesItemDeleted = salesItemMapper.delete(id);</span>
-<span class="nc" id="L161">			Integer salesDeleted = salesMapper.delete(id);</span>
-<span class="nc bnc" id="L162" title="All 4 branches missed.">			if(salesItemDeleted &gt; 0 &amp;&amp; salesDeleted &gt; 0) return 1;</span>
-<span class="nc" id="L163">			else return - 1;</span>
-<span class="nc" id="L164">		} catch(Exception e) {</span>
-<span class="nc" id="L165">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L159">			Integer salesItemDeleted = salesItemMapper.delete(id);</span>
+<span class="nc" id="L160">			Integer salesDeleted = salesMapper.delete(id);</span>
+<span class="nc bnc" id="L161" title="All 4 branches missed.">			if(salesItemDeleted &gt; 0 &amp;&amp; salesDeleted &gt; 0) return 1;</span>
+<span class="nc" id="L162">			else return - 1;</span>
+<span class="nc" id="L163">		} catch(Exception e) {</span>
+<span class="nc" id="L164">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 }

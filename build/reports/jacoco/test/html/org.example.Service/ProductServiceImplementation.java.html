@@ -12,46 +12,46 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-<span class="fc" id="L15">public class ProductServiceImplementation implements ProductService {</span>
+<span class="nc" id="L15">public class ProductServiceImplementation implements ProductService {</span>
 
 	@Autowired
 	private ProductDAO productDAO;
-<span class="fc" id="L19">	private final String NAME_REGEX = &quot;^[a-zA-Z\\s]{3,30}$&quot;;</span>
-<span class="fc" id="L20">	private final String CODE_REGEX = &quot;^[a-zA-Z0-9]{2,6}$&quot;;</span>
-<span class="fc" id="L21">	private final String UNIT_CODE_REGEX = &quot;^[a-zA-Z]{1,4}$&quot;;</span>
+<span class="nc" id="L19">	private final String NAME_REGEX = &quot;^[a-zA-Z\\s]{3,30}$&quot;;</span>
+<span class="nc" id="L20">	private final String CODE_REGEX = &quot;^[a-zA-Z0-9]{2,6}$&quot;;</span>
+<span class="nc" id="L21">	private final String UNIT_CODE_REGEX = &quot;^[a-zA-Z]{1,4}$&quot;;</span>
 
 	public Product create(Product product) throws Exception {
-<span class="fc" id="L24">		validate(product);</span>
-<span class="fc" id="L25">		return productDAO.create(product);</span>
+<span class="nc" id="L24">		validate(product);</span>
+<span class="nc" id="L25">		return productDAO.create(product);</span>
 	}
 
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
-<span class="fc" id="L29">			return productDAO.count(attribute, searchText);</span>
+<span class="nc" id="L29">			return productDAO.count(attribute, searchText);</span>
 	}
 
 	public List&lt;Product&gt; list(HashMap&lt;String, String&gt; listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List&lt;Product&gt; productList;
-<span class="pc bpc" id="L34" title="1 of 4 branches missed.">		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 &amp;&amp; listattributes.get(&quot;Searchtext&quot;) != null) {</span>
-<span class="fc" id="L35">			productList = productDAO.searchList(listattributes.get(&quot;Searchtext&quot;));</span>
+<span class="nc bnc" id="L34" title="All 4 branches missed.">		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 &amp;&amp; listattributes.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L35">			productList = productDAO.searchList(listattributes.get(&quot;Searchtext&quot;));</span>
 		} else {
-<span class="fc" id="L37">			int pageLength = Integer.parseInt(listattributes.get(&quot;Pagelength&quot;));</span>
-<span class="fc" id="L38">			int pageNumber = Integer.parseInt(listattributes.get(&quot;Pagenumber&quot;));</span>
-<span class="fc" id="L39">			int offset = (pageLength * pageNumber) - pageLength;</span>
-<span class="fc" id="L40">			productList = productDAO.list(listattributes.get(&quot;Attribute&quot;), listattributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
+<span class="nc" id="L37">			int pageLength = Integer.parseInt(listattributes.get(&quot;Pagelength&quot;));</span>
+<span class="nc" id="L38">			int pageNumber = Integer.parseInt(listattributes.get(&quot;Pagenumber&quot;));</span>
+<span class="nc" id="L39">			int offset = (pageLength * pageNumber) - pageLength;</span>
+<span class="nc" id="L40">			productList = productDAO.list(listattributes.get(&quot;Attribute&quot;), listattributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
 		}
-<span class="fc" id="L42">		return productList;</span>
+<span class="nc" id="L42">		return productList;</span>
 	}
 
 	public Product edit(Product product) throws Exception {
-<span class="fc" id="L46">		validate(product);</span>
-<span class="fc" id="L47">		return productDAO.edit(product);</span>
+<span class="nc" id="L46">		validate(product);</span>
+<span class="nc" id="L47">		return productDAO.edit(product);</span>
 	}
 
 	public Integer delete(String parameter) throws ApplicationErrorException {
-<span class="fc bfc" id="L51" title="All 2 branches covered.">		if(parameter != null)</span>
-<span class="fc" id="L52">			return productDAO.delete(parameter);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		if(parameter != null)</span>
+<span class="nc" id="L52">			return productDAO.delete(parameter);</span>
 		else
-<span class="fc" id="L54">			return -1;</span>
+<span class="nc" id="L54">			return -1;</span>
 	}
 
 	/**
@@ -60,16 +60,16 @@ import java.util.List;
 	 * @param product Product to be Validated
 	 */
 	private void validate(Product product) throws InvalidTemplateException {
-<span class="fc bfc" id="L63" title="All 2 branches covered.">		if(product == null)</span>
-<span class="fc" id="L64">			throw new NullPointerException(&quot;Product cannot be Null!!&quot;);</span>
-<span class="pc bpc" id="L65" title="1 of 4 branches missed.">		if(product.getCode() != null &amp;&amp; ! product.getCode().matches(CODE_REGEX))</span>
-<span class="fc" id="L66">			throw new InvalidTemplateException(&quot;Invalid Product Code!!&quot;);</span>
-<span class="pc bpc" id="L67" title="1 of 4 branches missed.">		if(product.getName() != null &amp;&amp; ! product.getName().matches(NAME_REGEX))</span>
-<span class="fc" id="L68">			throw new InvalidTemplateException(&quot;Invalid Product Name!&quot;);</span>
-<span class="pc bpc" id="L69" title="1 of 4 branches missed.">		if(product.getunitcode() != null &amp;&amp; ! product.getunitcode().matches(UNIT_CODE_REGEX))</span>
-<span class="fc" id="L70">			throw new InvalidTemplateException(&quot;Invalid Unit Code!!&quot;);</span>
-<span class="pc bpc" id="L71" title="1 of 4 branches missed.">		if(product.getType() != null &amp;&amp; ! product.getType().matches(NAME_REGEX))</span>
-<span class="fc" id="L72">			throw new InvalidTemplateException(&quot;Invalid Product Type!!&quot;);</span>
-<span class="fc" id="L73">	}</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">		if(product == null)</span>
+<span class="nc" id="L64">			throw new NullPointerException(&quot;Product cannot be Null!!&quot;);</span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">		if(product.getCode() != null &amp;&amp; ! product.getCode().matches(CODE_REGEX))</span>
+<span class="nc" id="L66">			throw new InvalidTemplateException(&quot;Invalid Product Code!!&quot;);</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">		if(product.getName() != null &amp;&amp; ! product.getName().matches(NAME_REGEX))</span>
+<span class="nc" id="L68">			throw new InvalidTemplateException(&quot;Invalid Product Name!&quot;);</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">		if(product.getunitcode() != null &amp;&amp; ! product.getunitcode().matches(UNIT_CODE_REGEX))</span>
+<span class="nc" id="L70">			throw new InvalidTemplateException(&quot;Invalid Unit Code!!&quot;);</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">		if(product.getType() != null &amp;&amp; ! product.getType().matches(NAME_REGEX))</span>
+<span class="nc" id="L72">			throw new InvalidTemplateException(&quot;Invalid Product Type!!&quot;);</span>
+<span class="nc" id="L73">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

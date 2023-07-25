@@ -76,25 +76,24 @@ import java.util.Scanner;
 			try {
 <span class="nc" id="L77">				stock = Float.parseFloat(productAttributes.get(5).trim());</span>
 <span class="nc" id="L78">			} catch(Exception e) {</span>
-<span class="nc" id="L79">				System.out.println(stock);</span>
-<span class="nc" id="L80">				System.out.println(&quot;&gt;&gt;Invalid format for 5th argument \&quot;stock\&quot;&quot;);</span>
-<span class="nc" id="L81">				FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;create&quot;);</span>
-<span class="nc" id="L82">				return;</span>
-<span class="nc" id="L83">			}</span>
+<span class="nc" id="L79">				System.out.println(&quot;&gt;&gt;Invalid format for 5th argument \&quot;stock\&quot;&quot;);</span>
+<span class="nc" id="L80">				FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;create&quot;);</span>
+<span class="nc" id="L81">				return;</span>
+<span class="nc" id="L82">			}</span>
 		}
-<span class="nc" id="L85">		Product product = new Product(code, name, unitCode, type, stock, price);</span>
+<span class="nc" id="L84">		Product product = new Product(code, name, unitCode, type, stock, price);</span>
 		Product createdProduct;
 		try {
-<span class="nc" id="L88">			createdProduct = productService.create(product);</span>
-<span class="nc" id="L89">		} catch(Exception e) {</span>
-<span class="nc" id="L90">			System.out.println(e.getMessage());</span>
-<span class="nc" id="L91">			return;</span>
-<span class="nc" id="L92">		}</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">		if(createdProduct != null) {</span>
-<span class="nc" id="L94">			System.out.println(&quot;&gt;&gt; Product Creation Successfull!!&quot;);</span>
-<span class="nc" id="L95">			System.out.println(createdProduct);</span>
+<span class="nc" id="L87">			createdProduct = productService.create(product);</span>
+<span class="nc" id="L88">		} catch(Exception e) {</span>
+<span class="nc" id="L89">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L90">			return;</span>
+<span class="nc" id="L91">		}</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		if(createdProduct != null) {</span>
+<span class="nc" id="L93">			System.out.println(&quot;&gt;&gt; Product Creation Successfull!!&quot;);</span>
+<span class="nc" id="L94">			System.out.println(createdProduct);</span>
 		}
-<span class="nc" id="L97">	}</span>
+<span class="nc" id="L96">	}</span>
 
 	/**
 	 * This method handles the Presentation layer of the List function.
@@ -104,93 +103,93 @@ import java.util.Scanner;
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void list(List&lt;String&gt; arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L107">		setMap(listAttributesMap, null, null, null, null);</span>
+<span class="nc" id="L106">		setMap(listAttributesMap, null, null, null, null);</span>
 		String searchText;
 		String attribute;
 		int pageNumber;
 		int pageLength;
-<span class="nc bnc" id="L112" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
-<span class="nc" id="L113">			FeedBackPrinter.printProductHelp(&quot;list&quot;);</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
-<span class="nc" id="L115">			setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, &quot;id&quot;, null);</span>
-<span class="nc" id="L116">			listHelper(listAttributesMap);</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">		} else if(arguments.size() == 4) {</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L119" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L120">				setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, &quot;id&quot;, null);</span>
-<span class="nc" id="L121">				listHelper(listAttributesMap);</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L123">				searchText = arguments.get(3).trim();</span>
-<span class="nc" id="L124">				setMap(listAttributesMap, null, null, null, searchText);</span>
-<span class="nc" id="L125">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L112">			FeedBackPrinter.printProductHelp(&quot;list&quot;);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L114">			setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, &quot;id&quot;, null);</span>
+<span class="nc" id="L115">			listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">		} else if(arguments.size() == 4) {</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L119">				setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, &quot;id&quot;, null);</span>
+<span class="nc" id="L120">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L122">				searchText = arguments.get(3).trim();</span>
+<span class="nc" id="L123">				setMap(listAttributesMap, null, null, null, searchText);</span>
+<span class="nc" id="L124">				listHelper(listAttributesMap);</span>
 			} else {
-<span class="nc" id="L127">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
+<span class="nc" id="L126">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
 			}
-<span class="nc bnc" id="L129" title="All 2 branches missed.">		} else if(arguments.size() == 5) {</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L131" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc bnc" id="L132" title="All 2 branches missed.">				if((pageNumber = validateNumber(arguments.get(4), &quot;PageNumber&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L133">				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), &quot;id&quot;, null);</span>
-<span class="nc" id="L134">				listHelper(listAttributesMap);</span>
-<span class="nc bnc" id="L135" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L136">				attribute = arguments.get(3);</span>
-<span class="nc" id="L137">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
-<span class="nc" id="L138">				searchText = arguments.get(4);</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">				if(productAttributes.contains(attribute)) {</span>
-<span class="nc" id="L140">					setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, attribute, searchText);</span>
-<span class="nc" id="L141">					listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		} else if(arguments.size() == 5) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				if((pageNumber = validateNumber(arguments.get(4), &quot;PageNumber&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L132">				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), &quot;id&quot;, null);</span>
+<span class="nc" id="L133">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L135">				attribute = arguments.get(3);</span>
+<span class="nc" id="L136">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L137">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">				if(productAttributes.contains(attribute)) {</span>
+<span class="nc" id="L139">					setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, attribute, searchText);</span>
+<span class="nc" id="L140">					listHelper(listAttributesMap);</span>
 				} else {
-<span class="nc" id="L143">					FeedBackPrinter.printNonSearchableAttribute(&quot;product&quot;, productAttributes);</span>
+<span class="nc" id="L142">					FeedBackPrinter.printNonSearchableAttribute(&quot;product&quot;, productAttributes);</span>
 				}
 			} else {
-<span class="nc" id="L146">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
+<span class="nc" id="L145">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
 			}
-<span class="nc bnc" id="L148" title="All 2 branches missed.">		} else if(arguments.size() == 7) {</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L150">				attribute = arguments.get(3);</span>
-<span class="nc" id="L151">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
-<span class="nc" id="L152">				searchText = arguments.get(4);</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">				if(productAttributes.contains(attribute)) {</span>
-<span class="nc bnc" id="L154" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L156">						setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, attribute, searchText);</span>
-<span class="nc" id="L157">						listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">		} else if(arguments.size() == 7) {</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L149">				attribute = arguments.get(3);</span>
+<span class="nc" id="L150">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L151">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				if(productAttributes.contains(attribute)) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L155">						setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, attribute, searchText);</span>
+<span class="nc" id="L156">						listHelper(listAttributesMap);</span>
 					} else {
-<span class="nc" id="L159">						System.out.println(&quot;&gt;&gt; Invalid Command Extension format !!!&quot;);</span>
-<span class="nc" id="L160">						FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;list&quot;);</span>
+<span class="nc" id="L158">						System.out.println(&quot;&gt;&gt; Invalid Command Extension format !!!&quot;);</span>
+<span class="nc" id="L159">						FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;list&quot;);</span>
 					}
 				} else {
-<span class="nc" id="L163">					FeedBackPrinter.printNonSearchableAttribute(&quot;product&quot;, productAttributes);</span>
+<span class="nc" id="L162">					FeedBackPrinter.printNonSearchableAttribute(&quot;product&quot;, productAttributes);</span>
 				}
 			} else {
-<span class="nc" id="L166">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
+<span class="nc" id="L165">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
 			}
-<span class="nc bnc" id="L168" title="All 2 branches missed.">		} else if(arguments.size() == 8) {</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L170">				attribute = arguments.get(3);</span>
-<span class="nc" id="L171">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
-<span class="nc" id="L172">				searchText = arguments.get(4);</span>
-<span class="nc bnc" id="L173" title="All 2 branches missed.">				if(productAttributes.contains(attribute)) {</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L175" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">						if((pageNumber = validateNumber(arguments.get(7), &quot;PageNumber&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L177">						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);</span>
-<span class="nc" id="L178">						listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">		} else if(arguments.size() == 8) {</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L169">				attribute = arguments.get(3);</span>
+<span class="nc" id="L170">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L171">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">				if(productAttributes.contains(attribute)) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">						if((pageNumber = validateNumber(arguments.get(7), &quot;PageNumber&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L176">						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);</span>
+<span class="nc" id="L177">						listHelper(listAttributesMap);</span>
 					} else {
-<span class="nc" id="L180">						FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
+<span class="nc" id="L179">						FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
 					}
 				} else {
-<span class="nc" id="L183">					FeedBackPrinter.printNonSearchableAttribute(&quot;product&quot;, productAttributes);</span>
+<span class="nc" id="L182">					FeedBackPrinter.printNonSearchableAttribute(&quot;product&quot;, productAttributes);</span>
 				}
 			} else {
-<span class="nc" id="L186">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
+<span class="nc" id="L185">				FeedBackPrinter.printInvalidExtension(&quot;product&quot;);</span>
 			}
-<span class="nc bnc" id="L188" title="All 2 branches missed.">		} else if(arguments.size() == 3) {</span>
-<span class="nc" id="L189">			FeedBackPrinter.printInvalidFormat(&quot;product&quot;);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		} else if(arguments.size() == 3) {</span>
+<span class="nc" id="L188">			FeedBackPrinter.printInvalidFormat(&quot;product&quot;);</span>
 		} else {
-<span class="nc" id="L191">			FeedBackPrinter.printInvalidFormat(&quot;product&quot;);</span>
+<span class="nc" id="L190">			FeedBackPrinter.printInvalidFormat(&quot;product&quot;);</span>
 		}
-<span class="nc" id="L193">	}</span>
+<span class="nc" id="L192">	}</span>
 
 	/**
 	 * This method serves the List function.
@@ -199,20 +198,20 @@ import java.util.Scanner;
 	 */
 	private void listHelper(HashMap&lt;String, String&gt; listAttributesMap) {
 		try {
-<span class="nc" id="L202">			List&lt;Product&gt; resultList = productService.list(listAttributesMap);</span>
-<span class="nc bnc" id="L203" title="All 2 branches missed.">			if(resultList.size() == 0) {</span>
-<span class="nc bnc" id="L204" title="All 2 branches missed.">				if(listAttributesMap.get(&quot;Searchtext&quot;) != null) {</span>
-<span class="nc" id="L205">					System.out.println(&quot;&gt;&gt; Given SearchText does not exist!!!&quot;);</span>
+<span class="nc" id="L201">			List&lt;Product&gt; resultList = productService.list(listAttributesMap);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">			if(resultList.size() == 0) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">				if(listAttributesMap.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L204">					System.out.println(&quot;&gt;&gt; Given SearchText does not exist!!!&quot;);</span>
 				}
-<span class="nc" id="L207">				return;</span>
+<span class="nc" id="L206">				return;</span>
 			}
-<span class="nc bnc" id="L209" title="All 2 branches missed.">			for(Product resultProduct: resultList) {</span>
-<span class="nc" id="L210">				System.out.println(&quot;&gt;&gt; id: &quot; + resultProduct.getId() + &quot;, code: &quot; + resultProduct.getCode() + &quot;, name: &quot; + resultProduct.getName() + &quot;, type: &quot; + resultProduct.getType() + &quot;, unitcode: &quot; + resultProduct.getunitcode() + &quot;, stock: &quot; + resultProduct.getAvailableQuantity() + &quot;, price: &quot; + resultProduct.getPrice());</span>
-<span class="nc" id="L211">			}</span>
-<span class="nc" id="L212">		} catch(Exception e) {</span>
-<span class="nc" id="L213">			System.out.println(e.getMessage());</span>
-<span class="nc" id="L214">		}</span>
-<span class="nc" id="L215">	}</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">			for(Product resultProduct: resultList) {</span>
+<span class="nc" id="L209">				System.out.println(&quot;&gt;&gt; id: &quot; + resultProduct.getId() + &quot;, code: &quot; + resultProduct.getCode() + &quot;, name: &quot; + resultProduct.getName() + &quot;, type: &quot; + resultProduct.getType() + &quot;, unitcode: &quot; + resultProduct.getunitcode() + &quot;, stock: &quot; + resultProduct.getStock() + &quot;, price: &quot; + resultProduct.getPrice());</span>
+<span class="nc" id="L210">			}</span>
+<span class="nc" id="L211">		} catch(Exception e) {</span>
+<span class="nc" id="L212">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L213">		}</span>
+<span class="nc" id="L214">	}</span>
 
 	/**
 	 * This method handles the Presentation Layer of the Count function.
@@ -220,13 +219,13 @@ import java.util.Scanner;
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problem.
 	 */
 	public void count(List&lt;String&gt; arguments) throws ApplicationErrorException {
-<span class="nc bnc" id="L223" title="All 2 branches missed.">		if(arguments.size() &gt; 2) {</span>
-<span class="nc" id="L224">			System.out.println(&quot;&gt;&gt; Invalid Command!! Try \&quot;help\&quot;&quot;);</span>
-<span class="nc" id="L225">			return;</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		if(arguments.size() &gt; 2) {</span>
+<span class="nc" id="L223">			System.out.println(&quot;&gt;&gt; Invalid Command!! Try \&quot;help\&quot;&quot;);</span>
+<span class="nc" id="L224">			return;</span>
 		}
-<span class="nc" id="L227">		int productCount = productService.count(&quot;id&quot;, null);</span>
-<span class="nc" id="L228">		System.out.println(&quot;&gt;&gt; ProductCount &quot; + productCount);</span>
-<span class="nc" id="L229">	}</span>
+<span class="nc" id="L226">		int productCount = productService.count(&quot;id&quot;, null);</span>
+<span class="nc" id="L227">		System.out.println(&quot;&gt;&gt; ProductCount &quot; + productCount);</span>
+<span class="nc" id="L228">	}</span>
 
 	/**
 	 * This method handles the Presentation Layer of the Edit function.
@@ -235,34 +234,34 @@ import java.util.Scanner;
 	 * @param command   Command String.
 	 */
 	public void edit(List&lt;String&gt; arguments, String command) {
-<span class="nc" id="L238">		final String editCommandRegex = &quot;^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$&quot;;</span>
-<span class="nc bnc" id="L239" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
-<span class="nc" id="L240">			FeedBackPrinter.printProductHelp(&quot;edit&quot;);</span>
-<span class="nc bnc" id="L241" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
-<span class="nc" id="L242">			System.out.print(&quot;&gt; &quot;);</span>
-<span class="nc" id="L243">			String parameters = scanner.nextLine();</span>
-<span class="nc bnc" id="L244" title="All 2 branches missed.">			if(! parameters.matches(editCommandRegex)) {</span>
-<span class="nc" id="L245">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;product edit help for proper syntax!&quot;);</span>
-<span class="nc" id="L246">				return;</span>
+<span class="nc" id="L237">		final String editCommandRegex = &quot;^id:\\s*(\\d+)(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?(?:,\\s*([A-Za-z]+):\\s*([^,]+))?$&quot;;</span>
+<span class="nc bnc" id="L238" title="All 4 branches missed.">		if(arguments.size() == 3 &amp;&amp; arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L239">			FeedBackPrinter.printProductHelp(&quot;edit&quot;);</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">		} else if(arguments.size() == 2) {</span>
+<span class="nc" id="L241">			System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L242">			String parameters = scanner.nextLine();</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">			if(! parameters.matches(editCommandRegex)) {</span>
+<span class="nc" id="L244">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;product edit help for proper syntax!&quot;);</span>
+<span class="nc" id="L245">				return;</span>
 			}
-<span class="nc" id="L248">			List&lt;String&gt; productAttributes = List.of(parameters.split(&quot;[,:]&quot;));</span>
-<span class="nc" id="L249">			editHelper(productAttributes);</span>
-<span class="nc bnc" id="L250" title="All 2 branches missed.">		} else if(arguments.size() &lt; 14) {</span>
-<span class="nc" id="L251">			System.out.println(&quot;&gt;&gt;Insufficient Arguments for command \&quot;product edit\&quot;&quot;);</span>
-<span class="nc bnc" id="L252" title="All 2 branches missed.">		} else if(arguments.size() &gt; 14) {</span>
-<span class="nc" id="L253">			System.out.println(&quot;&gt;&gt;Too many Arguments for command \&quot;product edit\&quot;&quot;);</span>
-<span class="nc bnc" id="L254" title="All 2 branches missed.">		} else if(! arguments.get(2).contains(&quot;id&quot;)) {</span>
-<span class="nc" id="L255">			System.out.println(&quot;&gt;&gt; Id is a Mandatory argument for every Edit operation&quot;);</span>
-<span class="nc" id="L256">			System.out.println(&quot;&gt;&gt; For every Edit operation the first argument must be product's ID&quot;);</span>
-<span class="nc" id="L257">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;edit&quot;);</span>
+<span class="nc" id="L247">			List&lt;String&gt; productAttributes = List.of(parameters.split(&quot;[,:]&quot;));</span>
+<span class="nc" id="L248">			editHelper(productAttributes);</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">		} else if(arguments.size() &lt; 16) {</span>
+<span class="nc" id="L250">			System.out.println(&quot;&gt;&gt;Insufficient Arguments for command \&quot;product edit\&quot;&quot;);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">		} else if(arguments.size() &gt; 16) {</span>
+<span class="nc" id="L252">			System.out.println(&quot;&gt;&gt;Too many Arguments for command \&quot;product edit\&quot;&quot;);</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">		} else if(! arguments.get(2).contains(&quot;id&quot;)) {</span>
+<span class="nc" id="L254">			System.out.println(&quot;&gt;&gt; Id is a Mandatory argument for every Edit operation&quot;);</span>
+<span class="nc" id="L255">			System.out.println(&quot;&gt;&gt; For every Edit operation the first argument must be product's ID&quot;);</span>
+<span class="nc" id="L256">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;edit&quot;);</span>
 		} else {
-<span class="nc bnc" id="L259" title="All 2 branches missed.">			if(! command.substring(13).matches(editCommandRegex)) {</span>
-<span class="nc" id="L260">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;product edit help for proper syntax!&quot;);</span>
-<span class="nc" id="L261">				return;</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">			if(! command.substring(13).matches(editCommandRegex)) {</span>
+<span class="nc" id="L259">				System.out.println(&quot;&gt;&gt; Invalid command Format!\n&gt;&gt; Try \&quot;product edit help for proper syntax!&quot;);</span>
+<span class="nc" id="L260">				return;</span>
 			}
-<span class="nc" id="L263">			editHelper(arguments.subList(2, arguments.size()));</span>
+<span class="nc" id="L262">			editHelper(arguments.subList(2, arguments.size()));</span>
 		}
-<span class="nc" id="L265">	}</span>
+<span class="nc" id="L264">	}</span>
 
 	/**
 	 * This method serves the Edit function
@@ -270,67 +269,67 @@ import java.util.Scanner;
 	 * @param editAttributes Attributes of product to be edited.
 	 */
 	private void editHelper(List&lt;String&gt; editAttributes) {
-<span class="nc bnc" id="L273" title="All 2 branches missed.">		if(editAttributes.size() &lt; 12)</span>
-<span class="nc" id="L274">			System.out.println(&quot;&gt;&gt; Insufficient arguments for edit!!\n Try \&quot;product edit help\&quot; for proper syntax!&quot;);</span>
-<span class="nc" id="L275">		Product product = new Product();</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">		if(editAttributes.size() &lt; 12)</span>
+<span class="nc" id="L273">			System.out.println(&quot;&gt;&gt; Insufficient arguments for edit!!\n Try \&quot;product edit help\&quot; for proper syntax!&quot;);</span>
+<span class="nc" id="L274">		Product product = new Product();</span>
 		try {
-<span class="nc" id="L277">			id = Integer.parseInt(editAttributes.get(1).trim());</span>
-<span class="nc" id="L278">		} catch(Exception e) {</span>
-<span class="nc" id="L279">			System.out.println(&quot;&gt;&gt; Id must be a Number!&quot;);</span>
-<span class="nc" id="L280">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;edit&quot;);</span>
-<span class="nc" id="L281">		}</span>
-<span class="nc" id="L282">		product.setId(id);</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">		if(product.getId() == 0) {</span>
-<span class="nc" id="L284">			System.out.println(&quot;&gt;&gt; Id should not be null&quot;);</span>
-<span class="nc" id="L285">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;edit&quot;);</span>
-<span class="nc" id="L286">			return;</span>
+<span class="nc" id="L276">			id = Integer.parseInt(editAttributes.get(1).trim());</span>
+<span class="nc" id="L277">		} catch(Exception e) {</span>
+<span class="nc" id="L278">			System.out.println(&quot;&gt;&gt; Id must be a Number!&quot;);</span>
+<span class="nc" id="L279">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;edit&quot;);</span>
+<span class="nc" id="L280">		}</span>
+<span class="nc" id="L281">		product.setId(id);</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">		if(product.getId() == 0) {</span>
+<span class="nc" id="L283">			System.out.println(&quot;&gt;&gt; Id should not be null&quot;);</span>
+<span class="nc" id="L284">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;edit&quot;);</span>
+<span class="nc" id="L285">			return;</span>
 		}
-<span class="nc bnc" id="L288" title="All 2 branches missed.">		for(int index = 2 ; index &lt; editAttributes.size() ; index = index + 2) {</span>
-<span class="nc bnc" id="L289" title="All 7 branches missed.">			switch(editAttributes.get(index).trim()) {</span>
-<span class="nc" id="L290">				case &quot;name&quot; -&gt; product.setName(editAttributes.get(index + 1).trim());</span>
-<span class="nc" id="L291">				case &quot;code&quot; -&gt; product.setCode(editAttributes.get(index + 1).trim());</span>
-<span class="nc" id="L292">				case &quot;unitcode&quot; -&gt; product.setunitcode(editAttributes.get(index + 1).trim());</span>
-<span class="nc" id="L293">				case &quot;type&quot; -&gt; product.setType(editAttributes.get(index + 1).trim());</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">		for(int index = 2 ; index &lt; editAttributes.size() ; index = index + 2) {</span>
+<span class="nc bnc" id="L288" title="All 7 branches missed.">			switch(editAttributes.get(index).trim()) {</span>
+<span class="nc" id="L289">				case &quot;name&quot; -&gt; product.setName(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L290">				case &quot;code&quot; -&gt; product.setCode(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L291">				case &quot;unitcode&quot; -&gt; product.setunitcode(editAttributes.get(index + 1).trim());</span>
+<span class="nc" id="L292">				case &quot;type&quot; -&gt; product.setType(editAttributes.get(index + 1).trim());</span>
 				case &quot;stock&quot; -&gt; {
 					try {
-<span class="nc" id="L296">						stock = Float.parseFloat(editAttributes.get(index + 1));</span>
-<span class="nc" id="L297">					} catch(Exception e) {</span>
-<span class="nc" id="L298">						System.out.println(&quot;Stock must be numeric!!&quot;);</span>
-<span class="nc" id="L299">						return;</span>
-<span class="nc" id="L300">					}</span>
-<span class="nc" id="L301">					product.setAvailableQuantity(stock);</span>
-<span class="nc" id="L302">				}</span>
+<span class="nc" id="L295">						stock = Float.parseFloat(editAttributes.get(index + 1));</span>
+<span class="nc" id="L296">					} catch(Exception e) {</span>
+<span class="nc" id="L297">						System.out.println(&quot;Stock must be numeric!!&quot;);</span>
+<span class="nc" id="L298">						return;</span>
+<span class="nc" id="L299">					}</span>
+<span class="nc" id="L300">					product.setStock(stock);</span>
+<span class="nc" id="L301">				}</span>
 				case &quot;price&quot; -&gt; {
 					try {
-<span class="nc" id="L305">						price = Double.parseDouble(editAttributes.get(index + 1));</span>
-<span class="nc" id="L306">					} catch(Exception e) {</span>
-<span class="nc" id="L307">						System.out.println(&quot;&gt;&gt; Price attribute must be a number!!&quot;);</span>
-<span class="nc" id="L308">						return;</span>
-<span class="nc" id="L309">					}</span>
-<span class="nc" id="L310">					product.setPrice(price);</span>
-<span class="nc" id="L311">				}</span>
+<span class="nc" id="L304">						price = Double.parseDouble(editAttributes.get(index + 1));</span>
+<span class="nc" id="L305">					} catch(Exception e) {</span>
+<span class="nc" id="L306">						System.out.println(&quot;&gt;&gt; Price attribute must be a number!!&quot;);</span>
+<span class="nc" id="L307">						return;</span>
+<span class="nc" id="L308">					}</span>
+<span class="nc" id="L309">					product.setPrice(price);</span>
+<span class="nc" id="L310">				}</span>
 				default -&gt; {
-<span class="nc" id="L313">					System.out.println(&quot;&gt;&gt; Invalid attribute given!!! : &quot; + editAttributes.get(index));</span>
-<span class="nc" id="L314">					System.out.println(&quot;&gt;&gt; Try \&quot;product edit help\&quot; for proper syntax&quot;);</span>
-<span class="nc" id="L315">					return;</span>
+<span class="nc" id="L312">					System.out.println(&quot;&gt;&gt; Invalid attribute given!!! : &quot; + editAttributes.get(index));</span>
+<span class="nc" id="L313">					System.out.println(&quot;&gt;&gt; Try \&quot;product edit help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L314">					return;</span>
 				}
 			}
 		}
 		Product editedProduct;
 		try {
-<span class="nc" id="L321">			editedProduct = productService.edit(product);</span>
-<span class="nc" id="L322">		} catch(Exception e) {</span>
-<span class="nc" id="L323">			System.out.println(e.getMessage());</span>
-<span class="nc" id="L324">			return;</span>
-<span class="nc" id="L325">		}</span>
-<span class="nc bnc" id="L326" title="All 2 branches missed.">		if(editedProduct != null) {</span>
-<span class="nc" id="L327">			System.out.println(&quot;&gt;&gt; Product Edited Successfully&quot;);</span>
-<span class="nc" id="L328">			System.out.println(editedProduct);</span>
+<span class="nc" id="L320">			editedProduct = productService.edit(product);</span>
+<span class="nc" id="L321">		} catch(Exception e) {</span>
+<span class="nc" id="L322">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L323">			return;</span>
+<span class="nc" id="L324">		}</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">		if(editedProduct != null) {</span>
+<span class="nc" id="L326">			System.out.println(&quot;&gt;&gt; Product Edited Successfully&quot;);</span>
+<span class="nc" id="L327">			System.out.println(editedProduct);</span>
 		} else {
-<span class="nc" id="L330">			System.out.println(&quot;&gt;&gt; Product edit failed!!!&quot;);</span>
-<span class="nc" id="L331">			System.out.println(&quot;&gt;&gt;Please check the Id you have entered!!!&quot;);</span>
+<span class="nc" id="L329">			System.out.println(&quot;&gt;&gt; Product edit failed!!!&quot;);</span>
+<span class="nc" id="L330">			System.out.println(&quot;&gt;&gt;Please check the Id you have entered!!!&quot;);</span>
 		}
-<span class="nc" id="L333">	}</span>
+<span class="nc" id="L332">	}</span>
 
 	/**
 	 * This method handles the Presentation Layer of the Delete function.
@@ -339,29 +338,29 @@ import java.util.Scanner;
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problem.
 	 */
 	public void delete(List&lt;String&gt; arguments) throws ApplicationErrorException {
-<span class="nc" id="L342">		String productcodeRegex = &quot;^[a-zA-Z0-9]{2,6}$&quot;;</span>
-<span class="nc bnc" id="L343" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
-<span class="nc" id="L344">			String NUMBER_REGEX = &quot;^\\d+(\\.\\d+)?$&quot;;</span>
-<span class="nc bnc" id="L345" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
-<span class="nc" id="L346">				FeedBackPrinter.printProductHelp(&quot;delete&quot;);</span>
-<span class="nc bnc" id="L347" title="All 2 branches missed.">			} else if(arguments.get(2).matches(NUMBER_REGEX)) {</span>
-<span class="nc" id="L348">				deleteHelper(arguments.get(2));</span>
+<span class="nc" id="L341">		String productcodeRegex = &quot;^[a-zA-Z0-9]{2,6}$&quot;;</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
+<span class="nc" id="L343">			String NUMBER_REGEX = &quot;^\\d+(\\.\\d+)?$&quot;;</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L345">				FeedBackPrinter.printProductHelp(&quot;delete&quot;);</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">			} else if(arguments.get(2).matches(NUMBER_REGEX)) {</span>
+<span class="nc" id="L347">				deleteHelper(arguments.get(2));</span>
 			} else {
-<span class="nc" id="L350">				System.out.println(&quot;&gt;&gt; Invalid format for id!!!&quot;);</span>
-<span class="nc" id="L351">				FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;delete&quot;);</span>
+<span class="nc" id="L349">				System.out.println(&quot;&gt;&gt; Invalid format for id!!!&quot;);</span>
+<span class="nc" id="L350">				FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;delete&quot;);</span>
 			}
-<span class="nc bnc" id="L353" title="All 4 branches missed.">		} else if(arguments.size() == 4 &amp;&amp; arguments.get(2).equals(&quot;-c&quot;)) {</span>
-<span class="nc bnc" id="L354" title="All 2 branches missed.">			if(arguments.get(3).matches(productcodeRegex)) {</span>
-<span class="nc" id="L355">				deleteHelper(arguments.get(3));</span>
+<span class="nc bnc" id="L352" title="All 4 branches missed.">		} else if(arguments.size() == 4 &amp;&amp; arguments.get(2).equals(&quot;-c&quot;)) {</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">			if(arguments.get(3).matches(productcodeRegex)) {</span>
+<span class="nc" id="L354">				deleteHelper(arguments.get(3));</span>
 			} else {
-<span class="nc" id="L357">				System.out.println(&quot;&gt;&gt; Invalid format for product Code!!!&quot;);</span>
-<span class="nc" id="L358">				FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;delete&quot;);</span>
+<span class="nc" id="L356">				System.out.println(&quot;&gt;&gt; Invalid format for product Code!!!&quot;);</span>
+<span class="nc" id="L357">				FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;delete&quot;);</span>
 			}
 		} else {
-<span class="nc" id="L361">			System.out.println(&quot;Invalid command format&quot;);</span>
-<span class="nc" id="L362">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;delete&quot;);</span>
+<span class="nc" id="L360">			System.out.println(&quot;Invalid command format&quot;);</span>
+<span class="nc" id="L361">			FeedBackPrinter.printHelpMessage(&quot;product&quot;, &quot;delete&quot;);</span>
 		}
-<span class="nc" id="L364">	}</span>
+<span class="nc" id="L363">	}</span>
 
 	/**
 	 * This method serves the Delete function
@@ -370,41 +369,41 @@ import java.util.Scanner;
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problem.
 	 */
 	private void deleteHelper(String parameter) throws ApplicationErrorException {
-<span class="nc" id="L373">		System.out.println(&quot;&gt;&gt; Are you sure want to delete the product y/n ? : &quot;);</span>
-<span class="nc" id="L374">		String prompt = scanner.nextLine();</span>
-<span class="nc bnc" id="L375" title="All 2 branches missed.">		if(prompt.equals(&quot;y&quot;)) {</span>
-<span class="nc bnc" id="L376" title="All 2 branches missed.">			if(productService.delete(parameter) == 1) {</span>
-<span class="nc" id="L377">				System.out.println(&quot;Product Deleted Successfully!!!&quot;);</span>
-<span class="nc bnc" id="L378" title="All 2 branches missed.">			} else if(productService.delete(parameter) == 0) {</span>
-<span class="nc" id="L379">				System.out.println(&quot;&gt;&gt; Product Deletion Failed!!!&quot;);</span>
-<span class="nc" id="L380">				System.out.println(&quot;&gt;&gt; Please check the Id (or) Code you have entered whether it exists or have any stock left!!&quot;);</span>
-<span class="nc" id="L381">				System.out.println(&quot;&gt;&gt; Try \&quot;product delete help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L372">		System.out.println(&quot;&gt;&gt; Are you sure want to delete the product y/n ? : &quot;);</span>
+<span class="nc" id="L373">		String prompt = scanner.nextLine();</span>
+<span class="nc bnc" id="L374" title="All 2 branches missed.">		if(prompt.equals(&quot;y&quot;)) {</span>
+<span class="nc bnc" id="L375" title="All 2 branches missed.">			if(productService.delete(parameter) == 1) {</span>
+<span class="nc" id="L376">				System.out.println(&quot;Product Deleted Successfully!!!&quot;);</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">			} else if(productService.delete(parameter) == 0) {</span>
+<span class="nc" id="L378">				System.out.println(&quot;&gt;&gt; Product Deletion Failed!!!&quot;);</span>
+<span class="nc" id="L379">				System.out.println(&quot;&gt;&gt; Please check the Id (or) Code you have entered whether it exists or have any stock left!!&quot;);</span>
+<span class="nc" id="L380">				System.out.println(&quot;&gt;&gt; Try \&quot;product delete help\&quot; for proper syntax&quot;);</span>
 			} else {
-<span class="nc" id="L383">				System.out.println(&quot;&gt;&gt; Delete Parameter cant be null!!&quot;);</span>
+<span class="nc" id="L382">				System.out.println(&quot;&gt;&gt; Delete Parameter cant be null!!&quot;);</span>
 			}
-<span class="nc bnc" id="L385" title="All 2 branches missed.">		} else if(prompt.equals(&quot;n&quot;)) {</span>
-<span class="nc" id="L386">			System.out.println(&quot;&gt;&gt; Delete operation cancelled&quot;);</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">		} else if(prompt.equals(&quot;n&quot;)) {</span>
+<span class="nc" id="L385">			System.out.println(&quot;&gt;&gt; Delete operation cancelled&quot;);</span>
 		} else {
-<span class="nc" id="L388">			System.out.println(&quot;&gt;&gt; Invalid delete prompt!!! Please select between y/n&quot;);</span>
+<span class="nc" id="L387">			System.out.println(&quot;&gt;&gt; Invalid delete prompt!!! Please select between y/n&quot;);</span>
 		}
-<span class="nc" id="L390">	}</span>
+<span class="nc" id="L389">	}</span>
 
 	private int validateNumber(String number, String name) {
 		int result;
 		try {
-<span class="nc" id="L395">			result = Integer.parseInt(number);</span>
-<span class="nc" id="L396">		} catch(Exception e) {</span>
-<span class="nc" id="L397">			System.out.println(&quot;Invalid &quot; + name + &quot;! Must be a number&quot;);</span>
-<span class="nc" id="L398">			return - 1;</span>
-<span class="nc" id="L399">		}</span>
-<span class="nc" id="L400">		return result;</span>
+<span class="nc" id="L394">			result = Integer.parseInt(number);</span>
+<span class="nc" id="L395">		} catch(Exception e) {</span>
+<span class="nc" id="L396">			System.out.println(&quot;Invalid &quot; + name + &quot;! Must be a number&quot;);</span>
+<span class="nc" id="L397">			return - 1;</span>
+<span class="nc" id="L398">		}</span>
+<span class="nc" id="L399">		return result;</span>
 	}
 
 	private void setMap(HashMap&lt;String, String&gt; listAttributesMap, String PageLength, String PageNumber, String Attribute, String SearchText) {
-<span class="nc" id="L404">		listAttributesMap.put(&quot;Pagelength&quot;, PageLength);</span>
-<span class="nc" id="L405">		listAttributesMap.put(&quot;Pagenumber&quot;, PageNumber);</span>
-<span class="nc" id="L406">		listAttributesMap.put(&quot;Attribute&quot;, Attribute);</span>
-<span class="nc" id="L407">		listAttributesMap.put(&quot;Searchtext&quot;, SearchText);</span>
-<span class="nc" id="L408">	}</span>
+<span class="nc" id="L403">		listAttributesMap.put(&quot;Pagelength&quot;, PageLength);</span>
+<span class="nc" id="L404">		listAttributesMap.put(&quot;Pagenumber&quot;, PageNumber);</span>
+<span class="nc" id="L405">		listAttributesMap.put(&quot;Attribute&quot;, Attribute);</span>
+<span class="nc" id="L406">		listAttributesMap.put(&quot;Searchtext&quot;, SearchText);</span>
+<span class="nc" id="L407">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

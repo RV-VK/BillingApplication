@@ -73,28 +73,29 @@ import java.util.*;
 <span class="nc bnc" id="L73" title="All 2 branches missed.">				if(! code.matches(productCodeRegex)) {</span>
 <span class="nc" id="L74">					System.out.println(&quot;Invalid format for product code!!&quot;);</span>
 <span class="nc" id="L75">					System.out.println(&quot;Try \&quot;purchase help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L76">					return;</span>
 				}
 				try {
-<span class="nc" id="L78">					quantity = Float.parseFloat(itemVariables[1].trim());</span>
-<span class="nc" id="L79">					costPrice = Double.parseDouble(itemVariables[2].trim());</span>
-<span class="nc" id="L80">				} catch(Exception e) {</span>
-<span class="nc" id="L81">					System.out.println(&quot;&gt;&gt; Quantity (or) Costprice must be a number!! Error in Product &quot; + i);</span>
-<span class="nc" id="L82">					System.out.println(&quot;&gt;&gt; Try \&quot;purchase help\&quot; for proper syntax!!!&quot;);</span>
-<span class="nc" id="L83">					return;</span>
-<span class="nc" id="L84">				}</span>
-<span class="nc" id="L85">				purchaseItemList.add(new PurchaseItem(new Product(code), quantity, costPrice));</span>
-<span class="nc" id="L86">				grandTotal += costPrice * quantity;</span>
+<span class="nc" id="L79">					quantity = Float.parseFloat(itemVariables[1].trim());</span>
+<span class="nc" id="L80">					costPrice = Double.parseDouble(itemVariables[2].trim());</span>
+<span class="nc" id="L81">				} catch(Exception e) {</span>
+<span class="nc" id="L82">					System.out.println(&quot;&gt;&gt; Quantity (or) Costprice must be a number!! Error in Product &quot; + i);</span>
+<span class="nc" id="L83">					System.out.println(&quot;&gt;&gt; Try \&quot;purchase help\&quot; for proper syntax!!!&quot;);</span>
+<span class="nc" id="L84">					return;</span>
+<span class="nc" id="L85">				}</span>
+<span class="nc" id="L86">				purchaseItemList.add(new PurchaseItem(new Product(code), quantity, costPrice));</span>
+<span class="nc" id="L87">				grandTotal += costPrice * quantity;</span>
 			}
-<span class="nc" id="L88">			Purchase purchase = new Purchase(purchaseDate, invoice, purchaseItemList, grandTotal);</span>
+<span class="nc" id="L89">			Purchase purchase = new Purchase(purchaseDate, invoice, purchaseItemList, grandTotal);</span>
 			try {
-<span class="nc" id="L90">				createdPurchase = purchaseService.create(purchase);</span>
-<span class="nc" id="L91">			} catch(Exception e) {</span>
-<span class="nc" id="L92">				System.out.println(e.getMessage());</span>
-<span class="nc" id="L93">				return;</span>
-<span class="nc" id="L94">			}</span>
-<span class="nc" id="L95">			printPurchaseBill();</span>
+<span class="nc" id="L91">				createdPurchase = purchaseService.create(purchase);</span>
+<span class="nc" id="L92">			} catch(Exception e) {</span>
+<span class="nc" id="L93">				System.out.println(e.getMessage());</span>
+<span class="nc" id="L94">				return;</span>
+<span class="nc" id="L95">			}</span>
+<span class="nc" id="L96">			printPurchaseBill();</span>
 		}
-<span class="nc" id="L97">	}</span>
+<span class="nc" id="L98">	}</span>
 
 	/**
 	 * This method handles the presentation layer of the Count function.
@@ -104,43 +105,43 @@ import java.util.*;
 	 */
 	public void count(List&lt;String&gt; arguments) throws ApplicationErrorException, InvalidTemplateException {
 		int purchaseCount;
-<span class="nc bnc" id="L107" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
-<span class="nc" id="L109">				FeedBackPrinter.printPurchaseHelp(&quot;count&quot;);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L110">				FeedBackPrinter.printPurchaseHelp(&quot;count&quot;);</span>
 			} else {
-<span class="nc" id="L111">				System.out.println(&quot;&gt;&gt; Invalid command given!!!&quot;);</span>
-<span class="nc" id="L112">				System.out.println(&quot;&gt;&gt; Try \&quot;purchase count help\&quot; for proper syntax!!&quot;);</span>
+<span class="nc" id="L112">				System.out.println(&quot;&gt;&gt; Invalid command given!!!&quot;);</span>
+<span class="nc" id="L113">				System.out.println(&quot;&gt;&gt; Try \&quot;purchase count help\&quot; for proper syntax!!&quot;);</span>
 			}
-<span class="nc" id="L114">			return;</span>
+<span class="nc" id="L115">			return;</span>
 		}
-<span class="nc bnc" id="L116" title="All 2 branches missed.">		if(arguments.size() == 2) {</span>
-<span class="nc" id="L117">			purchaseCount = purchaseService.count(&quot;id&quot;, null);</span>
-<span class="nc" id="L118">			System.out.println(&quot;&gt;&gt; PurchaseCount &quot; + purchaseCount);</span>
-<span class="nc" id="L119">			return;</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">		if(arguments.size() == 2) {</span>
+<span class="nc" id="L118">			purchaseCount = purchaseService.count(&quot;id&quot;, null);</span>
+<span class="nc" id="L119">			System.out.println(&quot;&gt;&gt; PurchaseCount &quot; + purchaseCount);</span>
+<span class="nc" id="L120">			return;</span>
 		}
-<span class="nc bnc" id="L121" title="All 2 branches missed.">		if(arguments.size() == 4) {</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-d&quot;)) {</span>
-<span class="nc" id="L123">				String parameter = arguments.get(3);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		if(arguments.size() == 4) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-d&quot;)) {</span>
+<span class="nc" id="L124">				String parameter = arguments.get(3);</span>
 				try {
-<span class="nc" id="L125">					purchaseCount = purchaseService.count(&quot;date&quot;, parameter);</span>
-<span class="nc" id="L126">				} catch(Exception e) {</span>
-<span class="nc" id="L127">					System.out.println(e.getMessage());</span>
-<span class="nc" id="L128">					return;</span>
-<span class="nc" id="L129">				}</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">				if(purchaseCount &gt; 0) System.out.println(&quot;&gt;&gt; PurchaseCount &quot; + purchaseCount);</span>
+<span class="nc" id="L126">					purchaseCount = purchaseService.count(&quot;date&quot;, parameter);</span>
+<span class="nc" id="L127">				} catch(Exception e) {</span>
+<span class="nc" id="L128">					System.out.println(e.getMessage());</span>
+<span class="nc" id="L129">					return;</span>
+<span class="nc" id="L130">				}</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				if(purchaseCount &gt; 0) System.out.println(&quot;&gt;&gt; PurchaseCount &quot; + purchaseCount);</span>
 				else {
-<span class="nc" id="L132">					System.out.println(&quot;&gt;&gt; Given Date not found!!!&quot;);</span>
-<span class="nc" id="L133">					System.out.println(&quot;&gt;&gt;Please Try with an existing searchtext&quot;);</span>
+<span class="nc" id="L133">					System.out.println(&quot;&gt;&gt; Given Date not found!!!&quot;);</span>
+<span class="nc" id="L134">					System.out.println(&quot;&gt;&gt;Please Try with an existing searchtext&quot;);</span>
 				}
-<span class="nc" id="L135">			} else {</span>
-<span class="nc" id="L136">				System.out.println(&quot;&gt;&gt; Invalid extension Given&quot;);</span>
-<span class="nc" id="L137">				System.out.println(&quot;&gt;&gt; Try \&quot;purchase count help\&quot; for proper syntax!!&quot;);</span>
+<span class="nc" id="L136">			} else {</span>
+<span class="nc" id="L137">				System.out.println(&quot;&gt;&gt; Invalid extension Given&quot;);</span>
+<span class="nc" id="L138">				System.out.println(&quot;&gt;&gt; Try \&quot;purchase count help\&quot; for proper syntax!!&quot;);</span>
 			}
 		} else {
-<span class="nc" id="L140">			System.out.println(&quot;&gt;&gt; Invalid Command Format!!!&quot;);</span>
-<span class="nc" id="L141">			System.out.println(&quot;&gt;&gt; Try \&quot;purchase count help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L141">			System.out.println(&quot;&gt;&gt; Invalid Command Format!!!&quot;);</span>
+<span class="nc" id="L142">			System.out.println(&quot;&gt;&gt; Try \&quot;purchase count help\&quot; for proper syntax&quot;);</span>
 		}
-<span class="nc" id="L143">	}</span>
+<span class="nc" id="L144">	}</span>
 
 	/**
 	 * This method handles the presentation layer of the List function.
@@ -150,91 +151,91 @@ import java.util.*;
 	 * @throws ApplicationErrorException     Exception thrown due to Persistence problems.
 	 */
 	public void list(List&lt;String&gt; arguments) throws PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L153">		setMap(listAttributesMap, null, null, null, null);</span>
-<span class="nc bnc" id="L154" title="All 4 branches missed.">		if(arguments.size() == 3) if(arguments.get(2).equals(&quot;help&quot;)) {</span>
-<span class="nc" id="L155">			FeedBackPrinter.printPurchaseHelp(&quot;list&quot;);</span>
-<span class="nc" id="L156">			return;</span>
+<span class="nc" id="L154">		setMap(listAttributesMap, null, null, null, null);</span>
+<span class="nc bnc" id="L155" title="All 4 branches missed.">		if(arguments.size() == 3) if(arguments.get(2).equals(&quot;help&quot;)) {</span>
+<span class="nc" id="L156">			FeedBackPrinter.printPurchaseHelp(&quot;list&quot;);</span>
+<span class="nc" id="L157">			return;</span>
 		}
-<span class="nc bnc" id="L158" title="All 2 branches missed.">		if(arguments.size() == 2) {</span>
-<span class="nc" id="L159">			setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, &quot;id&quot;, null);</span>
-<span class="nc" id="L160">			listHelper(listAttributesMap);</span>
-<span class="nc bnc" id="L161" title="All 2 branches missed.">		} else if(arguments.size() == 4) {</span>
-<span class="nc" id="L162">			pageLength = 0;</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L165">				setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, &quot;id&quot;, null);</span>
-<span class="nc" id="L166">				listHelper(listAttributesMap);</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L168">				searchText = arguments.get(3).trim();</span>
-<span class="nc" id="L169">				setMap(listAttributesMap, null, null, null, searchText);</span>
-<span class="nc" id="L170">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		if(arguments.size() == 2) {</span>
+<span class="nc" id="L160">			setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, &quot;id&quot;, null);</span>
+<span class="nc" id="L161">			listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">		} else if(arguments.size() == 4) {</span>
+<span class="nc" id="L163">			pageLength = 0;</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L166">				setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, &quot;id&quot;, null);</span>
+<span class="nc" id="L167">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L169">				searchText = arguments.get(3).trim();</span>
+<span class="nc" id="L170">				setMap(listAttributesMap, null, null, null, searchText);</span>
+<span class="nc" id="L171">				listHelper(listAttributesMap);</span>
 			} else {
-<span class="nc" id="L172">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
+<span class="nc" id="L173">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
 			}
-<span class="nc bnc" id="L174" title="All 2 branches missed.">		} else if(arguments.size() == 5) {</span>
-<span class="nc bnc" id="L175" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc bnc" id="L177" title="All 2 branches missed.">				if((pageNumber = validateNumber(arguments.get(4), &quot;PageNumber&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L178">				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), &quot;id&quot;, null);</span>
-<span class="nc" id="L179">				listHelper(listAttributesMap);</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L181">				attribute = arguments.get(3);</span>
-<span class="nc" id="L182">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
-<span class="nc" id="L183">				searchText = arguments.get(4);</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">				if(purchaseAttributes.contains(attribute)) {</span>
-<span class="nc" id="L185">					setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, attribute, searchText);</span>
-<span class="nc" id="L186">					listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">		} else if(arguments.size() == 5) {</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">				if((pageLength = validateNumber(arguments.get(3), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">				if((pageNumber = validateNumber(arguments.get(4), &quot;PageNumber&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L179">				setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), &quot;id&quot;, null);</span>
+<span class="nc" id="L180">				listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			} else if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L182">				attribute = arguments.get(3);</span>
+<span class="nc" id="L183">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L184">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">				if(purchaseAttributes.contains(attribute)) {</span>
+<span class="nc" id="L186">					setMap(listAttributesMap, &quot;20&quot;, &quot;1&quot;, attribute, searchText);</span>
+<span class="nc" id="L187">					listHelper(listAttributesMap);</span>
 				} else {
-<span class="nc" id="L188">					FeedBackPrinter.printNonSearchableAttribute(&quot;purchase&quot;, purchaseAttributes);</span>
+<span class="nc" id="L189">					FeedBackPrinter.printNonSearchableAttribute(&quot;purchase&quot;, purchaseAttributes);</span>
 				}
 			} else {
-<span class="nc" id="L191">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
+<span class="nc" id="L192">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
 			}
-<span class="nc bnc" id="L193" title="All 2 branches missed.">		} else if(arguments.size() == 7) {</span>
-<span class="nc bnc" id="L194" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L195">				attribute = arguments.get(3);</span>
-<span class="nc" id="L196">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
-<span class="nc" id="L197">				searchText = arguments.get(4);</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">				if(purchaseAttributes.contains(attribute)) {</span>
-<span class="nc bnc" id="L199" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L200" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L201">						setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, attribute, searchText);</span>
-<span class="nc" id="L202">						listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">		} else if(arguments.size() == 7) {</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L196">				attribute = arguments.get(3);</span>
+<span class="nc" id="L197">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L198">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">				if(purchaseAttributes.contains(attribute)) {</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L202">						setMap(listAttributesMap, String.valueOf(pageLength), &quot;1&quot;, attribute, searchText);</span>
+<span class="nc" id="L203">						listHelper(listAttributesMap);</span>
 					} else {
-<span class="nc" id="L204">						System.out.println(&quot;&gt;&gt; Invalid Command Extension format !!!&quot;);</span>
-<span class="nc" id="L205">						System.out.println(&quot;Try \&quot;purchase list help\&quot; for proper syntax&quot;);</span>
+<span class="nc" id="L205">						System.out.println(&quot;&gt;&gt; Invalid Command Extension format !!!&quot;);</span>
+<span class="nc" id="L206">						System.out.println(&quot;Try \&quot;purchase list help\&quot; for proper syntax&quot;);</span>
 					}
 				} else {
-<span class="nc" id="L208">					FeedBackPrinter.printNonSearchableAttribute(&quot;purchase&quot;, purchaseAttributes);</span>
+<span class="nc" id="L209">					FeedBackPrinter.printNonSearchableAttribute(&quot;purchase&quot;, purchaseAttributes);</span>
 				}
 			} else {
-<span class="nc" id="L211">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
+<span class="nc" id="L212">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
 			}
-<span class="nc bnc" id="L213" title="All 2 branches missed.">		} else if(arguments.size() == 8) {</span>
-<span class="nc bnc" id="L214" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
-<span class="nc" id="L215">				attribute = arguments.get(3);</span>
-<span class="nc" id="L216">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
-<span class="nc" id="L217">				searchText = arguments.get(4);</span>
-<span class="nc bnc" id="L218" title="All 2 branches missed.">				if(purchaseAttributes.contains(attribute)) {</span>
-<span class="nc bnc" id="L219" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
-<span class="nc bnc" id="L220" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">						if((pageNumber = validateNumber(arguments.get(7), &quot;PageNumber&quot;)) &lt; 0) return;</span>
-<span class="nc" id="L222">						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);</span>
-<span class="nc" id="L223">						listHelper(listAttributesMap);</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">		} else if(arguments.size() == 8) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;-s&quot;)) {</span>
+<span class="nc" id="L216">				attribute = arguments.get(3);</span>
+<span class="nc" id="L217">				attribute = attribute.replace(&quot;:&quot;, &quot;&quot;);</span>
+<span class="nc" id="L218">				searchText = arguments.get(4);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">				if(purchaseAttributes.contains(attribute)) {</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">					if(arguments.get(5).equals(&quot;-p&quot;)) {</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">						if((pageLength = validateNumber(arguments.get(6), &quot;PageLength&quot;)) &lt; 0) return;</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">						if((pageNumber = validateNumber(arguments.get(7), &quot;PageNumber&quot;)) &lt; 0) return;</span>
+<span class="nc" id="L223">						setMap(listAttributesMap, String.valueOf(pageLength), String.valueOf(pageNumber), attribute, searchText);</span>
+<span class="nc" id="L224">						listHelper(listAttributesMap);</span>
 					} else {
-<span class="nc" id="L225">						FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
+<span class="nc" id="L226">						FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
 					}
 				} else {
-<span class="nc" id="L228">					FeedBackPrinter.printNonSearchableAttribute(&quot;purchase&quot;, purchaseAttributes);</span>
+<span class="nc" id="L229">					FeedBackPrinter.printNonSearchableAttribute(&quot;purchase&quot;, purchaseAttributes);</span>
 				}
 			} else {
-<span class="nc" id="L231">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
+<span class="nc" id="L232">				FeedBackPrinter.printInvalidExtension(&quot;purchase&quot;);</span>
 			}
 
 		} else {
-<span class="nc" id="L235">			FeedBackPrinter.printInvalidFormat(&quot;purchase&quot;);</span>
+<span class="nc" id="L236">			FeedBackPrinter.printInvalidFormat(&quot;purchase&quot;);</span>
 		}
-<span class="nc" id="L237">	}</span>
+<span class="nc" id="L238">	}</span>
 
 	/**
 	 * This method serves the List function.
@@ -243,27 +244,27 @@ import java.util.*;
 	 */
 	private void listHelper(HashMap&lt;String, String&gt; listAttributesMap) {
 		try {
-<span class="nc" id="L246">			List&lt;Purchase&gt; purchaseList = purchaseService.list(listAttributesMap);</span>
-<span class="nc bnc" id="L247" title="All 2 branches missed.">			if(purchaseList.size() == 0) {</span>
-<span class="nc bnc" id="L248" title="All 2 branches missed.">				if(listAttributesMap.get(&quot;Searchtext&quot;) != null) {</span>
-<span class="nc" id="L249">					System.out.println(&quot;&gt;&gt;Given SearchText does not exist!!!&quot;);</span>
+<span class="nc" id="L247">			List&lt;Purchase&gt; purchaseList = purchaseService.list(listAttributesMap);</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">			if(purchaseList.size() == 0) {</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">				if(listAttributesMap.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L250">					System.out.println(&quot;&gt;&gt;Given SearchText does not exist!!!&quot;);</span>
 				}
-<span class="nc" id="L251">				return;</span>
+<span class="nc" id="L252">				return;</span>
 			}
-<span class="nc bnc" id="L253" title="All 2 branches missed.">			for(Purchase purchase: purchaseList) {</span>
-<span class="nc" id="L254">				System.out.print(&quot;id: &quot; + purchase.getId() + &quot;, date: &quot; + purchase.getDate() + &quot;, invoice: &quot; + purchase.getInvoice() + &quot;, &quot;);</span>
-<span class="nc" id="L255">				System.out.print(&quot;[&quot;);</span>
-<span class="nc bnc" id="L256" title="All 2 branches missed.">				for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {</span>
-<span class="nc" id="L257">					System.out.print(&quot;[name: &quot; + purchaseItem.getProduct().getName() + &quot;, quantity: &quot; + purchaseItem.getQuantity() + &quot;, price: &quot; + purchaseItem.getUnitPurchasePrice() + &quot;], &quot;);</span>
-<span class="nc" id="L258">				}</span>
-<span class="nc" id="L259">				System.out.print(purchase.getGrandTotal() + &quot; &quot;);</span>
-<span class="nc" id="L260">				System.out.print(&quot;]&quot;);</span>
-<span class="nc" id="L261">				System.out.println();</span>
-<span class="nc" id="L262">			}</span>
-<span class="nc" id="L263">		} catch(Exception e) {</span>
-<span class="nc" id="L264">			System.out.println(e.getMessage());</span>
-<span class="nc" id="L265">		}</span>
-<span class="nc" id="L266">	}</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">			for(Purchase purchase: purchaseList) {</span>
+<span class="nc" id="L255">				System.out.print(&quot;id: &quot; + purchase.getId() + &quot;, date: &quot; + purchase.getDate() + &quot;, invoice: &quot; + purchase.getInvoice() + &quot;, &quot;);</span>
+<span class="nc" id="L256">				System.out.print(&quot;[&quot;);</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">				for(PurchaseItem purchaseItem: purchase.getPurchaseItemList()) {</span>
+<span class="nc" id="L258">					System.out.print(&quot;[name: &quot; + purchaseItem.getProduct().getName() + &quot;, quantity: &quot; + purchaseItem.getQuantity() + &quot;, price: &quot; + purchaseItem.getUnitPurchasePrice() + &quot;], &quot;);</span>
+<span class="nc" id="L259">				}</span>
+<span class="nc" id="L260">				System.out.print(purchase.getGrandTotal() + &quot; &quot;);</span>
+<span class="nc" id="L261">				System.out.print(&quot;]&quot;);</span>
+<span class="nc" id="L262">				System.out.println();</span>
+<span class="nc" id="L263">			}</span>
+<span class="nc" id="L264">		} catch(Exception e) {</span>
+<span class="nc" id="L265">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L266">		}</span>
+<span class="nc" id="L267">	}</span>
 
 	/**
 	 * This method handles the presentation layer of the Delete function.
@@ -272,7 +273,6 @@ import java.util.*;
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 	public void delete(List&lt;String&gt; arguments) throws ApplicationErrorException {
-<span class="nc" id="L275">		PurchaseService purchaseDeleteService = new PurchaseServiceImplementation();</span>
 <span class="nc" id="L276">		String numberRegex = &quot;^[0-9]{1,10}$&quot;;</span>
 <span class="nc bnc" id="L277" title="All 2 branches missed.">		if(arguments.size() == 3) {</span>
 <span class="nc bnc" id="L278" title="All 2 branches missed.">			if(arguments.get(2).equals(&quot;help&quot;)) {</span>
@@ -281,7 +281,7 @@ import java.util.*;
 <span class="nc" id="L281">				System.out.println(&quot;&gt;&gt; Are you sure want to delete the Purchase Entry y/n ? : &quot;);</span>
 <span class="nc" id="L282">				String prompt = scanner.nextLine();</span>
 <span class="nc bnc" id="L283" title="All 2 branches missed.">				if(prompt.equals(&quot;y&quot;)) {</span>
-<span class="nc" id="L284">					int resultCode = purchaseDeleteService.delete(arguments.get(2));</span>
+<span class="nc" id="L284">					int resultCode = purchaseService.delete(arguments.get(2));</span>
 <span class="nc bnc" id="L285" title="All 2 branches missed.">					if(resultCode == 1) {</span>
 <span class="nc" id="L286">						System.out.println(&quot;&gt;&gt; Purchase Deleted Successfully!!&quot;);</span>
 <span class="nc bnc" id="L287" title="All 2 branches missed.">					} else if(resultCode == 0) {</span>
