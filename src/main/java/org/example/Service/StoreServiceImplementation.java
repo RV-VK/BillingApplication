@@ -38,6 +38,10 @@ public class StoreServiceImplementation implements StoreService {
 			throw new NullPointerException("Username Or Password Cannot be Null!!");
 	}
 
+	public Store view() throws ApplicationErrorException {
+		return storeDAO.view();
+	}
+
 	/**
 	 * This method validates the Store attributes.
 	 *
@@ -53,4 +57,6 @@ public class StoreServiceImplementation implements StoreService {
 		if(store.getGstCode() != null && ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))
 			throw new InvalidTemplateException("Invalid GstCode!!");
 	}
+
+
 }

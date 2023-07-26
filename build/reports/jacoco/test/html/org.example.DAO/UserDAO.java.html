@@ -41,7 +41,7 @@ import java.util.List;
 <span class="nc bnc" id="L41" title="All 2 branches missed.">		if(exception.getSQLState().equals(&quot;23505&quot;)) {</span>
 <span class="nc" id="L42">			throw new UniqueConstraintException(&quot;UserName must be unique!! The username you have entered already exists!!&quot;);</span>
 		}
-<span class="nc" id="L44">		throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+<span class="nc" id="L44">		throw new ApplicationErrorException(&quot;Application has went into an Error!!! Please Try again&quot;);</span>
 	}
 
 	/**
@@ -63,7 +63,7 @@ import java.util.List;
 			}
 <span class="nc" id="L64">			return count;</span>
 <span class="nc" id="L65">		} catch(Exception e) {</span>
-<span class="nc" id="L66">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+<span class="nc" id="L66">			throw new ApplicationErrorException(&quot;Application has went into an Error!!! Please Try again&quot;);</span>
 		}
 	}
 
@@ -79,7 +79,7 @@ import java.util.List;
 <span class="nc" id="L79">			return userMapper.searchList(searchText);</span>
 <span class="nc" id="L80">		} catch(Exception e) {</span>
 <span class="nc" id="L81">			System.out.println(e.getMessage());</span>
-<span class="nc" id="L82">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+<span class="nc" id="L82">			throw new ApplicationErrorException(&quot;Application has went into an Error!!! Please Try again&quot;);</span>
 		}
 	}
 
@@ -127,7 +127,7 @@ import java.util.List;
 			int pageCount;
 <span class="nc bnc" id="L128" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
 <span class="nc" id="L129">			else pageCount = (count / pageLength) + 1;</span>
-<span class="nc" id="L130">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
+<span class="nc" id="L130">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!  Existing Pagecount with given pagination &quot; + pageCount);</span>
 		}
 <span class="nc" id="L132">	}</span>
 
@@ -159,7 +159,7 @@ import java.util.List;
 <span class="nc" id="L159">			return userMapper.delete(username);</span>
 <span class="nc" id="L160">		} catch(Exception e) {</span>
 <span class="nc" id="L161">			e.printStackTrace();</span>
-<span class="nc" id="L162">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+<span class="nc" id="L162">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!  Please Try again&quot;);</span>
 		}
 	}
 

@@ -3,6 +3,7 @@
 import org.example.DAO.ApplicationErrorException;
 import org.example.DAO.PageCountOutOfBoundsException;
 import org.example.Entity.Product;
+import org.example.Service.InvalidTemplateException;
 import org.example.Service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,72 +14,104 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = &quot;/products&quot;)
-<span class="fc" id="L17">public class ProductController {</span>
-<span class="fc" id="L18">	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);</span>
+<span class="nc" id="L17">public class ProductController {</span>
+<span class="nc" id="L18">	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);</span>
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private ListAttributeMapValidator validator;
+<span class="nc" id="L23">	private HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
 
-	@GetMapping(path = &quot;/&quot;, produces = &quot;application/json&quot;)
-	public List&lt;Product&gt; getProducts() {
-<span class="fc" id="L24">		List&lt;Product&gt; productList = null;</span>
-<span class="fc" id="L25">		HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L26">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
-<span class="fc" id="L27">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="fc" id="L28">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="fc" id="L29">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
-		try {
-<span class="fc" id="L31">			productList = productService.list(listAttributes);</span>
-<span class="fc" id="L32">		} catch(ApplicationErrorException | PageCountOutOfBoundsException e) {</span>
-<span class="fc" id="L33">			logger.error(e.getMessage());</span>
-<span class="fc" id="L34">		}</span>
-<span class="fc" id="L35">		return productList;</span>
+
+	@GetMapping(path = &quot;/products&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getAll() throws PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L28">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="nc" id="L29">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L30">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L31">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="nc" id="L32">		return productService.list(listAttributes);</span>
 	}
 
-	@PostMapping(path = &quot;/addProduct&quot;, produces = &quot;application/json&quot;)
-	public Product add(@RequestBody Product product) {
-<span class="fc" id="L40">		Product createdProduct = null;</span>
-		try {
-<span class="fc" id="L42">			createdProduct = productService.create(product);</span>
-<span class="fc" id="L43">		} catch(Exception e) {</span>
-<span class="fc" id="L44">			logger.error(e.getMessage());</span>
-<span class="fc" id="L45">		}</span>
-<span class="fc" id="L46">		return createdProduct;</span>
+	@GetMapping(path = &quot;/products/{pageLength}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getByPageLength(@PathVariable String pageLength) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L37">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="nc" id="L38">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L39">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L40">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="nc" id="L41">		validator.validate(listAttributes, ProductController.class);</span>
+<span class="nc" id="L42">		return productService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/products/{pageLength}/{pageNumber}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getByPageLengthAndPageNumber(@PathVariable String pageLength, @PathVariable String pageNumber) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L47">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="nc" id="L48">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
+<span class="nc" id="L49">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L50">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="nc" id="L51">		validator.validate(listAttributes, ProductController.class);</span>
+<span class="nc" id="L52">		return productService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/products/find/{searchText}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getBySearchText(@PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L57">		listAttributes.put(&quot;Pagelength&quot;, null);</span>
+<span class="nc" id="L58">		listAttributes.put(&quot;Pagenumber&quot;, null);</span>
+<span class="nc" id="L59">		listAttributes.put(&quot;Attribute&quot;, null);</span>
+<span class="nc" id="L60">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L61">		return productService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/products/find/{attribute}/{searchText}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L66">		listAttributes.put(&quot;Pagelength&quot;, &quot;20&quot;);</span>
+<span class="nc" id="L67">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L68">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="nc" id="L69">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L70">		validator.validate(listAttributes, ProductController.class);</span>
+<span class="nc" id="L71">		return productService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/products/find/{attribute}/{searchText}/{PageLength}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getByAttributeAndSearchTextWithPageLength(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String PageLength) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L76">		listAttributes.put(&quot;Pagelength&quot;, PageLength);</span>
+<span class="nc" id="L77">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L78">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="nc" id="L79">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L80">		validator.validate(listAttributes, ProductController.class);</span>
+<span class="nc" id="L81">		return productService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/products/find/{attribute}/{searchText}/{PageLength}/{PageNumber}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Product&gt; getByAttributeAndSearchTextWithPageLengthAndPageNumber(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String PageLength, @PathVariable String PageNumber) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
+<span class="nc" id="L86">		listAttributes.put(&quot;Pagelength&quot;, PageLength);</span>
+<span class="nc" id="L87">		listAttributes.put(&quot;Pagenumber&quot;, PageNumber);</span>
+<span class="nc" id="L88">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="nc" id="L89">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L90">		validator.validate(listAttributes, ProductController.class);</span>
+<span class="nc" id="L91">		return productService.list(listAttributes);</span>
+	}
+
+	@PostMapping(path = &quot;/product&quot;, produces = &quot;application/json&quot;)
+	public Product add(@RequestBody Product product) throws Exception {
+<span class="nc" id="L96">		return productService.create(product);</span>
 	}
 
 	@GetMapping(path = &quot;/countProducts&quot;, produces = &quot;application/json&quot;)
-	public Integer countProducts() {
-<span class="fc" id="L51">		String attribute = &quot;id&quot;;</span>
-<span class="fc" id="L52">		String searchText = null;</span>
-<span class="fc" id="L53">		Integer count = null;</span>
-		try {
-<span class="fc" id="L55">			count = productService.count(attribute, searchText);</span>
-<span class="fc" id="L56">		} catch(ApplicationErrorException e) {</span>
-<span class="fc" id="L57">			logger.error(e.getMessage());</span>
-<span class="fc" id="L58">		}</span>
-<span class="fc" id="L59">		return count;</span>
+	public Integer count() throws ApplicationErrorException {
+<span class="nc" id="L101">		String attribute = &quot;id&quot;;</span>
+<span class="nc" id="L102">		String searchText = null;</span>
+<span class="nc" id="L103">		return productService.count(attribute, searchText);</span>
 	}
 
-	@PutMapping(path = &quot;/editProduct&quot;, produces = &quot;application/json&quot;)
-	public Product edit(@RequestBody Product product) {
-<span class="fc" id="L64">		Product editedProduct = null;</span>
-		try {
-<span class="fc" id="L66">			editedProduct = productService.edit(product);</span>
-<span class="fc" id="L67">		} catch(Exception e) {</span>
-<span class="fc" id="L68">			logger.error(e.getMessage());</span>
-<span class="fc" id="L69">		}</span>
-<span class="fc" id="L70">		return editedProduct;</span>
+	@PutMapping(path = &quot;/product&quot;, produces = &quot;application/json&quot;)
+	public Product edit(@RequestBody Product product) throws Exception {
+<span class="nc" id="L108">		return productService.edit(product);</span>
 	}
 
 	@DeleteMapping(path = &quot;/deleteProduct/{parameter}&quot;, produces = &quot;application/json&quot;)
-	public Integer deleteProduct(@PathVariable String parameter) {
-<span class="fc" id="L75">		Integer statusCode = null;</span>
-		try {
-<span class="fc" id="L77">			return productService.delete(parameter);</span>
-<span class="fc" id="L78">		} catch(ApplicationErrorException e) {</span>
-<span class="fc" id="L79">			logger.error(e.getMessage());</span>
-		}
-<span class="fc" id="L81">		return statusCode;</span>
+	public Integer delete(@PathVariable String parameter) throws ApplicationErrorException {
+<span class="nc" id="L113">		return productService.delete(parameter);</span>
 	}
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -13,6 +13,7 @@ import java.util.List;
 <span class="nc" id="L13">public class UnitDAO {</span>
 	@Autowired
 	private UnitMapper unitMapper;
+
 	/**
 	 * This method creates an Entry in the Unit table.
 	 *
@@ -22,10 +23,10 @@ import java.util.List;
 	 */
 	public Unit create(Unit unit) throws Exception {
 		try {
-<span class="nc" id="L25">			return unitMapper.create(unit);</span>
-<span class="nc" id="L26">		} catch(Exception e) {</span>
-<span class="nc" id="L27">			Throwable cause = e.getCause();</span>
-<span class="nc" id="L28">			throw handleException((SQLException)cause);</span>
+<span class="nc" id="L26">			return unitMapper.create(unit);</span>
+<span class="nc" id="L27">		} catch(Exception e) {</span>
+<span class="nc" id="L28">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L29">			throw handleException((SQLException)cause);</span>
 		}
 	}
 
@@ -37,11 +38,11 @@ import java.util.List;
 	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
 	 */
 	private Exception handleException(SQLException e) throws UniqueConstraintException, ApplicationErrorException, UnitCodeViolationException {
-<span class="nc bnc" id="L40" title="All 2 branches missed.">		if(e.getSQLState().equals(&quot;23505&quot;))</span>
-<span class="nc" id="L41">			throw new UniqueConstraintException(&quot;Unit Code must be unique!!! the Unit code you have entered Already exists&quot;);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">		else if(e.getSQLState().equals(&quot;23503&quot;))</span>
-<span class="nc" id="L43">			throw new UnitCodeViolationException(&quot;Unit code in use!! Cannot edit or delete!!&quot;);</span>
-<span class="nc" id="L44">		throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if(e.getSQLState().equals(&quot;23505&quot;))</span>
+<span class="nc" id="L42">			throw new UniqueConstraintException(&quot;Unit Code must be unique!!! the Unit code you have entered Already exists&quot;);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">		else if(e.getSQLState().equals(&quot;23503&quot;))</span>
+<span class="nc" id="L44">			throw new UnitCodeViolationException(&quot;Unit code in use!! Cannot edit or delete!!&quot;);</span>
+<span class="nc" id="L45">		throw new ApplicationErrorException(&quot;Application has went into an Error!!! Please Try again&quot;);</span>
 	}
 
 	/**
@@ -52,10 +53,10 @@ import java.util.List;
 	 */
 	public List&lt;Unit&gt; list() throws ApplicationErrorException {
 		try {
-<span class="nc" id="L55">			return unitMapper.list();</span>
-<span class="nc" id="L56">		} catch(Exception e) {</span>
-<span class="nc" id="L57">			e.printStackTrace();</span>
-<span class="nc" id="L58">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
+<span class="nc" id="L56">			return unitMapper.list();</span>
+<span class="nc" id="L57">		} catch(Exception e) {</span>
+<span class="nc" id="L58">			e.printStackTrace();</span>
+<span class="nc" id="L59">			throw new ApplicationErrorException(&quot;Application has went into an Error!!!\n Please Try again&quot;);</span>
 		}
 	}
 
@@ -68,10 +69,10 @@ import java.util.List;
 	 */
 	public Unit edit(Unit unit) throws Exception {
 		try {
-<span class="nc" id="L71">			return unitMapper.edit(unit);</span>
-<span class="nc" id="L72">		} catch(Exception e) {</span>
-<span class="nc" id="L73">			Throwable cause = e.getCause();</span>
-<span class="nc" id="L74">			throw handleException((SQLException)cause);</span>
+<span class="nc" id="L72">			return unitMapper.edit(unit);</span>
+<span class="nc" id="L73">		} catch(Exception e) {</span>
+<span class="nc" id="L74">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L75">			throw handleException((SQLException)cause);</span>
 		}
 	}
 
@@ -84,10 +85,10 @@ import java.util.List;
 	 */
 	public Integer delete(String code) throws Exception {
 		try {
-<span class="nc" id="L87">			return unitMapper.delete(code);</span>
-<span class="nc" id="L88">		} catch(Exception e) {</span>
-<span class="nc" id="L89">			Throwable cause = e.getCause();</span>
-<span class="nc" id="L90">			throw handleException((SQLException)cause);</span>
+<span class="nc" id="L88">			return unitMapper.delete(code);</span>
+<span class="nc" id="L89">		} catch(Exception e) {</span>
+<span class="nc" id="L90">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L91">			throw handleException((SQLException)cause);</span>
 		}
 	}
 
@@ -100,9 +101,9 @@ import java.util.List;
 	 */
 	public Unit findByCode(String code) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L103">			return unitMapper.findByCode(code);</span>
-<span class="nc" id="L104">		} catch(Exception e) {</span>
-<span class="nc" id="L105">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L104">			return unitMapper.findByCode(code);</span>
+<span class="nc" id="L105">		} catch(Exception e) {</span>
+<span class="nc" id="L106">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 }

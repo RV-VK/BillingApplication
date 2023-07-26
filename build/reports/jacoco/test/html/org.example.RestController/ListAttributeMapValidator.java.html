@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ListAttributeMapValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.RestController</a> &gt; <span class="el_source">ListAttributeMapValidator.java</span></div><h1>ListAttributeMapValidator.java</h1><pre class="source lang-java linenums">package org.example.RestController;
+
+import org.example.Service.InvalidTemplateException;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+@Component
+<span class="nc" id="L11">public class ListAttributeMapValidator {</span>
+	public void validate(HashMap&lt;String, String&gt; listAttributes, Class&lt;?&gt; callerClass) throws InvalidTemplateException {
+<span class="nc" id="L13">		String NUMBER_REGEX = &quot;^\\d+$&quot;;</span>
+<span class="nc" id="L14">		List&lt;String&gt; productAttributes = Arrays.asList(&quot;id&quot;, &quot;code&quot;, &quot;name&quot;, &quot;unitcode&quot;, &quot;type&quot;, &quot;price&quot;, &quot;stock&quot;);</span>
+<span class="nc" id="L15">		List&lt;String&gt; userAttributes = Arrays.asList(&quot;id&quot;, &quot;usertype&quot;, &quot;username&quot;, &quot;password&quot;, &quot;firstname&quot;, &quot;lastname&quot;, &quot;phonenumber&quot;);</span>
+<span class="nc" id="L16">		List&lt;String&gt; purchaseAttributes = Arrays.asList(&quot;id&quot;, &quot;date&quot;, &quot;invoice&quot;);</span>
+<span class="nc" id="L17">		List&lt;String&gt; saleAttributes = Arrays.asList(&quot;id&quot;, &quot;date&quot;);</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">		if(! listAttributes.get(&quot;Pagelength&quot;).matches(NUMBER_REGEX)) {</span>
+<span class="nc" id="L19">			System.out.println(listAttributes.get(&quot;Pagelength&quot;));</span>
+<span class="nc" id="L20">			throw new InvalidTemplateException(&quot;Pagelength Invalid! It must be number&quot;);</span>
+		}
+<span class="nc bnc" id="L22" title="All 2 branches missed.">		if(! listAttributes.get(&quot;Pagenumber&quot;).matches(NUMBER_REGEX))</span>
+<span class="nc" id="L23">			throw new InvalidTemplateException(&quot;Pagenumber Invalid! It mus be a number&quot;);</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">		if(listAttributes.get(&quot;Attribute&quot;) != null) {</span>
+<span class="nc bnc" id="L25" title="All 4 branches missed.">			if(callerClass.getSimpleName().equals(&quot;ProductController&quot;) &amp;&amp; ! productAttributes.contains(listAttributes.get(&quot;Attribute&quot;)))</span>
+<span class="nc" id="L26">				throw new InvalidTemplateException(&quot;Given Attribute is not A Searchable Attribute in Product&quot;);</span>
+<span class="nc bnc" id="L27" title="All 4 branches missed.">			else if(callerClass.getSimpleName().equals(&quot;UserController&quot;) &amp;&amp; ! userAttributes.contains(listAttributes.get(&quot;Attribute&quot;)))</span>
+<span class="nc" id="L28">				throw new InvalidTemplateException(&quot;Given Attribute is not A Searchable Attribute in User&quot;);</span>
+<span class="nc bnc" id="L29" title="All 4 branches missed.">			else if(callerClass.getSimpleName().equals(&quot;PurchaseController&quot;) &amp;&amp; ! purchaseAttributes.contains(listAttributes.get(&quot;Attribute&quot;)))</span>
+<span class="nc" id="L30">				throw new InvalidTemplateException(&quot;Given Attribute is not A Searchable Attribute in Purchase&quot;);</span>
+<span class="nc bnc" id="L31" title="All 4 branches missed.">			else if(callerClass.getSimpleName().equals(&quot;SalesController&quot;) &amp;&amp; ! saleAttributes.contains(listAttributes.get(&quot;Attribute&quot;)))</span>
+<span class="nc" id="L32">				throw new InvalidTemplateException(&quot;Given Attribute is not A Searchable Attribute in Sales&quot;);</span>
+		}
+<span class="nc" id="L34">	}</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

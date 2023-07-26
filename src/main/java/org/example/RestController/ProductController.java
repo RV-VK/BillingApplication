@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +18,8 @@ public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	@Autowired
 	private ProductService productService;
-	private List<Product> productList;
+	@Autowired
+	private ListAttributeMapValidator validator;
 	private HashMap<String, String> listAttributes = new HashMap<>();
 
 
@@ -29,13 +29,7 @@ public class ProductController {
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(ApplicationErrorException | PageCountOutOfBoundsException e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		return productService.list(listAttributes);
 	}
 
 	@GetMapping(path = "/products/{pageLength}", produces = "application/json")
@@ -44,14 +38,8 @@ public class ProductController {
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
-		validate(listAttributes);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		validator.validate(listAttributes, ProductController.class);
+		return productService.list(listAttributes);
 	}
 
 	@GetMapping(path = "/products/{pageLength}/{pageNumber}", produces = "application/json")
@@ -60,14 +48,8 @@ public class ProductController {
 		listAttributes.put("Pagenumber", pageNumber);
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
-		validate(listAttributes);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		validator.validate(listAttributes, ProductController.class);
+		return productService.list(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{searchText}", produces = "application/json")
@@ -76,13 +58,7 @@ public class ProductController {
 		listAttributes.put("Pagenumber", null);
 		listAttributes.put("Attribute", null);
 		listAttributes.put("Searchtext", searchText);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		return productService.list(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}", produces = "application/json")
@@ -91,14 +67,8 @@ public class ProductController {
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
-		validate(listAttributes);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		validator.validate(listAttributes, ProductController.class);
+		return productService.list(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}/{PageLength}", produces = "application/json")
@@ -107,14 +77,8 @@ public class ProductController {
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
-		validate(listAttributes);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		validator.validate(listAttributes, ProductController.class);
+		return productService.list(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}/{PageLength}/{PageNumber}", produces = "application/json")
@@ -123,74 +87,35 @@ public class ProductController {
 		listAttributes.put("Pagenumber", PageNumber);
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
-		validate(listAttributes);
-		try {
-			productList = productService.list(listAttributes);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return productList;
+		validator.validate(listAttributes, ProductController.class);
+		return productService.list(listAttributes);
 	}
 
 	@PostMapping(path = "/product", produces = "application/json")
 	public Product add(@RequestBody Product product) throws Exception {
-		Product createdProduct;
-		try {
-			createdProduct = productService.create(product);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return createdProduct;
+		return productService.create(product);
 	}
 
 	@GetMapping(path = "/countProducts", produces = "application/json")
-	public Integer countProducts() throws ApplicationErrorException {
+	public Integer count() throws ApplicationErrorException {
 		String attribute = "id";
 		String searchText = null;
-		Integer count;
-		try {
-			count = productService.count(attribute, searchText);
-		} catch(ApplicationErrorException e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return count;
+		return productService.count(attribute, searchText);
 	}
 
 	@PutMapping(path = "/product", produces = "application/json")
 	public Product edit(@RequestBody Product product) throws Exception {
-		Product editedProduct;
-		try {
-			editedProduct = productService.edit(product);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
-		return editedProduct;
+		return productService.edit(product);
 	}
 
 	@DeleteMapping(path = "/deleteProduct/{parameter}", produces = "application/json")
-	public Integer deleteProduct(@PathVariable String parameter) throws ApplicationErrorException {
-		try {
-			return productService.delete(parameter);
-		} catch(ApplicationErrorException e) {
-			logger.error(e.getMessage());
-			throw e;
-		}
+	public Integer delete(@PathVariable String parameter) throws ApplicationErrorException, InvalidTemplateException {
+		Integer statusCode;
+		statusCode = productService.delete(parameter);
+		if(statusCode == 1)
+			return statusCode;
+		else
+			throw new InvalidTemplateException("Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
 	}
 
-	private void validate(HashMap<String, String> listAttributes) throws InvalidTemplateException {
-		String NUMBER_REGEX = "^\\d+$";
-		List<String> productAttributes = Arrays.asList("id", "code", "name", "unitcode", "type", "price", "stock");
-		if(! listAttributes.get("Pagelength").matches(NUMBER_REGEX)) {
-			System.out.println(listAttributes.get("Pagelength"));
-			throw new InvalidTemplateException("Pagelength Invalid! It must be number");
-		}
-		if(! listAttributes.get("Pagenumber").matches(NUMBER_REGEX))
-			throw new InvalidTemplateException("Pagenumber Invalid! It mus be a number");
-		if(listAttributes.get("Attribute") != null && ! productAttributes.contains(listAttributes.get("Attribute")))
-			throw new InvalidTemplateException("Given Attribute is not A Searchable Attribute in Product");
-	}
 }

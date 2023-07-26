@@ -10,32 +10,36 @@ import java.sql.SQLException;
 
 
 @Service
-<span class="nc" id="L13">public class StoreServiceImplementation implements StoreService {</span>
-<span class="nc" id="L14">	private final String NAME_REGEX = &quot;^[a-zA-Z0-9\\s]{3,30}$&quot;;</span>
-<span class="nc" id="L15">	private final String PHONE_NUMBER_REGEX = &quot;^[6789]\\d{9}$&quot;;</span>
-<span class="nc" id="L16">	private final String GST_NUMBER_REGEX = &quot;^[a-zA-Z0-9]{15}$&quot;;</span>
+<span class="fc" id="L13">public class StoreServiceImplementation implements StoreService {</span>
+<span class="fc" id="L14">	private final String NAME_REGEX = &quot;^[a-zA-Z0-9\\s]{3,30}$&quot;;</span>
+<span class="fc" id="L15">	private final String PHONE_NUMBER_REGEX = &quot;^[6789]\\d{9}$&quot;;</span>
+<span class="fc" id="L16">	private final String GST_NUMBER_REGEX = &quot;^[a-zA-Z0-9]{15}$&quot;;</span>
 	@Autowired
 	private StoreDAO storeDAO;
 
 	@Override
 	public Store create(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L22">		validate(store);</span>
-<span class="nc" id="L23">		return storeDAO.create(store);</span>
+<span class="fc" id="L22">		validate(store);</span>
+<span class="fc" id="L23">		return storeDAO.create(store);</span>
 	}
 
 	@Override
 	public Store edit(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L28">		validate(store);</span>
-<span class="nc" id="L29">		return storeDAO.edit(store);</span>
+<span class="fc" id="L28">		validate(store);</span>
+<span class="fc" id="L29">		return storeDAO.edit(store);</span>
 	}
 
 
 	@Override
 	public Integer delete(String userName, String adminPassword) throws ApplicationErrorException {
-<span class="nc bnc" id="L35" title="All 4 branches missed.">		if(userName != null &amp;&amp; adminPassword != null)</span>
-<span class="nc" id="L36">			return storeDAO.delete(userName, adminPassword);</span>
+<span class="fc bfc" id="L35" title="All 4 branches covered.">		if(userName != null &amp;&amp; adminPassword != null)</span>
+<span class="fc" id="L36">			return storeDAO.delete(userName, adminPassword);</span>
 		else
-<span class="nc" id="L38">			throw new NullPointerException(&quot;Username Or Password Cannot be Null!!&quot;);</span>
+<span class="fc" id="L38">			throw new NullPointerException(&quot;Username Or Password Cannot be Null!!&quot;);</span>
+	}
+
+	public Store view() throws ApplicationErrorException {
+<span class="fc" id="L42">		return storeDAO.view();</span>
 	}
 
 	/**
@@ -44,14 +48,16 @@ import java.sql.SQLException;
 	 * @param store Store to be validated
 	 */
 	private void validate(Store store) throws InvalidTemplateException {
-<span class="nc bnc" id="L47" title="All 2 branches missed.">		if(store == null)</span>
-<span class="nc" id="L48">			throw new NullPointerException(&quot;Store cannot be Null!!&quot;);</span>
-<span class="nc bnc" id="L49" title="All 4 branches missed.">		if(store.getName() != null &amp;&amp; ! store.getName().matches(NAME_REGEX))</span>
-<span class="nc" id="L50">			throw new InvalidTemplateException(&quot;Invalid Store Name!!&quot;);</span>
-<span class="nc bnc" id="L51" title="All 4 branches missed.">		if(store.getPhoneNumber() != 0 &amp;&amp; ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
-<span class="nc" id="L52">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
-<span class="nc bnc" id="L53" title="All 4 branches missed.">		if(store.getGstCode() != null &amp;&amp; ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))</span>
-<span class="nc" id="L54">			throw new InvalidTemplateException(&quot;Invalid GstCode!!&quot;);</span>
-<span class="nc" id="L55">	}</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">		if(store == null)</span>
+<span class="fc" id="L52">			throw new NullPointerException(&quot;Store cannot be Null!!&quot;);</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">		if(store.getName() != null &amp;&amp; ! store.getName().matches(NAME_REGEX))</span>
+<span class="fc" id="L54">			throw new InvalidTemplateException(&quot;Invalid Store Name!!&quot;);</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">		if(store.getPhoneNumber() != 0 &amp;&amp; ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
+<span class="fc" id="L56">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">		if(store.getGstCode() != null &amp;&amp; ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))</span>
+<span class="fc" id="L58">			throw new InvalidTemplateException(&quot;Invalid GstCode!!&quot;);</span>
+<span class="fc" id="L59">	}</span>
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

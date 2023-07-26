@@ -1,6 +1,5 @@
 package org.example.DAO;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.example.Entity.Product;
 import org.example.Mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;

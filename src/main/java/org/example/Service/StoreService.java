@@ -18,6 +18,15 @@ public interface StoreService {
 	Store create(Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException;
 
 	/**
+	 * This method invokes the DAO of the Store entity and serves the View Function
+	 *
+	 * @return Store Object
+	 * @throws ApplicationErrorException Exception thrown due to Persistence problems.
+	 */
+	Store view() throws ApplicationErrorException;
+
+
+	/**
 	 * This method invokes the DAO of the Store entity and serves the Edit function.
 	 *
 	 * @param store Edited store.

@@ -13,6 +13,7 @@ import java.util.List;
 public class UnitDAO {
 	@Autowired
 	private UnitMapper unitMapper;
+
 	/**
 	 * This method creates an Entry in the Unit table.
 	 *
@@ -41,7 +42,7 @@ public class UnitDAO {
 			throw new UniqueConstraintException("Unit Code must be unique!!! the Unit code you have entered Already exists");
 		else if(e.getSQLState().equals("23503"))
 			throw new UnitCodeViolationException("Unit code in use!! Cannot edit or delete!!");
-		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		throw new ApplicationErrorException("Application has went into an Error!!! Please Try again");
 	}
 
 	/**

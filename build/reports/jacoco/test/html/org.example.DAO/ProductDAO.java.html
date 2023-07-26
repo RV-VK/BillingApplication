@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.DAO</a> &gt; <span class="el_source">ProductDAO.java</span></div><h1>ProductDAO.java</h1><pre class="source lang-java linenums">package org.example.DAO;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.example.Entity.Product;
 import org.example.Mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Component
-<span class="nc" id="L13">public class ProductDAO {</span>
+<span class="nc" id="L12">public class ProductDAO {</span>
 	@Autowired
 	private ProductMapper productMapper;
 
@@ -23,10 +22,10 @@ import java.util.List;
 	 */
 	public Product create(Product product) throws Exception {
 		try {
-<span class="nc" id="L26">			return productMapper.create(product);</span>
-<span class="nc" id="L27">		} catch(Exception e) {</span>
-<span class="nc" id="L28">			Throwable cause = e.getCause();</span>
-<span class="nc" id="L29">			throw handleException((SQLException)cause);</span>
+<span class="nc" id="L25">			return productMapper.create(product);</span>
+<span class="nc" id="L26">		} catch(Exception e) {</span>
+<span class="nc" id="L27">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L28">			throw handleException((SQLException)cause);</span>
 		}
 	}
 
@@ -39,15 +38,15 @@ import java.util.List;
 	 * @throws ApplicationErrorException  Exception thrown due to Persistence problems.
 	 */
 	private Exception handleException(SQLException e) throws UnitCodeViolationException, UniqueConstraintException, ApplicationErrorException {
-<span class="nc bnc" id="L42" title="All 2 branches missed.">		if(e.getSQLState().equals(&quot;23503&quot;)) {</span>
-<span class="nc" id="L43">			throw new UnitCodeViolationException(&quot;The unit Code you have entered  does not Exists!&quot;);</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">		} else if(e.getSQLState().equals(&quot;23505&quot;)) {</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">			if(e.getMessage().contains(&quot;product_name&quot;))</span>
-<span class="nc" id="L46">				throw new UniqueConstraintException(&quot;Name must be unique!\nThe Name you have entered already exists&quot;);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if(e.getSQLState().equals(&quot;23503&quot;)) {</span>
+<span class="nc" id="L42">			throw new UnitCodeViolationException(&quot;The unit Code you have entered  does not Exists!&quot;);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">		} else if(e.getSQLState().equals(&quot;23505&quot;)) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">			if(e.getMessage().contains(&quot;product_name&quot;))</span>
+<span class="nc" id="L45">				throw new UniqueConstraintException(&quot;Name must be unique!\nThe Name you have entered already exists&quot;);</span>
 			else
-<span class="nc" id="L48">				throw new UniqueConstraintException(&quot;Code must be unique! \nThe code you have entered already exists&quot;);</span>
+<span class="nc" id="L47">				throw new UniqueConstraintException(&quot;Code must be unique! \nThe code you have entered already exists&quot;);</span>
 		} else {
-<span class="nc" id="L50">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L49">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -62,15 +61,15 @@ import java.util.List;
 	public Integer count(String attribute, Object searchText) throws ApplicationErrorException {
 		try {
 			Integer count;
-<span class="nc bnc" id="L65" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
-<span class="nc" id="L66">				Double numericParameter = Double.parseDouble((String)searchText);</span>
-<span class="nc" id="L67">				count = productMapper.count(attribute, numericParameter);</span>
-<span class="nc" id="L68">			} else {</span>
-<span class="nc" id="L69">				count = productMapper.count(attribute, searchText);</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L65">				Double numericParameter = Double.parseDouble((String)searchText);</span>
+<span class="nc" id="L66">				count = productMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L67">			} else {</span>
+<span class="nc" id="L68">				count = productMapper.count(attribute, searchText);</span>
 			}
-<span class="nc" id="L71">			return count;</span>
-<span class="nc" id="L72">		} catch(Exception e) {</span>
-<span class="nc" id="L73">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L70">			return count;</span>
+<span class="nc" id="L71">		} catch(Exception e) {</span>
+<span class="nc" id="L72">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 
 	}
@@ -84,9 +83,9 @@ import java.util.List;
 	 */
 	public List&lt;Product&gt; searchList(String searchText) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L87">			return productMapper.searchList(searchText);</span>
-<span class="nc" id="L88">		} catch(Exception e) {</span>
-<span class="nc" id="L89">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L86">			return productMapper.searchList(searchText);</span>
+<span class="nc" id="L87">		} catch(Exception e) {</span>
+<span class="nc" id="L88">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -105,19 +104,19 @@ import java.util.List;
 		try {
 			Integer count;
 			List&lt;Product&gt; productList;
-<span class="nc bnc" id="L108" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
-<span class="nc" id="L109">				Double numericParameter = Double.parseDouble((String)searchText);</span>
-<span class="nc" id="L110">				count = productMapper.count(attribute, numericParameter);</span>
-<span class="nc" id="L111">				checkPagination(count, offset, pageLength);</span>
-<span class="nc" id="L112">				productList = productMapper.list(attribute, numericParameter, pageLength, offset);</span>
-<span class="nc" id="L113">			} else {</span>
-<span class="nc" id="L114">				count = productMapper.count(attribute, searchText);</span>
-<span class="nc" id="L115">				checkPagination(count, offset, pageLength);</span>
-<span class="nc" id="L116">				productList = productMapper.list(attribute, searchText, pageLength, offset);</span>
+<span class="nc bnc" id="L107" title="All 4 branches missed.">			if(searchText != null &amp;&amp; String.valueOf(searchText).matches(&quot;^\\d+(\\.\\d+)?$&quot;)) {</span>
+<span class="nc" id="L108">				Double numericParameter = Double.parseDouble((String)searchText);</span>
+<span class="nc" id="L109">				count = productMapper.count(attribute, numericParameter);</span>
+<span class="nc" id="L110">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L111">				productList = productMapper.list(attribute, numericParameter, pageLength, offset);</span>
+<span class="nc" id="L112">			} else {</span>
+<span class="nc" id="L113">				count = productMapper.count(attribute, searchText);</span>
+<span class="nc" id="L114">				checkPagination(count, offset, pageLength);</span>
+<span class="nc" id="L115">				productList = productMapper.list(attribute, searchText, pageLength, offset);</span>
 			}
-<span class="nc" id="L118">			return productList;</span>
-<span class="nc" id="L119">		} catch(Exception e) {</span>
-<span class="nc" id="L120">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L117">			return productList;</span>
+<span class="nc" id="L118">		} catch(Exception e) {</span>
+<span class="nc" id="L119">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -131,13 +130,13 @@ import java.util.List;
 	 *                                       non-existing page is prompted.
 	 */
 	private void checkPagination(int count, int offset, int pageLength) throws PageCountOutOfBoundsException {
-<span class="nc bnc" id="L134" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
+<span class="nc bnc" id="L133" title="All 4 branches missed.">		if(count &lt;= offset &amp;&amp; count != 0) {</span>
 			int pageCount;
-<span class="nc bnc" id="L136" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
-<span class="nc" id="L137">			else pageCount = (count / pageLength) + 1;</span>
-<span class="nc" id="L138">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">			if(count % pageLength == 0) pageCount = count / pageLength;</span>
+<span class="nc" id="L136">			else pageCount = (count / pageLength) + 1;</span>
+<span class="nc" id="L137">			throw new PageCountOutOfBoundsException(&quot;Requested Page doesnt Exist!!\nExisting Pagecount with given pagination &quot; + pageCount);</span>
 		}
-<span class="nc" id="L140">	}</span>
+<span class="nc" id="L139">	}</span>
 
 	/**
 	 * This method updates the attributes of the product entry in the Product table
@@ -148,10 +147,10 @@ import java.util.List;
 	 */
 	public Product edit(Product product) throws Exception {
 		try {
-<span class="nc" id="L151">			return productMapper.edit(product);</span>
-<span class="nc" id="L152">		} catch(Exception e) {</span>
-<span class="nc" id="L153">			Throwable cause = e.getCause();</span>
-<span class="nc" id="L154">			throw handleException((SQLException)cause);</span>
+<span class="nc" id="L150">			return productMapper.edit(product);</span>
+<span class="nc" id="L151">		} catch(Exception e) {</span>
+<span class="nc" id="L152">			Throwable cause = e.getCause();</span>
+<span class="nc" id="L153">			throw handleException((SQLException)cause);</span>
 		}
 	}
 
@@ -164,9 +163,9 @@ import java.util.List;
 	 */
 	public Integer delete(String parameter) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L167">			return productMapper.delete(parameter);</span>
-<span class="nc" id="L168">		} catch(Exception e) {</span>
-<span class="nc" id="L169">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L166">			return productMapper.delete(parameter);</span>
+<span class="nc" id="L167">		} catch(Exception e) {</span>
+<span class="nc" id="L168">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 
@@ -179,10 +178,10 @@ import java.util.List;
 	 */
 	public Product findByCode(String code) throws ApplicationErrorException {
 		try {
-<span class="nc" id="L182">			return productMapper.findByCode(code);</span>
-<span class="nc" id="L183">		} catch(Exception e) {</span>
-<span class="nc" id="L184">			System.out.println(e.getMessage());</span>
-<span class="nc" id="L185">			throw new ApplicationErrorException(e.getMessage());</span>
+<span class="nc" id="L181">			return productMapper.findByCode(code);</span>
+<span class="nc" id="L182">		} catch(Exception e) {</span>
+<span class="nc" id="L183">			System.out.println(e.getMessage());</span>
+<span class="nc" id="L184">			throw new ApplicationErrorException(e.getMessage());</span>
 		}
 	}
 }

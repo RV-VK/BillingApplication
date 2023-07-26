@@ -41,7 +41,7 @@ public class UserDAO {
 		if(exception.getSQLState().equals("23505")) {
 			throw new UniqueConstraintException("UserName must be unique!! The username you have entered already exists!!");
 		}
-		throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+		throw new ApplicationErrorException("Application has went into an Error!!! Please Try again");
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class UserDAO {
 			}
 			return count;
 		} catch(Exception e) {
-			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!! Please Try again");
 		}
 	}
 
@@ -79,7 +79,7 @@ public class UserDAO {
 			return userMapper.searchList(searchText);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
-			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!! Please Try again");
 		}
 	}
 
@@ -127,7 +127,7 @@ public class UserDAO {
 			int pageCount;
 			if(count % pageLength == 0) pageCount = count / pageLength;
 			else pageCount = (count / pageLength) + 1;
-			throw new PageCountOutOfBoundsException("Requested Page doesnt Exist!!\nExisting Pagecount with given pagination " + pageCount);
+			throw new PageCountOutOfBoundsException("Requested Page doesnt Exist!!  Existing Pagecount with given pagination " + pageCount);
 		}
 	}
 
@@ -159,7 +159,7 @@ public class UserDAO {
 			return userMapper.delete(username);
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new ApplicationErrorException("Application has went into an Error!!!\n Please Try again");
+			throw new ApplicationErrorException("Application has went into an Error!!!  Please Try again");
 		}
 	}
 

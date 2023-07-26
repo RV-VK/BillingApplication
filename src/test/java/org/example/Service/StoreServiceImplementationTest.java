@@ -60,7 +60,12 @@ class StoreServiceImplementationTest {
 		assertThrows(NullPointerException.class, () -> storeService.create(null));
 		verifyNoInteractions(storeDAO);
 	}
-
+	@Test
+	void viewShouldCallAndReturn() throws ApplicationErrorException {
+		when(storeDAO.view()).thenReturn(new Store());
+		assertNotNull(storeService.view());
+		verify(storeDAO, times(1)).view();
+	}
 	@Test
 	void editShouldCallAndReturnStore() throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		Store store = new Store("ABCD Stores", 8595449589L, "123-First Street Extension, CBE.", "1234567890ABCDE");
