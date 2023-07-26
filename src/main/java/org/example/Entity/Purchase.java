@@ -1,8 +1,11 @@
 package org.example.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Purchase {
 	private Integer id;
 	private String date;

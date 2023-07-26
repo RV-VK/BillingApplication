@@ -1,8 +1,10 @@
 package org.example.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Objects;
 
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PurchaseItem {
 	private Product product;
 	private Float quantity;

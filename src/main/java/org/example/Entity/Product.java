@@ -1,14 +1,17 @@
 package org.example.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
 	private Integer id;
 	private String code;
 	private String name;
 	private String unitcode;
 	private String type;
-	private Float stock;
+		private Float stock;
 	private Double price;
 
 	public Product() {
@@ -84,7 +87,8 @@ public class Product {
 		this.type = type;
 	}
 
-	public float getStock() {
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	public Float getStock() {
 		return stock;
 	}
 

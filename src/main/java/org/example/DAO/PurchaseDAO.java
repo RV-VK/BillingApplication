@@ -169,7 +169,7 @@ public class PurchaseDAO {
 			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);
 			int purchaseDeleted = purchaseMapper.delete(invoice);
 			if(purchaseItemDeleted > 0 && purchaseDeleted > 0) return 1;
-			else return - 1;
+			else return 0;
 		} catch(Exception e) {
 			throw new ApplicationErrorException(e.getMessage());
 		}
