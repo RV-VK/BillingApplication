@@ -26,7 +26,11 @@ public class UnitController {
 
 	@PutMapping(path = "/unit", produces = "application/json")
 	public Unit edit(@RequestBody Unit unit) throws Exception {
-		return unitService.edit(unit);
+		Unit editedUnit = unitService.edit(unit);
+		if(editedUnit == null)
+			throw new InvalidTemplateException("The Id doesnt exist to edit! Please give An Existing Id");
+		else
+			return editedUnit;
 	}
 
 	@DeleteMapping(path = "/deleteUnit/{unitCode}", produces = "application/json")

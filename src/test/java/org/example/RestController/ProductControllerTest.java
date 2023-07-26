@@ -144,7 +144,7 @@ public class ProductControllerTest {
 	}
 
 	@Test
-	void deleteProductShouldCallAndReturn() throws ApplicationErrorException {
+	void deleteProductShouldCallAndReturn() throws ApplicationErrorException, InvalidTemplateException {
 		String parameter = "G01";
 		when(productService.delete(parameter)).thenReturn(1);
 		assertEquals(1, productController.delete(parameter));

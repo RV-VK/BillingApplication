@@ -63,7 +63,7 @@ public class ProductController {
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}", produces = "application/json")
 	public List<Product> getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-		listAttributes.put("Pagelength", "20");
+		listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
@@ -105,7 +105,12 @@ public class ProductController {
 
 	@PutMapping(path = "/product", produces = "application/json")
 	public Product edit(@RequestBody Product product) throws Exception {
-		return productService.edit(product);
+		Product editedProduct = productService.edit(product);
+		if(editedProduct == null)
+			throw new InvalidTemplateException("The Id doesnt exist to edit! Please Give An Existing Id");
+		else
+			return editedProduct;
+
 	}
 
 	@DeleteMapping(path = "/deleteProduct/{parameter}", produces = "application/json")

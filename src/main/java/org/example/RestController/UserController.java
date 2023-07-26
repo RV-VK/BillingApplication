@@ -60,7 +60,7 @@ public class UserController {
 
 	@GetMapping(path = "/users/find/{attribute}/{searchText}", produces = "application/json")
 	public List<User> getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-		listAttributes.put("Pagelength", "20");
+		listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
@@ -102,7 +102,11 @@ public class UserController {
 
 	@PutMapping(path = "/user", produces = "application/json")
 	public User edit(@RequestBody User user) throws Exception {
-		return userService.edit(user);
+		User editedtUser = userService.edit(user);
+		if(editedtUser == null)
+			throw new InvalidTemplateException("The Id doesnt exists to edit! Please Give an Existing Id");
+		else
+			return editedtUser;
 	}
 
 	@DeleteMapping(path = "/deleteUser/{username}", produces = "application/json")
