@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.Service.UnitServiceImplementationTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2023-07-27T05:38:13" hostname="apnxdesk006-Veriton-M200-H61" time="0.145">
+  <properties/>
+  <testcase name="deleteShouldCallAndReturnStatusCode()" classname="org.example.Service.UnitServiceImplementationTest" time="0.006"/>
+  <testcase name="[1] Unit{id=null, name='Kilogr32am', code='kg', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[2] Unit{id=null, name='Kilogram', code='kgndalndsa', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[1] Unit{id=null, name='Kilogr32am', code='kg', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.005"/>
+  <testcase name="[2] Unit{id=null, name='Kilogram', code='kgndalndsa', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.003"/>
+  <testcase name="listCallsAndReturnsList()" classname="org.example.Service.UnitServiceImplementationTest" time="0.007"/>
+  <testcase name="editShouldCallAndReturnUnit()" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[1] null" classname="org.example.Service.UnitServiceImplementationTest" time="0.003"/>
+  <testcase name="[2] Unit{id=null, name='null', code='kg', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.003"/>
+  <testcase name="[3] Unit{id=null, name='Kilogram', code='null', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[4] Unit{id=null, name='Kilogram', code='kg', description='null', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.003"/>
+  <testcase name="[5] Unit{id=null, name='Kilogram', code='kg', description='Unit of Larger Masses', isDividable=null}" classname="org.example.Service.UnitServiceImplementationTest" time="0.003"/>
+  <testcase name="createShouldCallAndReturnUnit()" classname="org.example.Service.UnitServiceImplementationTest" time="0.005"/>
+  <testcase name="[1] null" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[2] Unit{id=null, name='null', code='kg', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[3] Unit{id=null, name='Kilogram', code='null', description='Unit of Larger Masses', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.003"/>
+  <testcase name="[4] Unit{id=null, name='Kilogram', code='kg', description='null', isDividable=true}" classname="org.example.Service.UnitServiceImplementationTest" time="0.004"/>
+  <testcase name="[5] Unit{id=null, name='Kilogram', code='kg', description='Unit of Larger Masses', isDividable=null}" classname="org.example.Service.UnitServiceImplementationTest" time="0.005"/>
+  <testcase name="deleteUserNullValidation()" classname="org.example.Service.UnitServiceImplementationTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

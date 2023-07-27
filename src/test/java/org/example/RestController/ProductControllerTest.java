@@ -119,7 +119,7 @@ public class ProductControllerTest {
 
 	@Test
 	void addProductShouldCallAndReturnTest() throws Exception {
-		Product product = new Product("G01", "Garlic", "kg", "Grocery", 2, 50);
+		Product product = new Product("G01", "Garlic", "kg", "Grocery", 2F, 50.0);
 		when(productService.create(product)).thenReturn(product);
 		assertEquals(product, productController.add(product));
 		verify(productService, times(1)).create(product);
@@ -137,7 +137,7 @@ public class ProductControllerTest {
 
 	@Test
 	void editProductShouldCallAndReturn() throws Exception {
-		Product product = new Product(101, "G11", "Ginger", "kg", "Grocery", 5, 55);
+		Product product = new Product(101, "G11", "Ginger", "kg", "Grocery", 5F, 55);
 		when(productService.edit(product)).thenReturn(product);
 		assertEquals(product, productController.edit(product));
 		verify(productService, times(1)).edit(product);

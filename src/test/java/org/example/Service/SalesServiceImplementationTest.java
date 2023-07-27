@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +83,7 @@ class SalesServiceImplementationTest {
 
 	@Test
 	void createShouldCallAndReturnSales() throws Exception {
-		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 5, 20));
+		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 5F, 20.0));
 		when(unitDAO.findByCode(anyString())).thenReturn(new Unit("Unit", "un", "desc", true));
 		when(salesDAO.create(sales)).thenReturn(sales);
 		assertNotNull(salesService.create(sales));
@@ -98,7 +99,7 @@ class SalesServiceImplementationTest {
 
 	@Test
 	void createShouldThrowExceptionWhenDividabilityViolated() throws Exception {
-		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 5, 20));
+		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 5F, 20.0));
 		when(unitDAO.findByCode(anyString())).thenReturn(new Unit("Unit", "un", "desc", false));
 		assertThrows(UnDividableEntityException.class, () -> salesService.create(sales));
 		verifyNoInteractions(salesDAO);
@@ -106,7 +107,7 @@ class SalesServiceImplementationTest {
 
 	@Test
 	void createShouldThrowExceptionWhenStockIsOut() throws Exception {
-		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 1, 20));
+		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 1F, 20.0));
 		assertThrows(ApplicationErrorException.class, () -> salesService.create(sales));
 		verifyNoInteractions(salesDAO);
 	}
@@ -122,6 +123,7 @@ class SalesServiceImplementationTest {
 	@Test
 	void createSalesNullValidation() {
 		assertThrows(NullPointerException.class, () -> salesService.create(null));
+		assertThrows(NullPointerException.class, () -> salesService.create(new Sales(null, new ArrayList<>(), 250.0)));
 		verifyNoInteractions(salesDAO);
 
 	}

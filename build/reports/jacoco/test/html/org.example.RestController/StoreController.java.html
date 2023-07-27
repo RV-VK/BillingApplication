@@ -17,23 +17,34 @@ import java.sql.SQLException;
 	private StoreService storeService;
 
 	@GetMapping(path = &quot;/store&quot;, produces = &quot;application/json&quot;)
-	public Store view() throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L21">		return storeService.create(new Store());</span>
+	public Store view() throws ApplicationErrorException {
+<span class="nc" id="L21">		return storeService.view();</span>
 	}
 
 	@PostMapping(path = &quot;/store&quot;, produces = &quot;application/json&quot;)
 	public Store add(@RequestBody Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L26">		return storeService.create(store);</span>
+<span class="nc" id="L26">		Store createdStore = storeService.create(store);</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		if(createdStore == null)</span>
+<span class="nc" id="L28">			throw new InvalidTemplateException(&quot;Store Already Exists!&quot;);</span>
+		else
+<span class="nc" id="L30">			return createdStore;</span>
 	}
 
 	@PutMapping(path = &quot;/store&quot;, produces = &quot;application/json&quot;)
 	public Store edit(@RequestBody Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L31">		return storeService.edit(store);</span>
+<span class="nc" id="L35">		return storeService.edit(store);</span>
 	}
 
 	@DeleteMapping(path = &quot;/deleteStore/{userName}/{passWord}&quot;, produces = &quot;application/json&quot;)
-	public Integer delete(@PathVariable String userName, @PathVariable String passWord) throws ApplicationErrorException {
-<span class="nc" id="L36">		return storeService.delete(userName, passWord);</span>
+	public Integer delete(@PathVariable String userName, @PathVariable String passWord) throws ApplicationErrorException, InvalidTemplateException {
+		Integer statusCode;
+<span class="nc" id="L41">		statusCode = storeService.delete(userName, passWord);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		if(statusCode == - 1) {</span>
+<span class="nc" id="L43">			throw new InvalidTemplateException(&quot;Invalid Admin Password!&quot;);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		} else if(statusCode == 0) {</span>
+<span class="nc" id="L45">			throw new InvalidTemplateException(&quot;No Store Exists to delete!&quot;);</span>
+		} else
+<span class="nc" id="L47">			return statusCode;</span>
 	}
 
 

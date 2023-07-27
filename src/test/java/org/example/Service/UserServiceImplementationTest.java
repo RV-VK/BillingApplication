@@ -35,11 +35,11 @@ class UserServiceImplementationTest {
 
 	public static Stream<Arguments> userProvider() {
 		return Stream.of(Arguments.of(new User("Some", "Thomas", "Thomas2121", "Thomas", "Shelby", 8954709985L)),
-				Arguments.of(new User("Thomas", "Thom12as", "Thomas2121", "Thomas", "Shelby", 8954709985L)),
-				Arguments.of(new User("Thomas", "Thomas", "T@21", "Thomas", "Shelby", 8954709985L)),
-				Arguments.of(new User("Thomas", "Thomas", "Thomas2121", "Thom243as", "Shelby", 8954709985L)),
-				Arguments.of(new User("Thomas", "Thomas", "Thomas2121", "Thomas", "Sh31elby", 8954709985L)),
-				Arguments.of(new User("Thomas", "Thomas", "Thomas2121", "Thomas", "Shelby", 231)));
+				Arguments.of(new User("Admin", "Thom12as", "Thomas2121", "Thomas", "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "T@21", "Thomas", "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "Thomas2121", "Thom243as", "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "Thomas2121", "Thomas", "Sh31elby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "Thomas2121", "Thomas", "Shelby", 231)));
 	}
 
 	public static Stream<Arguments> mapProvider() {
@@ -54,6 +54,15 @@ class UserServiceImplementationTest {
 			put("Attribute", "id");
 			put("Searchtext", null);
 		}}));
+	}
+
+	public static Stream<Arguments> userNullProvider() {
+		return Stream.of(Arguments.of((Object)null), Arguments.of(new User(null, "Thomas", "Thomas2121", "Thomas", "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", null, "Thomas2121", "Thomas", "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", null, "Thomas", "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "Thomas2121", null, "Shelby", 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "Thomas2121", "Thomas", null, 8954709985L)),
+				Arguments.of(new User("Admin", "Thomas", "Thomas2121", "Thomas", "Shelby", null)));
 	}
 
 	@BeforeEach
@@ -78,9 +87,10 @@ class UserServiceImplementationTest {
 		verifyNoInteractions(userDAO);
 	}
 
-	@Test
-	void createUserNullValidation() {
-		assertThrows(NullPointerException.class, () -> userService.create(null));
+	@ParameterizedTest
+	@MethodSource("userNullProvider")
+	void createUserNullValidation(User user) {
+		assertThrows(NullPointerException.class, () -> userService.create(user));
 		verifyNoInteractions(userDAO);
 	}
 
@@ -133,9 +143,10 @@ class UserServiceImplementationTest {
 		verifyNoInteractions(userDAO);
 	}
 
-	@Test
-	void editProductNullValidation() {
-		assertThrows(NullPointerException.class, () -> userService.edit(null));
+	@ParameterizedTest
+	@MethodSource("userNullProvider")
+	void editUserNullValidation(User user) {
+		assertThrows(NullPointerException.class, () -> userService.edit(user));
 		verifyNoInteractions(userDAO);
 	}
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.Service.ProductServiceImplementationTest" tests="30" skipped="0" failures="0" errors="0" timestamp="2023-07-27T05:38:12" hostname="apnxdesk006-Veriton-M200-H61" time="0.48">
+  <properties/>
+  <testcase name="[1] null" classname="org.example.Service.ProductServiceImplementationTest" time="0.107"/>
+  <testcase name="[2] Product{id=null, code='null', name='A', unitcode='kg', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.009"/>
+  <testcase name="[3] Product{id=null, code='G41', name='null', unitcode='kgDAsAS', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.009"/>
+  <testcase name="[4] Product{id=null, code='G41', name='Avocado', unitcode='null', type='Grocery221', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.01"/>
+  <testcase name="[5] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='null', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.007"/>
+  <testcase name="[6] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='Grocery', availableQuantity=null, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.01"/>
+  <testcase name="[7] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='Grocery', availableQuantity=0.0, price=null}" classname="org.example.Service.ProductServiceImplementationTest" time="0.01"/>
+  <testcase name="deleteShouldCallAndReturnStatusCode()" classname="org.example.Service.ProductServiceImplementationTest" time="0.021"/>
+  <testcase name="[1] Product{id=null, code='G', name='Avocado', unitcode='kg', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.005"/>
+  <testcase name="[2] Product{id=null, code='G41', name='A', unitcode='kg', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.009"/>
+  <testcase name="[3] Product{id=null, code='G41', name='Avocado', unitcode='kgDAsAS', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.007"/>
+  <testcase name="[4] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='Grocery221', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.008"/>
+  <testcase name="listWithSearchTextAloneCallsAndReturnsList()" classname="org.example.Service.ProductServiceImplementationTest" time="0.016"/>
+  <testcase name="[1] {Pagenumber=1, Searchtext=Grocery, Attribute=type, Pagelength=10}" classname="org.example.Service.ProductServiceImplementationTest" time="0.018"/>
+  <testcase name="[2] {Pagenumber=1, Searchtext=null, Attribute=id, Pagelength=10}" classname="org.example.Service.ProductServiceImplementationTest" time="0.009"/>
+  <testcase name="countShouldReturnCallandReturn()" classname="org.example.Service.ProductServiceImplementationTest" time="0.009"/>
+  <testcase name="[1] Product{id=null, code='G', name='Avocado', unitcode='kg', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.006"/>
+  <testcase name="[2] Product{id=null, code='G41', name='A', unitcode='kg', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.006"/>
+  <testcase name="[3] Product{id=null, code='G41', name='Avocado', unitcode='kgDAsAS', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.007"/>
+  <testcase name="[4] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='Grocery221', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.005"/>
+  <testcase name="createShouldCallAndReturnProduct()" classname="org.example.Service.ProductServiceImplementationTest" time="0.004"/>
+  <testcase name="[1] null" classname="org.example.Service.ProductServiceImplementationTest" time="0.019"/>
+  <testcase name="[2] Product{id=null, code='null', name='A', unitcode='kg', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.006"/>
+  <testcase name="[3] Product{id=null, code='G41', name='null', unitcode='kgDAsAS', type='Grocery', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.005"/>
+  <testcase name="[4] Product{id=null, code='G41', name='Avocado', unitcode='null', type='Grocery221', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.005"/>
+  <testcase name="[5] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='null', availableQuantity=0.0, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.01"/>
+  <testcase name="[6] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='Grocery', availableQuantity=null, price=50.0}" classname="org.example.Service.ProductServiceImplementationTest" time="0.004"/>
+  <testcase name="[7] Product{id=null, code='G41', name='Avocado', unitcode='kg', type='Grocery', availableQuantity=0.0, price=null}" classname="org.example.Service.ProductServiceImplementationTest" time="0.005"/>
+  <testcase name="deleteProductNullValidation()" classname="org.example.Service.ProductServiceImplementationTest" time="0.003"/>
+  <testcase name="editShouldCallAndReturnProduct()" classname="org.example.Service.ProductServiceImplementationTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

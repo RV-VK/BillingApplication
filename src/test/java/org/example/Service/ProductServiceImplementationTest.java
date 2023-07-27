@@ -34,7 +34,7 @@ class ProductServiceImplementationTest {
 	private ProductDAO productDAO;
 
 	private static Stream<Arguments> productProvider() {
-		return Stream.of(Arguments.of(new Product("G", "Avocado", "kg", "Grocery", 0, 50)), Arguments.of(new Product("G41", "A", "kg", "Grocery", 0, 50)), Arguments.of(new Product("G41", "Avocado", "kgDAsAS", "Grocery", 0, 50)), Arguments.of(new Product("G41", "Avocado", "kg", "Grocery221", 0, 50)));
+		return Stream.of(Arguments.of(new Product("G", "Avocado", "kg", "Grocery", 0F, 50.0)), Arguments.of(new Product("G41", "A", "kg", "Grocery", 0F, 50.0)), Arguments.of(new Product("G41", "Avocado", "kgDAsAS", "Grocery", 0F, 50.0)), Arguments.of(new Product("G41", "Avocado", "kg", "Grocery221", 0F, 50.0)));
 	}
 
 	public static Stream<Arguments> mapProvider() {
@@ -50,6 +50,14 @@ class ProductServiceImplementationTest {
 			put("Searchtext", null);
 		}}));
 	}
+
+	public static Stream<Arguments> productNullProvider() {
+		return Stream.of(Arguments.of((Object)null), Arguments.of(new Product(null, "A", "kg", "Grocery", 0F, 50.0)), Arguments.of(new Product("G41", null, "kgDAsAS", "Grocery", 0F, 50.0)), Arguments.of(new Product("G41", "Avocado", null, "Grocery221", 0F, 50.0)),
+				Arguments.of(new Product("G41", "Avocado", "kg", null, 0F, 50.0)),
+				Arguments.of(new Product("G41", "Avocado", "kg", "Grocery", null, 50.0)),
+				Arguments.of(new Product("G41", "Avocado", "kg", "Grocery", 0F, null)));
+	}
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -57,7 +65,7 @@ class ProductServiceImplementationTest {
 
 	@Test
 	void createShouldCallAndReturnProduct() throws Exception {
-		Product product = new Product("G41", "Avocado", "kg", "Grocery", 0, 50);
+		Product product = new Product("G41", "Avocado", "kg", "Grocery", 0F, 50.0);
 		when(productDAO.create(product)).thenReturn(product);
 		Product createdProduct = productService.create(product);
 		assertNotNull(createdProduct);
@@ -72,9 +80,10 @@ class ProductServiceImplementationTest {
 		verifyNoInteractions(productDAO);
 	}
 
-	@Test
-	void createProductNullValidation() {
-		assertThrows(NullPointerException.class, () -> productService.create(null));
+	@ParameterizedTest
+	@MethodSource("productNullProvider")
+	void createProductNullValidation(Product product) {
+		assertThrows(NullPointerException.class, () -> productService.create(product));
 		verifyNoInteractions(productDAO);
 	}
 
@@ -112,7 +121,7 @@ class ProductServiceImplementationTest {
 
 	@Test
 	void editShouldCallAndReturnProduct() throws Exception {
-		Product product = new Product("G41", "Avocado", "kg", "Grocery", 0, 60);
+		Product product = new Product("G41", "Avocado", "kg", "Grocery", 0F, 60.0);
 		when(productDAO.edit(product)).thenReturn(product);
 		Product editedProduct = productService.edit(product);
 		assertNotNull(editedProduct);
@@ -127,9 +136,10 @@ class ProductServiceImplementationTest {
 		verifyNoInteractions(productDAO);
 	}
 
-	@Test
-	void editProductNullValidation() {
-		assertThrows(NullPointerException.class, () -> productService.edit(null));
+	@ParameterizedTest
+	@MethodSource("productNullProvider")
+	void editProductNullValidation(Product product) {
+		assertThrows(NullPointerException.class, () -> productService.edit(product));
 		verifyNoInteractions(productDAO);
 	}
 

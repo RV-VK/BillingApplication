@@ -17,6 +17,14 @@ public class Store {
 		this.gstCode = gstCode;
 	}
 
+	public Store(String name, Long phoneNumber, String address, String gstCode) {
+		this.name = name;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.gstCode = gstCode;
+	}
+
+
 	public String getName() {
 		return name;
 	}

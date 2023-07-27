@@ -60,7 +60,7 @@ import java.util.List;
 
 	@GetMapping(path = &quot;/users/find/{attribute}/{searchText}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L63">		listAttributes.put(&quot;Pagelength&quot;, &quot;20&quot;);</span>
+<span class="nc" id="L63">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
 <span class="nc" id="L64">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
 <span class="nc" id="L65">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
 <span class="nc" id="L66">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
@@ -102,12 +102,20 @@ import java.util.List;
 
 	@PutMapping(path = &quot;/user&quot;, produces = &quot;application/json&quot;)
 	public User edit(@RequestBody User user) throws Exception {
-<span class="nc" id="L105">		return userService.edit(user);</span>
+<span class="nc" id="L105">		User editedtUser = userService.edit(user);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		if(editedtUser == null)</span>
+<span class="nc" id="L107">			throw new InvalidTemplateException(&quot;The Id doesnt exists to edit! Please Give an Existing Id&quot;);</span>
+		else
+<span class="nc" id="L109">			return editedtUser;</span>
 	}
 
 	@DeleteMapping(path = &quot;/deleteUser/{username}&quot;, produces = &quot;application/json&quot;)
-	public Integer delete(@PathVariable String username) throws ApplicationErrorException {
-<span class="nc" id="L110">		return userService.delete(username);</span>
+	public Integer delete(@PathVariable String username) throws ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L114">		Integer statusCode = userService.delete(username);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if(statusCode == 1)</span>
+<span class="nc" id="L116">			return statusCode;</span>
+		else
+<span class="nc" id="L118">			throw new InvalidTemplateException(&quot;Username doesnt Exists!&quot;);</span>
 	}
 
 }

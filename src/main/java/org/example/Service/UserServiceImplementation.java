@@ -73,15 +73,27 @@ public class UserServiceImplementation implements UserService {
 			throw new NullPointerException("User Cannot be Null!!");
 		if(user.getUserName() != null && ! user.getUserName().matches(NAME_REGEX))
 			throw new InvalidTemplateException("Invalid UserName!!");
+		else if(user.getUserName() == null)
+			throw new NullPointerException("Username cannot be null!");
 		if(user.getFirstName() != null && ! user.getFirstName().matches(NAME_REGEX))
 			throw new InvalidTemplateException("Invalid FirstName!!");
+		else if(user.getFirstName() == null)
+			throw new NullPointerException("FirstName Cannot be null");
 		if(user.getLastName() != null && ! user.getLastName().matches(LAST_NAME_REGEX))
 			throw new InvalidTemplateException("Invalid LastName!!");
+		else if(user.getLastName() == null)
+			throw new NullPointerException("LastName cannot be null");
 		if(user.getPassWord() != null && ! user.getPassWord().matches(PASSWORD_REGEX))
 			throw new InvalidTemplateException("Invalid Password!!");
-		if(user.getPhoneNumber() != 0 && ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
+		else if(user.getPassWord() == null)
+			throw new NullPointerException("Password Cannot be null!");
+		if(user.getPhoneNumber() != null && ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
 			throw new InvalidTemplateException("Invalid Phone-number!!");
+		else if(user.getPhoneNumber() == null)
+			throw new NullPointerException("PhoneNumber cannot be null");
 		if(user.getUserType() != null && ! userTypeList.contains(user.getUserType()))
 			throw new InvalidTemplateException("Invalid Usertype!!");
+		else if(user.getUserType() == null)
+			throw new NullPointerException("UserType Cannot be null!");
 	}
 }

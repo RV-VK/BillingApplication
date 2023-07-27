@@ -50,13 +50,21 @@ import java.sql.SQLException;
 	private void validate(Store store) throws InvalidTemplateException {
 <span class="fc bfc" id="L51" title="All 2 branches covered.">		if(store == null)</span>
 <span class="fc" id="L52">			throw new NullPointerException(&quot;Store cannot be Null!!&quot;);</span>
-<span class="pc bpc" id="L53" title="1 of 4 branches missed.">		if(store.getName() != null &amp;&amp; ! store.getName().matches(NAME_REGEX))</span>
+<span class="fc bfc" id="L53" title="All 4 branches covered.">		if(store.getName() != null &amp;&amp; ! store.getName().matches(NAME_REGEX))</span>
 <span class="fc" id="L54">			throw new InvalidTemplateException(&quot;Invalid Store Name!!&quot;);</span>
-<span class="pc bpc" id="L55" title="1 of 4 branches missed.">		if(store.getPhoneNumber() != 0 &amp;&amp; ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
-<span class="fc" id="L56">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
-<span class="pc bpc" id="L57" title="1 of 4 branches missed.">		if(store.getGstCode() != null &amp;&amp; ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))</span>
-<span class="fc" id="L58">			throw new InvalidTemplateException(&quot;Invalid GstCode!!&quot;);</span>
-<span class="fc" id="L59">	}</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		else if(store.getName() == null)</span>
+<span class="fc" id="L56">			throw new NullPointerException(&quot;Store Name cannot be null!&quot;);</span>
+<span class="fc bfc" id="L57" title="All 4 branches covered.">		if(store.getPhoneNumber() != null &amp;&amp; ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
+<span class="fc" id="L58">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		else if(store.getPhoneNumber() == null)</span>
+<span class="fc" id="L60">			throw new NullPointerException(&quot;PhoneNumber cannot be null!&quot;);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		if(store.getAddress() == null)</span>
+<span class="fc" id="L62">			throw new NullPointerException(&quot;Address Cannot be null!&quot;);</span>
+<span class="fc bfc" id="L63" title="All 4 branches covered.">		if(store.getGstCode() != null &amp;&amp; ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))</span>
+<span class="fc" id="L64">			throw new InvalidTemplateException(&quot;Invalid GstCode!!&quot;);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">		else if(store.getGstCode() == null)</span>
+<span class="fc" id="L66">			throw new NullPointerException(&quot;GstCode Cannot be null!&quot;);</span>
+<span class="fc" id="L67">	}</span>
 
 
 }

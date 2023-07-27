@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">13</div>
+<div class="counter">21</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">2.736s</div>
+<div class="counter">0.066s</div>
 <p>duration</p>
 </div>
 </td>
@@ -78,13 +78,13 @@
 <tr>
 <td class="success">createShouldCallAndReturnStore()</td>
 <td class="success">createShouldCallAndReturnStore()</td>
-<td class="success">0.004s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">[1] Store{name='A', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
 <td class="success">createShouldThrowExceptionWhenFormatMismatch(Store)[1]</td>
-<td class="success">0.056s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -96,61 +96,109 @@
 <tr>
 <td class="success">[3] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='123890ABCDE'}</td>
 <td class="success">createShouldThrowExceptionWhenFormatMismatch(Store)[3]</td>
-<td class="success">0.008s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">createStoreNullValidation()</td>
-<td class="success">createStoreNullValidation()</td>
+<td class="success">[1] null</td>
+<td class="success">createStoreNullValidation(Store)[1]</td>
 <td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] Store{name='null', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
+<td class="success">createStoreNullValidation(Store)[2]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[3] Store{name='ABC Stores', phoneNumber=null, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
+<td class="success">createStoreNullValidation(Store)[3]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[4] Store{name='ABC Stores', phoneNumber=8595449589, address='null', gstCode='123890ABCDE'}</td>
+<td class="success">createStoreNullValidation(Store)[4]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[5] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='null'}</td>
+<td class="success">createStoreNullValidation(Store)[5]</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">deleteShouldCallAndReturnStatusCode()</td>
 <td class="success">deleteShouldCallAndReturnStatusCode()</td>
-<td class="success">2.608s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">deleteUserNullValidation()</td>
 <td class="success">deleteUserNullValidation()</td>
-<td class="success">0.004s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">editProductNullValidation()</td>
-<td class="success">editProductNullValidation()</td>
-<td class="success">0.010s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">editShouldCallAndReturnStore()</td>
 <td class="success">editShouldCallAndReturnStore()</td>
-<td class="success">0.013s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">[1] Store{name='A', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
 <td class="success">editShouldThrowExceptionWhenFormatMismatch(Store)[1]</td>
-<td class="success">0.004s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">[2] Store{name='ABC Stores', phoneNumber=8599589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
 <td class="success">editShouldThrowExceptionWhenFormatMismatch(Store)[2]</td>
-<td class="success">0.004s</td>
+<td class="success">0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">[3] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='123890ABCDE'}</td>
 <td class="success">editShouldThrowExceptionWhenFormatMismatch(Store)[3]</td>
-<td class="success">0.004s</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] null</td>
+<td class="success">editStoreNullValidation(Store)[1]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] Store{name='null', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
+<td class="success">editStoreNullValidation(Store)[2]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[3] Store{name='ABC Stores', phoneNumber=null, address='123-First Street Extension, CBE.', gstCode='1234567890ABCDE'}</td>
+<td class="success">editStoreNullValidation(Store)[3]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[4] Store{name='ABC Stores', phoneNumber=8595449589, address='null', gstCode='123890ABCDE'}</td>
+<td class="success">editStoreNullValidation(Store)[4]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[5] Store{name='ABC Stores', phoneNumber=8595449589, address='123-First Street Extension, CBE.', gstCode='null'}</td>
+<td class="success">editStoreNullValidation(Store)[5]</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">viewShouldCallAndReturn()</td>
 <td class="success">viewShouldCallAndReturn()</td>
-<td class="success">0.011s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -163,7 +211,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.5.1</a> at 26-Jul-2023, 2:30:12 pm</p>
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at 27-Jul-2023, 11:08:14 am</p>
 </div>
 </div>
 </body>

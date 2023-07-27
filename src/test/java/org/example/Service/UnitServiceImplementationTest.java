@@ -36,6 +36,13 @@ class UnitServiceImplementationTest {
 				Arguments.of(new Unit("Kilogram", "kgndalndsa", "Unit of Larger Masses", true)));
 	}
 
+	public static Stream<Arguments> unitNullProvider() {
+		return Stream.of(Arguments.of((Unit)null), Arguments.of(new Unit(null, "kg", "Unit of Larger Masses", true)),
+				Arguments.of(new Unit("Kilogram", null, "Unit of Larger Masses", true)),
+				Arguments.of(new Unit("Kilogram", "kg", null, true)),
+				Arguments.of(new Unit("Kilogram", "kg", "Unit of Larger Masses", null)));
+	}
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -58,9 +65,10 @@ class UnitServiceImplementationTest {
 		verifyNoInteractions(unitDAO);
 	}
 
-	@Test
-	void createUnitNullValidation() {
-		assertThrows(NullPointerException.class, () -> unitService.create(null));
+	@ParameterizedTest
+	@MethodSource("unitNullProvider")
+	void createUnitNullValidation(Unit unit) {
+		assertThrows(NullPointerException.class, () -> unitService.create(unit));
 		verifyNoInteractions(unitDAO);
 	}
 
@@ -90,9 +98,10 @@ class UnitServiceImplementationTest {
 		verifyNoInteractions(unitDAO);
 	}
 
-	@Test
-	void editProductNullValidation() {
-		assertThrows(NullPointerException.class, () -> unitService.edit(null));
+	@ParameterizedTest
+	@MethodSource("unitNullProvider")
+	void editProductNullValidation(Unit unit) {
+		assertThrows(NullPointerException.class, () -> unitService.edit(unit));
 		verifyNoInteractions(unitDAO);
 	}
 

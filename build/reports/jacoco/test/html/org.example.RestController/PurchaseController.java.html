@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PurchaseController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BillingApplication</a> &gt; <a href="index.source.html" class="el_package">org.example.RestController</a> &gt; <span class="el_source">PurchaseController.java</span></div><h1>PurchaseController.java</h1><pre class="source lang-java linenums">package org.example.RestController;
+
+import org.example.DAO.ApplicationErrorException;
+import org.example.DAO.PageCountOutOfBoundsException;
+import org.example.Entity.Purchase;
+import org.example.Service.InvalidTemplateException;
+import org.example.Service.PurchaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+
+@RestController
+<span class="nc" id="L15">public class PurchaseController {</span>
+	@Autowired
+	private PurchaseService purchaseService;
+	@Autowired
+	private ListAttributeMapValidator validator;
+<span class="nc" id="L20">	private HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
+
+	@GetMapping(path = &quot;/purchases&quot;, produces = &quot;application/json&quot;)
+	@ResponseBody
+	public List&lt;Purchase&gt; getAll() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L25">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="nc" id="L26">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L27">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L28">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="nc" id="L29">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/purchases/{pageLength}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Purchase&gt; getByPageLength(@PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L34">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="nc" id="L35">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L36">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L37">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="nc" id="L38">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="nc" id="L39">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/purchases/{pageLength}/{pageNumber}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Purchase&gt; getByPageLengthAndPageNumber(@PathVariable String pageLength, @PathVariable String pageNumber) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L44">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="nc" id="L45">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
+<span class="nc" id="L46">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L47">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="nc" id="L48">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="nc" id="L49">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/purchases/find/{searchText}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Purchase&gt; getBySearchText(@PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L54">		listAttributes.put(&quot;Pagelength&quot;, null);</span>
+<span class="nc" id="L55">		listAttributes.put(&quot;Pagenumber&quot;, null);</span>
+<span class="nc" id="L56">		listAttributes.put(&quot;Attribute&quot;, null);</span>
+<span class="nc" id="L57">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L58">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/purchases/find/{attribute}/{searchText}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Purchase&gt; getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L63">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="nc" id="L64">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L65">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="nc" id="L66">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L67">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="nc" id="L68">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/purchases/find/{attribute}/{searchText}/{pageLength}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Purchase&gt; getByAttributeAndSearchTextWithPageLength(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L73">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="nc" id="L74">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L75">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="nc" id="L76">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L77">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="nc" id="L78">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/purchases/find/{attribute}/{searchText}/{pageLength}/{pageNumber}&quot;, produces = &quot;application/json&quot;)
+	public List&lt;Purchase&gt; getByAttributeAndSearchTextWithPageLengthAndPageNumber(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String pageLength, @PathVariable String pageNumber) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L83">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="nc" id="L84">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
+<span class="nc" id="L85">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="nc" id="L86">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="nc" id="L87">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="nc" id="L88">		return purchaseService.list(listAttributes);</span>
+	}
+
+	@GetMapping(path = &quot;/countPurchase&quot;, produces = &quot;application/json&quot;)
+	public Integer count() throws ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L93">		String attribute = &quot;id&quot;;</span>
+<span class="nc" id="L94">		String searchText = null;</span>
+<span class="nc" id="L95">		return purchaseService.count(attribute, searchText);</span>
+	}
+
+	@GetMapping(path = &quot;/countPurchase/{date}&quot;, produces = &quot;application/json&quot;)
+	public Integer countByDate(@PathVariable String date) throws ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L100">		Integer count = purchaseService.count(&quot;date&quot;, date);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		if(count &lt;= 0)</span>
+<span class="nc" id="L102">			throw new InvalidTemplateException(&quot;No Purchases for the Given Date&quot;);</span>
+		else
+<span class="nc" id="L104">			return count;</span>
+	}
+
+	@PostMapping(path = &quot;/purchase&quot;, produces = &quot;application/json&quot;)
+	public Purchase add(@RequestBody Purchase purchase) throws Exception {
+<span class="nc" id="L109">		return purchaseService.create(purchase);</span>
+	}
+
+	@DeleteMapping(path = &quot;/deletePurchase/{invoice}&quot;, produces = &quot;application/json&quot;)
+	public Integer delete(@PathVariable String invoice) throws ApplicationErrorException, InvalidTemplateException {
+<span class="nc" id="L114">		Integer statusCode = purchaseService.delete(invoice);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if(statusCode == 1)</span>
+<span class="nc" id="L116">			return statusCode;</span>
+		else
+<span class="nc" id="L118">			throw new InvalidTemplateException(&quot;Given Invoice doesnt exists to delete!&quot;);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

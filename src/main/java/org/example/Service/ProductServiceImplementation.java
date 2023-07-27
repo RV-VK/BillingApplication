@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public class ProductServiceImplementation implements ProductService {
 
-	@Autowired
-	private ProductDAO productDAO;
 	private final String NAME_REGEX = "^[a-zA-Z\\s]{3,30}$";
 	private final String CODE_REGEX = "^[a-zA-Z0-9]{2,6}$";
 	private final String UNIT_CODE_REGEX = "^[a-zA-Z]{1,4}$";
+	@Autowired
+	private ProductDAO productDAO;
 
 	public Product create(Product product) throws Exception {
 		validate(product);
@@ -26,7 +26,7 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
-			return productDAO.count(attribute, searchText);
+		return productDAO.count(attribute, searchText);
 	}
 
 	public List<Product> list(HashMap<String, String> listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
@@ -51,7 +51,7 @@ public class ProductServiceImplementation implements ProductService {
 		if(parameter != null)
 			return productDAO.delete(parameter);
 		else
-			return -1;
+			return - 1;
 	}
 
 	/**
@@ -64,11 +64,23 @@ public class ProductServiceImplementation implements ProductService {
 			throw new NullPointerException("Product cannot be Null!!");
 		if(product.getCode() != null && ! product.getCode().matches(CODE_REGEX))
 			throw new InvalidTemplateException("Invalid Product Code!!");
+		else if(product.getCode() == null)
+			throw new NullPointerException("Product Code Cannot be null!");
 		if(product.getName() != null && ! product.getName().matches(NAME_REGEX))
 			throw new InvalidTemplateException("Invalid Product Name!");
+		else if(product.getName() == null)
+			throw new NullPointerException("Product Name cannot be null");
 		if(product.getunitcode() != null && ! product.getunitcode().matches(UNIT_CODE_REGEX))
 			throw new InvalidTemplateException("Invalid Unit Code!!");
+		else if(product.getunitcode() == null)
+			throw new NullPointerException("UnitCode cannot be null");
 		if(product.getType() != null && ! product.getType().matches(NAME_REGEX))
 			throw new InvalidTemplateException("Invalid Product Type!!");
+		else if(product.getType() == null)
+			throw new NullPointerException("Product Type Cannot be null!");
+		if(product.getStock() == null)
+			throw new NullPointerException("Product Stock cannot be null");
+		if(product.getPrice() == null)
+			throw new NullPointerException("Product Price Cannot be null!");
 	}
 }

@@ -55,7 +55,15 @@ public class UnitServiceImplementation implements UnitService {
 			throw new NullPointerException("Unit Cannot be Null!!");
 		if(unit.getName() != null && ! unit.getName().matches(NAME_REGEX))
 			throw new InvalidTemplateException("Invalid Unit Name!!");
+		else if(unit.getName() == null)
+			throw new NullPointerException("Unit Name cannot be null!");
 		if(unit.getCode() != null && ! unit.getCode().matches(CODE_REGEX))
 			throw new InvalidTemplateException("Invalid UnitCode!!");
+		else if(unit.getCode() == null)
+			throw new NullPointerException("Unit Code Cannot be null!");
+		if(unit.getIsDividable() == null)
+			throw new NullPointerException("Isdividable field cannot be null!");
+		if(unit.getDescription() == null)
+			throw new NullPointerException("Description Cannot be null!");
 	}
 }

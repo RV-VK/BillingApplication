@@ -2,6 +2,7 @@
 
 import org.example.DAO.ApplicationErrorException;
 import org.example.Entity.Unit;
+import org.example.Service.InvalidTemplateException;
 import org.example.Service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,28 +10,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-<span class="nc" id="L12">public class UnitController {</span>
+<span class="nc" id="L13">public class UnitController {</span>
 	@Autowired
 	private UnitService unitService;
 
 	@GetMapping(path = &quot;/units&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Unit&gt; getAll() throws ApplicationErrorException {
-<span class="nc" id="L18">		return unitService.list();</span>
+<span class="nc" id="L19">		return unitService.list();</span>
 	}
 
 	@PostMapping(path = &quot;/unit&quot;, produces = &quot;application/json&quot;)
 	public Unit add(@RequestBody Unit unit) throws Exception {
-<span class="nc" id="L23">		return unitService.create(unit);</span>
+<span class="nc" id="L24">		return unitService.create(unit);</span>
 	}
 
 	@PutMapping(path = &quot;/unit&quot;, produces = &quot;application/json&quot;)
 	public Unit edit(@RequestBody Unit unit) throws Exception {
-<span class="nc" id="L28">		return unitService.edit(unit);</span>
+<span class="nc" id="L29">		Unit editedUnit = unitService.edit(unit);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">		if(editedUnit == null)</span>
+<span class="nc" id="L31">			throw new InvalidTemplateException(&quot;The Id doesnt exist to edit! Please give An Existing Id&quot;);</span>
+		else
+<span class="nc" id="L33">			return editedUnit;</span>
 	}
 
 	@DeleteMapping(path = &quot;/deleteUnit/{unitCode}&quot;, produces = &quot;application/json&quot;)
 	public Integer delete(@PathVariable String unitCode) throws Exception {
-<span class="nc" id="L33">		return unitService.delete(unitCode);</span>
+<span class="nc" id="L38">		Integer statusCode = unitService.delete(unitCode);</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">		if(statusCode == 1)</span>
+<span class="nc" id="L40">			return statusCode;</span>
+<span class="nc" id="L41">		else throw new InvalidTemplateException(&quot;UnitCode doesnt Exists!&quot;);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

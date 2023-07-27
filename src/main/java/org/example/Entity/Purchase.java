@@ -1,8 +1,8 @@
 package org.example.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,6 +31,14 @@ public class Purchase {
 		this.purchaseItemList = purchaseItemList;
 		this.grandTotal = grandTotal;
 	}
+
+	public Purchase(String date, Integer invoice, List<PurchaseItem> purchaseItemList, double grandTotal) {
+		this.date = date;
+		this.invoice = invoice;
+		this.purchaseItemList = purchaseItemList;
+		this.grandTotal = grandTotal;
+	}
+
 
 	public Integer getId() {
 		return id;

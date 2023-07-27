@@ -63,7 +63,7 @@ import java.util.List;
 
 	@GetMapping(path = &quot;/products/find/{attribute}/{searchText}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Product&gt; getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L66">		listAttributes.put(&quot;Pagelength&quot;, &quot;20&quot;);</span>
+<span class="nc" id="L66">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
 <span class="nc" id="L67">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
 <span class="nc" id="L68">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
 <span class="nc" id="L69">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
@@ -105,12 +105,22 @@ import java.util.List;
 
 	@PutMapping(path = &quot;/product&quot;, produces = &quot;application/json&quot;)
 	public Product edit(@RequestBody Product product) throws Exception {
-<span class="nc" id="L108">		return productService.edit(product);</span>
+<span class="nc" id="L108">		Product editedProduct = productService.edit(product);</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		if(editedProduct == null)</span>
+<span class="nc" id="L110">			throw new InvalidTemplateException(&quot;The Id doesnt exist to edit! Please Give An Existing Id&quot;);</span>
+		else
+<span class="nc" id="L112">			return editedProduct;</span>
+
 	}
 
 	@DeleteMapping(path = &quot;/deleteProduct/{parameter}&quot;, produces = &quot;application/json&quot;)
-	public Integer delete(@PathVariable String parameter) throws ApplicationErrorException {
-<span class="nc" id="L113">		return productService.delete(parameter);</span>
+	public Integer delete(@PathVariable String parameter) throws ApplicationErrorException, InvalidTemplateException {
+		Integer statusCode;
+<span class="nc" id="L119">		statusCode = productService.delete(parameter);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		if(statusCode == 1)</span>
+<span class="nc" id="L121">			return statusCode;</span>
+		else
+<span class="nc" id="L123">			throw new InvalidTemplateException(&quot;Please check the Id (or) Code you have entered whether it exists or have any stock left!!&quot;);</span>
 	}
 
 }

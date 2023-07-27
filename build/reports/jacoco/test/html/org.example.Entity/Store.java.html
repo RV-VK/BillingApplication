@@ -17,41 +17,49 @@ public class Store {
 <span class="fc" id="L17">		this.gstCode = gstCode;</span>
 <span class="fc" id="L18">	}</span>
 
+<span class="fc" id="L20">	public Store(String name, Long phoneNumber, String address, String gstCode) {</span>
+<span class="fc" id="L21">		this.name = name;</span>
+<span class="fc" id="L22">		this.phoneNumber = phoneNumber;</span>
+<span class="fc" id="L23">		this.address = address;</span>
+<span class="fc" id="L24">		this.gstCode = gstCode;</span>
+<span class="fc" id="L25">	}</span>
+
+
 	public String getName() {
-<span class="fc" id="L21">		return name;</span>
+<span class="fc" id="L29">		return name;</span>
 	}
 
 	public void setName(String name) {
-<span class="nc" id="L25">		this.name = name;</span>
-<span class="nc" id="L26">	}</span>
+<span class="nc" id="L33">		this.name = name;</span>
+<span class="nc" id="L34">	}</span>
 
 	public Long getPhoneNumber() {
-<span class="fc" id="L29">		return phoneNumber;</span>
+<span class="fc" id="L37">		return phoneNumber;</span>
 	}
 
 	public void setPhoneNumber(Long phoneNumber) {
-<span class="nc" id="L33">		this.phoneNumber = phoneNumber;</span>
-<span class="nc" id="L34">	}</span>
+<span class="nc" id="L41">		this.phoneNumber = phoneNumber;</span>
+<span class="nc" id="L42">	}</span>
 
 	public String getAddress() {
-<span class="nc" id="L37">		return address;</span>
+<span class="fc" id="L45">		return address;</span>
 	}
 
 	public void setAddress(String address) {
-<span class="nc" id="L41">		this.address = address;</span>
-<span class="nc" id="L42">	}</span>
+<span class="nc" id="L49">		this.address = address;</span>
+<span class="nc" id="L50">	}</span>
 
 	public String getGstCode() {
-<span class="fc" id="L45">		return gstCode;</span>
+<span class="fc" id="L53">		return gstCode;</span>
 	}
 
 	public void setGstCode(String gstCode) {
-<span class="nc" id="L49">		this.gstCode = gstCode;</span>
-<span class="nc" id="L50">	}</span>
+<span class="nc" id="L57">		this.gstCode = gstCode;</span>
+<span class="nc" id="L58">	}</span>
 
 	@Override
 	public String toString() {
-<span class="fc" id="L54">		return &quot;Store{&quot; + &quot;name='&quot; + name + '\'' + &quot;, phoneNumber=&quot; + phoneNumber + &quot;, address='&quot; + address + '\'' + &quot;, gstCode='&quot; + gstCode + '\'' + '}';</span>
+<span class="fc" id="L62">		return &quot;Store{&quot; + &quot;name='&quot; + name + '\'' + &quot;, phoneNumber=&quot; + phoneNumber + &quot;, address='&quot; + address + '\'' + &quot;, gstCode='&quot; + gstCode + '\'' + '}';</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

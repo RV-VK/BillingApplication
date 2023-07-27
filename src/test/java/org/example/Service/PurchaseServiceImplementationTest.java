@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +80,7 @@ class PurchaseServiceImplementationTest {
 
 	@Test
 	void createShouldCallAndReturnPurchase() throws Exception {
-		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 2, 20));
+		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 2F, 20.0));
 		when(unitDAO.findByCode(anyString())).thenReturn(new Unit("Unit", "un", "desc", true));
 		when(purchaseDAO.create(purchase)).thenReturn(purchase);
 		assertNotNull(purchaseService.create(purchase));
@@ -95,7 +96,7 @@ class PurchaseServiceImplementationTest {
 
 	@Test
 	void createShouldThrowExceptionWhenDividabilityViolated() throws Exception {
-		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 2, 20));
+		when(productDAO.findByCode(anyString())).thenReturn(new Product("G01", "Garlic", "kg", "Grocery", 2F, 20.0));
 		when(unitDAO.findByCode(anyString())).thenReturn(new Unit("Unit", "un", "desc", false));
 		assertThrows(UnDividableEntityException.class, () -> purchaseService.create(purchase));
 		verifyNoInteractions(purchaseDAO);
@@ -112,6 +113,8 @@ class PurchaseServiceImplementationTest {
 	@Test
 	void createPurchaseNullValidation() {
 		assertThrows(NullPointerException.class, () -> purchaseService.create(null));
+		assertThrows(NullPointerException.class, () -> purchaseService.create(new Purchase(null, 158, new ArrayList<>(), 250)));
+		assertThrows(NullPointerException.class, () -> purchaseService.create(new Purchase("2023-05-07", null, new ArrayList<>(), 250)));
 		verifyNoInteractions(purchaseDAO);
 
 	}

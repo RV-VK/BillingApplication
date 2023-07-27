@@ -52,10 +52,18 @@ public class StoreServiceImplementation implements StoreService {
 			throw new NullPointerException("Store cannot be Null!!");
 		if(store.getName() != null && ! store.getName().matches(NAME_REGEX))
 			throw new InvalidTemplateException("Invalid Store Name!!");
-		if(store.getPhoneNumber() != 0 && ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
+		else if(store.getName() == null)
+			throw new NullPointerException("Store Name cannot be null!");
+		if(store.getPhoneNumber() != null && ! String.valueOf(store.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))
 			throw new InvalidTemplateException("Invalid Phone-number!!");
+		else if(store.getPhoneNumber() == null)
+			throw new NullPointerException("PhoneNumber cannot be null!");
+		if(store.getAddress() == null)
+			throw new NullPointerException("Address Cannot be null!");
 		if(store.getGstCode() != null && ! String.valueOf(store.getGstCode()).matches(GST_NUMBER_REGEX))
 			throw new InvalidTemplateException("Invalid GstCode!!");
+		else if(store.getGstCode() == null)
+			throw new NullPointerException("GstCode Cannot be null!");
 	}
 
 

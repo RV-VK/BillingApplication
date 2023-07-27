@@ -33,6 +33,13 @@ class StoreServiceImplementationTest {
 				Arguments.of(new Store("ABC Stores", 8595449589L, "123-First Street Extension, CBE.", "123890ABCDE")));
 	}
 
+	public static Stream<Arguments> storeNullProvider() {
+		return Stream.of(Arguments.of((Store)null), Arguments.of(new Store(null, 8595449589L, "123-First Street Extension, CBE.", "1234567890ABCDE")),
+				Arguments.of(new Store("ABC Stores", null, "123-First Street Extension, CBE.", "1234567890ABCDE")),
+				Arguments.of(new Store("ABC Stores", 8595449589L, null, "123890ABCDE")),
+				Arguments.of(new Store("ABC Stores", 8595449589L, "123-First Street Extension, CBE.", null)));
+	}
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -55,17 +62,20 @@ class StoreServiceImplementationTest {
 		verifyNoInteractions(storeDAO);
 	}
 
-	@Test
-	void createStoreNullValidation() {
-		assertThrows(NullPointerException.class, () -> storeService.create(null));
+	@ParameterizedTest
+	@MethodSource("storeNullProvider")
+	void createStoreNullValidation(Store store) {
+		assertThrows(NullPointerException.class, () -> storeService.create(store));
 		verifyNoInteractions(storeDAO);
 	}
+
 	@Test
 	void viewShouldCallAndReturn() throws ApplicationErrorException {
 		when(storeDAO.view()).thenReturn(new Store());
 		assertNotNull(storeService.view());
 		verify(storeDAO, times(1)).view();
 	}
+
 	@Test
 	void editShouldCallAndReturnStore() throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		Store store = new Store("ABCD Stores", 8595449589L, "123-First Street Extension, CBE.", "1234567890ABCDE");
@@ -83,9 +93,10 @@ class StoreServiceImplementationTest {
 		verifyNoInteractions(storeDAO);
 	}
 
-	@Test
-	void editProductNullValidation() {
-		assertThrows(NullPointerException.class, () -> storeService.edit(null));
+	@ParameterizedTest
+	@MethodSource("storeNullProvider")
+	void editStoreNullValidation(Store store) {
+		assertThrows(NullPointerException.class, () -> storeService.edit(store));
 		verifyNoInteractions(storeDAO);
 	}
 

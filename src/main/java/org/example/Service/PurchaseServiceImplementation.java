@@ -86,5 +86,9 @@ public class PurchaseServiceImplementation implements PurchaseService {
 			throw new NullPointerException("Purchase cannot be Null");
 		if(purchase.getDate() != null && ! purchase.getDate().matches(dateRegex))
 			throw new InvalidTemplateException("Date Format is Invalid!! Must be YYYY-MM-DD!!");
+		else if(purchase.getDate() == null)
+			throw new NullPointerException("Purchase Date Cannot be null");
+		if(purchase.getInvoice() == null)
+			throw new NullPointerException("Invoice cannot be null!");
 	}
 }

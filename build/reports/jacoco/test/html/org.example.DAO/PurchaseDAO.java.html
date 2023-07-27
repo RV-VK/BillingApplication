@@ -169,7 +169,7 @@ import java.util.List;
 <span class="nc" id="L169">			int purchaseItemDeleted = purchaseItemMapper.delete(invoice);</span>
 <span class="nc" id="L170">			int purchaseDeleted = purchaseMapper.delete(invoice);</span>
 <span class="nc bnc" id="L171" title="All 4 branches missed.">			if(purchaseItemDeleted &gt; 0 &amp;&amp; purchaseDeleted &gt; 0) return 1;</span>
-<span class="nc" id="L172">			else return - 1;</span>
+<span class="nc" id="L172">			else return 0;</span>
 <span class="nc" id="L173">		} catch(Exception e) {</span>
 <span class="nc" id="L174">			throw new ApplicationErrorException(e.getMessage());</span>
 		}

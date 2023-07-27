@@ -31,7 +31,14 @@ public class User {
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 	}
-
+	public User(String userType, String userName, String passWord, String firstName, String lastName, Long phoneNumber) {
+		this.userType = userType;
+		this.userName = userName;
+		this.passWord = passWord;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+	}
 	public Integer getId() {
 		return id;
 	}

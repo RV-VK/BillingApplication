@@ -90,5 +90,7 @@ public class SalesServiceImplementation implements SalesService {
 			throw new NullPointerException("Sales cannot be Null");
 		if(sales.getDate() != null && ! sales.getDate().matches(dateRegex))
 			throw new InvalidTemplateException("Date Format is Invalid!! Must be YYYY-MM-DD!!");
+		else if(sales.getDate() == null)
+			throw new NullPointerException("Sales Date Cannot be null!");
 	}
 }

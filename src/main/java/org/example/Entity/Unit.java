@@ -7,6 +7,8 @@ public class Unit {
 	private String description;
 	private Boolean isDividable;
 
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -27,6 +29,13 @@ public class Unit {
 
 	public Unit(int id, String name, String code, String description, boolean isDividable) {
 		this.id = id;
+		this.name = name;
+		this.code = code;
+		this.description = description;
+		this.isDividable = isDividable;
+	}
+
+	public Unit(String name, String code, String description, Boolean isDividable) {
 		this.name = name;
 		this.code = code;
 		this.description = description;

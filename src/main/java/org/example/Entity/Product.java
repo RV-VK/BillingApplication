@@ -17,7 +17,7 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(int id, String code, String name, String unitcode, String type, float stock, double price) {
+	public Product(int id, String code, String name, String unitcode, String type, Float stock, double price) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
@@ -27,7 +27,7 @@ public class Product {
 		this.price = price;
 	}
 
-	public Product(String code, String name, String unitcode, String type, float stock, double price) {
+	public Product(String code, String name, String unitcode, String type, Float stock, Double price) {
 		this.code = code;
 		this.name = name;
 		this.unitcode = unitcode;
