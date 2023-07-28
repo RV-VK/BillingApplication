@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.UserControllerTest" tests="24" skipped="0" failures="0" errors="0" timestamp="2023-07-28T12:14:01" hostname="apnxdesk006-Veriton-M200-H61" time="0.251">
+  <properties/>
+  <testcase name="getUsersByPageLengthAndPageNumberShouldThrowExceptionOnInvalidPageLengthOrPageNumber()" classname="org.example.RestController.UserControllerTest" time="0.086"/>
+  <testcase name="getUsersByAttributeAndSearchTextWithPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="getUsersByPageLengthShouldThrowExceptionOnInvalidPageLength()" classname="org.example.RestController.UserControllerTest" time="0.008"/>
+  <testcase name="editUserShouldThrowExceptionWhenNullReturned()" classname="org.example.RestController.UserControllerTest" time="0.008"/>
+  <testcase name="getUsersByAttributeAndSearchTextWithPageLengthAndPageNumberShouldThrowExceptionOnInvalidAttributeOrPageLengthOrPageNumber()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="addUserShouldCatchAndRethrowExceptionAndNoMoreInteractions()" classname="org.example.RestController.UserControllerTest" time="0.004"/>
+  <testcase name="editUserShouldCatchAndRethrowException()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="addUserShouldCallAndReturnTest()" classname="org.example.RestController.UserControllerTest" time="0.004"/>
+  <testcase name="deleteUserShouldThrowExceptionWhenStatusCodeZero()" classname="org.example.RestController.UserControllerTest" time="0.004"/>
+  <testcase name="getUsersShouldCatchAndRethrowApplicationErrorException()" classname="org.example.RestController.UserControllerTest" time="0.004"/>
+  <testcase name="getUsersByAttributeAndSearchTextWithPageLengthShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.005"/>
+  <testcase name="getUsersByPageLengthShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.007"/>
+  <testcase name="getUsersByAttributeAndSearchTextShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.008"/>
+  <testcase name="deleteUserShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="getUsersByPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="getUsersShouldCallAndReturnTest()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="getUsersByAttributeAndSearchTextWithPageLengthShouldThrowExceptionOnInvalidAttributeOrPageLength()" classname="org.example.RestController.UserControllerTest" time="0.005"/>
+  <testcase name="getUsersByAttributeAndSearchTextShouldThrowExceptionOnInvalidAttribute()" classname="org.example.RestController.UserControllerTest" time="0.004"/>
+  <testcase name="deleteUserShouldCatchANdRethrowException()" classname="org.example.RestController.UserControllerTest" time="0.005"/>
+  <testcase name="getUsersBySearchTextShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="editUserShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.005"/>
+  <testcase name="countUserShouldCallAndReturn()" classname="org.example.RestController.UserControllerTest" time="0.006"/>
+  <testcase name="getUsersShouldCatchAndRethrowPageCountException()" classname="org.example.RestController.UserControllerTest" time="0.008"/>
+  <testcase name="countUserShouldCatchAndRethrowAndNoMoreInteractions()" classname="org.example.RestController.UserControllerTest" time="0.008"/>
+  <system-out><![CDATA[17:44:01.118 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.135 [Test worker] ERROR org.example.RestController.UserController -- User edit Failed! Given Id doesnt exists : null 
+17:44:01.148 [Test worker] ERROR org.example.RestController.UserController -- User Creation Failed!, null 
+17:44:01.154 [Test worker] ERROR org.example.RestController.UserController -- User Edit Failed!, null 
+17:44:01.159 [Test worker] INFO org.example.RestController.UserController -- User Creation Successfull! : User{id=null, userType='Admin', userName='manikantan', passWord='manikantan', firstName='Manikantan', lastName='RV', phoneNumber=6393974789} 
+17:44:01.165 [Test worker] ERROR org.example.RestController.UserController -- User deletion failed!, Given username doesnt exists : G01 
+17:44:01.169 [Test worker] ERROR org.example.RestController.UserController -- Error while retrieving data from the Database, null 
+17:44:01.175 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.182 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.191 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.198 [Test worker] INFO org.example.RestController.UserController -- User deleted Successfully!
+17:44:01.205 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.213 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.233 [Test worker] ERROR org.example.RestController.UserController -- User Deletion failed!, null 
+17:44:01.240 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+17:44:01.248 [Test worker] INFO org.example.RestController.UserController -- User Edited Successfully!, Edited User : User{id=null, userType='Admin', userName='manikantan', passWord='manikantan', firstName='Manikantan', lastName='RV', phoneNumber=6393974789} 
+17:44:01.254 [Test worker] INFO org.example.RestController.UserController -- Returned Successfully!, User Count : 20 
+17:44:01.264 [Test worker] WARN org.example.RestController.UserController -- Error while returning the list. null 
+17:44:01.273 [Test worker] ERROR org.example.RestController.UserController -- Error while retrieving data from database, null 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

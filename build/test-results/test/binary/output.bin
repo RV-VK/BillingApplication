@@ -1,0 +1,100 @@
+l17:43:59.779 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+l17:43:59.912 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+¿17:43:59.933 [Test worker] ERROR org.example.RestController.ProductController -- Product Delete Failed! Either the Product doesnt exists or doesnt have any stock left! Product-Parameter: G01 
+m17:43:59.968 [Test worker] ERROR org.example.RestController.ProductController -- Product Edit Failed!, null 
+Ì17:43:59.993 [Test worker] INFO org.example.RestController.ProductController -- Product Edited Successfully!, Edited Product : Product{id=101, code='G11', name='Ginger', unitcode='kg', type='Grocery', availableQuantity=5.0, price=55.0} 
+p17:44:00.023 [Test worker] ERROR org.example.RestController.ProductController -- Product deletion failed, null 
+
+l17:44:00.056 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+ﬂ17:44:00.085 [Test worker] INFO org.example.RestController.ProductController -- Product Created Successfully! : Product{id=null, code='G01', name='Garlic', unitcode='kg', type='Grocery', availableQuantity=2.0, price=50.0} 
+q17:44:00.099 [Test worker] ERROR org.example.RestController.ProductController -- Product Creation Failed!, null 
+v17:44:00.109 [Test worker] WARN org.example.RestController.ProductController -- Error while returning the list. null 
+l17:44:00.134 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+Ñ17:44:00.150 [Test worker] ERROR org.example.RestController.ProductController -- Product Edit Failed!, Given Id doesnt exists, 101 
+l17:44:00.156 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+|17:44:00.169 [Test worker] INFO org.example.RestController.ProductController -- Returned Successfully!, Product Count : 20 
+n17:44:00.175 [Test worker] INFO org.example.RestController.ProductController -- Product deleted successfully!
+l17:44:00.182 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+Ç17:44:00.191 [Test worker] ERROR org.example.RestController.ProductController -- Error while retrieving data from database, null 
+Ü17:44:00.197 [Test worker] ERROR org.example.RestController.ProductController -- Error while retrieving data from the Database, null 
+l17:44:00.205 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:44:00.311 [Test worker] WARN org.example.RestController.PurchaseController -- No Purchases for the Given date : 2023-05-30 
+m17:44:00.320 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+}17:44:00.327 [Test worker] INFO org.example.RestController.PurchaseController -- Returned Successfully! Purchase Count : 20 
+s17:44:00.333 [Test worker] WARN org.example.RestController.PurchaseController -- Error while returning list, null 
+m17:44:00.341 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+!s17:44:00.354 [Test worker] ERROR org.example.RestController.PurchaseController -- Purchase deletion failed!, null 
+"á17:44:00.361 [Test worker] ERROR org.example.RestController.PurchaseController -- Error while retrieving data from the database, null 
+#Ÿ17:44:00.367 [Test worker] INFO org.example.RestController.PurchaseController -- Purchase Created Successfully! Created Purchase : Purchase{id=null, date='null', invoice=null, purchaseItemList=null, grandTotal=null} 
+$s17:44:00.377 [Test worker] ERROR org.example.RestController.PurchaseController -- Purchase Creation failed!, null 
+%w17:44:00.383 [Test worker] WARN org.example.RestController.PurchaseController -- Error while returning the list. null 
+&m17:44:00.389 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+'m17:44:00.396 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+(ì17:44:00.404 [Test worker] ERROR org.example.RestController.PurchaseController -- Purchase deletion failed!, Given Invoice id doesnt exists : G01 
+*m17:44:00.426 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+,m17:44:00.454 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+-m17:44:00.464 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+.Å17:44:00.473 [Test worker] ERROR org.example.RestController.PurchaseController -- Error retrieving data from the database, null 
+0p17:44:00.491 [Test worker] INFO org.example.RestController.PurchaseController -- Purchase deleted Successfully!
+1á17:44:00.499 [Test worker] ERROR org.example.RestController.PurchaseController -- Error while retrieving data from the Database, null 
+3}17:44:00.511 [Test worker] INFO org.example.RestController.PurchaseController -- Returned Successfully! Purchase Count : 20 
+54j17:44:00.581 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+56p17:44:00.598 [Test worker] WARN org.example.RestController.SalesController -- Error while returning list, null 
+57~17:44:00.606 [Test worker] ERROR org.example.RestController.SalesController -- Error retrieving data from the database, null 
+59j17:44:00.617 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+5:j17:44:00.623 [Test worker] INFO org.example.RestController.SalesController -- Sales deleted Successfully!
+5;Ñ17:44:00.628 [Test worker] ERROR org.example.RestController.SalesController -- Sales deletion failed!, Given Id doesnt exists: G01 
+5<|17:44:00.633 [Test worker] WARN org.example.RestController.SalesController -- No Purchases for the given date : 2023-05-30 
+5=t17:44:00.644 [Test worker] WARN org.example.RestController.SalesController -- Error while returning the list. null 
+5>l17:44:00.649 [Test worker] ERROR org.example.RestController.SalesController -- Sales deletion failed, null 
+5?m17:44:00.657 [Test worker] ERROR org.example.RestController.SalesController -- Sales creation failed!, null 
+5@j17:44:00.663 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+5Bj17:44:00.677 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+5Dj17:44:00.698 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+5Fw17:44:00.712 [Test worker] INFO org.example.RestController.SalesController -- Returned Successfully! Sales Count : 20 
+5Gw17:44:00.719 [Test worker] INFO org.example.RestController.SalesController -- Returned Successfully! Sales Count : 20 
+5Hj17:44:00.728 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+5IÑ17:44:00.735 [Test worker] ERROR org.example.RestController.SalesController -- Error while retrieving data from the Database, null 
+5J¡17:44:00.742 [Test worker] INFO org.example.RestController.SalesController -- Sales created Successfully! Created SalesEntry : Sales{id=null, date='null', salesItemList=null, grandTotal=null} 
+5L~17:44:00.758 [Test worker] ERROR org.example.RestController.SalesController -- Error retrieving data from the database, null 
+5Mj17:44:00.763 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+ON17:44:00.821 [Test worker] ERROR org.example.RestController.StoreController -- Store deletion failed!, Invalid Admin Password.
+OPf17:44:00.826 [Test worker] ERROR org.example.RestController.StoreController -- Store deletion failed!
+OQj17:44:00.831 [Test worker] INFO org.example.RestController.StoreController -- Store deleted Successfully!
+ORk17:44:00.836 [Test worker] ERROR org.example.RestController.StoreController -- Store Creation failed, null
+OSi17:44:00.843 [Test worker] ERROR org.example.RestController.StoreController -- Store edit failed!, null 
+OTr17:44:00.848 [Test worker] WARN org.example.RestController.StoreController -- Warning! No Store exists to delete!
+OU·17:44:00.854 [Test worker] INFO org.example.RestController.StoreController -- Store edited Successfully! Edited Store: Store{name='ABCStores', phoneNumber=8594354848, address='123/B North Street', gstCode='1234567890ABCDE'} 
+OV‰17:44:00.859 [Test worker] INFO org.example.RestController.StoreController -- Store Created successfully! Created Store : Store{name='ABCStores', phoneNumber=8594354848, address='123/B North Street', gstCode='1234567890ABCDE'} 
+OW~17:44:00.864 [Test worker] ERROR org.example.RestController.StoreController -- Error retrieving data from the database, null 
+OX|17:44:00.869 [Test worker] WARN org.example.RestController.StoreController -- Store Creation failed!, Store already Exists!
+OYk17:44:00.874 [Test worker] INFO org.example.RestController.StoreController -- Store returned successfully!
+[Zg17:44:00.958 [Test worker] ERROR org.example.RestController.UnitController -- Unit Edit failed!, null 
+[\~17:44:00.964 [Test worker] ERROR org.example.RestController.UnitController -- Error retrieving data from the database!, null 
+[]k17:44:00.970 [Test worker] ERROR org.example.RestController.UnitController -- Unit Creation Failed!, null 
+[^◊17:44:00.975 [Test worker] INFO org.example.RestController.UnitController -- Unit Edited Successfully! Edited Unit : Unit{id=null, name='kilogram', code='kg', description='Unit of Larger Masses', isDividable=true} 
+[_Ÿ17:44:00.980 [Test worker] INFO org.example.RestController.UnitController -- Unit Created Successfully! Created Unit : Unit{id=null, name='kilogram', code='kg', description='Unit of Larger Masses', isDividable=true} 
+[`k17:44:00.990 [Test worker] ERROR org.example.RestController.UnitController -- Unit deletion failed!, null 
+[aä17:44:00.994 [Test worker] ERROR org.example.RestController.UnitController -- Unit deletion failed!, Given Unit Code doesnt exists : G01 
+[bi17:44:01.002 [Test worker] INFO org.example.RestController.UnitController -- List Returned Successfully!
+[cÄ17:44:01.009 [Test worker] ERROR org.example.RestController.UnitController -- Unit Edit failed!, Given Id doesnt exists : null 
+[dh17:44:01.014 [Test worker] INFO org.example.RestController.UnitController -- Unit deleted Successfully!
+fgi17:44:01.118 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fi17:44:01.135 [Test worker] ERROR org.example.RestController.UserController -- User edit Failed! Given Id doesnt exists : null 
+fkk17:44:01.148 [Test worker] ERROR org.example.RestController.UserController -- User Creation Failed!, null 
+flg17:44:01.154 [Test worker] ERROR org.example.RestController.UserController -- User Edit Failed!, null 
+fm¯17:44:01.159 [Test worker] INFO org.example.RestController.UserController -- User Creation Successfull! : User{id=null, userType='Admin', userName='manikantan', passWord='manikantan', firstName='Manikantan', lastName='RV', phoneNumber=6393974789} 
+fnâ17:44:01.165 [Test worker] ERROR org.example.RestController.UserController -- User deletion failed!, Given username doesnt exists : G01 
+foÉ17:44:01.169 [Test worker] ERROR org.example.RestController.UserController -- Error while retrieving data from the Database, null 
+fpi17:44:01.175 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fqi17:44:01.182 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fri17:44:01.191 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fsh17:44:01.198 [Test worker] INFO org.example.RestController.UserController -- User deleted Successfully!
+fti17:44:01.205 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fui17:44:01.213 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fxk17:44:01.233 [Test worker] ERROR org.example.RestController.UserController -- User Deletion failed!, null 
+fyi17:44:01.240 [Test worker] INFO org.example.RestController.UserController -- List returned Successfully!
+fzÑ17:44:01.248 [Test worker] INFO org.example.RestController.UserController -- User Edited Successfully!, Edited User : User{id=null, userType='Admin', userName='manikantan', passWord='manikantan', firstName='Manikantan', lastName='RV', phoneNumber=6393974789} 
+f{v17:44:01.254 [Test worker] INFO org.example.RestController.UserController -- Returned Successfully!, User Count : 20 
+f|s17:44:01.264 [Test worker] WARN org.example.RestController.UserController -- Error while returning the list. null 
+f}17:44:01.273 [Test worker] ERROR org.example.RestController.UserController -- Error while retrieving data from database, null 

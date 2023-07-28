@@ -13,11 +13,11 @@ public class PurchaseItem {
 <span class="nc" id="L13">	public PurchaseItem() {</span>
 <span class="nc" id="L14">	}</span>
 
-<span class="fc" id="L16">	public PurchaseItem(String code, float quantity, double unitPurchasePrice) {</span>
-<span class="fc" id="L17">		this.product = new Product(code);</span>
-<span class="fc" id="L18">		this.quantity = quantity;</span>
-<span class="fc" id="L19">		this.unitPurchasePrice = unitPurchasePrice;</span>
-<span class="fc" id="L20">	}</span>
+<span class="nc" id="L16">	public PurchaseItem(String code, float quantity, double unitPurchasePrice) {</span>
+<span class="nc" id="L17">		this.product = new Product(code);</span>
+<span class="nc" id="L18">		this.quantity = quantity;</span>
+<span class="nc" id="L19">		this.unitPurchasePrice = unitPurchasePrice;</span>
+<span class="nc" id="L20">	}</span>
 
 <span class="nc" id="L22">	public PurchaseItem(String code, String name, float quantity, double unitPurchasePrice) {</span>
 <span class="nc" id="L23">		this.product = new Product(code, name);</span>
@@ -33,15 +33,15 @@ public class PurchaseItem {
 
 
 	public Product getProduct() {
-<span class="fc" id="L36">		return product;</span>
+<span class="nc" id="L36">		return product;</span>
 	}
 
 	public void setProduct(Product product) {
-<span class="fc" id="L40">		this.product = product;</span>
-<span class="fc" id="L41">	}</span>
+<span class="nc" id="L40">		this.product = product;</span>
+<span class="nc" id="L41">	}</span>
 
 	public Float getQuantity() {
-<span class="fc" id="L44">		return quantity;</span>
+<span class="nc" id="L44">		return quantity;</span>
 	}
 
 	public void setQuantity(Float quantity) {

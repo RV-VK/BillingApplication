@@ -17,15 +17,15 @@ public class Product {
 <span class="nc" id="L17">	public Product() {</span>
 <span class="nc" id="L18">	}</span>
 
-<span class="nc" id="L20">	public Product(int id, String code, String name, String unitcode, String type, Float stock, double price) {</span>
-<span class="nc" id="L21">		this.id = id;</span>
-<span class="nc" id="L22">		this.code = code;</span>
-<span class="nc" id="L23">		this.name = name;</span>
-<span class="nc" id="L24">		this.unitcode = unitcode;</span>
-<span class="nc" id="L25">		this.type = type;</span>
-<span class="nc" id="L26">		this.stock = stock;</span>
-<span class="nc" id="L27">		this.price = price;</span>
-<span class="nc" id="L28">	}</span>
+<span class="fc" id="L20">	public Product(int id, String code, String name, String unitcode, String type, Float stock, double price) {</span>
+<span class="fc" id="L21">		this.id = id;</span>
+<span class="fc" id="L22">		this.code = code;</span>
+<span class="fc" id="L23">		this.name = name;</span>
+<span class="fc" id="L24">		this.unitcode = unitcode;</span>
+<span class="fc" id="L25">		this.type = type;</span>
+<span class="fc" id="L26">		this.stock = stock;</span>
+<span class="fc" id="L27">		this.price = price;</span>
+<span class="fc" id="L28">	}</span>
 
 <span class="fc" id="L30">	public Product(String code, String name, String unitcode, String type, Float stock, Double price) {</span>
 <span class="fc" id="L31">		this.code = code;</span>
@@ -37,9 +37,9 @@ public class Product {
 <span class="fc" id="L37">	}</span>
 
 
-<span class="fc" id="L40">	public Product(String code) {</span>
-<span class="fc" id="L41">		this.code = code;</span>
-<span class="fc" id="L42">	}</span>
+<span class="nc" id="L40">	public Product(String code) {</span>
+<span class="nc" id="L41">		this.code = code;</span>
+<span class="nc" id="L42">	}</span>
 
 <span class="nc" id="L44">	public Product(String code, String name) {</span>
 <span class="nc" id="L45">		this.code = code;</span>
@@ -48,7 +48,7 @@ public class Product {
 
 
 	public Integer getId() {
-<span class="nc" id="L51">		return id;</span>
+<span class="fc" id="L51">		return id;</span>
 	}
 
 	public void setId(Integer id) {
@@ -56,7 +56,7 @@ public class Product {
 <span class="nc" id="L56">	}</span>
 
 	public String getCode() {
-<span class="fc" id="L59">		return code;</span>
+<span class="nc" id="L59">		return code;</span>
 	}
 
 	public void setCode(String code) {
@@ -64,7 +64,7 @@ public class Product {
 <span class="nc" id="L64">	}</span>
 
 	public String getName() {
-<span class="fc" id="L67">		return name;</span>
+<span class="nc" id="L67">		return name;</span>
 	}
 
 	public void setName(String name) {
@@ -72,7 +72,7 @@ public class Product {
 <span class="nc" id="L72">	}</span>
 
 	public String getunitcode() {
-<span class="fc" id="L75">		return unitcode;</span>
+<span class="nc" id="L75">		return unitcode;</span>
 	}
 
 	public void setunitcode(String unitcode) {
@@ -80,7 +80,7 @@ public class Product {
 <span class="nc" id="L80">	}</span>
 
 	public String getType() {
-<span class="fc" id="L83">		return type;</span>
+<span class="nc" id="L83">		return type;</span>
 	}
 
 	public void setType(String type) {
@@ -89,7 +89,7 @@ public class Product {
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public Float getStock() {
-<span class="fc" id="L92">		return stock;</span>
+<span class="nc" id="L92">		return stock;</span>
 	}
 
 	public void setStock(float stock) {
@@ -97,7 +97,7 @@ public class Product {
 <span class="nc" id="L97">	}</span>
 
 	public Double getPrice() {
-<span class="fc" id="L100">		return price;</span>
+<span class="nc" id="L100">		return price;</span>
 	}
 
 	public void setPrice(Double price) {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.PurchaseControllerTest" tests="25" skipped="0" failures="0" errors="0" timestamp="2023-07-28T12:14:00" hostname="apnxdesk006-Veriton-M200-H61" time="0.268">
+  <properties/>
+  <testcase name="countPurchaseByDateShouldThrowExceptionOnZeroReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.068"/>
+  <testcase name="getPurchaseByAttributeAndSearchTextWithPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.009"/>
+  <testcase name="countPurchaseShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="getPurchaseShouldCatchAndRethrowInvalidTemplateException()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="getPurchaseByPageLengthShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.007"/>
+  <testcase name="getPurchaseByAttributeAndSearchTextShouldThrowExceptionOnInvalidAttribute()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="deletePurchaseShouldCatchANdRethrowException()" classname="org.example.RestController.PurchaseControllerTest" time="0.007"/>
+  <testcase name="countPurchaseByDateShouldCatchAndRethrowAndNoMoreInteractions()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="addPurchaseShouldCallAndReturnTest()" classname="org.example.RestController.PurchaseControllerTest" time="0.009"/>
+  <testcase name="addPurchaseShouldCatchAndRethrowExceptionAndNoMoreInteractions()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="getPurchaseShouldCatchAndRethrowPageCountException()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="getPurchaseByAttributeAndSearchTextWithPageLengthShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.005"/>
+  <testcase name="getPurchaseBySearchTextShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.007"/>
+  <testcase name="deletePurchaseShouldThrowExceptionWhenStatusCodeZero()" classname="org.example.RestController.PurchaseControllerTest" time="0.007"/>
+  <testcase name="getPurchaseByPageLengthAndPageNumberShouldThrowExceptionOnInvalidPageLengthOrPageNumber()" classname="org.example.RestController.PurchaseControllerTest" time="0.008"/>
+  <testcase name="getPurchaseByPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.01"/>
+  <testcase name="getPurchaseByAttributeAndSearchTextWithPageLengthAndPageNumberShouldThrowExceptionOnInvalidAttributeOrPageLengthOrPageNumber()" classname="org.example.RestController.PurchaseControllerTest" time="0.012"/>
+  <testcase name="getPurchaseByAttributeAndSearchTextShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.012"/>
+  <testcase name="getPurchaseShouldCallAndReturnTest()" classname="org.example.RestController.PurchaseControllerTest" time="0.006"/>
+  <testcase name="countPurchaseShouldCatchAndRethrowAndNoMoreInteractions()" classname="org.example.RestController.PurchaseControllerTest" time="0.007"/>
+  <testcase name="getPurchaseByAttributeAndSearchTextWithPageLengthShouldThrowExceptionOnInvalidAttributeOrPageLength()" classname="org.example.RestController.PurchaseControllerTest" time="0.007"/>
+  <testcase name="deletePurchaseShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.008"/>
+  <testcase name="getPurchaseShouldCatchAndRethrowApplicationErrorException()" classname="org.example.RestController.PurchaseControllerTest" time="0.006"/>
+  <testcase name="getPurchaseByPageLengthShouldThrowExceptionOnInvalidPageLength()" classname="org.example.RestController.PurchaseControllerTest" time="0.004"/>
+  <testcase name="countPurchaseNyDateShouldCallAndReturn()" classname="org.example.RestController.PurchaseControllerTest" time="0.006"/>
+  <system-out><![CDATA[17:44:00.311 [Test worker] WARN org.example.RestController.PurchaseController -- No Purchases for the Given date : 2023-05-30 
+17:44:00.320 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.327 [Test worker] INFO org.example.RestController.PurchaseController -- Returned Successfully! Purchase Count : 20 
+17:44:00.333 [Test worker] WARN org.example.RestController.PurchaseController -- Error while returning list, null 
+17:44:00.341 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.354 [Test worker] ERROR org.example.RestController.PurchaseController -- Purchase deletion failed!, null 
+17:44:00.361 [Test worker] ERROR org.example.RestController.PurchaseController -- Error while retrieving data from the database, null 
+17:44:00.367 [Test worker] INFO org.example.RestController.PurchaseController -- Purchase Created Successfully! Created Purchase : Purchase{id=null, date='null', invoice=null, purchaseItemList=null, grandTotal=null} 
+17:44:00.377 [Test worker] ERROR org.example.RestController.PurchaseController -- Purchase Creation failed!, null 
+17:44:00.383 [Test worker] WARN org.example.RestController.PurchaseController -- Error while returning the list. null 
+17:44:00.389 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.396 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.404 [Test worker] ERROR org.example.RestController.PurchaseController -- Purchase deletion failed!, Given Invoice id doesnt exists : G01 
+17:44:00.426 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.454 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.464 [Test worker] INFO org.example.RestController.PurchaseController -- List returned Successfully!
+17:44:00.473 [Test worker] ERROR org.example.RestController.PurchaseController -- Error retrieving data from the database, null 
+17:44:00.491 [Test worker] INFO org.example.RestController.PurchaseController -- Purchase deleted Successfully!
+17:44:00.499 [Test worker] ERROR org.example.RestController.PurchaseController -- Error while retrieving data from the Database, null 
+17:44:00.511 [Test worker] INFO org.example.RestController.PurchaseController -- Returned Successfully! Purchase Count : 20 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

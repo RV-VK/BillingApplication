@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.ProductControllerTest" tests="24" skipped="0" failures="0" errors="0" timestamp="2023-07-28T12:13:56" hostname="apnxdesk006-Veriton-M200-H61" time="3.862">
+  <properties/>
+  <testcase name="getProductsByPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="3.55"/>
+  <testcase name="getProductsByAttributeAndSearchTextWithPageLengthShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.011"/>
+  <testcase name="deleteProductShouldThrowExceptionWhenStatusCodeZero()" classname="org.example.RestController.ProductControllerTest" time="0.031"/>
+  <testcase name="editProductShouldCatchAndRethrowException()" classname="org.example.RestController.ProductControllerTest" time="0.022"/>
+  <testcase name="getProductsByAttributeAndSearchTextWithPageLengthAndPageNumberShouldThrowExceptionOnInvalidAttributeOrPageLengthOrPageNumber()" classname="org.example.RestController.ProductControllerTest" time="0.012"/>
+  <testcase name="editProductShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.028"/>
+  <testcase name="deleteProductShouldCatchANdRethrowException()" classname="org.example.RestController.ProductControllerTest" time="0.008"/>
+  <testcase name="getProductsByPageLengthShouldThrowExceptionOnInvalidPageLength()" classname="org.example.RestController.ProductControllerTest" time="0.011"/>
+  <testcase name="getProductsBySearchTextShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.015"/>
+  <testcase name="getProductsByAttributeAndSearchTextShouldThrowExceptionOnInvalidAttribute()" classname="org.example.RestController.ProductControllerTest" time="0.014"/>
+  <testcase name="addProductShouldCallAndReturnTest()" classname="org.example.RestController.ProductControllerTest" time="0.009"/>
+  <testcase name="addProductShouldCatchAndRethrowExceptionAndNoMoreInteractions()" classname="org.example.RestController.ProductControllerTest" time="0.012"/>
+  <testcase name="getProductsShouldCatchAndRethrowPageCountException()" classname="org.example.RestController.ProductControllerTest" time="0.007"/>
+  <testcase name="getProductsByAttributeAndSearchTextWithPageLengthShouldThrowExceptionOnInvalidAttributeOrPageLength()" classname="org.example.RestController.ProductControllerTest" time="0.012"/>
+  <testcase name="getProductsByAttributeAndSearchTextWithPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.01"/>
+  <testcase name="editProductShouldThrowExceptionWhenNullReturned()" classname="org.example.RestController.ProductControllerTest" time="0.006"/>
+  <testcase name="getProductsShouldCallAndReturnTest()" classname="org.example.RestController.ProductControllerTest" time="0.005"/>
+  <testcase name="getProductsByPageLengthAndPageNumberShouldThrowExceptionOnInvalidPageLengthOrPageNumber()" classname="org.example.RestController.ProductControllerTest" time="0.005"/>
+  <testcase name="countProductShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.006"/>
+  <testcase name="deleteProductShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.005"/>
+  <testcase name="getProductsByAttributeAndSearchTextShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.006"/>
+  <testcase name="countProductShouldCatchAndRethrowAndNoMoreInteractions()" classname="org.example.RestController.ProductControllerTest" time="0.008"/>
+  <testcase name="getProductsShouldCatchAndRethrowApplicationErrorException()" classname="org.example.RestController.ProductControllerTest" time="0.005"/>
+  <testcase name="getProductsByPageLengthShouldCallAndReturn()" classname="org.example.RestController.ProductControllerTest" time="0.007"/>
+  <system-out><![CDATA[17:43:59.779 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:43:59.912 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:43:59.933 [Test worker] ERROR org.example.RestController.ProductController -- Product Delete Failed! Either the Product doesnt exists or doesnt have any stock left! Product-Parameter: G01 
+17:43:59.968 [Test worker] ERROR org.example.RestController.ProductController -- Product Edit Failed!, null 
+17:43:59.993 [Test worker] INFO org.example.RestController.ProductController -- Product Edited Successfully!, Edited Product : Product{id=101, code='G11', name='Ginger', unitcode='kg', type='Grocery', availableQuantity=5.0, price=55.0} 
+17:44:00.023 [Test worker] ERROR org.example.RestController.ProductController -- Product deletion failed, null 
+17:44:00.056 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:44:00.085 [Test worker] INFO org.example.RestController.ProductController -- Product Created Successfully! : Product{id=null, code='G01', name='Garlic', unitcode='kg', type='Grocery', availableQuantity=2.0, price=50.0} 
+17:44:00.099 [Test worker] ERROR org.example.RestController.ProductController -- Product Creation Failed!, null 
+17:44:00.109 [Test worker] WARN org.example.RestController.ProductController -- Error while returning the list. null 
+17:44:00.134 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:44:00.150 [Test worker] ERROR org.example.RestController.ProductController -- Product Edit Failed!, Given Id doesnt exists, 101 
+17:44:00.156 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:44:00.169 [Test worker] INFO org.example.RestController.ProductController -- Returned Successfully!, Product Count : 20 
+17:44:00.175 [Test worker] INFO org.example.RestController.ProductController -- Product deleted successfully!
+17:44:00.182 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+17:44:00.191 [Test worker] ERROR org.example.RestController.ProductController -- Error while retrieving data from database, null 
+17:44:00.197 [Test worker] ERROR org.example.RestController.ProductController -- Error while retrieving data from the Database, null 
+17:44:00.205 [Test worker] INFO org.example.RestController.ProductController -- List returned Successfully!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

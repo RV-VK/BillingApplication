@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.SalesControllerTest" tests="25" skipped="0" failures="0" errors="0" timestamp="2023-07-28T12:14:00" hostname="apnxdesk006-Veriton-M200-H61" time="0.244">
+  <properties/>
+  <testcase name="getSalesByAttributeAndSearchTextShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.073"/>
+  <testcase name="getSalesShouldCatchAndRethrowInvalidTemplateException()" classname="org.example.RestController.SalesControllerTest" time="0.004"/>
+  <testcase name="countSalesShouldCatchAndRethrowAndNoMoreInteractions()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="getSalesByAttributeAndSearchTextShouldThrowExceptionOnInvalidAttribute()" classname="org.example.RestController.SalesControllerTest" time="0.004"/>
+  <testcase name="getSalesByPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.004"/>
+  <testcase name="deleteSalesShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="deleteSalesShouldThrowExceptionWhenStatusCodeZero()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="countSalesByDateShouldThrowExceptionOnZeroReturn()" classname="org.example.RestController.SalesControllerTest" time="0.004"/>
+  <testcase name="getSalesShouldCatchAndRethrowPageCountException()" classname="org.example.RestController.SalesControllerTest" time="0.008"/>
+  <testcase name="deleteSalesShouldCatchANdRethrowException()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="addSalesShouldCatchAndRethrowExceptionAndNoMoreInteractions()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="getSalesByAttributeAndSearchTextWithPageLengthShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="getSalesByAttributeAndSearchTextWithPageLengthShouldThrowExceptionOnInvalidAttributeOrPageLength()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="getSalesByPageLengthShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="getSalesByPageLengthAndPageNumberShouldThrowExceptionOnInvalidPageLengthOrPageNumber()" classname="org.example.RestController.SalesControllerTest" time="0.008"/>
+  <testcase name="getSalesByAttributeAndSearchTextWithPageLengthAndPageNumberShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="getSalesByPageLengthShouldThrowExceptionOnInvalidPageLength()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="countSalesNyDateShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="countSalesShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="getSalesBySearchTextShouldCallAndReturn()" classname="org.example.RestController.SalesControllerTest" time="0.007"/>
+  <testcase name="getSalesShouldCatchAndRethrowApplicationErrorException()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="addSalesShouldCallAndReturnTest()" classname="org.example.RestController.SalesControllerTest" time="0.009"/>
+  <testcase name="getSalesByAttributeAndSearchTextWithPageLengthAndPageNumberShouldThrowExceptionOnInvalidAttributeOrPageLengthOrPageNumber()" classname="org.example.RestController.SalesControllerTest" time="0.006"/>
+  <testcase name="countSalesByDateShouldCatchAndRethrowAndNoMoreInteractions()" classname="org.example.RestController.SalesControllerTest" time="0.005"/>
+  <testcase name="getSalesShouldCallAndReturnTest()" classname="org.example.RestController.SalesControllerTest" time="0.004"/>
+  <system-out><![CDATA[17:44:00.581 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+17:44:00.598 [Test worker] WARN org.example.RestController.SalesController -- Error while returning list, null 
+17:44:00.606 [Test worker] ERROR org.example.RestController.SalesController -- Error retrieving data from the database, null 
+17:44:00.617 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+17:44:00.623 [Test worker] INFO org.example.RestController.SalesController -- Sales deleted Successfully!
+17:44:00.628 [Test worker] ERROR org.example.RestController.SalesController -- Sales deletion failed!, Given Id doesnt exists: G01 
+17:44:00.633 [Test worker] WARN org.example.RestController.SalesController -- No Purchases for the given date : 2023-05-30 
+17:44:00.644 [Test worker] WARN org.example.RestController.SalesController -- Error while returning the list. null 
+17:44:00.649 [Test worker] ERROR org.example.RestController.SalesController -- Sales deletion failed, null 
+17:44:00.657 [Test worker] ERROR org.example.RestController.SalesController -- Sales creation failed!, null 
+17:44:00.663 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+17:44:00.677 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+17:44:00.698 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+17:44:00.712 [Test worker] INFO org.example.RestController.SalesController -- Returned Successfully! Sales Count : 20 
+17:44:00.719 [Test worker] INFO org.example.RestController.SalesController -- Returned Successfully! Sales Count : 20 
+17:44:00.728 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+17:44:00.735 [Test worker] ERROR org.example.RestController.SalesController -- Error while retrieving data from the Database, null 
+17:44:00.742 [Test worker] INFO org.example.RestController.SalesController -- Sales created Successfully! Created SalesEntry : Sales{id=null, date='null', salesItemList=null, grandTotal=null} 
+17:44:00.758 [Test worker] ERROR org.example.RestController.SalesController -- Error retrieving data from the database, null 
+17:44:00.763 [Test worker] INFO org.example.RestController.SalesController -- List returned Successfully!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
