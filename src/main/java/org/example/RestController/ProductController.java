@@ -98,10 +98,10 @@ public class ProductController {
 		try {
 			createdProduct = productService.create(product);
 		} catch(Exception exception) {
-			logger.error("Product Creation Failed!, {}", exception.getMessage());
+			logger.error("Product Creation Failed!, {} ", exception.getMessage());
 			throw exception;
 		}
-		logger.info("Product Created Successfully! : {}", createdProduct);
+		logger.info("Product Created Successfully! : {} ", createdProduct);
 		return createdProduct;
 	}
 
@@ -113,7 +113,7 @@ public class ProductController {
 		try {
 			count = productService.count(attribute, searchText);
 		} catch(ApplicationErrorException exception) {
-			logger.error("Error while retrieving data from database, {}", exception.getMessage());
+			logger.error("Error while retrieving data from database, {} ", exception.getMessage());
 			throw exception;
 		}
 		logger.info("Returned Successfully!, Product Count : {} ", count);
@@ -126,14 +126,14 @@ public class ProductController {
 		try {
 			editedProduct = productService.edit(product);
 		} catch(Exception exception) {
-			logger.error("Product Edit Failed!, {}", exception.getMessage());
+			logger.error("Product Edit Failed!, {} ", exception.getMessage());
 			throw exception;
 		}
 		if(editedProduct == null) {
-			logger.error("Product Edit Failed!, Given Id doesnt exists, {}", product.getId());
+			logger.error("Product Edit Failed!, Given Id doesnt exists, {} ", product.getId());
 			throw new InvalidTemplateException("The Id doesnt exist to edit! Please Give An Existing Id");
 		} else {
-			logger.info("Product Edited Successfully!");
+			logger.info("Product Edited Successfully!, Edited Product : {} ", editedProduct);
 			return editedProduct;
 		}
 	}
@@ -144,14 +144,14 @@ public class ProductController {
 		try {
 			statusCode = productService.delete(parameter);
 		} catch(ApplicationErrorException exception) {
-			logger.error("Product deletion failed, {}", exception.getMessage());
+			logger.error("Product deletion failed, {} ", exception.getMessage());
 			throw exception;
 		}
 		if(statusCode == 1) {
 			logger.info("Product deleted successfully!");
 			return statusCode;
 		} else {
-			logger.error("Product Delete Failed! Either the Product doesnt exists or doesnt have any stock left! Product-Parameter: {}", parameter);
+			logger.error("Product Delete Failed! Either the Product doesnt exists or doesnt have any stock left! Product-Parameter: {} ", parameter);
 			throw new InvalidTemplateException("Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
 		}
 	}
@@ -160,10 +160,10 @@ public class ProductController {
 		try {
 			productList = productService.list(listAttributes);
 		} catch(PageCountOutOfBoundsException exception) {
-			logger.error("Error while returning the list. {}", exception.getMessage());
+			logger.warn("Error while returning the list. {} ", exception.getMessage());
 			throw exception;
 		} catch(ApplicationErrorException exception) {
-			logger.error("Error while retrieving data from the Database, {}", exception.getMessage());
+			logger.error("Error while retrieving data from the Database, {} ", exception.getMessage());
 			throw exception;
 		}
 		logger.info("List returned Successfully!");

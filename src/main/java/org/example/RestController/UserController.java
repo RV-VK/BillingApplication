@@ -98,10 +98,10 @@ public class UserController {
 		try {
 			createdUser = userService.create(user);
 		} catch(Exception exception) {
-			logger.error("User Creation Failed!, {}", exception.getMessage());
+			logger.error("User Creation Failed!, {} ", exception.getMessage());
 			throw exception;
 		}
-		logger.info("User Creation Successfull! : {}", createdUser);
+		logger.info("User Creation Successfull! : {} ", createdUser);
 		return createdUser;
 	}
 
@@ -113,7 +113,7 @@ public class UserController {
 		try {
 			count = userService.count(attribute, searchText);
 		} catch(ApplicationErrorException exception) {
-			logger.error("Error while retrieving data from database, {}", exception.getMessage());
+			logger.error("Error while retrieving data from database, {} ", exception.getMessage());
 			throw exception;
 		}
 		logger.info("Returned Successfully!, User Count : {} ", count);
@@ -126,14 +126,14 @@ public class UserController {
 		try {
 			editedUser = userService.edit(user);
 		} catch(Exception exception) {
-			logger.error("User Edit Failed!, {}", exception.getMessage());
+			logger.error("User Edit Failed!, {} ", exception.getMessage());
 			throw exception;
 		}
 		if(editedUser == null) {
-			logger.error("User edit Failed! Given Id doesnt exists : {}", user.getId());
+			logger.error("User edit Failed! Given Id doesnt exists : {} ", user.getId());
 			throw new InvalidTemplateException("The Id doesnt exists to edit! Please Give an Existing Id");
 		} else {
-			logger.info("User Edited Successfully!");
+			logger.info("User Edited Successfully!, Edited User : {} ", editedUser);
 			return editedUser;
 		}
 	}
@@ -144,14 +144,14 @@ public class UserController {
 		try {
 			statusCode = userService.delete(username);
 		} catch(ApplicationErrorException exception) {
-			logger.error("User Deletion failed!, {}", exception.getMessage());
+			logger.error("User Deletion failed!, {} ", exception.getMessage());
 			throw exception;
 		}
 		if(statusCode == 1) {
 			logger.info("User deleted Successfully!");
 			return statusCode;
 		} else {
-			logger.error("User deletion failed!, Given username doesnt exists : {}", username);
+			logger.error("User deletion failed!, Given username doesnt exists : {} ", username);
 			throw new InvalidTemplateException("Username doesnt Exists!");
 		}
 	}
@@ -160,10 +160,10 @@ public class UserController {
 		try {
 			userList = userService.list(listAttributes);
 		} catch(PageCountOutOfBoundsException exception) {
-			logger.error("Error while returning the list. {}", exception.getMessage());
+			logger.warn("Error while returning the list. {} ", exception.getMessage());
 			throw exception;
 		} catch(ApplicationErrorException exception) {
-			logger.error("Error while retrieving data from the Database, {}", exception.getMessage());
+			logger.error("Error while retrieving data from the Database, {} ", exception.getMessage());
 			throw exception;
 		}
 		logger.info("List returned Successfully!");

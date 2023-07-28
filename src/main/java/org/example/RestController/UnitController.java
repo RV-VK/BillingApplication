@@ -23,7 +23,7 @@ public class UnitController {
 		try {
 			unitList = unitService.list();
 		} catch(ApplicationErrorException exception) {
-			logger.error("Error retrieving data from the database!, {}", exception.getMessage());
+			logger.error("Error retrieving data from the database!, {} ", exception.getMessage());
 			throw exception;
 		}
 		logger.info("List Returned Successfully!");
@@ -36,10 +36,10 @@ public class UnitController {
 		try {
 			createdUnit = unitService.create(unit);
 		} catch(Exception exception) {
-			logger.error("Unit Creation Failed!, {}", exception.getMessage());
+			logger.error("Unit Creation Failed!, {} ", exception.getMessage());
 			throw exception;
 		}
-		logger.info("Unit Created Successfully!");
+		logger.info("Unit Created Successfully! Created Unit : {} ", createdUnit);
 		return createdUnit;
 	}
 
@@ -49,14 +49,14 @@ public class UnitController {
 		try {
 			editedUnit = unitService.edit(unit);
 		} catch(Exception exception) {
-			logger.error("Unit Edit failed!, {}", exception.getMessage());
+			logger.error("Unit Edit failed!, {} ", exception.getMessage());
 			throw exception;
 		}
 		if(editedUnit == null) {
-			logger.error("Unit Edit failed!, Given unit doesnt exists : {}", unit.getId());
+			logger.error("Unit Edit failed!, Given Id doesnt exists : {} ", unit.getId());
 			throw new InvalidTemplateException("The Id doesnt exist to edit! Please give An Existing Id");
 		} else {
-			logger.info("Unit Edited Successfully!");
+			logger.info("Unit Edited Successfully! Edited Unit : {} ", editedUnit);
 			return editedUnit;
 		}
 	}
@@ -67,7 +67,7 @@ public class UnitController {
 		try {
 			statusCode = unitService.delete(unitCode);
 		} catch(Exception exception) {
-			logger.error("Unit deletion failed!, {}", exception.getMessage());
+			logger.error("Unit deletion failed!, {} ", exception.getMessage());
 			throw exception;
 		}
 		if(statusCode == 1) {
@@ -75,7 +75,7 @@ public class UnitController {
 			return statusCode;
 
 		} else {
-			logger.error("Unit deletion failed!, Given Unit Code doesnt exists : {}", unitCode);
+			logger.error("Unit deletion failed!, Given Unit Code doesnt exists : {} ", unitCode);
 			throw new InvalidTemplateException("UnitCode doesnt Exists!");
 		}
 	}

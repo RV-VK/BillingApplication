@@ -5,6 +5,8 @@ import org.example.DAO.PageCountOutOfBoundsException;
 import org.example.Entity.Purchase;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.PurchaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +15,13 @@ import java.util.List;
 
 @RestController
 public class PurchaseController {
+	private final Logger logger = LoggerFactory.getLogger(PurchaseController.class);
 	@Autowired
 	private PurchaseService purchaseService;
 	@Autowired
 	private ListAttributeMapValidator validator;
 	private HashMap<String, String> listAttributes = new HashMap<>();
+	private List<Purchase> purchaseList;
 
 	@GetMapping(path = "/purchases", produces = "application/json")
 	@ResponseBody
@@ -26,7 +30,7 @@ public class PurchaseController {
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/purchases/{pageLength}", produces = "application/json")
@@ -36,7 +40,7 @@ public class PurchaseController {
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
 		validator.validate(listAttributes, PurchaseController.class);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/purchases/{pageLength}/{pageNumber}", produces = "application/json")
@@ -46,7 +50,7 @@ public class PurchaseController {
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
 		validator.validate(listAttributes, PurchaseController.class);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/purchases/find/{searchText}", produces = "application/json")
@@ -55,7 +59,7 @@ public class PurchaseController {
 		listAttributes.put("Pagenumber", null);
 		listAttributes.put("Attribute", null);
 		listAttributes.put("Searchtext", searchText);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/purchases/find/{attribute}/{searchText}", produces = "application/json")
@@ -65,7 +69,7 @@ public class PurchaseController {
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
 		validator.validate(listAttributes, PurchaseController.class);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/purchases/find/{attribute}/{searchText}/{pageLength}", produces = "application/json")
@@ -75,7 +79,7 @@ public class PurchaseController {
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
 		validator.validate(listAttributes, PurchaseController.class);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/purchases/find/{attribute}/{searchText}/{pageLength}/{pageNumber}", produces = "application/json")
@@ -85,37 +89,88 @@ public class PurchaseController {
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
 		validator.validate(listAttributes, PurchaseController.class);
-		return purchaseService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/countPurchase", produces = "application/json")
 	public Integer count() throws ApplicationErrorException, InvalidTemplateException {
+		Integer count;
 		String attribute = "id";
 		String searchText = null;
-		return purchaseService.count(attribute, searchText);
+		try {
+			count = purchaseService.count(attribute, searchText);
+		} catch(Exception exception) {
+			logger.error("Error retrieving data from the database, {} ", exception.getMessage());
+			throw exception;
+		}
+		logger.info("Returned Successfully! Purchase Count : {} ", count);
+		return count;
 	}
 
 	@GetMapping(path = "/countPurchase/{date}", produces = "application/json")
 	public Integer countByDate(@PathVariable String date) throws ApplicationErrorException, InvalidTemplateException {
-		Integer count = purchaseService.count("date", date);
-		if(count <= 0)
+		Integer count;
+		try {
+			count = purchaseService.count("date", date);
+		} catch(Exception exception) {
+			logger.error("Error while retrieving data from the database, {} ", exception.getMessage());
+			throw exception;
+		}
+		if(count <= 0) {
+			logger.warn("No Purchases for the Given date : {} ", date);
 			throw new InvalidTemplateException("No Purchases for the Given Date");
-		else
+		} else {
+			logger.info("Returned Successfully! Purchase Count : {} ", count);
 			return count;
+		}
 	}
 
 	@PostMapping(path = "/purchase", produces = "application/json")
 	public Purchase add(@RequestBody Purchase purchase) throws Exception {
-		return purchaseService.create(purchase);
+		Purchase createdPurchase;
+		try {
+			createdPurchase = purchaseService.create(purchase);
+		} catch(Exception exception) {
+			logger.error("Purchase Creation failed!, {} ", exception.getMessage());
+			throw exception;
+		}
+		logger.info("Purchase Created Successfully! Created Purchase : {} ", createdPurchase);
+		return createdPurchase;
 	}
 
 	@DeleteMapping(path = "/deletePurchase/{invoice}", produces = "application/json")
 	public Integer delete(@PathVariable String invoice) throws ApplicationErrorException, InvalidTemplateException {
-		Integer statusCode = purchaseService.delete(invoice);
-		if(statusCode == 1)
+		Integer statusCode;
+		try {
+			statusCode = purchaseService.delete(invoice);
+		} catch(Exception exception) {
+			logger.error("Purchase deletion failed!, {} ", exception.getMessage());
+			throw exception;
+		}
+		if(statusCode == 1) {
+			logger.info("Purchase deleted Successfully!");
 			return statusCode;
-		else
+		} else {
+			logger.error("Purchase deletion failed!, Given Invoice id doesnt exists : {} ", invoice);
 			throw new InvalidTemplateException("Given Invoice doesnt exists to delete!");
+		}
+	}
+
+	private List<Purchase> listHelperFunction(HashMap<String, String> listAttributes) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+		try {
+			purchaseList = purchaseService.list(listAttributes);
+		} catch(PageCountOutOfBoundsException exception) {
+			logger.warn("Error while returning the list. {} ", exception.getMessage());
+			throw exception;
+		} catch(ApplicationErrorException exception) {
+			logger.error("Error while retrieving data from the Database, {} ", exception.getMessage());
+			throw exception;
+		} catch(InvalidTemplateException exception) {
+			logger.warn("Error while returning list, {} ", exception.getMessage());
+			throw exception;
+		}
+		logger.info("List returned Successfully!");
+		return purchaseList;
 	}
 
 }
