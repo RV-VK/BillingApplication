@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.StoreControllerTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2023-07-28T12:14:00" hostname="apnxdesk006-Veriton-M200-H61" time="0.104">
+  <properties/>
+  <testcase name="deleteStoreShouldThrowIfStatusNegative()" classname="org.example.RestController.StoreControllerTest" time="0.051"/>
+  <testcase name="deleteStoreShouldCatchAndRethrow()" classname="org.example.RestController.StoreControllerTest" time="0.004"/>
+  <testcase name="deleteStoreShouldCallAndReturn()" classname="org.example.RestController.StoreControllerTest" time="0.004"/>
+  <testcase name="addStoreShouldCatchAndRethrowException()" classname="org.example.RestController.StoreControllerTest" time="0.005"/>
+  <testcase name="editStoreShouldCatchAndRethrowException()" classname="org.example.RestController.StoreControllerTest" time="0.006"/>
+  <testcase name="deleteStoreShouldThrowIfStatusCodeZero()" classname="org.example.RestController.StoreControllerTest" time="0.004"/>
+  <testcase name="editStoreShouldCallAndReturn()" classname="org.example.RestController.StoreControllerTest" time="0.006"/>
+  <testcase name="addStoreShouldCallAndReturn()" classname="org.example.RestController.StoreControllerTest" time="0.003"/>
+  <testcase name="storeViewShouldCatchAndRethrow()" classname="org.example.RestController.StoreControllerTest" time="0.005"/>
+  <testcase name="addStoreShouldCallThrowIfNullReturned()" classname="org.example.RestController.StoreControllerTest" time="0.004"/>
+  <testcase name="storeViewShouldCallAndReturn()" classname="org.example.RestController.StoreControllerTest" time="0.004"/>
+  <system-out><![CDATA[17:44:00.821 [Test worker] ERROR org.example.RestController.StoreController -- Store deletion failed!, Invalid Admin Password.
+17:44:00.826 [Test worker] ERROR org.example.RestController.StoreController -- Store deletion failed!
+17:44:00.831 [Test worker] INFO org.example.RestController.StoreController -- Store deleted Successfully!
+17:44:00.836 [Test worker] ERROR org.example.RestController.StoreController -- Store Creation failed, null
+17:44:00.843 [Test worker] ERROR org.example.RestController.StoreController -- Store edit failed!, null 
+17:44:00.848 [Test worker] WARN org.example.RestController.StoreController -- Warning! No Store exists to delete!
+17:44:00.854 [Test worker] INFO org.example.RestController.StoreController -- Store edited Successfully! Edited Store: Store{name='ABCStores', phoneNumber=8594354848, address='123/B North Street', gstCode='1234567890ABCDE'} 
+17:44:00.859 [Test worker] INFO org.example.RestController.StoreController -- Store Created successfully! Created Store : Store{name='ABCStores', phoneNumber=8594354848, address='123/B North Street', gstCode='1234567890ABCDE'} 
+17:44:00.864 [Test worker] ERROR org.example.RestController.StoreController -- Error retrieving data from the database, null 
+17:44:00.869 [Test worker] WARN org.example.RestController.StoreController -- Store Creation failed!, Store already Exists!
+17:44:00.874 [Test worker] INFO org.example.RestController.StoreController -- Store returned successfully!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

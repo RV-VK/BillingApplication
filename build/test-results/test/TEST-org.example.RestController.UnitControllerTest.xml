@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.RestController.UnitControllerTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2023-07-28T12:14:00" hostname="apnxdesk006-Veriton-M200-H61" time="0.135">
+  <properties/>
+  <testcase name="editUnitShouldCatchAndRethrowException()" classname="org.example.RestController.UnitControllerTest" time="0.079"/>
+  <testcase name="getUnitShouldCatchAndRethrowException()" classname="org.example.RestController.UnitControllerTest" time="0.004"/>
+  <testcase name="addUnitShouldCatchAndRethrowExceptionAndNoMoreInteractions()" classname="org.example.RestController.UnitControllerTest" time="0.005"/>
+  <testcase name="editUnitShouldCallAndReturn()" classname="org.example.RestController.UnitControllerTest" time="0.005"/>
+  <testcase name="addUnitShouldCallAndReturnTest()" classname="org.example.RestController.UnitControllerTest" time="0.004"/>
+  <testcase name="deleteUnitShouldCatchANdRethrowException()" classname="org.example.RestController.UnitControllerTest" time="0.008"/>
+  <testcase name="deleteUnitShouldThrowExceptionWhenStatusCodeZero()" classname="org.example.RestController.UnitControllerTest" time="0.006"/>
+  <testcase name="getUnitShouldCallAndReturnTest()" classname="org.example.RestController.UnitControllerTest" time="0.004"/>
+  <testcase name="editUnitShouldThrowExceptionWhenNullReturned()" classname="org.example.RestController.UnitControllerTest" time="0.008"/>
+  <testcase name="deleteUnitShouldCallAndReturn()" classname="org.example.RestController.UnitControllerTest" time="0.004"/>
+  <system-out><![CDATA[17:44:00.958 [Test worker] ERROR org.example.RestController.UnitController -- Unit Edit failed!, null 
+17:44:00.964 [Test worker] ERROR org.example.RestController.UnitController -- Error retrieving data from the database!, null 
+17:44:00.970 [Test worker] ERROR org.example.RestController.UnitController -- Unit Creation Failed!, null 
+17:44:00.975 [Test worker] INFO org.example.RestController.UnitController -- Unit Edited Successfully! Edited Unit : Unit{id=null, name='kilogram', code='kg', description='Unit of Larger Masses', isDividable=true} 
+17:44:00.980 [Test worker] INFO org.example.RestController.UnitController -- Unit Created Successfully! Created Unit : Unit{id=null, name='kilogram', code='kg', description='Unit of Larger Masses', isDividable=true} 
+17:44:00.990 [Test worker] ERROR org.example.RestController.UnitController -- Unit deletion failed!, null 
+17:44:00.994 [Test worker] ERROR org.example.RestController.UnitController -- Unit deletion failed!, Given Unit Code doesnt exists : G01 
+17:44:01.002 [Test worker] INFO org.example.RestController.UnitController -- List Returned Successfully!
+17:44:01.009 [Test worker] ERROR org.example.RestController.UnitController -- Unit Edit failed!, Given Id doesnt exists : null 
+17:44:01.014 [Test worker] INFO org.example.RestController.UnitController -- Unit deleted Successfully!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

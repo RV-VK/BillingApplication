@@ -14,53 +14,53 @@ import java.util.List;
 
 
 @Service
-<span class="fc" id="L17">public class UserServiceImplementation implements UserService {</span>
+<span class="nc" id="L17">public class UserServiceImplementation implements UserService {</span>
 
-<span class="fc" id="L19">	private final String NAME_REGEX = &quot;^[a-zA-Z\\s]{3,30}$&quot;;</span>
-<span class="fc" id="L20">	private final String LAST_NAME_REGEX = &quot;^[a-zA-Z\\s]{0,30}$&quot;;</span>
-<span class="fc" id="L21">	private final String PASSWORD_REGEX = &quot;^[a-zA-Z0-9]{8,30}$&quot;;</span>
-<span class="fc" id="L22">	private final List&lt;String&gt; userTypeList = Arrays.asList(&quot;Sales&quot;, &quot;Purchase&quot;, &quot;Admin&quot;);</span>
-<span class="fc" id="L23">	private final String PHONE_NUMBER_REGEX = &quot;^[6789]\\d{9}$&quot;;</span>
+<span class="nc" id="L19">	private final String NAME_REGEX = &quot;^[a-zA-Z\\s]{3,30}$&quot;;</span>
+<span class="nc" id="L20">	private final String LAST_NAME_REGEX = &quot;^[a-zA-Z\\s]{0,30}$&quot;;</span>
+<span class="nc" id="L21">	private final String PASSWORD_REGEX = &quot;^[a-zA-Z0-9]{8,30}$&quot;;</span>
+<span class="nc" id="L22">	private final List&lt;String&gt; userTypeList = Arrays.asList(&quot;Sales&quot;, &quot;Purchase&quot;, &quot;Admin&quot;);</span>
+<span class="nc" id="L23">	private final String PHONE_NUMBER_REGEX = &quot;^[6789]\\d{9}$&quot;;</span>
 	@Autowired
 	private UserDAO userDAO;
 
 	@Override
 	public User create(User user) throws Exception {
-<span class="fc" id="L29">		validate(user);</span>
-<span class="fc" id="L30">		return userDAO.create(user);</span>
+<span class="nc" id="L29">		validate(user);</span>
+<span class="nc" id="L30">		return userDAO.create(user);</span>
 	}
 
 	@Override
 	public Integer count(String attribute, String searchText) throws ApplicationErrorException {
-<span class="fc" id="L35">		return userDAO.count(attribute, searchText);</span>
+<span class="nc" id="L35">		return userDAO.count(attribute, searchText);</span>
 	}
 
 	@Override
 	public List&lt;User&gt; list(HashMap&lt;String, String&gt; listattributes) throws ApplicationErrorException, PageCountOutOfBoundsException {
 		List&lt;User&gt; userList;
-<span class="pc bpc" id="L41" title="1 of 4 branches missed.">		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 &amp;&amp; listattributes.get(&quot;Searchtext&quot;) != null) {</span>
-<span class="fc" id="L42">			userList = userDAO.searchList(listattributes.get(&quot;Searchtext&quot;));</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">		if(Collections.frequency(listattributes.values(), null) == listattributes.size() - 1 &amp;&amp; listattributes.get(&quot;Searchtext&quot;) != null) {</span>
+<span class="nc" id="L42">			userList = userDAO.searchList(listattributes.get(&quot;Searchtext&quot;));</span>
 		} else {
-<span class="fc" id="L44">			int pageLength = Integer.parseInt(listattributes.get(&quot;Pagelength&quot;));</span>
-<span class="fc" id="L45">			int pageNumber = Integer.parseInt(listattributes.get(&quot;Pagenumber&quot;));</span>
-<span class="fc" id="L46">			int offset = (pageLength * pageNumber) - pageLength;</span>
-<span class="fc" id="L47">			userList = userDAO.list(listattributes.get(&quot;Attribute&quot;), listattributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
+<span class="nc" id="L44">			int pageLength = Integer.parseInt(listattributes.get(&quot;Pagelength&quot;));</span>
+<span class="nc" id="L45">			int pageNumber = Integer.parseInt(listattributes.get(&quot;Pagenumber&quot;));</span>
+<span class="nc" id="L46">			int offset = (pageLength * pageNumber) - pageLength;</span>
+<span class="nc" id="L47">			userList = userDAO.list(listattributes.get(&quot;Attribute&quot;), listattributes.get(&quot;Searchtext&quot;), pageLength, offset);</span>
 		}
-<span class="fc" id="L49">		return userList;</span>
+<span class="nc" id="L49">		return userList;</span>
 	}
 
 	@Override
 	public User edit(User user) throws Exception {
-<span class="fc" id="L54">		validate(user);</span>
-<span class="fc" id="L55">		return userDAO.edit(user);</span>
+<span class="nc" id="L54">		validate(user);</span>
+<span class="nc" id="L55">		return userDAO.edit(user);</span>
 	}
 
 	@Override
 	public Integer delete(String username) throws ApplicationErrorException {
-<span class="fc bfc" id="L60" title="All 2 branches covered.">		if(username != null)</span>
-<span class="fc" id="L61">			return userDAO.delete(username);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		if(username != null)</span>
+<span class="nc" id="L61">			return userDAO.delete(username);</span>
 		else
-<span class="fc" id="L63">			return - 1;</span>
+<span class="nc" id="L63">			return - 1;</span>
 	}
 
 	/**
@@ -69,32 +69,32 @@ import java.util.List;
 	 * @param user user to be validated.
 	 */
 	private void validate(User user) throws InvalidTemplateException {
-<span class="fc bfc" id="L72" title="All 2 branches covered.">		if(user == null)</span>
-<span class="fc" id="L73">			throw new NullPointerException(&quot;User Cannot be Null!!&quot;);</span>
-<span class="fc bfc" id="L74" title="All 4 branches covered.">		if(user.getUserName() != null &amp;&amp; ! user.getUserName().matches(NAME_REGEX))</span>
-<span class="fc" id="L75">			throw new InvalidTemplateException(&quot;Invalid UserName!!&quot;);</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">		else if(user.getUserName() == null)</span>
-<span class="fc" id="L77">			throw new NullPointerException(&quot;Username cannot be null!&quot;);</span>
-<span class="fc bfc" id="L78" title="All 4 branches covered.">		if(user.getFirstName() != null &amp;&amp; ! user.getFirstName().matches(NAME_REGEX))</span>
-<span class="fc" id="L79">			throw new InvalidTemplateException(&quot;Invalid FirstName!!&quot;);</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">		else if(user.getFirstName() == null)</span>
-<span class="fc" id="L81">			throw new NullPointerException(&quot;FirstName Cannot be null&quot;);</span>
-<span class="fc bfc" id="L82" title="All 4 branches covered.">		if(user.getLastName() != null &amp;&amp; ! user.getLastName().matches(LAST_NAME_REGEX))</span>
-<span class="fc" id="L83">			throw new InvalidTemplateException(&quot;Invalid LastName!!&quot;);</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">		else if(user.getLastName() == null)</span>
-<span class="fc" id="L85">			throw new NullPointerException(&quot;LastName cannot be null&quot;);</span>
-<span class="fc bfc" id="L86" title="All 4 branches covered.">		if(user.getPassWord() != null &amp;&amp; ! user.getPassWord().matches(PASSWORD_REGEX))</span>
-<span class="fc" id="L87">			throw new InvalidTemplateException(&quot;Invalid Password!!&quot;);</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">		else if(user.getPassWord() == null)</span>
-<span class="fc" id="L89">			throw new NullPointerException(&quot;Password Cannot be null!&quot;);</span>
-<span class="fc bfc" id="L90" title="All 4 branches covered.">		if(user.getPhoneNumber() != null &amp;&amp; ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
-<span class="fc" id="L91">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
-<span class="fc bfc" id="L92" title="All 2 branches covered.">		else if(user.getPhoneNumber() == null)</span>
-<span class="fc" id="L93">			throw new NullPointerException(&quot;PhoneNumber cannot be null&quot;);</span>
-<span class="fc bfc" id="L94" title="All 4 branches covered.">		if(user.getUserType() != null &amp;&amp; ! userTypeList.contains(user.getUserType()))</span>
-<span class="fc" id="L95">			throw new InvalidTemplateException(&quot;Invalid Usertype!!&quot;);</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">		else if(user.getUserType() == null)</span>
-<span class="fc" id="L97">			throw new NullPointerException(&quot;UserType Cannot be null!&quot;);</span>
-<span class="fc" id="L98">	}</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		if(user == null)</span>
+<span class="nc" id="L73">			throw new NullPointerException(&quot;User Cannot be Null!!&quot;);</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">		if(user.getUserName() != null &amp;&amp; ! user.getUserName().matches(NAME_REGEX))</span>
+<span class="nc" id="L75">			throw new InvalidTemplateException(&quot;Invalid UserName!!&quot;);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		else if(user.getUserName() == null)</span>
+<span class="nc" id="L77">			throw new NullPointerException(&quot;Username cannot be null!&quot;);</span>
+<span class="nc bnc" id="L78" title="All 4 branches missed.">		if(user.getFirstName() != null &amp;&amp; ! user.getFirstName().matches(NAME_REGEX))</span>
+<span class="nc" id="L79">			throw new InvalidTemplateException(&quot;Invalid FirstName!!&quot;);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		else if(user.getFirstName() == null)</span>
+<span class="nc" id="L81">			throw new NullPointerException(&quot;FirstName Cannot be null&quot;);</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">		if(user.getLastName() != null &amp;&amp; ! user.getLastName().matches(LAST_NAME_REGEX))</span>
+<span class="nc" id="L83">			throw new InvalidTemplateException(&quot;Invalid LastName!!&quot;);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		else if(user.getLastName() == null)</span>
+<span class="nc" id="L85">			throw new NullPointerException(&quot;LastName cannot be null&quot;);</span>
+<span class="nc bnc" id="L86" title="All 4 branches missed.">		if(user.getPassWord() != null &amp;&amp; ! user.getPassWord().matches(PASSWORD_REGEX))</span>
+<span class="nc" id="L87">			throw new InvalidTemplateException(&quot;Invalid Password!!&quot;);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		else if(user.getPassWord() == null)</span>
+<span class="nc" id="L89">			throw new NullPointerException(&quot;Password Cannot be null!&quot;);</span>
+<span class="nc bnc" id="L90" title="All 4 branches missed.">		if(user.getPhoneNumber() != null &amp;&amp; ! String.valueOf(user.getPhoneNumber()).matches(PHONE_NUMBER_REGEX))</span>
+<span class="nc" id="L91">			throw new InvalidTemplateException(&quot;Invalid Phone-number!!&quot;);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		else if(user.getPhoneNumber() == null)</span>
+<span class="nc" id="L93">			throw new NullPointerException(&quot;PhoneNumber cannot be null&quot;);</span>
+<span class="nc bnc" id="L94" title="All 4 branches missed.">		if(user.getUserType() != null &amp;&amp; ! userTypeList.contains(user.getUserType()))</span>
+<span class="nc" id="L95">			throw new InvalidTemplateException(&quot;Invalid Usertype!!&quot;);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		else if(user.getUserType() == null)</span>
+<span class="nc" id="L97">			throw new NullPointerException(&quot;UserType Cannot be null!&quot;);</span>
+<span class="nc" id="L98">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

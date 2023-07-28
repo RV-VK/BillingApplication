@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - StoreControllerTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>StoreControllerTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/org.example.RestController.html">org.example.RestController</a> &gt; StoreControllerTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">11</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.096s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">addStoreShouldCallAndReturn()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">addStoreShouldCallThrowIfNullReturned()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">addStoreShouldCatchAndRethrowException()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deleteStoreShouldCallAndReturn()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deleteStoreShouldCatchAndRethrow()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deleteStoreShouldThrowIfStatusCodeZero()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deleteStoreShouldThrowIfStatusNegative()</td>
+<td class="success">0.051s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">editStoreShouldCallAndReturn()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">editStoreShouldCatchAndRethrowException()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">storeViewShouldCallAndReturn()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">storeViewShouldCatchAndRethrow()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>17:44:00.821 [Test worker] ERROR org.example.RestController.StoreController -- Store deletion failed!, Invalid Admin Password.
+17:44:00.826 [Test worker] ERROR org.example.RestController.StoreController -- Store deletion failed!
+17:44:00.831 [Test worker] INFO org.example.RestController.StoreController -- Store deleted Successfully!
+17:44:00.836 [Test worker] ERROR org.example.RestController.StoreController -- Store Creation failed, null
+17:44:00.843 [Test worker] ERROR org.example.RestController.StoreController -- Store edit failed!, null 
+17:44:00.848 [Test worker] WARN org.example.RestController.StoreController -- Warning! No Store exists to delete!
+17:44:00.854 [Test worker] INFO org.example.RestController.StoreController -- Store edited Successfully! Edited Store: Store{name='ABCStores', phoneNumber=8594354848, address='123/B North Street', gstCode='1234567890ABCDE'} 
+17:44:00.859 [Test worker] INFO org.example.RestController.StoreController -- Store Created successfully! Created Store : Store{name='ABCStores', phoneNumber=8594354848, address='123/B North Street', gstCode='1234567890ABCDE'} 
+17:44:00.864 [Test worker] ERROR org.example.RestController.StoreController -- Error retrieving data from the database, null 
+17:44:00.869 [Test worker] WARN org.example.RestController.StoreController -- Store Creation failed!, Store already Exists!
+17:44:00.874 [Test worker] INFO org.example.RestController.StoreController -- Store returned successfully!
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at 28-Jul-2023, 5:44:01 pm</p>
+</div>
+</div>
+</body>
+</html>

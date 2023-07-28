@@ -6,6 +6,8 @@ import org.example.DAO.UniqueConstraintException;
 import org.example.DAO.UnitCodeViolationException;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.UnDividableEntityException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,49 +18,50 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 @RestControllerAdvice
-<span class="nc" id="L19">public class APIExceptionHandler extends ResponseEntityExceptionHandler {</span>
+<span class="nc" id="L21">public class APIExceptionHandler extends ResponseEntityExceptionHandler {</span>
 	private ErrorDetails errorDetails;
+<span class="nc" id="L23">	private Logger logger = LoggerFactory.getLogger(APIExceptionHandler.class);</span>
 
 	@ExceptionHandler(InvalidTemplateException.class)
 	public final ResponseEntity&lt;ErrorDetails&gt; handleInvalidTemplateException(InvalidTemplateException invalidTemplateException, WebRequest request) {
-<span class="nc" id="L24">		logger.error(invalidTemplateException.getMessage());</span>
-<span class="nc" id="L25">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), invalidTemplateException.getMessage(), request.getDescription(false));</span>
-<span class="nc" id="L26">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L27">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), invalidTemplateException.getMessage(), request.getDescription(false));</span>
+<span class="nc" id="L28">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
 	}
 
 	@ExceptionHandler(PageCountOutOfBoundsException.class)
 	public final ResponseEntity&lt;ErrorDetails&gt; handlePageCountOutOfBoundsException(PageCountOutOfBoundsException exception, WebRequest request) {
-<span class="nc" id="L31">		logger.error(exception.getMessage());</span>
-<span class="nc" id="L32">		errorDetails = new ErrorDetails(HttpStatus.NOT_FOUND, new Date(), exception.getMessage(), request.getDescription(false));</span>
-<span class="nc" id="L33">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L33">		errorDetails = new ErrorDetails(HttpStatus.NOT_FOUND, new Date(), exception.getMessage(), request.getDescription(false));</span>
+<span class="nc" id="L34">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.NOT_FOUND);</span>
 	}
 
 	@ExceptionHandler(ApplicationErrorException.class)
 	public final ResponseEntity&lt;ErrorDetails&gt; handleApplicationErrorException(ApplicationErrorException exception, WebRequest request) {
-<span class="nc" id="L38">		logger.error(exception.getMessage());</span>
 <span class="nc" id="L39">		errorDetails = new ErrorDetails(HttpStatus.NOT_FOUND, new Date(), exception.getMessage(), request.getDescription(false));</span>
 <span class="nc" id="L40">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.NOT_FOUND);</span>
 	}
 
 	@ExceptionHandler(UniqueConstraintException.class)
 	public final ResponseEntity&lt;ErrorDetails&gt; handleUniqueConstraintException(UniqueConstraintException exception, WebRequest request) {
-<span class="nc" id="L45">		logger.error(exception.getMessage());</span>
-<span class="nc" id="L46">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), request.getDescription(false));</span>
-<span class="nc" id="L47">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L45">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), request.getDescription(false));</span>
+<span class="nc" id="L46">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
 	}
 
 	@ExceptionHandler(UnitCodeViolationException.class)
 	public final ResponseEntity&lt;ErrorDetails&gt; handleUnitCodeViolationException(UnitCodeViolationException exception, WebRequest webRequest) {
-<span class="nc" id="L52">		logger.error(exception.getMessage());</span>
-<span class="nc" id="L53">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), webRequest.getDescription(false));</span>
-<span class="nc" id="L54">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L51">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), webRequest.getDescription(false));</span>
+<span class="nc" id="L52">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
 	}
 
 	@ExceptionHandler(UnDividableEntityException.class)
 	public final ResponseEntity&lt;ErrorDetails&gt; handleUnDividableEntityException(UnDividableEntityException exception, WebRequest request) {
-<span class="nc" id="L59">		logger.error(exception.getMessage());</span>
-<span class="nc" id="L60">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), request.getDescription(false));</span>
-<span class="nc" id="L61">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
+<span class="nc" id="L57">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), request.getDescription(false));</span>
+<span class="nc" id="L58">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
+	}
+
+	@ExceptionHandler(NullPointerException.class)
+	public final ResponseEntity&lt;ErrorDetails&gt; handleNullPointerException(NullPointerException exception, WebRequest request) {
+<span class="nc" id="L63">		errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, new Date(), exception.getMessage(), request.getDescription(false));</span>
+<span class="nc" id="L64">		return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

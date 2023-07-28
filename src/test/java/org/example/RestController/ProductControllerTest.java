@@ -28,6 +28,8 @@ public class ProductControllerTest {
 	private ProductController productController;
 	@Mock
 	private ProductService productService;
+	@Mock
+	private ListAttributeMapValidator validator;
 
 	@BeforeEach
 	void setUp() {
@@ -43,14 +45,30 @@ public class ProductControllerTest {
 	}
 
 	@Test
+	void getProductsShouldCatchAndRethrowPageCountException() throws PageCountOutOfBoundsException, ApplicationErrorException {
+		when(productService.list(any())).thenThrow(PageCountOutOfBoundsException.class);
+		assertThrows(PageCountOutOfBoundsException.class, () -> productController.getAll());
+		verifyNoMoreInteractions(productService);
+	}
+
+	@Test
+	void getProductsShouldCatchAndRethrowApplicationErrorException() throws PageCountOutOfBoundsException, ApplicationErrorException {
+		when(productService.list(any())).thenThrow(ApplicationErrorException.class);
+		assertThrows(ApplicationErrorException.class, () -> productController.getAll());
+		verifyNoMoreInteractions(productService);
+	}
+
+	@Test
 	void getProductsByPageLengthShouldCallAndReturn() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		when(productService.list(any())).thenReturn(new ArrayList<>());
+		doNothing().when(validator).validate(any(), any());
 		assertNotNull(productController.getByPageLength("10"));
 		verify(productService, times(1)).list(any());
 	}
 
 	@Test
-	void getProductsByPageLengthShouldThrowExceptionOnInvalidPageLength() {
+	void getProductsByPageLengthShouldThrowExceptionOnInvalidPageLength() throws InvalidTemplateException {
+		doThrow(InvalidTemplateException.class).when(validator).validate(any(), any());
 		assertThrows(InvalidTemplateException.class, () -> productController.getByPageLength("S"));
 		verifyNoInteractions(productService);
 	}
@@ -58,12 +76,14 @@ public class ProductControllerTest {
 	@Test
 	void getProductsByPageLengthAndPageNumberShouldCallAndReturn() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		when(productService.list(any())).thenReturn(new ArrayList<>());
+		doNothing().when(validator).validate(any(), any());
 		assertNotNull(productController.getByPageLengthAndPageNumber("10", "2"));
 		verify(productService, times(1)).list(any());
 	}
 
 	@Test
-	void getProductsByPageLengthAndPageNumberShouldThrowExceptionOnInvalidPageLengthOrPageNumber() {
+	void getProductsByPageLengthAndPageNumberShouldThrowExceptionOnInvalidPageLengthOrPageNumber() throws InvalidTemplateException {
+		doThrow(InvalidTemplateException.class).when(validator).validate(any(), any());
 		assertThrows(InvalidTemplateException.class, () -> productController.getByPageLengthAndPageNumber("1", "S"));
 		verifyNoInteractions(productService);
 	}
@@ -78,12 +98,14 @@ public class ProductControllerTest {
 	@Test
 	void getProductsByAttributeAndSearchTextShouldCallAndReturn() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		when(productService.list(any())).thenReturn(new ArrayList<>());
+		doNothing().when(validator).validate(any(), any());
 		assertNotNull(productController.getByAttributeAndSearchText("id", "198"));
 		verify(productService, times(1)).list(any());
 	}
 
 	@Test
-	void getProductsByAttributeAndSearchTextShouldThrowExceptionOnInvalidAttribute() {
+	void getProductsByAttributeAndSearchTextShouldThrowExceptionOnInvalidAttribute() throws InvalidTemplateException {
+		doThrow(InvalidTemplateException.class).when(validator).validate(any(), any());
 		assertThrows(InvalidTemplateException.class, () -> productController.getByAttributeAndSearchText("some", "search"));
 		verifyNoInteractions(productService);
 	}
@@ -91,12 +113,14 @@ public class ProductControllerTest {
 	@Test
 	void getProductsByAttributeAndSearchTextWithPageLengthShouldCallAndReturn() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		when(productService.list(any())).thenReturn(new ArrayList<>());
+		doNothing().when(validator).validate(any(), any());
 		assertNotNull(productController.getByAttributeAndSearchTextWithPageLength("id", "20", "5"));
 		verify(productService, times(1)).list(any());
 	}
 
 	@Test
-	void getProductsByAttributeAndSearchTextWithPageLengthShouldThrowExceptionOnInvalidAttributeOrPageLength() {
+	void getProductsByAttributeAndSearchTextWithPageLengthShouldThrowExceptionOnInvalidAttributeOrPageLength() throws InvalidTemplateException {
+		doThrow(InvalidTemplateException.class).when(validator).validate(any(), any());
 		assertThrows(InvalidTemplateException.class, () -> productController.getByAttributeAndSearchTextWithPageLength("some", "search", "2"));
 		assertThrows(InvalidTemplateException.class, () -> productController.getByAttributeAndSearchTextWithPageLength("id", "search", "S"));
 		verifyNoInteractions(productService);
@@ -105,12 +129,14 @@ public class ProductControllerTest {
 	@Test
 	void getProductsByAttributeAndSearchTextWithPageLengthAndPageNumberShouldCallAndReturn() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		when(productService.list(any())).thenReturn(new ArrayList<>());
+		doNothing().when(validator).validate(any(), any());
 		assertNotNull(productController.getByAttributeAndSearchTextWithPageLengthAndPageNumber("id", "20", "5", "1"));
 		verify(productService, times(1)).list(any());
 	}
 
 	@Test
-	void getProductsByAttributeAndSearchTextWithPageLengthAndPageNumberShouldThrowExceptionOnInvalidAttributeOrPageLengthOrPageNumber() {
+	void getProductsByAttributeAndSearchTextWithPageLengthAndPageNumberShouldThrowExceptionOnInvalidAttributeOrPageLengthOrPageNumber() throws InvalidTemplateException {
+		doThrow(InvalidTemplateException.class).when(validator).validate(any(), any());
 		assertThrows(InvalidTemplateException.class, () -> productController.getByAttributeAndSearchTextWithPageLengthAndPageNumber("some", "search", "2", "1"));
 		assertThrows(InvalidTemplateException.class, () -> productController.getByAttributeAndSearchTextWithPageLengthAndPageNumber("id", "search", "S", "1"));
 		assertThrows(InvalidTemplateException.class, () -> productController.getByAttributeAndSearchTextWithPageLengthAndPageNumber("id", "search", "2", "S"));
@@ -126,12 +152,29 @@ public class ProductControllerTest {
 	}
 
 	@Test
+	void addProductShouldCatchAndRethrowExceptionAndNoMoreInteractions() throws Exception {
+		Product product = new Product("G01", "Garlic", "lg", "Grocery", 2F, 50.0);
+		when(productService.create(product)).thenThrow(Exception.class);
+		assertThrows(Exception.class, () -> productController.add(product));
+		verifyNoMoreInteractions(productService);
+	}
+
+	@Test
 	void countProductShouldCallAndReturn() throws ApplicationErrorException {
 		String attribute = "id";
 		String searchText = null;
 		when(productService.count(attribute, searchText)).thenReturn(20);
 		assertEquals(20, productController.count());
 		verify(productService, times(1)).count(attribute, searchText);
+	}
+
+	@Test
+	void countProductShouldCatchAndRethrowAndNoMoreInteractions() throws ApplicationErrorException {
+		String attribute = "id";
+		String searchText = null;
+		when(productService.count(attribute, searchText)).thenThrow(ApplicationErrorException.class);
+		assertThrows(ApplicationErrorException.class, () -> productController.count());
+		verifyNoMoreInteractions(productService);
 	}
 
 
@@ -144,11 +187,43 @@ public class ProductControllerTest {
 	}
 
 	@Test
+	void editProductShouldCatchAndRethrowException() throws Exception {
+		Product product = new Product(101, "G11", "Ginger", "kgl", "Grocery", 5F, 55);
+		when(productService.edit(product)).thenThrow(Exception.class);
+		assertThrows(Exception.class, () -> productController.edit(product));
+		verifyNoMoreInteractions(productService);
+	}
+
+	@Test
+	void editProductShouldThrowExceptionWhenNullReturned() throws Exception {
+		Product product = new Product(101, "G11", "Ginger", "kgl", "Grocery", 5F, 55);
+		when(productService.edit(product)).thenReturn(null);
+		assertThrows(InvalidTemplateException.class, () -> productController.edit(product));
+		verifyNoMoreInteractions(productService);
+	}
+
+	@Test
 	void deleteProductShouldCallAndReturn() throws ApplicationErrorException, InvalidTemplateException {
 		String parameter = "G01";
 		when(productService.delete(parameter)).thenReturn(1);
 		assertEquals(1, productController.delete(parameter));
 		verify(productService, times(1)).delete(parameter);
+	}
+
+	@Test
+	void deleteProductShouldCatchANdRethrowException() throws ApplicationErrorException {
+		String parameter = "G01";
+		when(productService.delete(parameter)).thenThrow(ApplicationErrorException.class);
+		assertThrows(ApplicationErrorException.class, () -> productController.delete(parameter));
+		verifyNoMoreInteractions(productService);
+	}
+
+	@Test
+	void deleteProductShouldThrowExceptionWhenStatusCodeZero() throws ApplicationErrorException {
+		String parameter = "G01";
+		when(productService.delete(parameter)).thenReturn(0);
+		assertThrows(InvalidTemplateException.class, () -> productController.delete(parameter));
+		verifyNoMoreInteractions(productService);
 	}
 
 }

@@ -5,6 +5,8 @@ import org.example.DAO.PageCountOutOfBoundsException;
 import org.example.Entity.Sales;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.SalesService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,111 +14,163 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-<span class="nc" id="L15">public class SalesController {</span>
+<span class="fc" id="L17">public class SalesController {</span>
+<span class="fc" id="L18">	private final Logger logger = LoggerFactory.getLogger(SalesController.class);</span>
 	@Autowired
 	private SalesService salesService;
 	@Autowired
 	private ListAttributeMapValidator validator;
-<span class="nc" id="L20">	private HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L23">	private HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
+	private List&lt;Sales&gt; salesList;
 
 	@GetMapping(path = &quot;/sales&quot;, produces = &quot;application/json&quot;)
 	@ResponseBody
 	public List&lt;Sales&gt; getAll() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L25">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
-<span class="nc" id="L26">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L27">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="nc" id="L28">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
-<span class="nc" id="L29">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L29">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="fc" id="L30">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L31">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="fc" id="L32">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="fc" id="L33">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/sales/{pageLength}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Sales&gt; getByPageLength(@PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L34">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
-<span class="nc" id="L35">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L36">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="nc" id="L37">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
-<span class="nc" id="L38">		validator.validate(listAttributes, PurchaseController.class);</span>
-<span class="nc" id="L39">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L38">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="fc" id="L39">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L40">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="fc" id="L41">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="fc" id="L42">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="fc" id="L43">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/sales/{pageLength}/{pageNumber}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Sales&gt; getByPageLengthAndPageNumber(@PathVariable String pageLength, @PathVariable String pageNumber) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L44">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
-<span class="nc" id="L45">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
-<span class="nc" id="L46">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="nc" id="L47">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
-<span class="nc" id="L48">		validator.validate(listAttributes, PurchaseController.class);</span>
-<span class="nc" id="L49">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L48">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="fc" id="L49">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
+<span class="fc" id="L50">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="fc" id="L51">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="fc" id="L52">		validator.validate(listAttributes, PurchaseController.class);</span>
+<span class="fc" id="L53">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/sales/find/{searchText}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Sales&gt; getBySearchText(@PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L54">		listAttributes.put(&quot;Pagelength&quot;, null);</span>
-<span class="nc" id="L55">		listAttributes.put(&quot;Pagenumber&quot;, null);</span>
-<span class="nc" id="L56">		listAttributes.put(&quot;Attribute&quot;, null);</span>
-<span class="nc" id="L57">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L58">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L58">		listAttributes.put(&quot;Pagelength&quot;, null);</span>
+<span class="fc" id="L59">		listAttributes.put(&quot;Pagenumber&quot;, null);</span>
+<span class="fc" id="L60">		listAttributes.put(&quot;Attribute&quot;, null);</span>
+<span class="fc" id="L61">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L62">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/sales/find/{attribute}/{searchText}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Sales&gt; getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L63">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
-<span class="nc" id="L64">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L65">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
-<span class="nc" id="L66">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L67">		validator.validate(listAttributes, SalesController.class);</span>
-<span class="nc" id="L68">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L67">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="fc" id="L68">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L69">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="fc" id="L70">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L71">		validator.validate(listAttributes, SalesController.class);</span>
+<span class="fc" id="L72">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/sales/find/{attribute}/{searchText}/{pageLength}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Sales&gt; getByAttributeAndSearchTextWithPageLength(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L73">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
-<span class="nc" id="L74">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L75">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
-<span class="nc" id="L76">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L77">		validator.validate(listAttributes, SalesController.class);</span>
-<span class="nc" id="L78">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L77">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="fc" id="L78">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L79">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="fc" id="L80">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L81">		validator.validate(listAttributes, SalesController.class);</span>
+<span class="fc" id="L82">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/sales/find/{attribute}/{searchText}/{pageLength}/{pageNumber}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Sales&gt; getByAttributeAndSearchTextWithPageLengthAndPageNumber(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String pageLength, @PathVariable String pageNumber) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L83">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
-<span class="nc" id="L84">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
-<span class="nc" id="L85">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
-<span class="nc" id="L86">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L87">		validator.validate(listAttributes, SalesController.class);</span>
-<span class="nc" id="L88">		return salesService.list(listAttributes);</span>
+<span class="fc" id="L87">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="fc" id="L88">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
+<span class="fc" id="L89">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="fc" id="L90">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L91">		validator.validate(listAttributes, SalesController.class);</span>
+<span class="fc" id="L92">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/countSales&quot;, produces = &quot;application/json&quot;)
 	public Integer count() throws ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L93">		String attribute = &quot;id&quot;;</span>
-<span class="nc" id="L94">		String searchText = null;</span>
-<span class="nc" id="L95">		return salesService.count(attribute, searchText);</span>
+		Integer count;
+<span class="fc" id="L98">		String attribute = &quot;id&quot;;</span>
+<span class="fc" id="L99">		String searchText = null;</span>
+		try {
+<span class="fc" id="L101">			count = salesService.count(attribute, searchText);</span>
+<span class="fc" id="L102">		} catch(Exception exception) {</span>
+<span class="fc" id="L103">			logger.error(&quot;Error retrieving data from the database, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L104">			throw exception;</span>
+<span class="fc" id="L105">		}</span>
+<span class="fc" id="L106">		logger.info(&quot;Returned Successfully! Sales Count : {} &quot;, count);</span>
+<span class="fc" id="L107">		return count;</span>
 	}
 
 	@GetMapping(path = &quot;/countSales/{date}&quot;, produces = &quot;application/json&quot;)
 	public Integer countByDate(@PathVariable String date) throws ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L100">		Integer count = salesService.count(&quot;date&quot;, date);</span>
-<span class="nc bnc" id="L101" title="All 2 branches missed.">		if(count &lt;= 0)</span>
-<span class="nc" id="L102">			throw new InvalidTemplateException(&quot;No Purchases for the Given Date&quot;);</span>
-		else
-<span class="nc" id="L104">			return count;</span>
+		Integer count;
+		try {
+<span class="fc" id="L114">			count = salesService.count(&quot;date&quot;, date);</span>
+<span class="fc" id="L115">		} catch(Exception exception) {</span>
+<span class="fc" id="L116">			logger.error(&quot;Error retrieving data from the database, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L117">			throw exception;</span>
+<span class="fc" id="L118">		}</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">		if(count &lt;= 0) {</span>
+<span class="fc" id="L120">			logger.warn(&quot;No Purchases for the given date : {} &quot;, date);</span>
+<span class="fc" id="L121">			throw new InvalidTemplateException(&quot;No Purchases for the Given Date&quot;);</span>
+		} else {
+<span class="fc" id="L123">			logger.info(&quot;Returned Successfully! Sales Count : {} &quot;, count);</span>
+<span class="fc" id="L124">			return count;</span>
+		}
 	}
 
 	@PostMapping(path = &quot;/sales&quot;, produces = &quot;application/json&quot;)
 	public Sales add(@RequestBody Sales sales) throws Exception {
-<span class="nc" id="L109">		return salesService.create(sales);</span>
+		Sales createdSale;
+		try {
+<span class="fc" id="L132">			createdSale = salesService.create(sales);</span>
+<span class="fc" id="L133">		} catch(Exception exception) {</span>
+<span class="fc" id="L134">			logger.error(&quot;Sales creation failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L135">			throw exception;</span>
+<span class="fc" id="L136">		}</span>
+<span class="fc" id="L137">		logger.info(&quot;Sales created Successfully! Created SalesEntry : {} &quot;, sales);</span>
+<span class="fc" id="L138">		return createdSale;</span>
 	}
 
 	@DeleteMapping(path = &quot;/deleteSales/{id}&quot;, produces = &quot;application/json&quot;)
 	public Integer delete(@PathVariable String id) throws ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L114">		Integer statusCode = salesService.delete(id);</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">		if(statusCode == 1)</span>
-<span class="nc" id="L116">			return statusCode;</span>
-		else
-<span class="nc" id="L118">			throw new InvalidTemplateException(&quot;Given Id doesnt exists to delete!&quot;);</span>
+		Integer statusCode;
+		try {
+<span class="fc" id="L145">			statusCode = salesService.delete(id);</span>
+<span class="fc" id="L146">		} catch(Exception exception) {</span>
+<span class="fc" id="L147">			logger.error(&quot;Sales deletion failed, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L148">			throw exception;</span>
+<span class="fc" id="L149">		}</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">		if(statusCode == 1) {</span>
+<span class="fc" id="L151">			logger.info(&quot;Sales deleted Successfully!&quot;);</span>
+<span class="fc" id="L152">			return statusCode;</span>
+		} else {
+<span class="fc" id="L154">			logger.error(&quot;Sales deletion failed!, Given Id doesnt exists: {} &quot;, id);</span>
+<span class="fc" id="L155">			throw new InvalidTemplateException(&quot;Given Id doesnt exists to delete!&quot;);</span>
+		}
 	}
 
+	private List&lt;Sales&gt; listHelperFunction(HashMap&lt;String, String&gt; listAttributes) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
+		try {
+<span class="fc" id="L161">			salesList = salesService.list(listAttributes);</span>
+<span class="fc" id="L162">		} catch(PageCountOutOfBoundsException exception) {</span>
+<span class="fc" id="L163">			logger.warn(&quot;Error while returning the list. {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L164">			throw exception;</span>
+<span class="fc" id="L165">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L166">			logger.error(&quot;Error while retrieving data from the Database, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L167">			throw exception;</span>
+<span class="fc" id="L168">		} catch(InvalidTemplateException exception) {</span>
+<span class="fc" id="L169">			logger.warn(&quot;Error while returning list, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L170">			throw exception;</span>
+<span class="fc" id="L171">		}</span>
+<span class="fc" id="L172">		logger.info(&quot;List returned Successfully!&quot;);</span>
+<span class="fc" id="L173">		return salesList;</span>
+	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

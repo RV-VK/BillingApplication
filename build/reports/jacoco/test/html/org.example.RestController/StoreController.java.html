@@ -5,46 +5,83 @@ import org.example.DAO.ApplicationErrorException;
 import org.example.Entity.Store;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.StoreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
 @RestController
-<span class="nc" id="L14">public class StoreController {</span>
+<span class="fc" id="L16">public class StoreController {</span>
 
+<span class="fc" id="L18">	private final Logger logger = LoggerFactory.getLogger(StoreController.class);</span>
 	@Autowired
 	private StoreService storeService;
 
 	@GetMapping(path = &quot;/store&quot;, produces = &quot;application/json&quot;)
 	public Store view() throws ApplicationErrorException {
-<span class="nc" id="L21">		return storeService.view();</span>
+		Store store;
+		try {
+<span class="fc" id="L26">			store = storeService.view();</span>
+<span class="fc" id="L27">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L28">			logger.error(&quot;Error retrieving data from the database, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L29">			throw exception;</span>
+<span class="fc" id="L30">		}</span>
+<span class="fc" id="L31">		logger.info(&quot;Store returned successfully!&quot;);</span>
+<span class="fc" id="L32">		return store;</span>
 	}
 
 	@PostMapping(path = &quot;/store&quot;, produces = &quot;application/json&quot;)
 	public Store add(@RequestBody Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L26">		Store createdStore = storeService.create(store);</span>
-<span class="nc bnc" id="L27" title="All 2 branches missed.">		if(createdStore == null)</span>
-<span class="nc" id="L28">			throw new InvalidTemplateException(&quot;Store Already Exists!&quot;);</span>
-		else
-<span class="nc" id="L30">			return createdStore;</span>
+		Store createdStore;
+		try {
+<span class="fc" id="L39">			createdStore = storeService.create(store);</span>
+<span class="fc" id="L40">		} catch(SQLException | ApplicationErrorException exception) {</span>
+<span class="fc" id="L41">			logger.error(&quot;Store Creation failed, {}&quot;, exception.getMessage());</span>
+<span class="fc" id="L42">			throw exception;</span>
+<span class="fc" id="L43">		}</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		if(createdStore == null) {</span>
+<span class="fc" id="L45">			logger.warn(&quot;Store Creation failed!, Store already Exists!&quot;);</span>
+<span class="fc" id="L46">			throw new InvalidTemplateException(&quot;Store Already Exists!&quot;);</span>
+		} else {
+<span class="fc" id="L48">			logger.info(&quot;Store Created successfully! Created Store : {} &quot;, createdStore);</span>
+<span class="fc" id="L49">			return createdStore;</span>
+		}
 	}
 
 	@PutMapping(path = &quot;/store&quot;, produces = &quot;application/json&quot;)
 	public Store edit(@RequestBody Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L35">		return storeService.edit(store);</span>
+		Store editedStore;
+		try {
+<span class="fc" id="L57">			editedStore = storeService.edit(store);</span>
+<span class="fc" id="L58">		} catch(Exception exception) {</span>
+<span class="fc" id="L59">			logger.error(&quot;Store edit failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L60">			throw exception;</span>
+<span class="fc" id="L61">		}</span>
+<span class="fc" id="L62">		logger.info(&quot;Store edited Successfully! Edited Store: {} &quot;, editedStore);</span>
+<span class="fc" id="L63">		return editedStore;</span>
 	}
 
 	@DeleteMapping(path = &quot;/deleteStore/{userName}/{passWord}&quot;, produces = &quot;application/json&quot;)
 	public Integer delete(@PathVariable String userName, @PathVariable String passWord) throws ApplicationErrorException, InvalidTemplateException {
 		Integer statusCode;
-<span class="nc" id="L41">		statusCode = storeService.delete(userName, passWord);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">		if(statusCode == - 1) {</span>
-<span class="nc" id="L43">			throw new InvalidTemplateException(&quot;Invalid Admin Password!&quot;);</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">		} else if(statusCode == 0) {</span>
-<span class="nc" id="L45">			throw new InvalidTemplateException(&quot;No Store Exists to delete!&quot;);</span>
-		} else
-<span class="nc" id="L47">			return statusCode;</span>
+		try {
+<span class="fc" id="L70">			statusCode = storeService.delete(userName, passWord);</span>
+<span class="fc" id="L71">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L72">			logger.error(&quot;Store deletion failed!&quot;);</span>
+<span class="fc" id="L73">			throw exception;</span>
+<span class="fc" id="L74">		}</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">		if(statusCode == - 1) {</span>
+<span class="fc" id="L76">			logger.error(&quot;Store deletion failed!, Invalid Admin Password.&quot;);</span>
+<span class="fc" id="L77">			throw new InvalidTemplateException(&quot;Invalid Admin Password!&quot;);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		} else if(statusCode == 0) {</span>
+<span class="fc" id="L79">			logger.warn(&quot;Warning! No Store exists to delete!&quot;);</span>
+<span class="fc" id="L80">			throw new InvalidTemplateException(&quot;No Store Exists to delete!&quot;);</span>
+		} else {
+<span class="fc" id="L82">			logger.info(&quot;Store deleted Successfully!&quot;);</span>
+<span class="fc" id="L83">			return statusCode;</span>
+		}
 	}
 
 

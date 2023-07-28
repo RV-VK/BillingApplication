@@ -4,41 +4,80 @@ import org.example.DAO.ApplicationErrorException;
 import org.example.Entity.Unit;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.UnitService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-<span class="nc" id="L13">public class UnitController {</span>
+<span class="fc" id="L15">public class UnitController {</span>
+<span class="fc" id="L16">	private static final Logger logger = LoggerFactory.getLogger(UnitController.class);</span>
 	@Autowired
 	private UnitService unitService;
 
 	@GetMapping(path = &quot;/units&quot;, produces = &quot;application/json&quot;)
 	public List&lt;Unit&gt; getAll() throws ApplicationErrorException {
-<span class="nc" id="L19">		return unitService.list();</span>
+		List&lt;Unit&gt; unitList;
+		try {
+<span class="fc" id="L24">			unitList = unitService.list();</span>
+<span class="fc" id="L25">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L26">			logger.error(&quot;Error retrieving data from the database!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L27">			throw exception;</span>
+<span class="fc" id="L28">		}</span>
+<span class="fc" id="L29">		logger.info(&quot;List Returned Successfully!&quot;);</span>
+<span class="fc" id="L30">		return unitList;</span>
 	}
 
 	@PostMapping(path = &quot;/unit&quot;, produces = &quot;application/json&quot;)
 	public Unit add(@RequestBody Unit unit) throws Exception {
-<span class="nc" id="L24">		return unitService.create(unit);</span>
+		Unit createdUnit;
+		try {
+<span class="fc" id="L37">			createdUnit = unitService.create(unit);</span>
+<span class="fc" id="L38">		} catch(Exception exception) {</span>
+<span class="fc" id="L39">			logger.error(&quot;Unit Creation Failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L40">			throw exception;</span>
+<span class="fc" id="L41">		}</span>
+<span class="fc" id="L42">		logger.info(&quot;Unit Created Successfully! Created Unit : {} &quot;, createdUnit);</span>
+<span class="fc" id="L43">		return createdUnit;</span>
 	}
 
 	@PutMapping(path = &quot;/unit&quot;, produces = &quot;application/json&quot;)
 	public Unit edit(@RequestBody Unit unit) throws Exception {
-<span class="nc" id="L29">		Unit editedUnit = unitService.edit(unit);</span>
-<span class="nc bnc" id="L30" title="All 2 branches missed.">		if(editedUnit == null)</span>
-<span class="nc" id="L31">			throw new InvalidTemplateException(&quot;The Id doesnt exist to edit! Please give An Existing Id&quot;);</span>
-		else
-<span class="nc" id="L33">			return editedUnit;</span>
+		Unit editedUnit;
+		try {
+<span class="fc" id="L50">			editedUnit = unitService.edit(unit);</span>
+<span class="fc" id="L51">		} catch(Exception exception) {</span>
+<span class="fc" id="L52">			logger.error(&quot;Unit Edit failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L53">			throw exception;</span>
+<span class="fc" id="L54">		}</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		if(editedUnit == null) {</span>
+<span class="fc" id="L56">			logger.error(&quot;Unit Edit failed!, Given Id doesnt exists : {} &quot;, unit.getId());</span>
+<span class="fc" id="L57">			throw new InvalidTemplateException(&quot;The Id doesnt exist to edit! Please give An Existing Id&quot;);</span>
+		} else {
+<span class="fc" id="L59">			logger.info(&quot;Unit Edited Successfully! Edited Unit : {} &quot;, editedUnit);</span>
+<span class="fc" id="L60">			return editedUnit;</span>
+		}
 	}
 
 	@DeleteMapping(path = &quot;/deleteUnit/{unitCode}&quot;, produces = &quot;application/json&quot;)
 	public Integer delete(@PathVariable String unitCode) throws Exception {
-<span class="nc" id="L38">		Integer statusCode = unitService.delete(unitCode);</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">		if(statusCode == 1)</span>
-<span class="nc" id="L40">			return statusCode;</span>
-<span class="nc" id="L41">		else throw new InvalidTemplateException(&quot;UnitCode doesnt Exists!&quot;);</span>
+		Integer statusCode;
+		try {
+<span class="fc" id="L68">			statusCode = unitService.delete(unitCode);</span>
+<span class="fc" id="L69">		} catch(Exception exception) {</span>
+<span class="fc" id="L70">			logger.error(&quot;Unit deletion failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L71">			throw exception;</span>
+<span class="fc" id="L72">		}</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">		if(statusCode == 1) {</span>
+<span class="fc" id="L74">			logger.info(&quot;Unit deleted Successfully!&quot;);</span>
+<span class="fc" id="L75">			return statusCode;</span>
+
+		} else {
+<span class="fc" id="L78">			logger.error(&quot;Unit deletion failed!, Given Unit Code doesnt exists : {} &quot;, unitCode);</span>
+<span class="fc" id="L79">			throw new InvalidTemplateException(&quot;UnitCode doesnt Exists!&quot;);</span>
+		}
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

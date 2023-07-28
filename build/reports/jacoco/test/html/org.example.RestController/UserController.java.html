@@ -5,6 +5,8 @@ import org.example.DAO.PageCountOutOfBoundsException;
 import org.example.Entity.User;
 import org.example.Service.InvalidTemplateException;
 import org.example.Service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,111 +14,160 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-<span class="nc" id="L15">public class UserController {</span>
+<span class="fc" id="L17">public class UserController {</span>
+<span class="fc" id="L18">	private static final Logger logger = LoggerFactory.getLogger(UserController.class);</span>
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private ListAttributeMapValidator validator;
-<span class="nc" id="L20">	private HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L23">	private HashMap&lt;String, String&gt; listAttributes = new HashMap&lt;&gt;();</span>
+	private List&lt;User&gt; userList;
 
 	@GetMapping(path = &quot;/users&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getAll() throws PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L24">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
-<span class="nc" id="L25">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L26">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="nc" id="L27">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="fc" id="L28">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="fc" id="L29">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L30">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="fc" id="L31">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
 
-<span class="nc" id="L29">		return userService.list(listAttributes);</span>
+<span class="fc" id="L33">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/users/{pageLength}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getByPageLength(@PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L34">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
-<span class="nc" id="L35">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L36">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="nc" id="L37">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
-<span class="nc" id="L38">		validator.validate(listAttributes, UserController.class);</span>
-<span class="nc" id="L39">		return userService.list(listAttributes);</span>
+<span class="fc" id="L38">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="fc" id="L39">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L40">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="fc" id="L41">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="fc" id="L42">		validator.validate(listAttributes, UserController.class);</span>
+<span class="fc" id="L43">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/users/{pageLength}/{pageNumber}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getByPageLengthAndPageNumber(@PathVariable String pageLength, @PathVariable String pageNumber) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L44">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
-<span class="nc" id="L45">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
-<span class="nc" id="L46">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
-<span class="nc" id="L47">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
-<span class="nc" id="L48">		validator.validate(listAttributes, UserController.class);</span>
-<span class="nc" id="L49">		return userService.list(listAttributes);</span>
+<span class="fc" id="L48">		listAttributes.put(&quot;Pagelength&quot;, pageLength);</span>
+<span class="fc" id="L49">		listAttributes.put(&quot;Pagenumber&quot;, pageNumber);</span>
+<span class="fc" id="L50">		listAttributes.put(&quot;Attribute&quot;, &quot;id&quot;);</span>
+<span class="fc" id="L51">		listAttributes.put(&quot;Searchtext&quot;, null);</span>
+<span class="fc" id="L52">		validator.validate(listAttributes, UserController.class);</span>
+<span class="fc" id="L53">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/users/find/{searchText}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getBySearchText(@PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L54">		listAttributes.put(&quot;Pagelength&quot;, null);</span>
-<span class="nc" id="L55">		listAttributes.put(&quot;Pagenumber&quot;, null);</span>
-<span class="nc" id="L56">		listAttributes.put(&quot;Attribute&quot;, null);</span>
-<span class="nc" id="L57">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L58">		return userService.list(listAttributes);</span>
+<span class="fc" id="L58">		listAttributes.put(&quot;Pagelength&quot;, null);</span>
+<span class="fc" id="L59">		listAttributes.put(&quot;Pagenumber&quot;, null);</span>
+<span class="fc" id="L60">		listAttributes.put(&quot;Attribute&quot;, null);</span>
+<span class="fc" id="L61">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L62">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/users/find/{attribute}/{searchText}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L63">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
-<span class="nc" id="L64">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L65">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
-<span class="nc" id="L66">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L67">		validator.validate(listAttributes, UserController.class);</span>
-<span class="nc" id="L68">		return userService.list(listAttributes);</span>
+<span class="fc" id="L67">		listAttributes.put(&quot;Pagelength&quot;, String.valueOf(Integer.MAX_VALUE));</span>
+<span class="fc" id="L68">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L69">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="fc" id="L70">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L71">		validator.validate(listAttributes, UserController.class);</span>
+<span class="fc" id="L72">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/users/find/{attribute}/{searchText}/{PageLength}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getByAttributeAndSearchTextWithPageLength(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String PageLength) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L73">		listAttributes.put(&quot;Pagelength&quot;, PageLength);</span>
-<span class="nc" id="L74">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
-<span class="nc" id="L75">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
-<span class="nc" id="L76">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L77">		validator.validate(listAttributes, UserController.class);</span>
-<span class="nc" id="L78">		return userService.list(listAttributes);</span>
+<span class="fc" id="L77">		listAttributes.put(&quot;Pagelength&quot;, PageLength);</span>
+<span class="fc" id="L78">		listAttributes.put(&quot;Pagenumber&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L79">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="fc" id="L80">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L81">		validator.validate(listAttributes, UserController.class);</span>
+<span class="fc" id="L82">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@GetMapping(path = &quot;/users/find/{attribute}/{searchText}/{PageLength}/{PageNumber}&quot;, produces = &quot;application/json&quot;)
 	public List&lt;User&gt; getByAttributeAndSearchTextWithPageLengthAndPageNumber(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String PageLength, @PathVariable String PageNumber) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
-<span class="nc" id="L83">		listAttributes.put(&quot;Pagelength&quot;, PageLength);</span>
-<span class="nc" id="L84">		listAttributes.put(&quot;Pagenumber&quot;, PageNumber);</span>
-<span class="nc" id="L85">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
-<span class="nc" id="L86">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
-<span class="nc" id="L87">		validator.validate(listAttributes, UserController.class);</span>
-<span class="nc" id="L88">		return userService.list(listAttributes);</span>
+<span class="fc" id="L87">		listAttributes.put(&quot;Pagelength&quot;, PageLength);</span>
+<span class="fc" id="L88">		listAttributes.put(&quot;Pagenumber&quot;, PageNumber);</span>
+<span class="fc" id="L89">		listAttributes.put(&quot;Attribute&quot;, attribute);</span>
+<span class="fc" id="L90">		listAttributes.put(&quot;Searchtext&quot;, searchText);</span>
+<span class="fc" id="L91">		validator.validate(listAttributes, UserController.class);</span>
+<span class="fc" id="L92">		return listHelperFunction(listAttributes);</span>
 	}
 
 	@PostMapping(path = &quot;/user&quot;, produces = &quot;application/json&quot;)
 	public User add(@RequestBody User user) throws Exception {
-<span class="nc" id="L93">		return userService.create(user);</span>
+		User createdUser;
+		try {
+<span class="fc" id="L99">			createdUser = userService.create(user);</span>
+<span class="fc" id="L100">		} catch(Exception exception) {</span>
+<span class="fc" id="L101">			logger.error(&quot;User Creation Failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L102">			throw exception;</span>
+<span class="fc" id="L103">		}</span>
+<span class="fc" id="L104">		logger.info(&quot;User Creation Successfull! : {} &quot;, createdUser);</span>
+<span class="fc" id="L105">		return createdUser;</span>
 	}
 
 	@GetMapping(path = &quot;/countUsers&quot;, produces = &quot;application/json&quot;)
 	public Integer count() throws ApplicationErrorException {
-<span class="nc" id="L98">		String attribute = &quot;id&quot;;</span>
-<span class="nc" id="L99">		String searchText = null;</span>
-<span class="nc" id="L100">		return userService.count(attribute, searchText);</span>
+<span class="fc" id="L110">		String attribute = &quot;id&quot;;</span>
+<span class="fc" id="L111">		String searchText = null;</span>
+		Integer count;
+		try {
+<span class="fc" id="L114">			count = userService.count(attribute, searchText);</span>
+<span class="fc" id="L115">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L116">			logger.error(&quot;Error while retrieving data from database, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L117">			throw exception;</span>
+<span class="fc" id="L118">		}</span>
+<span class="fc" id="L119">		logger.info(&quot;Returned Successfully!, User Count : {} &quot;, count);</span>
+<span class="fc" id="L120">		return count;</span>
 	}
 
 	@PutMapping(path = &quot;/user&quot;, produces = &quot;application/json&quot;)
 	public User edit(@RequestBody User user) throws Exception {
-<span class="nc" id="L105">		User editedtUser = userService.edit(user);</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">		if(editedtUser == null)</span>
-<span class="nc" id="L107">			throw new InvalidTemplateException(&quot;The Id doesnt exists to edit! Please Give an Existing Id&quot;);</span>
-		else
-<span class="nc" id="L109">			return editedtUser;</span>
+		User editedUser;
+		try {
+<span class="fc" id="L127">			editedUser = userService.edit(user);</span>
+<span class="fc" id="L128">		} catch(Exception exception) {</span>
+<span class="fc" id="L129">			logger.error(&quot;User Edit Failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L130">			throw exception;</span>
+<span class="fc" id="L131">		}</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">		if(editedUser == null) {</span>
+<span class="fc" id="L133">			logger.error(&quot;User edit Failed! Given Id doesnt exists : {} &quot;, user.getId());</span>
+<span class="fc" id="L134">			throw new InvalidTemplateException(&quot;The Id doesnt exists to edit! Please Give an Existing Id&quot;);</span>
+		} else {
+<span class="fc" id="L136">			logger.info(&quot;User Edited Successfully!, Edited User : {} &quot;, editedUser);</span>
+<span class="fc" id="L137">			return editedUser;</span>
+		}
 	}
 
 	@DeleteMapping(path = &quot;/deleteUser/{username}&quot;, produces = &quot;application/json&quot;)
 	public Integer delete(@PathVariable String username) throws ApplicationErrorException, InvalidTemplateException {
-<span class="nc" id="L114">		Integer statusCode = userService.delete(username);</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">		if(statusCode == 1)</span>
-<span class="nc" id="L116">			return statusCode;</span>
-		else
-<span class="nc" id="L118">			throw new InvalidTemplateException(&quot;Username doesnt Exists!&quot;);</span>
+		Integer statusCode;
+		try {
+<span class="fc" id="L145">			statusCode = userService.delete(username);</span>
+<span class="fc" id="L146">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L147">			logger.error(&quot;User Deletion failed!, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L148">			throw exception;</span>
+<span class="fc" id="L149">		}</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">		if(statusCode == 1) {</span>
+<span class="fc" id="L151">			logger.info(&quot;User deleted Successfully!&quot;);</span>
+<span class="fc" id="L152">			return statusCode;</span>
+		} else {
+<span class="fc" id="L154">			logger.error(&quot;User deletion failed!, Given username doesnt exists : {} &quot;, username);</span>
+<span class="fc" id="L155">			throw new InvalidTemplateException(&quot;Username doesnt Exists!&quot;);</span>
+		}
 	}
 
+	private List&lt;User&gt; listHelperFunction(HashMap&lt;String, String&gt; listAttributes) throws PageCountOutOfBoundsException, ApplicationErrorException {
+		try {
+<span class="fc" id="L161">			userList = userService.list(listAttributes);</span>
+<span class="fc" id="L162">		} catch(PageCountOutOfBoundsException exception) {</span>
+<span class="fc" id="L163">			logger.warn(&quot;Error while returning the list. {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L164">			throw exception;</span>
+<span class="fc" id="L165">		} catch(ApplicationErrorException exception) {</span>
+<span class="fc" id="L166">			logger.error(&quot;Error while retrieving data from the Database, {} &quot;, exception.getMessage());</span>
+<span class="fc" id="L167">			throw exception;</span>
+<span class="fc" id="L168">		}</span>
+<span class="fc" id="L169">		logger.info(&quot;List returned Successfully!&quot;);</span>
+<span class="fc" id="L170">		return userList;</span>
+	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
