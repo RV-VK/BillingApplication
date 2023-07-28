@@ -21,6 +21,7 @@ public class ProductController {
 	@Autowired
 	private ListAttributeMapValidator validator;
 	private HashMap<String, String> listAttributes = new HashMap<>();
+	private List<Product> productList;
 
 
 	@GetMapping(path = "/products", produces = "application/json")
@@ -29,7 +30,7 @@ public class ProductController {
 		listAttributes.put("Pagenumber", "1");
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/products/{pageLength}", produces = "application/json")
@@ -39,7 +40,7 @@ public class ProductController {
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
 		validator.validate(listAttributes, ProductController.class);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/products/{pageLength}/{pageNumber}", produces = "application/json")
@@ -49,7 +50,7 @@ public class ProductController {
 		listAttributes.put("Attribute", "id");
 		listAttributes.put("Searchtext", null);
 		validator.validate(listAttributes, ProductController.class);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{searchText}", produces = "application/json")
@@ -58,7 +59,7 @@ public class ProductController {
 		listAttributes.put("Pagenumber", null);
 		listAttributes.put("Attribute", null);
 		listAttributes.put("Searchtext", searchText);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}", produces = "application/json")
@@ -68,7 +69,7 @@ public class ProductController {
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
 		validator.validate(listAttributes, ProductController.class);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}/{PageLength}", produces = "application/json")
@@ -78,7 +79,7 @@ public class ProductController {
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
 		validator.validate(listAttributes, ProductController.class);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}/{PageLength}/{PageNumber}", produces = "application/json")
@@ -88,39 +89,84 @@ public class ProductController {
 		listAttributes.put("Attribute", attribute);
 		listAttributes.put("Searchtext", searchText);
 		validator.validate(listAttributes, ProductController.class);
-		return productService.list(listAttributes);
+		return listHelperFunction(listAttributes);
 	}
 
 	@PostMapping(path = "/product", produces = "application/json")
 	public Product add(@RequestBody Product product) throws Exception {
-		return productService.create(product);
+		Product createdProduct;
+		try {
+			createdProduct = productService.create(product);
+		} catch(Exception exception) {
+			logger.error("Product Creation Failed!, {}", exception.getMessage());
+			throw exception;
+		}
+		logger.info("Product Created Successfully! : {}", createdProduct);
+		return createdProduct;
 	}
 
 	@GetMapping(path = "/countProducts", produces = "application/json")
 	public Integer count() throws ApplicationErrorException {
 		String attribute = "id";
 		String searchText = null;
-		return productService.count(attribute, searchText);
+		Integer count;
+		try {
+			count = productService.count(attribute, searchText);
+		} catch(ApplicationErrorException exception) {
+			logger.error("Error while retrieving data from database, {}", exception.getMessage());
+			throw exception;
+		}
+		logger.info("Returned Successfully!, Product Count : {} ", count);
+		return count;
 	}
 
 	@PutMapping(path = "/product", produces = "application/json")
 	public Product edit(@RequestBody Product product) throws Exception {
-		Product editedProduct = productService.edit(product);
-		if(editedProduct == null)
+		Product editedProduct;
+		try {
+			editedProduct = productService.edit(product);
+		} catch(Exception exception) {
+			logger.error("Product Edit Failed!, {}", exception.getMessage());
+			throw exception;
+		}
+		if(editedProduct == null) {
+			logger.error("Product Edit Failed!, Given Id doesnt exists, {}", product.getId());
 			throw new InvalidTemplateException("The Id doesnt exist to edit! Please Give An Existing Id");
-		else
+		} else {
+			logger.info("Product Edited Successfully!");
 			return editedProduct;
-
+		}
 	}
 
 	@DeleteMapping(path = "/deleteProduct/{parameter}", produces = "application/json")
 	public Integer delete(@PathVariable String parameter) throws ApplicationErrorException, InvalidTemplateException {
 		Integer statusCode;
-		statusCode = productService.delete(parameter);
-		if(statusCode == 1)
+		try {
+			statusCode = productService.delete(parameter);
+		} catch(ApplicationErrorException exception) {
+			logger.error("Product deletion failed, {}", exception.getMessage());
+			throw exception;
+		}
+		if(statusCode == 1) {
+			logger.info("Product deleted successfully!");
 			return statusCode;
-		else
+		} else {
+			logger.error("Product Delete Failed! Either the Product doesnt exists or doesnt have any stock left! Product-Parameter: {}", parameter);
 			throw new InvalidTemplateException("Please check the Id (or) Code you have entered whether it exists or have any stock left!!");
+		}
 	}
 
+	private List<Product> listHelperFunction(HashMap<String, String> listAttributes) throws PageCountOutOfBoundsException, ApplicationErrorException {
+		try {
+			productList = productService.list(listAttributes);
+		} catch(PageCountOutOfBoundsException exception) {
+			logger.error("Error while returning the list. {}", exception.getMessage());
+			throw exception;
+		} catch(ApplicationErrorException exception) {
+			logger.error("Error while retrieving data from the Database, {}", exception.getMessage());
+			throw exception;
+		}
+		logger.info("List returned Successfully!");
+		return productList;
+	}
 }
