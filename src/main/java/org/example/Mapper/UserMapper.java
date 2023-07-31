@@ -95,4 +95,7 @@ public interface UserMapper {
 	 */
 	@Select("SELECT * FROM users WHERE username=#{username}")
 	User login(@Param("username") String userName, String passWord) throws SQLException, ApplicationErrorException;
+
+	@Select("SELECT * FROM users WHERE username=#{username}")
+	User findByUsername(@Param("username") String username);
 }

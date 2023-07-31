@@ -1,8 +1,5 @@
 package org.example.CLIController;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -14,7 +11,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = "org.example.CLIController,org.example.DAO,org.example.Entity,org.example.Mapper,org.example.Service,org.example.RestController")
+@ComponentScan(basePackages = "org.example.CLIController,org.example.DAO,org.example.Entity,org.example.Mapper,org.example.Service,org.example.RestController, org.example.Security")
 @MapperScan("org.example.Mapper")
 public class AppDependencyConfig {
 	@Bean
@@ -26,6 +23,7 @@ public class AppDependencyConfig {
 		dataSource.setPassword("manikantan1205");
 		return dataSource;
 	}
+
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
