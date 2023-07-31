@@ -8,6 +8,7 @@ import org.example.Service.PurchaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class PurchaseController {
 	private List<Purchase> purchaseList;
 
 	@GetMapping(path = "/purchases", produces = "application/json")
-	@ResponseBody
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getAll() throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));
 		listAttributes.put("Pagenumber", "1");
@@ -34,6 +35,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/purchases/{pageLength}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getByPageLength(@PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", pageLength);
 		listAttributes.put("Pagenumber", "1");
@@ -44,6 +46,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/purchases/{pageLength}/{pageNumber}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getByPageLengthAndPageNumber(@PathVariable String pageLength, @PathVariable String pageNumber) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", pageLength);
 		listAttributes.put("Pagenumber", pageNumber);
@@ -54,6 +57,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/purchases/find/{searchText}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getBySearchText(@PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", null);
 		listAttributes.put("Pagenumber", null);
@@ -63,6 +67,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/purchases/find/{attribute}/{searchText}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));
 		listAttributes.put("Pagenumber", "1");
@@ -73,6 +78,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/purchases/find/{attribute}/{searchText}/{pageLength}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getByAttributeAndSearchTextWithPageLength(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String pageLength) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", pageLength);
 		listAttributes.put("Pagenumber", "1");
@@ -83,6 +89,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/purchases/find/{attribute}/{searchText}/{pageLength}/{pageNumber}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public List<Purchase> getByAttributeAndSearchTextWithPageLengthAndPageNumber(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String pageLength, @PathVariable String pageNumber) throws PageCountOutOfBoundsException, ApplicationErrorException, InvalidTemplateException {
 		listAttributes.put("Pagelength", pageLength);
 		listAttributes.put("Pagenumber", pageNumber);
@@ -93,6 +100,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/countPurchase", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public Integer count() throws ApplicationErrorException, InvalidTemplateException {
 		Integer count;
 		String attribute = "id";
@@ -108,6 +116,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping(path = "/countPurchase/{date}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public Integer countByDate(@PathVariable String date) throws ApplicationErrorException, InvalidTemplateException {
 		Integer count;
 		try {
@@ -126,6 +135,7 @@ public class PurchaseController {
 	}
 
 	@PostMapping(path = "/purchase", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public Purchase add(@RequestBody Purchase purchase) throws Exception {
 		Purchase createdPurchase;
 		try {
@@ -139,6 +149,7 @@ public class PurchaseController {
 	}
 
 	@DeleteMapping(path = "/deletePurchase/{invoice}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin') or hasRole('Purchase')")
 	public Integer delete(@PathVariable String invoice) throws ApplicationErrorException, InvalidTemplateException {
 		Integer statusCode;
 		try {

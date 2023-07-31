@@ -8,6 +8,7 @@ import org.example.Service.StoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ public class StoreController {
 	private StoreService storeService;
 
 	@GetMapping(path = "/store", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Store view() throws ApplicationErrorException {
 		Store store;
 		try {
@@ -33,6 +35,7 @@ public class StoreController {
 	}
 
 	@PostMapping(path = "/store", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Store add(@RequestBody Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		Store createdStore;
 		try {
@@ -51,6 +54,7 @@ public class StoreController {
 	}
 
 	@PutMapping(path = "/store", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Store edit(@RequestBody Store store) throws SQLException, ApplicationErrorException, InvalidTemplateException {
 		Store editedStore;
 		try {
@@ -64,6 +68,7 @@ public class StoreController {
 	}
 
 	@DeleteMapping(path = "/deleteStore/{userName}/{passWord}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Integer delete(@PathVariable String userName, @PathVariable String passWord) throws ApplicationErrorException, InvalidTemplateException {
 		Integer statusCode;
 		try {

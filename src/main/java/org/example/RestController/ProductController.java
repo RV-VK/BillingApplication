@@ -8,6 +8,7 @@ import org.example.Service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,8 +24,8 @@ public class ProductController {
 	private HashMap<String, String> listAttributes = new HashMap<>();
 	private List<Product> productList;
 
-
 	@GetMapping(path = "/products", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getAll() throws PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));
 		listAttributes.put("Pagenumber", "1");
@@ -34,6 +35,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products/{pageLength}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getByPageLength(@PathVariable String pageLength) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", pageLength);
 		listAttributes.put("Pagenumber", "1");
@@ -44,6 +46,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products/{pageLength}/{pageNumber}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getByPageLengthAndPageNumber(@PathVariable String pageLength, @PathVariable String pageNumber) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", pageLength);
 		listAttributes.put("Pagenumber", pageNumber);
@@ -54,6 +57,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products/find/{searchText}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getBySearchText(@PathVariable String searchText) throws PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", null);
 		listAttributes.put("Pagenumber", null);
@@ -63,6 +67,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getByAttributeAndSearchText(@PathVariable String attribute, @PathVariable String searchText) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", String.valueOf(Integer.MAX_VALUE));
 		listAttributes.put("Pagenumber", "1");
@@ -73,6 +78,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}/{PageLength}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getByAttributeAndSearchTextWithPageLength(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String PageLength) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", PageLength);
 		listAttributes.put("Pagenumber", "1");
@@ -83,6 +89,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products/find/{attribute}/{searchText}/{PageLength}/{PageNumber}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Product> getByAttributeAndSearchTextWithPageLengthAndPageNumber(@PathVariable String attribute, @PathVariable String searchText, @PathVariable String PageLength, @PathVariable String PageNumber) throws InvalidTemplateException, PageCountOutOfBoundsException, ApplicationErrorException {
 		listAttributes.put("Pagelength", PageLength);
 		listAttributes.put("Pagenumber", PageNumber);
@@ -93,6 +100,7 @@ public class ProductController {
 	}
 
 	@PostMapping(path = "/product", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Product add(@RequestBody Product product) throws Exception {
 		Product createdProduct;
 		try {
@@ -106,6 +114,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/countProducts", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Integer count() throws ApplicationErrorException {
 		String attribute = "id";
 		String searchText = null;
@@ -121,6 +130,7 @@ public class ProductController {
 	}
 
 	@PutMapping(path = "/product", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Product edit(@RequestBody Product product) throws Exception {
 		Product editedProduct;
 		try {
@@ -139,6 +149,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping(path = "/deleteProduct/{parameter}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Integer delete(@PathVariable String parameter) throws ApplicationErrorException, InvalidTemplateException {
 		Integer statusCode;
 		try {

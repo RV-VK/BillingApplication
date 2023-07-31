@@ -7,6 +7,7 @@ import org.example.Service.UnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class UnitController {
 	private UnitService unitService;
 
 	@GetMapping(path = "/units", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public List<Unit> getAll() throws ApplicationErrorException {
 		List<Unit> unitList;
 		try {
@@ -31,6 +33,7 @@ public class UnitController {
 	}
 
 	@PostMapping(path = "/unit", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Unit add(@RequestBody Unit unit) throws Exception {
 		Unit createdUnit;
 		try {
@@ -44,6 +47,7 @@ public class UnitController {
 	}
 
 	@PutMapping(path = "/unit", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Unit edit(@RequestBody Unit unit) throws Exception {
 		Unit editedUnit;
 		try {
@@ -62,6 +66,7 @@ public class UnitController {
 	}
 
 	@DeleteMapping(path = "/deleteUnit/{unitCode}", produces = "application/json")
+	@PreAuthorize("hasRole('Admin')")
 	public Integer delete(@PathVariable String unitCode) throws Exception {
 		Integer statusCode;
 		try {
