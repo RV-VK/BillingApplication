@@ -11,4 +11,4 @@ A Sample Billing CRUD System  is assumed and developed using Business Entities.
 
 CLI Support -- UI Support -- API Support :)
 
-Will try to elaborate the Readme.MD in further Commits. xD.
+Will try to elaborate the Readme in further Commits. xD.
