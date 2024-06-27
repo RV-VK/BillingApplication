@@ -10,5 +10,3 @@ A Sample Billing CRUD System  is assumed and developed using Business Entities.
 4- Servlets and JSP Application is replaced with Spring MVC Rest API Application.
 
 CLI Support -- UI Support -- API Support :)
-
-Will try to elaborate the Readme in further Commits. xD.
